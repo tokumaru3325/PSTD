@@ -19,7 +19,7 @@ MonoBehaviour:
   - m_Id: 6
     m_Sprites:
     - {fileID: 677820102, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
-    - {fileID: 0}
+    - {fileID: -613371190, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
     - {fileID: -708390749, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
     - {fileID: -1717073274, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
     - {fileID: -762492478, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
@@ -28,20 +28,10 @@ MonoBehaviour:
     - {fileID: -35864197, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
     - {fileID: -1620747614, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
     - {fileID: 678145602, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
-    m_PerlinScale: 0.853
+    m_PerlinScale: 0.5
     m_Output: 1
     m_ColliderType: 1
     m_RandomTransform: 0
