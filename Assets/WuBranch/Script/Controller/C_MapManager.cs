@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+ï»¿using Cysharp.Threading.Tasks;
 using System.IO;
 using Unity.VisualScripting;
 using System.Collections.Generic;
@@ -7,18 +7,18 @@ using UnityEngine;
 public class C_MapManager : MonoBehaviour
 {
     /// <summary>
-    /// ƒ}ƒbƒv
+    /// ãƒãƒƒãƒ—
     /// </summary>
     public M_Map Map { get; private set; }
 
 
     async UniTaskVoid Awake()
     {
-        // Application.streamingAssetsPath ‚ÍAssets‰º‚ÌStreamingAssetsƒtƒHƒ‹ƒ_‚ğw‚·
-        // “Ç‚İê—p‚ÌˆÀ‘S‚ÈƒfƒBƒŒƒNƒgƒŠ‚Å‚·B(ƒvƒ‰ƒbƒgƒtƒH[ƒ€‹¤’Ê)
-        // Path.Combine ‚ÍA2”Ô–Ú‚Ìˆø”‚ª / ‚â \ ‚Ån‚Ü‚é‚ÆA‚»‚ê‚ğuâ‘ÎƒpƒXi‚Ü‚½‚Íƒ‹[ƒg‚©‚ç‚ÌƒpƒXjv‚Æ‚İ‚È‚µ‚Ä‚µ‚Ü‚¢A1”Ô–Ú‚Ìˆø”‚ğ–³‹‚µ‚Ü‚·B
+        // Application.streamingAssetsPath ã¯Assetsä¸‹ã®StreamingAssetsãƒ•ã‚©ãƒ«ãƒ€ã‚’æŒ‡ã™
+        // èª­ã¿å°‚ç”¨ã®å®‰å…¨ãªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã§ã™ã€‚(ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ å…±é€š)
+        // Path.Combine ã¯ã€2ç•ªç›®ã®å¼•æ•°ãŒ / ã‚„ \ ã§å§‹ã¾ã‚‹ã¨ã€ãã‚Œã‚’ã€Œçµ¶å¯¾ãƒ‘ã‚¹ï¼ˆã¾ãŸã¯ãƒ«ãƒ¼ãƒˆã‹ã‚‰ã®ãƒ‘ã‚¹ï¼‰ã€ã¨ã¿ãªã—ã¦ã—ã¾ã„ã€1ç•ªç›®ã®å¼•æ•°ã‚’ç„¡è¦–ã—ã¾ã™ã€‚
         string path = Path.Combine(Application.streamingAssetsPath, "MapData/Stage1.csv");
-        // (’ˆÓ: Às‘O‚É‚±‚ÌƒpƒX‚Éƒtƒ@ƒCƒ‹‚ğ”z’u‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚è‚Ü‚·)
+        // (æ³¨æ„: å®Ÿè¡Œå‰ã«ã“ã®ãƒ‘ã‚¹ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é…ç½®ã—ã¦ãŠãå¿…è¦ãŒã‚ã‚Šã¾ã™)
         ReadMap(path);
     }
 
@@ -34,31 +34,31 @@ public class C_MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ}ƒbƒv‚ğ“Ç‚İ‚Ş
+    /// ãƒãƒƒãƒ—ã‚’èª­ã¿è¾¼ã‚€
     /// </summary>
-    /// <param name="path">ƒ}ƒbƒv‚ÌƒpƒX</param>
+    /// <param name="path">ãƒãƒƒãƒ—ã®ãƒ‘ã‚¹</param>
     /// <returns></returns>
     private async UniTaskVoid ReadMap(string path)
     {
         try
         {
-            Debug.Log($"ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚ğŠJn‚µ‚Ü‚·: {path}");
+            Debug.Log($"ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã‚’é–‹å§‹ã—ã¾ã™: {path}");
 
-            // ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒXŒo—R‚Å”ñ“¯Šúƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·
-            // this.GetCancellationTokenOnDestroy() ‚ÅA‚±‚ÌƒIƒuƒWƒFƒNƒg‚ª
-            // ”jŠü‚³‚ê‚½‚ç©“®“I‚Éƒtƒ@ƒCƒ‹“Ç‚İ‚İ‚ğƒLƒƒƒ“ƒZƒ‹‚Å‚«‚Ü‚·B
+            // ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹çµŒç”±ã§éåŒæœŸãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™
+            // this.GetCancellationTokenOnDestroy() ã§ã€ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ
+            // ç ´æ£„ã•ã‚ŒãŸã‚‰è‡ªå‹•çš„ã«ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã§ãã¾ã™ã€‚
             string[][] data = await C_FileManager.Instance.LoadDataAsync(
                 path,
                 FileType.CSV,
                 this.GetCancellationTokenOnDestroy()
             );
 
-            // ‚±‚Ìs‚Íƒ[ƒJ[ƒXƒŒƒbƒh‚©‚çƒƒCƒ“ƒXƒŒƒbƒh‚É–ß‚Á‚½Œã‚ÉÀs‚³‚ê‚Ü‚·
+            // ã“ã®è¡Œã¯ãƒ¯ãƒ¼ã‚«ãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰ã‹ã‚‰ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã«æˆ»ã£ãŸå¾Œã«å®Ÿè¡Œã•ã‚Œã¾ã™
             if (data != null)
             {
-                Debug.Log($"ƒf[ƒ^‚Ì“Ç‚İ‚İ‚ªŠ®—¹‚µ‚Ü‚µ‚½B{data.Length} s");
+                Debug.Log($"ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ãŒå®Œäº†ã—ã¾ã—ãŸã€‚{data.Length} è¡Œ");
                 ConvertData(data);
-                Debug.Log($"ƒ}ƒbƒvƒf[ƒ^‚Ö‚Ì•ÏŠ·‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+                Debug.Log($"ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã¸ã®å¤‰æ›ãŒå®Œäº†ã—ã¾ã—ãŸã€‚");
             }
         }
         catch (FileNotFoundException ex)
@@ -67,14 +67,14 @@ public class C_MapManager : MonoBehaviour
         }
         catch (IOException ex)
         {
-            Debug.LogError($"’v–½“I‚ÈI/OƒGƒ‰[: {ex.Message}");
+            Debug.LogError($"è‡´å‘½çš„ãªI/Oã‚¨ãƒ©ãƒ¼: {ex.Message}");
         }
     }
 
     /// <summary>
-    /// ƒf[ƒ^•ÏŠ·
+    /// ãƒ‡ãƒ¼ã‚¿å¤‰æ›
     /// </summary>
-    /// <param name="data">ƒ\[ƒX</param>
+    /// <param name="data">ã‚½ãƒ¼ã‚¹</param>
     private void ConvertData(string[][] source)
     {
         List<List<int>> tmpMap = new List<List<int>>();
@@ -92,9 +92,9 @@ public class C_MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ‹[ƒg‚ğƒQƒbƒg
+    /// ãƒ«ãƒ¼ãƒˆã‚’ã‚²ãƒƒãƒˆ
     /// </summary>
-    /// <returns>ƒ‹[ƒg</returns>
+    /// <returns>ãƒ«ãƒ¼ãƒˆ</returns>
     private List<List<int>> GetPath()
     {
         return Map.GetPath();

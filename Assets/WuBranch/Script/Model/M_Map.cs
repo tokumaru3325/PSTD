@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,28 +8,28 @@ public class M_Map
     private List<List<int>> _map;
 
     /// <summary>
-    /// ƒ‹[ƒg
+    /// ãƒ«ãƒ¼ãƒˆ
     /// </summary>
     private List<List<int>> _path;
 
     /// <summary>
-    /// ƒ‹[ƒg‚ªXV‚³‚ê‚½‚Ì’Ê’m
+    /// ãƒ«ãƒ¼ãƒˆãŒæ›´æ–°ã•ã‚ŒãŸã®é€šçŸ¥
     /// </summary>
     public event Action<List<List<int>>> OnUpdatePath;
 
     /// <summary>
-    /// ƒ‹[ƒg‚ğƒQƒbƒg
+    /// ãƒ«ãƒ¼ãƒˆã‚’ã‚²ãƒƒãƒˆ
     /// </summary>
-    /// <returns>ƒ‹[ƒg</returns>
+    /// <returns>ãƒ«ãƒ¼ãƒˆ</returns>
     public List<List<int>> GetPath()
     {
         return _path;
     }
 
     /// <summary>
-    /// ƒ‹[ƒg‚ğİ’è
+    /// ãƒ«ãƒ¼ãƒˆã‚’è¨­å®š
     /// </summary>
-    /// <param name="path">ƒ‹[ƒg</param>
+    /// <param name="path">ãƒ«ãƒ¼ãƒˆ</param>
     public void SetPath(List<List<int>> path)
     {
         _path = path;

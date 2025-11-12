@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.IO;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 
 /// <summary>
-/// “Ç‚İ‚Şƒtƒ@ƒCƒ‹‚Ìí—Ş‚ğ’è‹`‚µ‚Ü‚·B
+/// èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡ã‚’å®šç¾©ã—ã¾ã™ã€‚
 /// </summary>
 public enum FileType
 {
@@ -31,28 +31,28 @@ public class C_FileManager
 
     #endregion
 
-    // íœ‚·‚é•¶ši‹ó”’‚ÆƒJƒ“ƒ}j‚ğ’è‹`‚·‚é³‹K•\Œ»
+    // å‰Šé™¤ã™ã‚‹æ–‡å­—ï¼ˆç©ºç™½ã¨ã‚«ãƒ³ãƒï¼‰ã‚’å®šç¾©ã™ã‚‹æ­£è¦è¡¨ç¾
     private static readonly Regex _removeCharsRegex = new Regex(@"[\s,]", RegexOptions.Compiled);
 
     /// <summary>
-    /// ƒtƒ@ƒCƒ‹‚ğ”ñ“¯Šú (UniTask) ‚Å“Ç‚İ‚İA‰ÁH‚µ‚½ƒf[ƒ^‚ğ“ñŸ”z—ñ‚Å•Ô‚µ‚Ü‚·B
-    /// ˆ—‚Íƒ[ƒJ[ƒXƒŒƒbƒh‚ÅÀs‚³‚ê‚Ü‚·B
+    /// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’éåŒæœŸ (UniTask) ã§èª­ã¿è¾¼ã¿ã€åŠ å·¥ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’äºŒæ¬¡é…åˆ—ã§è¿”ã—ã¾ã™ã€‚
+    /// å‡¦ç†ã¯ãƒ¯ãƒ¼ã‚«ãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰ã§å®Ÿè¡Œã•ã‚Œã¾ã™ã€‚
     /// </summary>
-    /// <param name="filePath">“Ç‚İ‚Şƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒX</param>
-    /// <param name="fileType">ƒtƒ@ƒCƒ‹‚Ìí—Ş (TXT ‚Ü‚½‚Í CSV)</param>
-    /// <param name="cancellationToken">ƒLƒƒƒ“ƒZƒ‹—pƒg[ƒNƒ“ (”CˆÓ)</param>
-    /// <returns>‰ÁHÏ‚İ‚Ì string[][] ƒf[ƒ^</returns>
+    /// <param name="filePath">èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ãƒ«ãƒ‘ã‚¹</param>
+    /// <param name="fileType">ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡ (TXT ã¾ãŸã¯ CSV)</param>
+    /// <param name="cancellationToken">ã‚­ãƒ£ãƒ³ã‚»ãƒ«ç”¨ãƒˆãƒ¼ã‚¯ãƒ³ (ä»»æ„)</param>
+    /// <returns>åŠ å·¥æ¸ˆã¿ã® string[][] ãƒ‡ãƒ¼ã‚¿</returns>
     public async UniTask<string[][]> LoadDataAsync(string filePath, FileType fileType, CancellationToken cancellationToken = default)
     {
-        // UniTask.RunOnThreadPool ‚ğg‚¢Ad‚¢ƒtƒ@ƒCƒ‹I/Oˆ—‘S‘Ì‚ğ
-        // Unity‚ÌƒƒCƒ“ƒXƒŒƒbƒhŠO (ƒ[ƒJ[ƒXƒŒƒbƒh) ‚ÅÀs‚µ‚Ü‚·B
+        // UniTask.RunOnThreadPool ã‚’ä½¿ã„ã€é‡ã„ãƒ•ã‚¡ã‚¤ãƒ«I/Oå‡¦ç†å…¨ä½“ã‚’
+        // Unityã®ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰å¤– (ãƒ¯ãƒ¼ã‚«ãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰) ã§å®Ÿè¡Œã—ã¾ã™ã€‚
         return await UniTask.RunOnThreadPool(async () =>
         {
             if (!File.Exists(filePath))
             {
-                // ƒƒCƒ“ƒXƒŒƒbƒh‚Å‚È‚­‚Ä‚à Debug.LogWarning ‚â
-                // —áŠO‚ÌƒXƒ[‚Í‰Â”\‚Å‚· (—áŠO‚Í await ‚µ‚½‘¤‚É“`”d‚µ‚Ü‚·)
-                throw new FileNotFoundException("w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB", filePath);
+                // ãƒ¡ã‚¤ãƒ³ã‚¹ãƒ¬ãƒƒãƒ‰ã§ãªãã¦ã‚‚ Debug.LogWarning ã‚„
+                // ä¾‹å¤–ã®ã‚¹ãƒ­ãƒ¼ã¯å¯èƒ½ã§ã™ (ä¾‹å¤–ã¯ await ã—ãŸå´ã«ä¼æ’­ã—ã¾ã™)
+                throw new FileNotFoundException("æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚", filePath);
             }
 
             var allRows = new List<string[]>();
@@ -63,19 +63,19 @@ public class C_FileManager
                 {
                     string line;
 
-                    // CancellationToken ‚ª—v‹‚³‚ê‚½‚©Šm”F
+                    // CancellationToken ãŒè¦æ±‚ã•ã‚ŒãŸã‹ç¢ºèª
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    // ReadLineAsync ‚Í•W€‚Ì Task<string> ‚ğ•Ô‚µ‚Ü‚·‚ªA
-                    // await ‚Í UniTask “à‚Å‚à Task ‚ğ‘Ò‹@‚Å‚«‚Ü‚·B
+                    // ReadLineAsync ã¯æ¨™æº–ã® Task<string> ã‚’è¿”ã—ã¾ã™ãŒã€
+                    // await ã¯ UniTask å†…ã§ã‚‚ Task ã‚’å¾…æ©Ÿã§ãã¾ã™ã€‚
                     while ((line = await sr.ReadLineAsync()) != null)
                     {
-                        // ƒLƒƒƒ“ƒZƒ‹Šm”F (ƒ‹[ƒv‚Ì‚½‚Ñ‚ÉŠm”F)
+                        // ã‚­ãƒ£ãƒ³ã‚»ãƒ«ç¢ºèª (ãƒ«ãƒ¼ãƒ—ã®ãŸã³ã«ç¢ºèª)
                         cancellationToken.ThrowIfCancellationRequested();
 
                         string[] sourceColumns;
 
-                        // 1. ƒtƒ@ƒCƒ‹ƒ^ƒCƒv‚É‰‚¶‚Äs‚ğ•ªŠ„
+                        // 1. ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—ã«å¿œã˜ã¦è¡Œã‚’åˆ†å‰²
                         if (fileType == FileType.CSV)
                         {
                             sourceColumns = line.Split(',');
@@ -85,7 +85,7 @@ public class C_FileManager
                             sourceColumns = new string[] { line };
                         }
 
-                        // 2. ŠeƒZƒ‹‚ğ‰ÁH
+                        // 2. å„ã‚»ãƒ«ã‚’åŠ å·¥
                         var processedColumns = new string[sourceColumns.Length];
                         for (int i = 0; i < sourceColumns.Length; i++)
                         {
@@ -96,21 +96,21 @@ public class C_FileManager
                     }
                 }
 
-                // ƒ[ƒJ[ƒXƒŒƒbƒh‚ÌŒ‹‰Ê (string[][]) ‚ğ•Ô‚·
+                // ãƒ¯ãƒ¼ã‚«ãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰ã®çµæœ (string[][]) ã‚’è¿”ã™
                 return allRows.ToArray();
             }
             catch (OperationCanceledException)
             {
-                // ƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½ê‡‚ÍƒƒO‚ğo—Íi‚Ü‚½‚Í‰½‚à‚µ‚È‚¢j
-                UnityEngine.Debug.Log("ƒtƒ@ƒCƒ‹“Ç‚İ‚İ‚ªƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½B");
-                return null; // ‚Ü‚½‚Í‹ó‚Ì”z—ñ
+                // ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚ŒãŸå ´åˆã¯ãƒ­ã‚°ã‚’å‡ºåŠ›ï¼ˆã¾ãŸã¯ä½•ã‚‚ã—ãªã„ï¼‰
+                UnityEngine.Debug.Log("ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ãŒã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã¾ã—ãŸã€‚");
+                return null; // ã¾ãŸã¯ç©ºã®é…åˆ—
             }
             catch (Exception ex)
             {
-                UnityEngine.Debug.LogError($"ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½: {ex.Message}");
-                throw new IOException($"ƒtƒ@ƒCƒ‹“Ç‚İ‚İƒGƒ‰[: {filePath}", ex);
+                UnityEngine.Debug.LogError($"ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ: {ex.Message}");
+                throw new IOException($"ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ã‚¨ãƒ©ãƒ¼: {filePath}", ex);
             }
 
-        }, cancellationToken: cancellationToken); // RunOnThreadPool ‚É‚àƒg[ƒNƒ“‚ğ“n‚·
+        }, cancellationToken: cancellationToken); // RunOnThreadPool ã«ã‚‚ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æ¸¡ã™
     }
 }
