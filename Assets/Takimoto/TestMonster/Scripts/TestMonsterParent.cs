@@ -5,9 +5,11 @@ public class TestMonsterParent : MonoBehaviour
 {
     public Sprite MonsterIcon;
     public int MonsterCost;
+    public float MonsterCoolDown;
 
-    private Action _onDisable;
-    public float ElapsedTime;
+    public float ElapsedTime = 0.0f;
+
+    public float speed = -50.0f;
 
     public void Initialize(Action onDisable)
     {
@@ -25,6 +27,8 @@ public class TestMonsterParent : MonoBehaviour
     void Update()
     {
         ElapsedTime += Time.deltaTime;
+
+        transform.position += new Vector3(0.0f, 5.0f, 0.0f) * Time.deltaTime;
 
         if(ElapsedTime >= 2.0f)
         {

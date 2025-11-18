@@ -34,7 +34,6 @@ public class ObjectPoolTest : MonoBehaviour
                 Monster.gameObject.SetActive(true);
                 Monster.ElapsedTime = 0;
 
-                Debug.Log("Visibility");
                 return Monster;                
             }
         }
@@ -47,7 +46,7 @@ public class ObjectPoolTest : MonoBehaviour
             newMonster.gameObject.SetActive(true);
             newMonster.ElapsedTime = 0;
             pool.Add(newMonster);
-            Debug.Log("Create");
+            
             return newMonster;
         }
 
