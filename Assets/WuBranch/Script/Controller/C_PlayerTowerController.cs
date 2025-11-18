@@ -58,9 +58,13 @@ public class C_PlayerTowerController : MonoBehaviour
         _playerModel.SetHP(_playerModel.HP + heal);
     }
 
+    /// <summary>
+    /// 体力更新時の処理
+    /// </summary>
+    /// <param name="hp"></param>
     private void OnUpdateHP(float hp)
     {
-        _playerView.UpdateHP(hp);
+        _playerView.UpdateHP(hp, Max_HP);
     }
 
     /// <summary>

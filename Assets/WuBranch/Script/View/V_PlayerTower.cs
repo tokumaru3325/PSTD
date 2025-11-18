@@ -34,6 +34,12 @@ public class V_PlayerTower : MonoBehaviour
     private C_PlayerTowerController _playerController;
 
     /// <summary>
+    /// 体力ゲージ
+    /// </summary>
+    [SerializeField]
+    private V_HealthGuage _healthGuage;
+
+    /// <summary>
     /// ダメージフラッシュエフェクト
     /// </summary>
     private DamageFlash _damageFlash;
@@ -79,7 +85,7 @@ public class V_PlayerTower : MonoBehaviour
     /// タワーの体力を更新する
     /// </summary>
     /// <param name="hp">新しい体力</param>
-    public void UpdateHP(float hp)
+    public void UpdateHP(float hp, float maxHp)
     {
         // タワーの段階を更新する
         for (int i = 0; i < _towerStages.Count; i++)
@@ -90,5 +96,9 @@ public class V_PlayerTower : MonoBehaviour
                 break;
             }
         }
+        // 体力ゲージを更新する
+        float maxHP = maxHp;
+        float healthRate = hp / maxHP;
+        _healthGuage.SetGuage(healthRate);
     }
 }
