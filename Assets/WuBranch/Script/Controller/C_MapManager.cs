@@ -14,6 +14,7 @@ public class C_MapManager : MonoBehaviour
 
     async UniTaskVoid Awake()
     {
+        Map = new M_Map();
         // Application.streamingAssetsPath はAssets下のStreamingAssetsフォルダを指す
         // 読み専用の安全なディレクトリです。(プラットフォーム共通)
         // Path.Combine は、2番目の引数が / や \ で始まると、それを「絶対パス（またはルートからのパス）」とみなしてしまい、1番目の引数を無視します。
@@ -24,13 +25,13 @@ public class C_MapManager : MonoBehaviour
 
     async UniTaskVoid Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -82,7 +83,7 @@ public class C_MapManager : MonoBehaviour
         {
             Debug.Log("[ " + string.Join(" | ", row) + " ]");
             List<int> colData = new List<int>();
-            foreach(var col in row)
+            foreach (var col in row)
             {
                 colData.Add(int.Parse(col));
             }

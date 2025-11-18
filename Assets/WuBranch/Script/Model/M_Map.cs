@@ -17,6 +17,12 @@ public class M_Map
     /// </summary>
     public event Action<List<List<int>>> OnUpdatePath;
 
+    public M_Map()
+    {
+        _map = new List<List<int>>();
+        _path = new List<List<int>>();
+    }
+
     /// <summary>
     /// ルートをゲット
     /// </summary>
@@ -33,6 +39,6 @@ public class M_Map
     public void SetPath(List<List<int>> path)
     {
         _path = path;
-        OnUpdatePath.Invoke(path);
+        OnUpdatePath?.Invoke(path);
     }
 }
