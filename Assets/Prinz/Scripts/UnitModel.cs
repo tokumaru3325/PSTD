@@ -6,7 +6,7 @@ public class UnitModel
     public int Health { get; private set; }
     public int AttackPower { get; private set; }
     public float AttackSpeed { get; private set; }
-    public float MoveSpeed { get; private set; }
+    public float MoveSpeed { get; set; }
 
     public Vector3 MoveDirection { get; set; }
 

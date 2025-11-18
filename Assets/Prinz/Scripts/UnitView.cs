@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class UnitView : MonoBehaviour
 {
+    private UnitPresenter presenter;
+
     public void UpdateHealth(int hp)
     {
         // update sprite, bar, etc.
@@ -16,9 +18,15 @@ public class UnitView : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
+     //   presenter.SetView(this);
 
     }
 
+    private void Awake()
+    {
+        presenter = GetComponent<UnitPresenter>();
+        presenter.SetView(this);
+    }
     // Update is called once per frame
     void Update()
     {

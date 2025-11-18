@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class SpawnButton : MonoBehaviour
 {
-    public TestMonsterParent Monster;
+    public UnitPresenter Monster;
     public Button Button;
 
     [SerializeField] ObjectPoolTest objectPoolTest;
@@ -12,7 +12,7 @@ public class SpawnButton : MonoBehaviour
     void Start()
     {
         //ボタンの画像をモンスターのアイコンに変える
-        Button.image.sprite = Monster.MonsterIcon;
+    //    Button.image.sprite = Monster.MonsterIcon;
 
         objectPoolTest.CreatePool(10);
     }

@@ -3,15 +3,15 @@ using UnityEngine;
 public class UnitPresenter: MonoBehaviour
 {
     public UnitModel model;
-    public UnitView view;
+
+    private UnitView view;
 
 
-    public void Initialize(UnitModel model, UnitView view)
+    public void Initialize()
     {
-        this.model = model;
-        this.view = view;
+        this.model = new UnitModel();
 
-        model.OnHealthChanged += OnHealthChanged;
+     //   model.OnHealthChanged += OnHealthChanged;
     }
     private void OnHealthChanged()
     {
@@ -20,7 +20,12 @@ public class UnitPresenter: MonoBehaviour
 
     private void OnDisable()
     {
-        model.OnHealthChanged -= OnHealthChanged;
+      //  model.OnHealthChanged -= OnHealthChanged;
+    }
+
+    public void SetView(UnitView view)
+    {
+        this.view = view;
     }
 
     private void Move()
