@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestMonsterParent
   MonsterIcon: {fileID: 21300000, guid: 3eb028d791e270b40b357a33d046fcd9, type: 3}
-  MonsterCost: 0
-  MonsterCoolDown: 2
+  MonsterCost: 10
+  MonsterCoolDown: 5
   ElapsedTime: 0
   speed: -50

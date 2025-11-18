@@ -6,9 +6,11 @@ public class SpawnButton : MonoBehaviour
 {
     public TestMonsterParent Monster;
     public Button Button;
-    public Image Image;
+    private Image _image;
 
-    private float Timer = 0.0f;
+    private float _timer = 0.0f;
+    private Player _player;
+    private bool _bPushed = false;
 
     [SerializeField] ObjectPoolTest objectPoolTest;
 
@@ -18,23 +20,47 @@ public class SpawnButton : MonoBehaviour
         //ボタンの画像をモンスターのアイコンに変える
         Button.image.sprite = Monster.MonsterIcon;
 
-        objectPoolTest.CreatePool(10);
-        Image.fillAmount = 0;
+        Image[] Images = Button.GetComponentsInChildren<Image>();
+        for(int i = 0; i < Images.Length; i++)
+        {
+            if (Images[i].gameObject.name == "CoolDown")
+            {
+                _image = Images[i];
+                break;
+            }
+        }
+        _image.fillAmount = 0;
+
+        _player = FindAnyObjectByType<Player>();
+
+        objectPoolTest.CreatePool(10);        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Button.interactable == false)
+        if (_bPushed)
         {
-            Timer += Time.deltaTime;
-            Image.fillAmount += Time.deltaTime / Monster.MonsterCoolDown;
-            if(Timer > Monster.MonsterCoolDown)
+            _timer += Time.deltaTime;
+            _image.fillAmount += Time.deltaTime / Monster.MonsterCoolDown;
+            if (_timer > Monster.MonsterCoolDown)
             {
                 Button.interactable = true;
-                Image.fillAmount = 0;
+                _image.fillAmount = 0;
+                _bPushed = false;
             }
         }
+        else
+        {
+            if (_player.Money <= Monster.MonsterCost)
+            {
+                Button.interactable = false;
+            }
+            else
+            {
+                Button.interactable = true;
+            }
+        }        
     }
 
     public void OnButtonDown_Spawn()
@@ -44,17 +70,9 @@ public class SpawnButton : MonoBehaviour
         objectPoolTest.GetObj(position);
 
         Button.interactable = false;
-        Timer = 0.0f;
-    }
+        _timer = 0.0f;
+        _player.Money -= Monster.MonsterCost;
 
-    public void Create()
-    {
-        //TestMonsterPool.Instance.GetEnemy();
-        
-    }
-
-    public void Clear()
-    {
-        TestMonsterPool.Instance.ClearEnemy();
+        _bPushed = true;
     }
 }
