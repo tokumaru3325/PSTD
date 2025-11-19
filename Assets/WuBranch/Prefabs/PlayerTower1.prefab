@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2663007256665380277}
   - component: {fileID: 5684337860675968823}
   - component: {fileID: 6662387296350973895}
+  - component: {fileID: 1860676233158408536}
   m_Layer: 0
   m_Name: PlayerTower1
   m_TagString: Untagged
@@ -159,7 +160,8 @@ MonoBehaviour:
     healthThreshold: 30
   - towerSprite: {fileID: 21300000, guid: 2c9b4f75b27e8df4b9af6fe48d6def66, type: 3}
     healthThreshold: 0
-  _playerController: {fileID: 0}
+  _playerController: {fileID: 1860676233158408536}
+  _healthGuage: {fileID: 7325418786087702757}
 --- !u!114 &6662387296350973895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +218,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1860676233158408536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997660852378255683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6d7de8ceb464a45811ef69ec2f8218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_PlayerTowerController
+  Max_HP: 100
 --- !u!1 &1814192218691804247
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +291,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 30
   m_TargetDisplay: 0
 --- !u!114 &8180392000482963102
 MonoBehaviour:
@@ -413,7 +428,6 @@ MonoBehaviour:
   _duration: 0.5
   _strength: 1
   _vibrate: 100
-  InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &2618791477507155424
 GameObject:
   m_ObjectHideFlags: 0
