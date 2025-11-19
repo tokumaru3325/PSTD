@@ -6,13 +6,30 @@ public class UnitPresenter: MonoBehaviour
 
     private UnitView view;
 
+    [SerializeField]
+    UnitData unitData;
 
     public void Initialize()
     {
         this.model = new UnitModel();
+        InitializeModel();
 
-     //   model.OnHealthChanged += OnHealthChanged;
+        //   model.OnHealthChanged += OnHealthChanged;
     }
+
+    private void InitializeModel()
+    {
+        model.SetPlayerSide(unitData.PlayerSide);
+        model.SetMaxHealth(unitData.MaxHealth);
+        model.SetHealth(unitData.MaxHealth);
+        model.SetAttackPower(unitData.AttackPower);
+        model.SetAttackSpeed(unitData.AttackSpeed);
+        model.SetMoveSpeed(unitData.MoveSpeed);
+        model.SetUnitCost(unitData.UnitCost);
+        model.SetUnitCoolDown(unitData.UnitCoolDown);
+        model.SetMoveDirection(unitData.MoveDirection);
+    }
+
     private void OnHealthChanged()
     {
         view.UpdateHealth(model.Health);
@@ -45,5 +62,8 @@ public class UnitPresenter: MonoBehaviour
         Move();
     }
 
-
+    void Takedamage(int dmg)
+    {
+        model.SetHealth(model.Health - dmg);
+    }
 }

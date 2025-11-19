@@ -4,7 +4,7 @@ public class UnitView : MonoBehaviour
 {
     private UnitPresenter presenter;
 
-    public void UpdateHealth(int hp)
+    public void UpdateHealth(float hp)
     {
         // update sprite, bar, etc.
     }

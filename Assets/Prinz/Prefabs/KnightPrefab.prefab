@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbc539c5571f814c92a1df644375d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
+  unitData: {fileID: 11400000, guid: cc8bd4e6abc6f1a488b0c1a1f1209c5d, type: 2}
 --- !u!114 &3051980271961957158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,4 +206,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fba202879ce8574a85cca40eab922ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitView
-  presenter: {fileID: 4717811697732357988}
