@@ -3,6 +3,7 @@ using UnityEngine;
 public class UnitView : MonoBehaviour
 {
     private UnitPresenter presenter;
+    public Animator animator;
 
     public void UpdateHealth(float hp)
     {
@@ -10,8 +11,13 @@ public class UnitView : MonoBehaviour
     }
 
     public void PlayMoveAnimation()
-    { 
-        // call animation here
+    {
+        animator.SetBool("isWalking", true);
+    }
+
+    public void StopMoveAnimation()
+    {
+        animator.SetBool("isWalking", false);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,6 +32,7 @@ public class UnitView : MonoBehaviour
     {
         presenter = GetComponent<UnitPresenter>();
         presenter.SetView(this);
+        animator = GetComponent<Animator>();
     }
     // Update is called once per frame
     void Update()

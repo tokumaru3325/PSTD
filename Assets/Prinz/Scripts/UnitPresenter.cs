@@ -38,6 +38,7 @@ public class UnitPresenter: MonoBehaviour
     private void OnDisable()
     {
       //  model.OnHealthChanged -= OnHealthChanged;
+      view.StopMoveAnimation();
     }
 
     public void SetView(UnitView view)
@@ -48,6 +49,7 @@ public class UnitPresenter: MonoBehaviour
     private void Move()
     {
         transform.position += model.MoveDirection * model.MoveSpeed * Time.deltaTime;
+        view.PlayMoveAnimation();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
