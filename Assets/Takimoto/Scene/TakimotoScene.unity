@@ -486,7 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Monster: {fileID: 4535805232374097004, guid: fdbc403047bd67d418abb33b4e7aaad8, type: 3}
+  Unit: {fileID: 11400000, guid: cc8bd4e6abc6f1a488b0c1a1f1209c5d, type: 2}
   Button: {fileID: 1340069616}
   objectPoolTest: {fileID: 2078422202}
 --- !u!4 &1110059504
@@ -757,7 +757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Monster: {fileID: 4535805232374097004, guid: fdbc403047bd67d418abb33b4e7aaad8, type: 3}
+  Unit: {fileID: 11400000, guid: cc8bd4e6abc6f1a488b0c1a1f1209c5d, type: 2}
   Button: {fileID: 358546546}
   objectPoolTest: {fileID: 2078422202}
 --- !u!4 &1648010407
@@ -1213,7 +1213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 6565119644130588998, guid: fdbc403047bd67d418abb33b4e7aaad8, type: 3}
+  prefabObj: {fileID: 8341941516833268087, guid: bd76c2f67783fdc4680a68fd893fd3db, type: 3}
 --- !u!4 &2078422203
 Transform:
   m_ObjectHideFlags: 0

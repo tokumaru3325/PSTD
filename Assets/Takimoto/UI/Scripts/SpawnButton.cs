@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class SpawnButton : MonoBehaviour
 {
-    public UnitPresenter Monster;
+    public UnitData Unit;
     public Button Button;
     private Image _image;
 
@@ -42,8 +42,8 @@ public class SpawnButton : MonoBehaviour
         if (_bPushed)
         {
             _timer += Time.deltaTime;
-            _image.fillAmount += Time.deltaTime / Monster.MonsterCoolDown;
-            if (_timer > Monster.MonsterCoolDown)
+            _image.fillAmount += Time.deltaTime / Unit.UnitCoolDown;
+            if (_timer > Unit.UnitCoolDown) //HERE USE UNITDATA INSTEAD !!!!!
             {
                 Button.interactable = true;
                 _image.fillAmount = 0;
@@ -52,7 +52,8 @@ public class SpawnButton : MonoBehaviour
         }
         else
         {
-            if (_player.Money <= Monster.MonsterCost)
+            //Debug.Log($"_player:{_player}, Unit:{Unit}, cost:{Unit.UnitCost}");
+            if (_player.Money <= Unit.UnitCost)
             {
                 Button.interactable = false;
             }
@@ -71,7 +72,7 @@ public class SpawnButton : MonoBehaviour
 
         Button.interactable = false;
         _timer = 0.0f;
-        _player.Money -= Monster.MonsterCost;
+        _player.Money -= Unit.UnitCost;
 
         _bPushed = true;
     }
