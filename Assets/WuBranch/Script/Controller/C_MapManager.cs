@@ -11,6 +11,13 @@ public class C_MapManager : MonoBehaviour
     /// </summary>
     public M_Map Map { get; private set; }
 
+    /// <summary>
+    /// マップ座標(0,0)の初期Unity位置、左上が0,0(Unityの座標だと(-18.5, 8.5))
+    /// </summary>
+    [SerializeField]
+    private float MAP_INIT_POS_X;
+    [SerializeField]
+    private float MAP_INIT_POS_Y;
 
     async UniTaskVoid Awake()
     {
@@ -23,7 +30,7 @@ public class C_MapManager : MonoBehaviour
         ReadMap(path);
     }
 
-    async UniTaskVoid Start()
+    void Start()
     {
 
     }
@@ -101,4 +108,61 @@ public class C_MapManager : MonoBehaviour
         return Map.GetPath();
     }
 
+    /// <summary>
+    /// マップ座標に変換
+    /// </summary>
+    /// <param name="posX">Unity座標X</param>
+    /// <param name="posY">Unity座標y</param>
+    /// <returns>マップ座標</returns>
+    public M_MapPosition ConvertToMapPos(float posX, float posY)
+    { 
+        M_MapPosition targetPos;
+        targetPos.x = (int)(posX - MAP_INIT_POS_X); 
+        targetPos.y = -(int)(posY - MAP_INIT_POS_Y);
+        return targetPos;
+    }
+
+    /// <summary>
+    /// マップ座標に変換
+    /// </summary>
+    /// <param name="position">Unity座標</param>
+    /// <returns>マップ座標</returns>
+    public M_MapPosition ConvertToMapPos(Vector3 position)
+    {
+        M_MapPosition targetPos;
+        targetPos.x = (int)(position.x - MAP_INIT_POS_X);
+        targetPos.y = -(int)(position.y - MAP_INIT_POS_Y);
+        return targetPos;
+    }
+
+    /// <summary>
+    /// Unity座標に変換
+    /// </summary>
+    /// <param name="position">マップ座標</param>
+    /// <returns>Unity座標</returns>
+    public Vector3 ConvertToUnityPos(M_MapPosition position)
+    {
+        Vector3 targetPos = Vector3.zero;
+        targetPos.x = position.x + MAP_INIT_POS_X;
+        targetPos.y = position.y + MAP_INIT_POS_Y;
+        return targetPos;
+    }
+
+    /// <summary>
+    /// 行けるかを確認
+    /// </summary>
+    /// <param name="pos">移動したい場所</param>
+    /// <returns>true: 行ける, false: 行けない</returns>
+    public bool CanGo(Vector3 pos)
+    {
+        M_MapPosition mapPos = ConvertToMapPos(pos);
+        List<List<int>> route = Map.GetPath();
+        return route[mapPos.y][mapPos.x] == 0;
+    }
+
+    public bool CanGo(M_MapPosition pos)
+    {
+        List<List<int>> route = Map.GetPath();
+        return route[pos.y][pos.x] == 0;
+    }
 }
