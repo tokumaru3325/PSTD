@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 3778870867253667000}
   - component: {fileID: 2268014145427682945}
   - component: {fileID: 8535387334436437020}
+  - component: {fileID: 4717811697732357988}
+  - component: {fileID: 3051980271961957158}
   m_Layer: 0
   m_Name: KnightPrefab
   m_TagString: Untagged
@@ -161,7 +163,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8341941516833268087}
   m_BodyType: 0
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -179,3 +181,28 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4717811697732357988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8341941516833268087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dbc539c5571f814c92a1df644375d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitController
+  unitData: {fileID: 11400000, guid: cc8bd4e6abc6f1a488b0c1a1f1209c5d, type: 2}
+--- !u!114 &3051980271961957158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8341941516833268087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fba202879ce8574a85cca40eab922ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitView
