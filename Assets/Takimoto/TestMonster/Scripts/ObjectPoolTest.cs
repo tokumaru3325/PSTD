@@ -18,17 +18,13 @@ public class ObjectPoolTest : MonoBehaviour
         {
             GameObject gameObject = Instantiate(prefabObj);
             UnitPresenter obj = gameObject.GetComponent<UnitPresenter>();
-            //[2025/11/18]　プリンス　Start
-
-            obj.Initialize();
-            //[2025/11/18]　プリンス　End
             obj.gameObject.SetActive(false);
             pool.Add(obj);
         }
     }
 
     //使う時に場所を指定して表示する
-    public UnitPresenter GetObj(Vector3 position)
+    public UnitPresenter GetObj(Vector3 position, UnitData data)
     {
         //使ってないものを探す
         for(int i = 0; i < pool.Count; i++)
@@ -37,7 +33,7 @@ public class ObjectPoolTest : MonoBehaviour
             {
                 UnitPresenter Unit = pool[i];
                 Unit.gameObject.transform.position = position;
-                Unit.Initialize();
+                Unit.Initialize(data);
                 Unit.gameObject.SetActive(true);
              //   Monster.ElapsedTime = 0;
 
@@ -51,7 +47,7 @@ public class ObjectPoolTest : MonoBehaviour
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize();
+            newUnit.Initialize(data);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
          //   newMonster.ElapsedTime = 0;
@@ -63,5 +59,11 @@ public class ObjectPoolTest : MonoBehaviour
         return null;
     }
 
-
+    //[2025/11/20]　プリンス　Start
+    public void Release(UnitPresenter unit)
+    {
+        unit.gameObject.SetActive(false);
+        //reset animator, vfx, etc.
+    }
+    //[2025/11/20]　プリンス　End
 }
