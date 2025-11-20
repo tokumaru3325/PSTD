@@ -20,18 +20,17 @@ public abstract class UnitModel
         MoveDirection = data.MoveDirection;
     }
 
-    /// <summary>
-    /// プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
-    /// </summary>
-    public int      PlayerSide { get;  set; }
-    public float    MaxHealth { get; set; }
+    // プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
+    public int      PlayerSide { get; private set; }
+
+    public float    MaxHealth { get; private set; }
     public float    Health { get; private set; }
-    public float    AttackPower { get;  set; }
-    public float    AttackSpeed { get;  set; }
-    public float    MoveSpeed { get;  set; }
-    public int      UnitCost { get;  set; }
-    public float    UnitCoolDown { get;  set; }
-    public Vector3  MoveDirection { get;  set; }
+    public float    AttackPower { get; private set; }
+    public float    AttackSpeed { get; private set; }
+    public float    MoveSpeed { get; private set; }
+    public int      UnitCost { get; private set; }
+    public float    UnitCoolDown { get; private set; }
+    public Vector3  MoveDirection { get; private set; }
 
     public bool IsDead => Health <= 0f;
 

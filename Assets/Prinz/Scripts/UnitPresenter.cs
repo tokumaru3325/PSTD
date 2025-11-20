@@ -4,7 +4,6 @@ public class UnitPresenter: MonoBehaviour
 {
     private UnitModel model;
     private UnitView view;
- //   [SerializeField]
     UnitData Data;
 
     public void Initialize(UnitData data)
@@ -85,7 +84,7 @@ public class UnitPresenter: MonoBehaviour
         model?.Tick(this);
     }
 
-    void Takedamage(int dmg)
+    public void Takedamage(int dmg)
     {
         model.SetHealth(model.Health - dmg);
     }
@@ -100,7 +99,7 @@ public class UnitPresenter: MonoBehaviour
     public bool TryGetLowHpAlly(out UnitPresenter ally)
     {
         ally = null;
-        return false; // fill your ally search logic
+        return false; //ally search logic here somewhere maybe
     }
 
     public void SpawnProjectile(GameObject prefab, float speed, float damage)

@@ -12,7 +12,6 @@ public class KnightModel : UnitModel
 
         presenter.Move(this.MoveSpeed, this.MoveDirection);
 
-
 /*        if (presenter.IsEnemyInRange(Data.AttackRange) && attackTimer <= 0f)
         {
             presenter.PerformMeleeAttack(Data.AttackDamage);
