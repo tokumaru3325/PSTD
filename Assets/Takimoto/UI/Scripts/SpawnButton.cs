@@ -37,12 +37,12 @@ public class SpawnButton : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (_bPushed)
         {
-            _timer += Time.deltaTime;
-            _image.fillAmount += Time.deltaTime / Unit.UnitCoolDown;
+            _timer += Time.fixedDeltaTime;
+            _image.fillAmount += Time.fixedDeltaTime / Unit.UnitCoolDown;
             if (_timer > Unit.UnitCoolDown) //HERE USE UNITDATA INSTEAD !!!!!
             {
                 Button.interactable = true;
