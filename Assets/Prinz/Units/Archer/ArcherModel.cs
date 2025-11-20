@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class KnightModel : UnitModel
+public class ArcherModel : UnitModel
 {
     private float attackTimer;
-
-    public KnightModel(KnightData data) : base(data) { }
+    private ArcherData ArcherData => (ArcherData)Data;
+    public ArcherModel(ArcherData data) : base(data) { }
 
     public override void Tick(UnitPresenter presenter)
     {
@@ -15,7 +15,11 @@ public class KnightModel : UnitModel
 
 /*        if (presenter.IsEnemyInRange(Data.AttackRange) && attackTimer <= 0f)
         {
-            presenter.PerformMeleeAttack(Data.AttackDamage);
+            presenter.SpawnProjectile(
+                ArcherData.ProjectilePrefab,
+                ArcherData.ProjectileSpeed,
+                Data.AttackDamage
+            );
             attackTimer = Data.AttackCooldown;
         }*/
     }

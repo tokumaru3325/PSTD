@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class KnightView : UnitView
 {
-    private KnightPresenter presenter;
-    public Animator animator;
+   // private KnightPresenter presenter;
+    //public Animator animator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
