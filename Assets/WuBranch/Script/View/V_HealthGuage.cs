@@ -23,28 +23,12 @@ public class V_HealthGuage : MonoBehaviour
     /// </summary>
     private float _currentHealthRate = 1.0f;
 
-    /// <summary>
-    /// 振動の強さ
-    /// </summary>
-    [SerializeField]
-    private float _strength = 20.0f;
-
-    /// <summary>
-    /// 振動の細かさ
-    /// </summary>
-    [SerializeField]
-    private int _vibrate = 100;
-
     void Start()
     {
         // 初期化
         _currentHealthRate = 1.0f;
         _healthImage.fillAmount = _currentHealthRate;
         _burnImage.fillAmount = _currentHealthRate;
-    }
-
-    void Update()
-    {
     }
 
     public void SetGuage(float targetRate)
@@ -54,6 +38,5 @@ public class V_HealthGuage : MonoBehaviour
         {
             _burnImage.DOFillAmount(targetRate, _duration * 0.5f).SetDelay(0.25f);
         });
-        transform.DOShakePosition(_duration * 0.5f, _strength, _vibrate);
     }
 }
