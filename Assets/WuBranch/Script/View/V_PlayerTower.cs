@@ -13,10 +13,10 @@ public struct TowerStage
     public Sprite towerSprite;
 
     /// <summary>
-    /// 体力の閾値
+    /// 体力の閾値(パーセント)
     /// </summary>
     [SerializeField]
-    public float healthThreshold;
+    public float healthThresholdPecent;
 }
 
 public class V_PlayerTower : MonoBehaviour
@@ -34,6 +34,12 @@ public class V_PlayerTower : MonoBehaviour
     private C_PlayerTowerController _playerController;
 
     /// <summary>
+    /// タワーのスプライトレンダラー
+    /// </summary>
+    [SerializeField]
+    private SpriteRenderer _tower;
+
+    /// <summary>
     /// 体力ゲージ
     /// </summary>
     [SerializeField]
@@ -44,6 +50,11 @@ public class V_PlayerTower : MonoBehaviour
     /// </summary>
     private DamageFlash _damageFlash;
 
+    /// <summary>
+    /// UIシェイクエフェクト
+    /// </summary>
+    private V_UIShake _uiShake;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -51,13 +62,18 @@ public class V_PlayerTower : MonoBehaviour
         {
             _playerController.SetView(this);
         }
-        _damageFlash = GetComponent<DamageFlash>();
+        _damageFlash = GetComponentInChildren<DamageFlash>();
+        _uiShake = GetComponentInChildren<V_UIShake>();
+        SetInitTowerImg();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            HandleDamage(10f);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -68,6 +84,22 @@ public class V_PlayerTower : MonoBehaviour
         }
     }
 
+    private void SetInitTowerImg()
+    {
+        float maxThreshold = 0f;
+        int index = 0;
+        for (int i = 0; i < _towerStages.Count; i++)
+        {
+            if (_towerStages[i].healthThresholdPecent > maxThreshold)
+            {
+                maxThreshold = _towerStages[i].healthThresholdPecent;
+                index = i;
+            }
+        }
+        if (_tower)
+            _tower.sprite = _towerStages[index].towerSprite;
+    }
+
     /// <summary>
     /// ダメージ処理
     /// </summary>
@@ -75,10 +107,11 @@ public class V_PlayerTower : MonoBehaviour
     private void HandleDamage(float Damage)
     {
         // タワーにダメージを与える
-        _playerController.DecreaseHP(10f);
+        _playerController.DecreaseHP(Damage);
 
         // エフェクト
         _damageFlash.TriggerFlash();
+        _uiShake.Shake();
     }
 
     /// <summary>
@@ -87,18 +120,19 @@ public class V_PlayerTower : MonoBehaviour
     /// <param name="hp">新しい体力</param>
     public void UpdateHP(float hp, float maxHp)
     {
+        float healthRate = hp / maxHp;
         // タワーの段階を更新する
         for (int i = 0; i < _towerStages.Count; i++)
         {
-            if (hp <= _towerStages[i].healthThreshold)
+            if (healthRate <= _towerStages[i].healthThresholdPecent)
             {
-                GetComponent<SpriteRenderer>().sprite = _towerStages[i].towerSprite;
-                break;
+                if (_tower)
+                {
+                    _tower.sprite = _towerStages[i].towerSprite;
+                }
             }
         }
         // 体力ゲージを更新する
-        float maxHP = maxHp;
-        float healthRate = hp / maxHP;
         _healthGuage.SetGuage(healthRate);
     }
 }
