@@ -22,16 +22,15 @@ public class DamageFlash : MonoBehaviour
     [SerializeField]
     private AnimationCurve _flashSpeedCurve;
 
-    private SpriteRenderer _spriteRenderer;
     private Material _material;
     private Coroutine _flashCoroutine;
 
     void Awake()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (_spriteRenderer)
-            _material = _spriteRenderer.material;
+        if (spriteRenderer)
+            _material = spriteRenderer.material;
     }
 
     public void TriggerFlash()
