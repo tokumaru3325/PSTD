@@ -3,7 +3,7 @@ using UnityEngine;
 public class KnightPresenter : UnitPresenter
 {
 
-    public KnightModel model;
+   // public KnightModel model;
 
     private KnightView view;
 
