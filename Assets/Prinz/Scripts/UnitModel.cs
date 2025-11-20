@@ -2,8 +2,24 @@ using System;
 using UnityEngine;
 
 //[Serializable]
-public class UnitModel
+public abstract class UnitModel
 {
+    protected UnitData Data;
+
+    public UnitModel(UnitData data)
+    {
+        Data = data;
+        PlayerSide = data.PlayerSide;
+        MaxHealth = data.MaxHealth;
+        Health = data.MaxHealth;
+        AttackPower = data.AttackPower;
+        AttackSpeed = data.AttackSpeed;
+        MoveSpeed = data.MoveSpeed;
+        UnitCost = data.UnitCost;
+        UnitCoolDown = data.UnitCoolDown;
+        MoveDirection = data.MoveDirection;
+    }
+
     /// <summary>
     /// プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
     /// </summary>
@@ -15,11 +31,14 @@ public class UnitModel
     public float    MoveSpeed { get;  set; }
     public int      UnitCost { get;  set; }
     public float    UnitCoolDown { get;  set; }
-    public Vector3  MoveDirection { get;  set; } //test
+    public Vector3  MoveDirection { get;  set; }
 
+    public bool IsDead => Health <= 0f;
 
     public event Action<float, float> OnHealthChanged;
 
+
+    public abstract void Tick(UnitPresenter presenter);
 
 
 #region Setter

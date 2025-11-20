@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class SpawnButton : MonoBehaviour
 {
-    public UnitData Unit;
+    public UnitData Unit; //ScriptableObjectをインスペクターに設定する
     public Button Button;
     private Image _image;
 
@@ -68,7 +68,7 @@ public class SpawnButton : MonoBehaviour
     {
         //Monsterをスポーンさせる
         Vector3 position = Vector3.zero;
-        objectPoolTest.GetObj(position);
+        objectPoolTest.GetObj(position, Unit); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         Button.interactable = false;
         _timer = 0.0f;
