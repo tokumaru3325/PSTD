@@ -63,7 +63,7 @@ public class UnitPresenter: MonoBehaviour
     private void OnDisable()
     {
       //  model.OnHealthChanged -= OnHealthChanged;
-        view?.StopMoveAnimation();
+    //    view?.PlayMove();
         model = null; // clear model to avoid stale state when pooled
     }
 
@@ -75,7 +75,7 @@ public class UnitPresenter: MonoBehaviour
     public void Move(float movespeed, Vector3 direction)
     {
         transform.Translate(direction * movespeed * Time.deltaTime);
-        view?.PlayMoveAnimation();
+        view?.PlayMove();
     }
 
     // Update is called once per frame

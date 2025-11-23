@@ -7,22 +7,12 @@ public class UnitView : MonoBehaviour
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void PlayHeal() => Animator.SetTrigger("Heal");
-    public void PlayMove() => Animator.SetBool("isWalking", true);
+    public void PlayMove() => Animator.SetBool("Move", true);
     public void PlayDeath() => Animator.SetTrigger("Die");
 
     public void UpdateHealth(float hp)
     {
         // update sprite, bar, etc.
-    }
-
-    public void PlayMoveAnimation()
-    {
-        Animator.SetBool("isWalking", true);
-    }
-
-    public void StopMoveAnimation()
-    {
-        Animator.SetBool("isWalking", false);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
