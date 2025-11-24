@@ -39,4 +39,16 @@ public class V_HealthGuage : MonoBehaviour
             _burnImage.DOFillAmount(targetRate, _duration * 0.5f).SetDelay(0.25f);
         });
     }
+
+    public void HideGuage()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        rectTransform.DOSizeDelta(new Vector2(-160, -20), 0.5f).SetEase(Ease.OutBack);
+    }
+
+    public void ShowGuage()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        rectTransform.DOSizeDelta(new Vector2(0, 0), 0.5f).SetEase(Ease.OutBack);
+    }
 }
