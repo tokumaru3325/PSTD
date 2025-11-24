@@ -71,7 +71,7 @@ public class V_CameraMover : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-       // GetComponent<Image>().color = Color.white;
+
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class V_CameraMover : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
         //Debug.Log($"Get result {side}");
         // 左：8、上：4、右：2、下：1
         byte result = 0x00;
-        switch(_direction)
+        switch (_direction)
         {
             case MoveDir.Left:
                 result = (byte)(side & 0x08);
@@ -111,7 +111,7 @@ public class V_CameraMover : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
                 break;
             case MoveDir.Up:
                 result = (byte)(side & 0x04);
-                break;  
+                break;
             case MoveDir.Down:
                 result = (byte)(side & 0x01);
                 break;
