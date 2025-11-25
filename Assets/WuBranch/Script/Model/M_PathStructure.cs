@@ -8,7 +8,7 @@ enum PathStructure : int
     // 一般道
     Road = 0,
     // 障害物がある道
-    Obstacle = 1,
+    Obstacle = 20,
     // 通れない道
     Blocked = 999,
 }
