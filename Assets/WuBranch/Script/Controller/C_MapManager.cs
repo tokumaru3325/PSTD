@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class C_MapManager : MonoBehaviour
 {
     /// <summary>
@@ -38,7 +39,18 @@ public class C_MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            List<M_MapPosition> route = C_PathSearch.GetPath(GetAllRoute(), new M_MapPosition(4, 5), new M_MapPosition(31, 16));
+            for(int index = 0; index < route.Count; index++)
+            {
+                Color txtColor = Color.blue;
+                if(index == 0 || index == route.Count-1)
+                    txtColor = Color.red;
+                Vector3 pos = ConvertToUnityPos(route[index]);
+                Debug.DrawLine(pos + Vector3.left, pos - Vector3.left, txtColor, 100f, false);
+            }
+        }
     }
 
     /// <summary>
@@ -103,7 +115,7 @@ public class C_MapManager : MonoBehaviour
     /// ルートをゲット
     /// </summary>
     /// <returns>ルート</returns>
-    private List<List<int>> GetPath()
+    public List<List<int>> GetAllRoute()
     {
         return Map.GetPath();
     }
@@ -115,10 +127,10 @@ public class C_MapManager : MonoBehaviour
     /// <param name="posY">Unity座標y</param>
     /// <returns>マップ座標</returns>
     public M_MapPosition ConvertToMapPos(float posX, float posY)
-    { 
+    {
         M_MapPosition targetPos;
-        targetPos.x = (int)(posX - MAP_INIT_POS_X); 
-        targetPos.y = -(int)(posY - MAP_INIT_POS_Y);
+        targetPos.X = Mathf.RoundToInt(posX - MAP_INIT_POS_X);
+        targetPos.Y = Mathf.RoundToInt(-(posY - MAP_INIT_POS_Y));
         return targetPos;
     }
 
@@ -130,8 +142,8 @@ public class C_MapManager : MonoBehaviour
     public M_MapPosition ConvertToMapPos(Vector3 position)
     {
         M_MapPosition targetPos;
-        targetPos.x = (int)(position.x - MAP_INIT_POS_X);
-        targetPos.y = -(int)(position.y - MAP_INIT_POS_Y);
+        targetPos.X = Mathf.RoundToInt(position.x - MAP_INIT_POS_X);
+        targetPos.Y = Mathf.RoundToInt(-(position.y - MAP_INIT_POS_Y));
         return targetPos;
     }
 
@@ -143,26 +155,39 @@ public class C_MapManager : MonoBehaviour
     public Vector3 ConvertToUnityPos(M_MapPosition position)
     {
         Vector3 targetPos = Vector3.zero;
-        targetPos.x = position.x + MAP_INIT_POS_X;
-        targetPos.y = position.y + MAP_INIT_POS_Y;
+        targetPos.x = position.X + MAP_INIT_POS_X;
+        targetPos.y = -position.Y + MAP_INIT_POS_Y;
         return targetPos;
     }
 
     /// <summary>
-    /// 行けるかを確認
+    /// 行けるかどうか
     /// </summary>
-    /// <param name="pos">移動したい場所</param>
+    /// <param name="pos">Unity座標</param>
     /// <returns>true: 行ける, false: 行けない</returns>
     public bool CanGo(Vector3 pos)
     {
         M_MapPosition mapPos = ConvertToMapPos(pos);
-        List<List<int>> route = Map.GetPath();
-        return route[mapPos.y][mapPos.x] == 0;
+        return Map.GetPathCost(mapPos.X, mapPos.Y) != (int)PathStructure.Blocked;
     }
 
+    /// <summary>
+    /// 行けるかどうか
+    /// </summary>
+    /// <param name="pos">マップ座標</param>
+    /// <returns>true: 行ける, false: 行けない</returns>
     public bool CanGo(M_MapPosition pos)
     {
-        List<List<int>> route = Map.GetPath();
-        return route[pos.y][pos.x] == 0;
+        return Map.GetPathCost(pos.X, pos.Y) != (int)PathStructure.Blocked;
+    }
+
+    /// <summary>
+    /// 経路コストをゲット
+    /// </summary>
+    /// <param name="pos">マップ座標</param>
+    /// <returns>コスト</returns>
+    public int GetPathCost(M_MapPosition pos)
+    {
+        return Map.GetPathCost(pos.X, pos.Y);
     }
 }
