@@ -44,7 +44,7 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     /// 体力ゲージ
     /// </summary>
     [SerializeField]
-    private V_HealthGuage _healthGuage;
+    private V_HealthGauge _healthGauge;
 
     /// <summary>
     /// ダメージフラッシュエフェクト
@@ -137,16 +137,16 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
             }
         }
         // 体力ゲージを更新する
-        _healthGuage.SetGuage(healthRate);
+        _healthGauge.SetGauge(healthRate);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _healthGuage.HideGuage();
+        _healthGauge.HideGauge();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _healthGuage.ShowGuage();
+        _healthGauge.ShowGauge();
     }
 }
