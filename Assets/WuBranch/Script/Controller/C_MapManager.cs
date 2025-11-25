@@ -39,7 +39,18 @@ public class C_MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            List<M_MapPosition> route = C_PathSearch.GetPath(GetAllRoute(), new M_MapPosition(4, 5), new M_MapPosition(31, 16));
+            for(int index = 0; index < route.Count; index++)
+            {
+                Color txtColor = Color.blue;
+                if(index == 0 || index == route.Count-1)
+                    txtColor = Color.red;
+                Vector3 pos = ConvertToUnityPos(route[index]);
+                Debug.DrawLine(pos + Vector3.left, pos - Vector3.left, txtColor, 100f, false);
+            }
+        }
     }
 
     /// <summary>
