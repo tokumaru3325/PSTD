@@ -104,7 +104,7 @@ public class C_MapManager : MonoBehaviour
     /// ルートをゲット
     /// </summary>
     /// <returns>ルート</returns>
-    private List<List<int>> GetAllRoute()
+    public List<List<int>> GetAllRoute()
     {
         return Map.GetPath();
     }
@@ -145,7 +145,7 @@ public class C_MapManager : MonoBehaviour
     {
         Vector3 targetPos = Vector3.zero;
         targetPos.x = position.X + MAP_INIT_POS_X;
-        targetPos.y = position.Y + MAP_INIT_POS_Y;
+        targetPos.y = -position.Y + MAP_INIT_POS_Y;
         return targetPos;
     }
 
