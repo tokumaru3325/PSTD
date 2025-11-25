@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [Serializable]
 public struct TowerStage
@@ -19,7 +20,7 @@ public struct TowerStage
     public float healthThresholdPecent;
 }
 
-public class V_PlayerTower : MonoBehaviour
+public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
     /// <summary>
     /// 各段階のタワーモデル
@@ -84,6 +85,9 @@ public class V_PlayerTower : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// タワーの見た目を初期化
+    /// </summary>
     private void SetInitTowerImg()
     {
         float maxThreshold = 0f;
@@ -134,5 +138,15 @@ public class V_PlayerTower : MonoBehaviour
         }
         // 体力ゲージを更新する
         _healthGuage.SetGuage(healthRate);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _healthGuage.HideGuage();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        _healthGuage.ShowGuage();
     }
 }
