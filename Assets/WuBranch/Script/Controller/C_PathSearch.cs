@@ -80,6 +80,7 @@ public class C_PathSearch
                 Node node = new(pos, path[rowIndex][colIndex], path[rowIndex][colIndex] != (int)PathStructure.Blocked);
                 rowNode.Add(node);
             }
+            map.Add(rowNode);
         }
         return map;
     }
@@ -146,14 +147,14 @@ public class C_PathSearch
             M_MapPosition neighborPoint = new(current.Pos.X + dir.X, current.Pos.Y + dir.Y);
 
             // マップに入っているか
-            if (CheckInMap<Node>(searchMap, neighborPoint))
+            if (!CheckInMap<Node>(searchMap, neighborPoint))
                 continue;
 
             // 実際のノード
             Node neighbor = searchMap[neighborPoint.Y][neighborPoint.X];
 
             // 通れないもしくはすでに決めたノードリストに入ったなら無視
-            if (neighbor.CanGo || pathNodes.Contains(neighbor))
+            if (!neighbor.CanGo || pathNodes.Contains(neighbor))
                 continue;
             // コストを計算
             int tentativeG = CaculateCost(current);
@@ -218,7 +219,7 @@ public class Node
     /// <summary>
     /// 総コスト
     /// </summary>
-    public int FinalCost;
+    public int FinalCost => ActualCost + HeuristicCost;
 
     /// <summary>
     /// 通れるか
