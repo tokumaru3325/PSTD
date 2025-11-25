@@ -55,7 +55,6 @@ public class ReelController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InputSlot();
         ReelMove(Time.deltaTime);
     }
 
@@ -121,10 +120,10 @@ public class ReelController : MonoBehaviour
         }
     }
 
-    void InputSlot()
+    public void InputSlot()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
+        //if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        //{
             switch (reelMover.state)
             {
                 case ReelMover.State.nextBet:
@@ -164,7 +163,7 @@ public class ReelController : MonoBehaviour
                     canMoveR = false;
                     break;
             }
-        }
+        //}
     }
 
     bool ReelStopper(int num, bool koyakuok)
