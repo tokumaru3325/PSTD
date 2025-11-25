@@ -4,6 +4,8 @@ public class UnitStateMachine
 {
     private IUnitState _current;
 
+    public UnitStateMachine(UnitModel model) { }
+
     public void Initialize(IUnitState startState)
     {
         _current = startState;

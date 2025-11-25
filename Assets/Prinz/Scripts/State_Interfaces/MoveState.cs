@@ -9,7 +9,10 @@ public class MoveState : IUnitState
         _model = model;
     }
 
-    public void OnEnter() { }
+    public void OnEnter() 
+    {
+        
+    }
     public void OnExit() { }
 
     public IUnitState OnUpdate(float dt)

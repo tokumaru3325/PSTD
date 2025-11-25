@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8450854812631772162}
   - component: {fileID: 2629747673540187634}
+  - component: {fileID: 7180586679957449137}
   - component: {fileID: 3778870867253667000}
   - component: {fileID: 2268014145427682945}
   - component: {fileID: 8535387334436437020}
@@ -95,6 +96,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &7180586679957449137
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8341941516833268087}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.25, y: -0.08362168}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.87312603, y: 0.844345}
+  m_EdgeRadius: 0
 --- !u!70 &3778870867253667000
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -193,7 +240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbc539c5571f814c92a1df644375d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
-  unitData: {fileID: 11400000, guid: cc8bd4e6abc6f1a488b0c1a1f1209c5d, type: 2}
 --- !u!114 &3051980271961957158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,3 +252,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fba202879ce8574a85cca40eab922ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitView
+  Animator: {fileID: 0}
