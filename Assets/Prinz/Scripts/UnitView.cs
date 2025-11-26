@@ -6,8 +6,10 @@ public class UnitView : MonoBehaviour
     public Animator Animator;
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
+    public void StopAttack() => Animator.SetTrigger("StopAttack");
     public void PlayHeal() => Animator.SetTrigger("Heal");
     public void PlayMove() => Animator.SetBool("Move", true);
+    public void StopMove() => Animator.SetBool("Move", false);
     public void PlayDeath() => Animator.SetTrigger("Die");
 
     public void UpdateHealth(float hp)
@@ -19,14 +21,12 @@ public class UnitView : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-     //   presenter.SetView(this);
-
     }
 
     private void Awake()
     {
         presenter = GetComponent<UnitPresenter>();
-        presenter.SetView(this);
+    //    presenter.SetView(this);
         Animator = GetComponent<Animator>();
     }
     // Update is called once per frame

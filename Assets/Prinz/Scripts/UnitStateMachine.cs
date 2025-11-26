@@ -4,7 +4,7 @@ public class UnitStateMachine
 {
     private IUnitState _current;
 
-    public UnitStateMachine(UnitModel model) { }
+    public UnitStateMachine() { }
 
     public void Initialize(IUnitState startState)
     {

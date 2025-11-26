@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class DeadState : IUnitState
 {
-    private UnitModel _model;
+    private readonly UnitModel _model;
+    private readonly UnitPresenter _presenter;
 
-    public DeadState(UnitModel model)
+    public DeadState(UnitModel model, UnitPresenter presenter)
     {
         _model = model;
+        _presenter = presenter;
     }
 
     public void OnEnter() { }

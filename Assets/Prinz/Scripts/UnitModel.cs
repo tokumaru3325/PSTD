@@ -36,8 +36,27 @@ public abstract class UnitModel
 
     public event Action<float, float> OnHealthChanged;
 
+    //owner
+    public UnitPresenter Owner { get; private set; }
+
+    public void Bind(UnitPresenter presenter)
+    {
+        Owner = presenter;
+    }
+
+    //target enemy
+    public UnitPresenter TargetEnemy { get; private set; }
+
+    public void SetTarget(UnitPresenter enemy)
+    {
+        TargetEnemy = enemy;
+    }
+
+
 
     public abstract void Tick(UnitPresenter presenter);
+
+
 
 
 #region Setter

@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class UnitPresenter: MonoBehaviour
 {
-    private UnitModel _model;
-    private UnitView _view;
-    private UnitStateMachine _statemachine;
+    public UnitModel Model { get; private set; }
+    public UnitView View { get; private set; }
+
+    private UnitStateMachine _stateMachine;
     UnitData Data;
 
     public void Initialize(UnitData data)
     {
-        _view = GetComponent<UnitView>();
+        View = GetComponent<UnitView>();
         CreateModelFromData(data);
 
         //キャラクタの向きを初期化する
@@ -22,20 +23,20 @@ public class UnitPresenter: MonoBehaviour
 
     private void InitializeModel()
     {
-        _model.SetPlayerSide(Data.PlayerSide);
-        _model.SetMaxHealth(Data.MaxHealth);
-        _model.SetHealth(Data.MaxHealth);
-        _model.SetAttackPower(Data.AttackPower);
-        _model.SetAttackSpeed(Data.AttackSpeed);
-        _model.SetMoveSpeed(Data.MoveSpeed);
-        _model.SetUnitCost(Data.UnitCost);
-        _model.SetUnitCoolDown(Data.UnitCoolDown);
-        _model.SetMoveDirection(Data.MoveDirection);
+        Model.SetPlayerSide(Data.PlayerSide);
+        Model.SetMaxHealth(Data.MaxHealth);
+        Model.SetHealth(Data.MaxHealth);
+        Model.SetAttackPower(Data.AttackPower);
+        Model.SetAttackSpeed(Data.AttackSpeed);
+        Model.SetMoveSpeed(Data.MoveSpeed);
+        Model.SetUnitCost(Data.UnitCost);
+        Model.SetUnitCoolDown(Data.UnitCoolDown);
+        Model.SetMoveDirection(Data.MoveDirection);
     }
 
     private void OnHealthChanged()
     {
-        _view.UpdateHealth(_model.Health);
+        View.UpdateHealth(Model.Health);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -55,39 +56,43 @@ public class UnitPresenter: MonoBehaviour
 
         //pick the right model subclass
         if (data is KnightData kd)
-            _model = new KnightModel(kd);
+        {
+            Model = new KnightModel(kd);
+            _stateMachine = new UnitStateMachine();
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState if needed
+        }
         else if (data is ArcherData ad)
-            _model = new ArcherModel(ad);
+        {
+            Model = new ArcherModel(ad);
+            _stateMachine = new UnitStateMachine();
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState if needed
+        }
         else if (data is MageData md)
-            _model = new MageModel(md);
+        {
+            Model = new MageModel(md);
+            _stateMachine = new UnitStateMachine();
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState if needed
+        }
         else
         {
             Debug.LogError("Unknown data type: " + data.GetType());
             return;
         }
-
-        //キャラクタにAIを付ける
-        CreateStateMachineFromModel(_model);
-    }
-
-    protected void CreateStateMachineFromModel(UnitModel model)
-    {
-        _statemachine = new UnitStateMachine(model);
     }
 
     private void OnDisable()
     {
       //  model.OnHealthChanged -= OnHealthChanged;
     //    view?.PlayMove();
-        _model = null; // clear model to avoid stale state when pooled
+        Model = null; // clear model to avoid stale state when pooled
     }
 
-    public void SetView(UnitView view)
+/*    public void SetView(UnitView view)
     {
-        this._view = view;
-    }
+        View = view;
+    }*/
 
-    public void Move(float movespeed, Vector3 direction)
+/*    public void Move(float movespeed, Vector3 direction)
     {
         if (direction.x < 0) // TODO : call it when change direction not everyframe
             FaceLeft(transform);
@@ -95,24 +100,25 @@ public class UnitPresenter: MonoBehaviour
 
             transform.Translate(direction * movespeed * Time.deltaTime);
         
-        _view?.PlayMove();
-    }
+        View?.PlayMove();
+    }*/
 
     // Update is called once per frame
     void Update()
     {
-        _model?.Tick(this);
+        Model?.Tick(this);
+        _stateMachine?.Tick(Time.deltaTime);
     }
 
-    public void Takedamage(int dmg)
+    public void TakeDamage(float dmg)
     {
-        _model.SetHealth(_model.Health - dmg);
+        Model.SetHealth(Model.Health - dmg);
     }
 
     public bool IsEnemyInRange(float range) { /* ...*/ return false; }
-    public void PerformMeleeAttack(float dmg) { /* ... */ _view?.PlayAttack(); }
-    public void PerformMagicAttack(float dmg) { /* ... */ _view?.PlayAttack(); }
-    public void ReceiveHeal(float amount) { /* ... */ _view?.PlayHeal(); }
+    public void PerformMeleeAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
 
     public void PlayHealVFX() { /* particles */ }
 
@@ -125,7 +131,7 @@ public class UnitPresenter: MonoBehaviour
     public void SpawnProjectile(GameObject prefab, float speed, float damage)
     {
         // Instantiate, configure velocity and damage
-        _view?.PlayAttack();
+        View?.PlayAttack();
     }
 
     public void FaceRight(Transform transform)
