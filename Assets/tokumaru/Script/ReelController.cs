@@ -67,7 +67,7 @@ public class ReelController : MonoBehaviour
                 reelL.transform.Translate(0, ySpeed * deltaTIme, 0);
                 if (reelL.transform.position.y <= 1.0f + oya.transform.position.y)
                 {
-                    reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, 0);
+                    reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, oya.transform.position.z);
                 }
             }
             else
@@ -85,7 +85,7 @@ public class ReelController : MonoBehaviour
                 reelC.transform.Translate(0, ySpeed * deltaTIme, 0);
                 if (reelC.transform.position.y <= 1.0f + oya.transform.position.y)
                 {
-                    reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, 0);
+                    reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, oya.transform.position.z);
 
                 }
             }
@@ -104,7 +104,7 @@ public class ReelController : MonoBehaviour
                 reelR.transform.Translate(0, ySpeed * deltaTIme, 0);
                 if (reelR.transform.position.y <= 1.0f + oya.transform.position.y)
                 {
-                    reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, 0);
+                    reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, oya.transform.position.z);
 
                 }
             }
@@ -178,7 +178,7 @@ public class ReelController : MonoBehaviour
                 {
                     if (reelLeftZugaraNum[num] + oya.transform.position.y + 0.1f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[num] + oya.transform.position.y - 0.1f)
                     {
-                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[num] + oya.transform.position.y, 0);
+                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[num] + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelLStoped = true;
                        
@@ -189,7 +189,7 @@ public class ReelController : MonoBehaviour
                         reelL.transform.Translate(0, ySpeed * Time.deltaTime, 0);
                         if (reelL.transform.position.y <= 1.0f + oya.transform.position.y)
                         {
-                            reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, 0);
+                            reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, oya.transform.position.z);
 
                         }
                     }
@@ -204,7 +204,7 @@ public class ReelController : MonoBehaviour
                     }
                     if (reelLeftZugaraNum[koyakuNum] + oya.transform.position.y + 0.1f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[koyakuNum] + oya.transform.position.y - 0.1f)
                     {
-                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[koyakuNum] + oya.transform.position.y, 0);
+                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[koyakuNum] + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelLStoped = true;
                         hazureChange = false;
@@ -216,7 +216,7 @@ public class ReelController : MonoBehaviour
                         reelL.transform.Translate(0, ySpeed * Time.deltaTime, 0);
                         if (reelL.transform.position.y <= 1.0f + oya.transform.position.y)
                         {
-                            reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, 0);
+                            reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, oya.transform.position.z);
 
                         }
                     }
@@ -228,7 +228,7 @@ public class ReelController : MonoBehaviour
                 {
                     if (reelCenterZugaraNum[num] + oya.transform.position.y + 0.1f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[num] + oya.transform.position.y - 0.1f)
                     {
-                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[num] + oya.transform.position.y, 0);
+                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[num] + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelCStoped = true;
                         
@@ -239,7 +239,7 @@ public class ReelController : MonoBehaviour
                         reelC.transform.Translate(0, ySpeed * Time.deltaTime, 0);
                         if (reelC.transform.position.y <= 1.0f + oya.transform.position.y)
                         {
-                            reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, 0);
+                            reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, oya.transform.position.z);
 
                         }
                     }
@@ -257,7 +257,7 @@ public class ReelController : MonoBehaviour
                     }
                     if (reelCenterZugaraNum[koyakuNum] + oya.transform.position.y + 0.1f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[koyakuNum] + oya.transform.position.y - 0.1f)
                     {
-                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[koyakuNum] + oya.transform.position.y, 0);
+                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[koyakuNum] + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelCStoped = true;
                         hazureChange = false;
@@ -269,7 +269,7 @@ public class ReelController : MonoBehaviour
                         reelC.transform.Translate(0, ySpeed * Time.deltaTime, 0);
                         if (reelC.transform.position.y <= 1.0f + oya.transform.position.y)
                         {
-                            reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, 0);
+                            reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, oya.transform.position.z);
 
                         }
                     }
@@ -281,7 +281,7 @@ public class ReelController : MonoBehaviour
                 {
                     if (reelRightZugaraNum[num] + oya.transform.position.y + 0.1f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[num] + oya.transform.position.y - 0.1f)
                     {
-                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] + oya.transform.position.y, 0);
+                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
                         
@@ -292,7 +292,7 @@ public class ReelController : MonoBehaviour
                         reelR.transform.Translate(0, ySpeed * Time.deltaTime, 0);
                         if (reelR.transform.position.y <= 1.0f + oya.transform.position.y)
                         {
-                            reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, 0);
+                            reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, oya.transform.position.z);
 
                         }
                     }
@@ -310,7 +310,7 @@ public class ReelController : MonoBehaviour
                     }
                     if (reelRightZugaraNum[koyakuNum] + oya.transform.position.y + 0.1f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[koyakuNum] + oya.transform.position.y - 0.1f)
                     {
-                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[koyakuNum] + oya.transform.position.y, 0);
+                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[koyakuNum] + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
                         hazureChange = false;
@@ -322,7 +322,7 @@ public class ReelController : MonoBehaviour
                         reelR.transform.Translate(0, ySpeed * Time.deltaTime, 0);
                         if (reelR.transform.position.y <= 1.0f + oya.transform.position.y)
                         {
-                            reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, 0);
+                            reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, oya.transform.position.z);
 
                         }
                     }
@@ -377,20 +377,20 @@ public class ReelController : MonoBehaviour
         reelLeftZugaraNum.Add(0, 4.1f);
         reelLeftZugaraNum.Add(1, 2.9f);
         reelLeftZugaraNum.Add(2, 6.3f);
-        reelLeftZugaraNum.Add(3, 5.3f);
+        reelLeftZugaraNum.Add(3, 5.2f);
         reelLeftZugaraNum.Add(4, 1.5f);
 
-        reelCenterZugaraNum.Add(0, 4.1f);
-        reelCenterZugaraNum.Add(1, 2.9f);
-        reelCenterZugaraNum.Add(2, 6.3f);
-        reelCenterZugaraNum.Add(3, 5.3f);
-        reelCenterZugaraNum.Add(4, 1.5f);
+        reelCenterZugaraNum.Add(0, 5.15f);
+        reelCenterZugaraNum.Add(1, 4.0f);
+        reelCenterZugaraNum.Add(2, 1.44f);
+        reelCenterZugaraNum.Add(3, 2.85f);
+        reelCenterZugaraNum.Add(4, 6.3f);
 
-        reelRightZugaraNum.Add(0, 4.1f);
-        reelRightZugaraNum.Add(1, 2.9f);
-        reelRightZugaraNum.Add(2, 6.3f);
-        reelRightZugaraNum.Add(3, 5.3f);
-        reelRightZugaraNum.Add(4, 1.5f);
+        reelRightZugaraNum.Add(0, 2.9f);
+        reelRightZugaraNum.Add(1, 6.25f);
+        reelRightZugaraNum.Add(2, 5.1f);
+        reelRightZugaraNum.Add(3, 1.4f);
+        reelRightZugaraNum.Add(4, 4.0f);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
