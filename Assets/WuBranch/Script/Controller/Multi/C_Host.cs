@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class C_Host : MonoBehaviour
 {
+    void Start()
+    {
+        StartHost();
+    }
 
-    public void StartHost()
+    private void StartHost()
     {
         NetworkManager.Singleton.StartHost();
     }
-
-
 }

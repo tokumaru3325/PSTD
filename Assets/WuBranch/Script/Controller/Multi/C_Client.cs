@@ -3,7 +3,13 @@ using UnityEngine;
 
 public class C_Client : MonoBehaviour
 {
-    public void StartClient()
+
+    void Start()
+    {
+        StartClient();
+    }
+
+    private void StartClient()
     {
         NetworkManager.Singleton.StartClient();
     }

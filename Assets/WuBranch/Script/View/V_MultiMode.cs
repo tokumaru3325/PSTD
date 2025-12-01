@@ -18,9 +18,16 @@ public class V_MultiMode : MonoBehaviour
     private Button _clientBtn;
 
     /// <summary>
-    /// 共通変数
+    /// バックボタン
     /// </summary>
-    private C_GlobalVariable _variables;
+    [SerializeField]
+    private Button _backBtn;
+
+    /// <summary>
+    /// ひとつ前の画面
+    /// </summary>
+    [SerializeField]
+    private GameObject _preScene;
 
     void Awake()
     {
@@ -34,34 +41,32 @@ public class V_MultiMode : MonoBehaviour
             _hostBtn.onClick.AddListener(CreateLobby);
         if (_clientBtn)
             _clientBtn.onClick.AddListener(SearchLobby);
-        _variables = FindFirstObjectByType<C_GlobalVariable>();
+        if (_backBtn)
+            _backBtn.onClick.AddListener(BackToTitle);
     }
 
     /// <summary>
-    /// ロビーを作る
+    /// ロビーを作るシーンに行く
     /// </summary>
     public void CreateLobby()
     {
-        if (_variables)
-        {
-            _variables.SetMultiRole(MultiRoleType.Host);
-            SceneManager.LoadScene("Multi", LoadSceneMode.Single);
-        }
-        else
-            Debug.LogError("Did not find variable!");
+        SceneManager.LoadScene("RoomCreate", LoadSceneMode.Single);
     }
 
     /// <summary>
-    /// ロビーを探す
+    /// ロビーを探すシーンに行く
     /// </summary>
     public void SearchLobby()
     {
-        if (_variables)
-        {
-            _variables.SetMultiRole(MultiRoleType.Client);
-            SceneManager.LoadScene("Multi", LoadSceneMode.Single);
-        }
-        else
-            Debug.LogError("Did not find variable!");
+        SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
+    }
+
+    /// <summary>
+    /// 前の画面に戻る
+    /// </summary>
+    public void BackToTitle()
+    {
+        gameObject.SetActive(false);
+        _preScene.SetActive(true);
     }
 }
