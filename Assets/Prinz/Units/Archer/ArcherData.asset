@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7304e2826cfb14f8119f3510d6a76f, type: 3}
   m_Name: ArcherData
   m_EditorClassIdentifier: Assembly-CSharp::ArcherData
-  PlayerSide: 0
+  PlayerSide: 1
   MaxHealth: 10
-  AttackPower: 1
-  AttackSpeed: 1
-  MoveSpeed: 3
-  UnitCost: 1
-  UnitCoolDown: 1
+  BaseAttackPower: 1
+  BaseAttackSpeed: 1
+  BaseAttackRange: 1
+  BaseMoveSpeed: 3
+  BaseUnitCost: 0
+  BaseUnitCoolDown: 0
   MoveDirection: {x: -1, y: 0, z: 0}

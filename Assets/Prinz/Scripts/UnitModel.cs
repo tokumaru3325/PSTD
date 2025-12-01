@@ -12,11 +12,12 @@ public abstract class UnitModel
         PlayerSide = data.PlayerSide;
         MaxHealth = data.MaxHealth;
         Health = data.MaxHealth;
-        AttackPower = data.AttackPower;
-        AttackSpeed = data.AttackSpeed;
-        MoveSpeed = data.MoveSpeed;
-        UnitCost = data.UnitCost;
-        UnitCoolDown = data.UnitCoolDown;
+        AttackPower = data.BaseAttackPower;
+        AttackSpeed = data.BaseAttackSpeed;
+        AttackRange = data.BaseAttackRange;
+        MoveSpeed = data.BaseMoveSpeed;
+        UnitCost = data.BaseUnitCost;
+        UnitCoolDown = data.BaseUnitCoolDown;
         MoveDirection = data.MoveDirection;
     }
 
@@ -27,6 +28,7 @@ public abstract class UnitModel
     public float    Health { get; private set; }
     public float    AttackPower { get; private set; }
     public float    AttackSpeed { get; private set; }
+
     public float    MoveSpeed { get; private set; }
     public int      UnitCost { get; private set; }
     public float    UnitCoolDown { get; private set; }
@@ -35,6 +37,19 @@ public abstract class UnitModel
     public bool IsDead => Health <= 0f;
 
     public event Action<float, float> OnHealthChanged;
+
+
+    #region Range 
+    public float    AttackRange { get; private set; }
+    public float    BaseAttackRange { get; private set; }
+    public float    RangeMultiplier { get; private set; } = 1.0f;
+    public float CurrentRange => BaseAttackRange * RangeMultiplier;
+
+    public void SetRangeBuff(float factor)
+    {
+        RangeMultiplier = factor;
+    }
+    #endregion
 
     //owner
     public UnitPresenter Owner { get; private set; }

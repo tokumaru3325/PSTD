@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628cc78ecbcd38644973c142d3543641, type: 3}
   m_Name: KnightDataTest
   m_EditorClassIdentifier: Assembly-CSharp::KnightData
-  PlayerSide: 0
+  PlayerSide: 2
   MaxHealth: 10
-  AttackPower: 1
-  AttackSpeed: 1
-  MoveSpeed: 2
-  UnitCost: 1
-  UnitCoolDown: 1
+  BaseAttackPower: 1
+  BaseAttackSpeed: 1
+  BaseAttackRange: 2
+  BaseMoveSpeed: 2
+  BaseUnitCost: 0
+  BaseUnitCoolDown: 0
   MoveDirection: {x: 1, y: 0, z: 0}

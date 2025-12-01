@@ -5,7 +5,10 @@ public class UnitPresenter: MonoBehaviour
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
+
+
     private UnitStateMachine _stateMachine;
+
     UnitData Data;
 
     public void Initialize(UnitData data)
@@ -21,7 +24,7 @@ public class UnitPresenter: MonoBehaviour
         //   model.OnHealthChanged += OnHealthChanged;
     }
 
-    private void InitializeModel()
+/*    private void InitializeModel()
     {
         Model.SetPlayerSide(Data.PlayerSide);
         Model.SetMaxHealth(Data.MaxHealth);
@@ -29,10 +32,10 @@ public class UnitPresenter: MonoBehaviour
         Model.SetAttackPower(Data.AttackPower);
         Model.SetAttackSpeed(Data.AttackSpeed);
         Model.SetMoveSpeed(Data.MoveSpeed);
-        Model.SetUnitCost(Data.UnitCost);
-        Model.SetUnitCoolDown(Data.UnitCoolDown);
+        Model.SetUnitCost(Data.BaseUnitCost);
+        Model.SetUnitCoolDown(Data.BaseUnitCoolDown);
         Model.SetMoveDirection(Data.MoveDirection);
-    }
+    }*/
 
     private void OnHealthChanged()
     {
@@ -59,19 +62,19 @@ public class UnitPresenter: MonoBehaviour
         {
             Model = new KnightModel(kd);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState if needed
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is ArcherData ad)
         {
             Model = new ArcherModel(ad);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState if needed
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is MageData md)
         {
             Model = new MageModel(md);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState if needed
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else
         {
@@ -83,31 +86,15 @@ public class UnitPresenter: MonoBehaviour
     private void OnDisable()
     {
       //  model.OnHealthChanged -= OnHealthChanged;
-    //    view?.PlayMove();
         Model = null; // clear model to avoid stale state when pooled
     }
-
-/*    public void SetView(UnitView view)
-    {
-        View = view;
-    }*/
-
-/*    public void Move(float movespeed, Vector3 direction)
-    {
-        if (direction.x < 0) // TODO : call it when change direction not everyframe
-            FaceLeft(transform);
-        else FaceRight(transform);
-
-            transform.Translate(direction * movespeed * Time.deltaTime);
-        
-        View?.PlayMove();
-    }*/
 
     // Update is called once per frame
     void Update()
     {
         Model?.Tick(this);
         _stateMachine?.Tick(Time.deltaTime);
+     //   ShowRange(true);
     }
 
     public void TakeDamage(float dmg)
@@ -125,12 +112,13 @@ public class UnitPresenter: MonoBehaviour
     public bool TryGetLowHpAlly(out UnitPresenter ally)
     {
         ally = null;
-        return false; //ally search logic here somewhere maybe
+        //ally search logic here somewhere maybe
+        return false; 
     }
 
     public void SpawnProjectile(GameObject prefab, float speed, float damage)
     {
-        // Instantiate, configure velocity and damage
+        // Instantiate, configure velocity and damage here
         View?.PlayAttack();
     }
 
@@ -142,5 +130,42 @@ public class UnitPresenter: MonoBehaviour
     public void FaceLeft(Transform transform)
     {
         transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+    }
+
+    private void ApplyAttackRange()
+    {
+        if (View?.AttackRangeTransform == null)
+        {
+            Debug.LogError("AttackRangeTransform not found");
+            return;
+        }
+        float newRange = Model.CurrentRange;
+
+        // Adjust collider width AND sprite size by scaling the child object
+        Vector3 scale = View.AttackRangeTransform.localScale;
+        scale.x = newRange;     // grow horizontally
+        scale.y = newRange;     // grow vertically (if needed)
+        View.AttackRangeTransform.localScale = scale;
+    }
+
+    public void SetRangeBuff(float factor)
+    {
+        Model?.SetRangeBuff(factor);
+        ApplyAttackRange();
+    }
+
+    public void ShowRange(bool show)
+    {
+        View?.ShowAttackRange(show);
+    }
+
+/*    public void OnCollisionEnter2D(Collision2D other)
+    {
+        Debug.LogWarning("Colliding via presenter");
+    }*/
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.LogWarning("Colliding via presenter");
     }
 }
