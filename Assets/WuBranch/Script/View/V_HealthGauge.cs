@@ -4,7 +4,7 @@ using DG.Tweening;
 using System.Runtime.CompilerServices;
 using UnityEngine.InputSystem;
 
-public class V_HealthGuage : MonoBehaviour
+public class V_HealthGauge : MonoBehaviour
 {
     [SerializeField]
     private Image _healthImage;
@@ -31,7 +31,7 @@ public class V_HealthGuage : MonoBehaviour
         _burnImage.fillAmount = _currentHealthRate;
     }
 
-    public void SetGuage(float targetRate)
+    public void SetGauge(float targetRate)
     {
         _currentHealthRate = targetRate;
         _healthImage.DOFillAmount(targetRate, _duration).SetEase(Ease.OutQuad).OnComplete(() =>
@@ -40,13 +40,13 @@ public class V_HealthGuage : MonoBehaviour
         });
     }
 
-    public void HideGuage()
+    public void HideGauge()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         rectTransform.DOSizeDelta(new Vector2(-160, -20), 0.5f).SetEase(Ease.OutBack);
     }
 
-    public void ShowGuage()
+    public void ShowGauge()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         rectTransform.DOSizeDelta(new Vector2(0, 0), 0.5f).SetEase(Ease.OutBack);

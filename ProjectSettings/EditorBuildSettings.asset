@@ -5,9 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    guid: 91600cd1e5d89504d8dbd2ffc65cfae9
+  - enabled: 1
+    path: Assets/WuBranch/Scenes/ModeSelect.unity
+    guid: f64dec77eb3adc044ab370fec43b4ed9
+  - enabled: 1
+    path: Assets/WuBranch/Scenes/RoomCreate.unity
+    guid: 0c5e632fc188f914395a5f7533cdc54a
+  - enabled: 1
+    path: Assets/WuBranch/Scenes/RoomList.unity
+    guid: e07048dbeb7ffd84bac15bf6f48de1fb
+  - enabled: 1
+    path: Assets/WuBranch/Scenes/Room.unity
+    guid: 5fc17b520c2c0cc4d9dfcb4a57948d4d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
