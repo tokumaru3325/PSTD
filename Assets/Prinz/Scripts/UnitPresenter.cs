@@ -37,7 +37,7 @@ public class UnitPresenter: MonoBehaviour
             FaceLeft(transform);
         else FaceRight(transform);
 
-        //Model.OnHealthChanged += OnHealthChanged;
+        Model.OnHealthChanged += OnHealthChanged;
     }
 
 /*    private void InitializeModel()
@@ -53,9 +53,15 @@ public class UnitPresenter: MonoBehaviour
         Model.SetMoveDirection(Data.MoveDirection);
     }*/
 
-    private void OnHealthChanged()
+    private void OnHealthChanged(float health, float maxHealth)
     {
-        View.UpdateHealth(Model.Health);
+        if (Model.IsDead)
+        {
+            _stateMachine.TrySetState(new DeadState(Model, this));
+            return;
+        }
+
+        View.UpdateHealth(health);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -103,7 +109,7 @@ public class UnitPresenter: MonoBehaviour
 
     private void OnDisable()
     {
-      //  model.OnHealthChanged -= OnHealthChanged;
+        Model.OnHealthChanged -= OnHealthChanged;
         Model = null; // clear model to avoid stale state when pooled
     }
 
@@ -113,6 +119,11 @@ public class UnitPresenter: MonoBehaviour
         Model?.Tick(this);
         _stateMachine?.Tick(Time.deltaTime);
      //   ShowRange(true);
+    }
+
+    private void FixedUpdate()
+    {
+        _stateMachine?.Tick(Time.fixedDeltaTime);
     }
 
     public C_MapManager MapManager { get { return _mapManager; } }

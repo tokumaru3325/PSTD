@@ -31,4 +31,9 @@ public class IdleState : IUnitState
 
         return null;
     }
+
+    public IUnitState OnFixedUpdate(float fdt)
+    {
+        return null;
+    }
 }

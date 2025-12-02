@@ -24,6 +24,17 @@ public class UnitStateMachine
         }
     }
 
+    public void FixedTick(float fixeddeltaTime)
+    {
+        var next = Current?.OnFixedUpdate(fixeddeltaTime);
+        if (next != null)
+        {
+            Current.OnExit();
+            Current = next;
+            Current.OnEnter();
+        }
+    }
+
     public void TrySetState(IUnitState newState)
     {
         Debug.LogWarning("TrySetState() called");

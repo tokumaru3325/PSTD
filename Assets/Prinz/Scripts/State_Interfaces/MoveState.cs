@@ -26,9 +26,15 @@ public class MoveState : IUnitState
     public void OnExit()
     {
         _presenter?.View?.StopMove();
+        
     }
 
     public IUnitState OnUpdate(float dt)
+    {
+        return null;
+    }
+
+    public IUnitState OnFixedUpdate(float fdt)
     {
         DebugShowRoute();
 
@@ -50,7 +56,7 @@ public class MoveState : IUnitState
             _model.SetMoveDirection(target - current);
         }
 
-        Move(_model.MoveSpeed, _model.MoveDirection, dt);
+        Move(_model.MoveSpeed, _model.MoveDirection, fdt);
 
         if (_model.HasTargetInRange() ) //ターゲットがいる場合
         {

@@ -57,4 +57,9 @@ public class AttackState : IUnitState
 
         return null;
     }
+
+    public IUnitState OnFixedUpdate(float fdt)
+    {
+        return null;
+    }
 }
