@@ -8,9 +8,9 @@ public class ArcherModel : UnitModel
 
     public override void Tick(UnitPresenter presenter)
     {
-        attackTimer -= Time.deltaTime;
+      //  attackTimer -= Time.deltaTime;
 
-        presenter.Move(this.MoveSpeed, this.MoveDirection);
+       // presenter.Move(this.MoveSpeed, this.MoveDirection);
 
 
 /*        if (presenter.IsEnemyInRange(Data.AttackRange) && attackTimer <= 0f)

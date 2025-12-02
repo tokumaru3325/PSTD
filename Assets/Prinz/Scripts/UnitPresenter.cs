@@ -2,35 +2,44 @@ using UnityEngine;
 
 public class UnitPresenter: MonoBehaviour
 {
-    private UnitModel model;
-    private UnitView view;
- //   [SerializeField]
+    public UnitModel Model { get; private set; }
+    public UnitView View { get; private set; }
+
+
+
+    private UnitStateMachine _stateMachine;
+
     UnitData Data;
 
     public void Initialize(UnitData data)
     {
-        view = GetComponent<UnitView>();
+        View = GetComponent<UnitView>();
         CreateModelFromData(data);
+
+        //キャラクタの向きを初期化する
+        if (data.MoveDirection.x < 0)
+            FaceLeft(transform);
+        else FaceRight(transform);
 
         //   model.OnHealthChanged += OnHealthChanged;
     }
 
-    private void InitializeModel()
+/*    private void InitializeModel()
     {
-        model.SetPlayerSide(Data.PlayerSide);
-        model.SetMaxHealth(Data.MaxHealth);
-        model.SetHealth(Data.MaxHealth);
-        model.SetAttackPower(Data.AttackPower);
-        model.SetAttackSpeed(Data.AttackSpeed);
-        model.SetMoveSpeed(Data.MoveSpeed);
-        model.SetUnitCost(Data.UnitCost);
-        model.SetUnitCoolDown(Data.UnitCoolDown);
-        model.SetMoveDirection(Data.MoveDirection);
-    }
+        Model.SetPlayerSide(Data.PlayerSide);
+        Model.SetMaxHealth(Data.MaxHealth);
+        Model.SetHealth(Data.MaxHealth);
+        Model.SetAttackPower(Data.AttackPower);
+        Model.SetAttackSpeed(Data.AttackSpeed);
+        Model.SetMoveSpeed(Data.MoveSpeed);
+        Model.SetUnitCost(Data.BaseUnitCost);
+        Model.SetUnitCoolDown(Data.BaseUnitCoolDown);
+        Model.SetMoveDirection(Data.MoveDirection);
+    }*/
 
     private void OnHealthChanged()
     {
-        view.UpdateHealth(model.Health);
+        View.UpdateHealth(Model.Health);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -50,62 +59,121 @@ public class UnitPresenter: MonoBehaviour
 
         //pick the right model subclass
         if (data is KnightData kd)
-            model = new KnightModel(kd);
+        {
+            Model = new KnightModel(kd);
+            _stateMachine = new UnitStateMachine();
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        }
         else if (data is ArcherData ad)
-            model = new ArcherModel(ad);
+        {
+            Model = new ArcherModel(ad);
+            _stateMachine = new UnitStateMachine();
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        }
         else if (data is MageData md)
-            model = new MageModel(md);
+        {
+            Model = new MageModel(md);
+            _stateMachine = new UnitStateMachine();
+            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        }
         else
         {
             Debug.LogError("Unknown data type: " + data.GetType());
+            return;
         }
     }
 
     private void OnDisable()
     {
       //  model.OnHealthChanged -= OnHealthChanged;
-        view?.StopMoveAnimation();
-        model = null; // clear model to avoid stale state when pooled
-    }
-
-    public void SetView(UnitView view)
-    {
-        this.view = view;
-    }
-
-    public void Move(float movespeed, Vector3 direction)
-    {
-        transform.Translate(direction * movespeed * Time.deltaTime);
-        view?.PlayMoveAnimation();
+        Model = null; // clear model to avoid stale state when pooled
     }
 
     // Update is called once per frame
     void Update()
     {
-        model?.Tick(this);
+        Model?.Tick(this);
+        _stateMachine?.Tick(Time.deltaTime);
+     //   ShowRange(true);
     }
 
-    void Takedamage(int dmg)
+    public void TakeDamage(float dmg)
     {
-        model.SetHealth(model.Health - dmg);
+        Model.SetHealth(Model.Health - dmg);
     }
 
     public bool IsEnemyInRange(float range) { /* ...*/ return false; }
-    public void PerformMeleeAttack(float dmg) { /* ... */ view?.PlayAttack(); }
-    public void PerformMagicAttack(float dmg) { /* ... */ view?.PlayAttack(); }
-    public void ReceiveHeal(float amount) { /* ... */ view?.PlayHeal(); }
+    public void PerformMeleeAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
 
     public void PlayHealVFX() { /* particles */ }
 
     public bool TryGetLowHpAlly(out UnitPresenter ally)
     {
         ally = null;
-        return false; // fill your ally search logic
+        //ally search logic here somewhere maybe
+        return false; 
     }
 
     public void SpawnProjectile(GameObject prefab, float speed, float damage)
     {
-        // Instantiate, configure velocity and damage
-        view?.PlayAttack();
+        // Instantiate, configure velocity and damage here
+        View?.PlayAttack();
+    }
+
+    public void FaceRight(Transform transform)
+    {
+        transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void FaceLeft(Transform transform)
+    {
+        transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+    }
+
+    private void ApplyAttackRange()
+    {
+        if (View?.AttackRangeTransform == null)
+        {
+            Debug.LogError("AttackRangeTransform not found");
+            return;
+        }
+        float newRange = Model.CurrentRange;
+
+        // Adjust collider width AND sprite size by scaling the child object
+        Vector3 scale = View.AttackRangeTransform.localScale;
+        scale.x = newRange;     // grow horizontally
+        scale.y = newRange;     // grow vertically (if needed)
+        View.AttackRangeTransform.localScale = scale;
+    }
+
+    public void SetRangeBuff(float factor)
+    {
+        Model?.SetRangeBuff(factor);
+        ApplyAttackRange();
+    }
+
+    public void ShowRange(bool show)
+    {
+        View?.ShowAttackRange(show);
+    }
+
+    public bool AllowDetection =>
+       _stateMachine.Current is MoveState ||
+       _stateMachine.Current is IdleState;
+
+    public void OnEnterRange(Collider2D other)
+    {
+        Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
+
+        // Only accept valid UnitPresenters with opposite team
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) return;
+        if (target.Model.PlayerSide == Model.PlayerSide) return;
+
+        Model.AddTarget(target);
+
+        // Tell the FSM that we may need to switch state
+    //    _stateMachine.TrySetState(new IdleState());
     }
 }

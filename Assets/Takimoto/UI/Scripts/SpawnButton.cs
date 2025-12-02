@@ -56,7 +56,7 @@ public class SpawnButton : MonoBehaviour
                 _textComp = Texts[i];
                 _textComp.gameObject.SetActive(false);
                 _textCompStartPosition = _textComp.rectTransform.anchoredPosition;
-                _textComp.SetText("-" + Unit.UnitCost);
+                _textComp.SetText("-" + Unit.BaseUnitCost);
                 break;
             }
         }
@@ -84,8 +84,8 @@ public class SpawnButton : MonoBehaviour
                 _textComp.rectTransform.anchoredPosition += new Vector2(0.0f, 50.0f) * Time.fixedDeltaTime;
             }
 
-            _imageComp.fillAmount += Time.fixedDeltaTime / Unit.UnitCoolDown;
-            if (_timer > Unit.UnitCoolDown) //HERE USE UNITDATA INSTEAD !!!!!
+            _imageComp.fillAmount += Time.fixedDeltaTime / Unit.BaseUnitCoolDown;
+            if (_timer > Unit.BaseUnitCoolDown) //HERE USE UNITDATA INSTEAD !!!!!
             {
                 _buttonComp.interactable = true;
                 _imageComp.fillAmount = 0;
@@ -95,7 +95,7 @@ public class SpawnButton : MonoBehaviour
         else
         {
             //Debug.Log($"_player:{_player}, Unit:{Unit}, cost:{Unit.UnitCost}");
-            if (_player.Money <= Unit.UnitCost)
+            if (_player.Money <= Unit.BaseUnitCost)
             {
                 _buttonComp.interactable = false;
             }
@@ -113,7 +113,7 @@ public class SpawnButton : MonoBehaviour
 
         _buttonComp.interactable = false;
         _timer = 0.0f;
-        _player.Money -= Unit.UnitCost;
+        _player.Money -= Unit.BaseUnitCost;
 
         _textComp.gameObject.SetActive(true);
         _textComp.rectTransform.anchoredPosition = _textCompStartPosition;
