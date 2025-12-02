@@ -72,7 +72,7 @@ public class C_CameraMover : MonoBehaviour
         _moveAction = InputSystem.actions.FindAction("Move");
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Vector2 direction = _moveAction.ReadValue<Vector2>();
         MoveTarget(direction);

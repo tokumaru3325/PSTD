@@ -24,7 +24,7 @@ public class ObjectPoolTest : MonoBehaviour
     }
 
     //使う時に場所を指定して表示する
-    public UnitPresenter GetObj(Vector3 position, UnitData data)
+    public UnitPresenter GetObj(Vector3 position, UnitData data, Vector3 enemyPos)
     {
         //使ってないものを探す
         for(int i = 0; i < pool.Count; i++)
@@ -32,8 +32,8 @@ public class ObjectPoolTest : MonoBehaviour
             if (pool[i].gameObject.activeSelf == false)
             {
                 UnitPresenter Unit = pool[i];
-                Unit.gameObject.transform.position = position;
-                Unit.Initialize(data);
+                //Unit.gameObject.transform.position = position;
+                Unit.Initialize(data, position, enemyPos);
                 Unit.gameObject.SetActive(true);
              //   Monster.ElapsedTime = 0;
 
@@ -47,7 +47,7 @@ public class ObjectPoolTest : MonoBehaviour
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data);
+            newUnit.Initialize(data, position, enemyPos);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
          //   newMonster.ElapsedTime = 0;
