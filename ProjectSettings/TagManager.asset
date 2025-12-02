@@ -7,6 +7,9 @@ TagManager:
   - 1
   - Unit
   - AttackRange
+  - Player1
+  - Player2
+  - SpawnPos
   layers:
   - Default
   - TransparentFX
