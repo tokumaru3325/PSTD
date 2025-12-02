@@ -159,13 +159,21 @@ public class UnitPresenter: MonoBehaviour
         View?.ShowAttackRange(show);
     }
 
-/*    public void OnCollisionEnter2D(Collision2D other)
-    {
-        Debug.LogWarning("Colliding via presenter");
-    }*/
+    public bool AllowDetection =>
+       _stateMachine.Current is MoveState ||
+       _stateMachine.Current is IdleState;
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnEnterRange(Collider2D other)
     {
-        Debug.LogWarning("Colliding via presenter");
+        Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
+
+        // Only accept valid UnitPresenters with opposite team
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) return;
+        if (target.Model.PlayerSide == Model.PlayerSide) return;
+
+        Model.AddTarget(target);
+
+        // Tell the FSM that we may need to switch state
+    //    _stateMachine.TrySetState(new IdleState());
     }
 }

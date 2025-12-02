@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -25,10 +26,10 @@ public class MoveState : IUnitState
     {
         Move(_model.MoveSpeed, _model.MoveDirection, dt);
 
-//        if (_model.HasEnemyInRange())
-//        {
-//            return new AttackState(_model, _presenter);
-//        }
+        if (_model.HasEnemyInRange() ) //ターゲットがいる場合
+        {
+            return new AttackState(_model, _presenter);
+        }
 
         return null;
     }

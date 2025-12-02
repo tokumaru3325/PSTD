@@ -28,7 +28,7 @@ public class KnightAttackRange : MonoBehaviour
     {
         if (other.gameObject.tag == "Unit")
         {
-            Debug.LogWarning("Collision ! in range script");
+            Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Collision with {other.gameObject.name}");
         }
     }
 }

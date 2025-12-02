@@ -25,23 +25,31 @@ public class AttackState : IUnitState
     public IUnitState OnUpdate(float dt)
     {
 
-        /*        if (_model.TargetEnemy == null)
-                {
-                    return new UnitWalkState(_model, _presenter);
-                }
+    //    if (_model.TargetEnemy == null)
+     //   {
+     //       return new MoveState(_model, _presenter);
+     //   }
 
-                // Enemy is too far → go back to walking
-                if (!_model.HasEnemyInRange())
-                {
-                    return new UnitWalkState(_model, _presenter);
-                }*/
+        // Enemy is too far → go back to walking
+        if (!_model.HasEnemyInRange())
+        {
+            return new MoveState(_model, _presenter);
+        }
+
+/*        var target = _model.GetPrimaryTarget();
+
+        if (target == null || target.IsDead)
+            return new IdleState();
+
+        PerformAttack(target);
+        return this;*/
 
         _attackTimer += dt;
 
         if (_attackTimer >= 1f / _model.AttackSpeed)
         {
             _attackTimer = 0f;
-            _model.TargetEnemy.TakeDamage(_model.AttackPower);
+         //   _model.TargetEnemy.TakeDamage(_model.AttackPower);
         }
 
         return null;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 //[Serializable]
@@ -60,17 +61,39 @@ public abstract class UnitModel
     }
 
     //target enemy
-    public UnitPresenter TargetEnemy { get; private set; }
+
+/*    public UnitPresenter TargetEnemy { get; private set; }
 
     public void SetTarget(UnitPresenter enemy)
     {
         TargetEnemy = enemy;
+    }*/
+
+    private readonly List<UnitPresenter> targets = new();
+
+    public void AddTarget(UnitPresenter t)
+    {
+        if (!targets.Contains(t))
+            targets.Add(t);
     }
 
-
+    public List<UnitPresenter> Targets => targets;
 
     public abstract void Tick(UnitPresenter presenter);
 
+    public bool HasEnemyInRange()
+    {
+        if(targets.Count == 0) return false;
+
+        return true;
+    }
+
+    public UnitPresenter ClosestEnemy()
+    {
+       // targets.ForEach
+
+        return null;
+    }
 
 
 

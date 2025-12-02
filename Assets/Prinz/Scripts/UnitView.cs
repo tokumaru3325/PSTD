@@ -63,8 +63,18 @@ public class UnitView : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.LogError("Colliding called in view");
-        presenter.OnTriggerEnter2D(other);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+     //   Debug.LogError($"VIEW : exit trigger with {other.gameObject.name}");
+    }
+
+    public void OnEnterRange(Collider2D other)
+    {
+        Debug.LogError($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        if (!presenter.AllowDetection) return;
+        presenter.OnEnterRange(other);
     }
 
 }
