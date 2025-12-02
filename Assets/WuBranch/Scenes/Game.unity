@@ -692,7 +692,7 @@ MonoBehaviour:
   _side:
     Left: -14
     Right: 16
-    Up: 5
+    Up: 6
     Down: -8
 --- !u!114 &330585549
 MonoBehaviour:
