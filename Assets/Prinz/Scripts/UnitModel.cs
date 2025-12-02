@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +34,10 @@ public abstract class UnitModel
     public int      UnitCost { get; private set; }
     public float    UnitCoolDown { get; private set; }
     public Vector3  MoveDirection { get; private set; }
+
+    public M_MapPosition EnemyPlayerPos { get; private set; }
+
+    public List<M_MapPosition> Route { get; private set; }
 
     public bool IsDead => Health <= 0f;
 
@@ -95,7 +99,15 @@ public abstract class UnitModel
         return null;
     }
 
+    public void SetEnemyPolayerPos(M_MapPosition pos)
+    {
+        EnemyPlayerPos = pos;
+    }
 
+    public void SetRoute(List<M_MapPosition> route)
+    {
+        Route = route;
+    }
 
 #region Setter
     public void SetHealth(float amount)
@@ -141,7 +153,11 @@ public abstract class UnitModel
 
     public void SetMoveDirection (Vector3 direction)
     {
-        MoveDirection = direction;
+        if (MoveDirection != direction)
+        {
+            MoveDirection = direction;
+            Debug.Log($"MoveDirection: {MoveDirection}");
+        }
     }
 #endregion
 }

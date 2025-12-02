@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitPresenter: MonoBehaviour
@@ -5,16 +7,30 @@ public class UnitPresenter: MonoBehaviour
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
-
+    private C_MapManager _mapManager;
 
     private UnitStateMachine _stateMachine;
 
     UnitData Data;
 
-    public void Initialize(UnitData data)
+    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos)
     {
         View = GetComponent<UnitView>();
         CreateModelFromData(data);
+
+        M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
+        Vector3 up = _mapManager.ConvertToUnityPos(mp);
+        Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
+        gameObject.transform.position = up;
+
+        // 位置をマップ座標に変換
+        if (_mapManager)
+        {
+            M_MapPosition start = _mapManager.ConvertToMapPos(transform.position);
+            M_MapPosition end = _mapManager.ConvertToMapPos(enemyPos);
+            Model.SetEnemyPolayerPos(end);
+            Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end));
+        }
 
         //キャラクタの向きを初期化する
         if (data.MoveDirection.x < 0)
@@ -45,8 +61,6 @@ public class UnitPresenter: MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Application.targetFrameRate = 60;
- 
     }
 
     protected void CreateModelFromData(UnitData data)
@@ -56,6 +70,9 @@ public class UnitPresenter: MonoBehaviour
             Debug.LogError("UnitPresenter.Initialize called with null UnitData");
             return;
         }
+
+        // map
+        _mapManager = FindFirstObjectByType<C_MapManager>();
 
         //pick the right model subclass
         if (data is KnightData kd)
@@ -96,6 +113,8 @@ public class UnitPresenter: MonoBehaviour
         _stateMachine?.Tick(Time.deltaTime);
      //   ShowRange(true);
     }
+
+    public C_MapManager MapManager { get { return _mapManager; } }
 
     public void TakeDamage(float dmg)
     {

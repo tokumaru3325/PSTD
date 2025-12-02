@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,16 @@ public class SpawnButton : MonoBehaviour
     [SerializeField] ObjectPoolTest objectPoolTest;
 
     [SerializeField] Vector3 spawnPosition;
+
+    [SerializeField] 
+    private string _playerTag;
+
+    [SerializeField]
+    private string _enemyTag;
+
+    private Player _enemy;
+
+    const string SPAWN_TAG = "SpawnPos";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -61,7 +72,9 @@ public class SpawnButton : MonoBehaviour
             }
         }
 
-        _player = FindAnyObjectByType<Player>();
+        //_player = FindAnyObjectByType<Player>();
+        _player = GameObject.FindGameObjectWithTag(_playerTag).GetComponent<Player>();
+        _enemy = GameObject.FindGameObjectWithTag(_enemyTag).GetComponent<Player>();
 
         objectPoolTest.CreatePool(10);        
     }
@@ -109,7 +122,9 @@ public class SpawnButton : MonoBehaviour
     public void OnButtonDown_Spawn()
     {
         //Monsterをスポーンさせる
-        objectPoolTest.GetObj(spawnPosition, Unit); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
+        Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
+        objectPoolTest.GetObj(mySpawnPos, Unit, enemyPos); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         _buttonComp.interactable = false;
         _timer = 0.0f;
@@ -119,5 +134,19 @@ public class SpawnButton : MonoBehaviour
         _textComp.rectTransform.anchoredPosition = _textCompStartPosition;
 
         _bPushed = true;
+    }
+
+    private Vector3 GetSpawnPos(GameObject player)
+    {
+        var childs = player.GetComponentsInChildren<Transform>();
+        foreach (var child in childs)
+        {
+            if (child.tag.Equals(SPAWN_TAG))
+            {
+                return child.transform.position;
+            }
+        }
+
+        return new(-999, -999, -999);
     }
 }

@@ -21,6 +21,14 @@ public class C_GlobalVariable : MonoBehaviour
         _datas = new M_GlobalVariable();
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     /// <summary>
     /// マルチの役割を設定
     /// </summary>
