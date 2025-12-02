@@ -109,7 +109,7 @@ MonoBehaviour:
     healthThresholdPecent: 0
   _playerController: {fileID: 1860676233158408536}
   _tower: {fileID: 1951261320476271373}
-  _healthGauge: {fileID: 0}
+  _healthGauge: {fileID: 7325418786087702757}
 --- !u!114 &1860676233158408536
 MonoBehaviour:
   m_ObjectHideFlags: 0
