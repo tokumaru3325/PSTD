@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitleButton : MonoBehaviour
 {
@@ -16,11 +17,11 @@ public class TitleButton : MonoBehaviour
 
     public void OnButtonDown_Start()
     {
-        Debug.Log("Pushed StartButton");
+        SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
     }
 
     public void OnButtonDown_Quit()
     {
-        Debug.Log("Pushed QuitButton");
+        Application.Quit();
     }
 }
