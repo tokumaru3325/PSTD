@@ -16,6 +16,7 @@ public class ReelController : MonoBehaviour
     [SerializeField] private GameObject reelC;
     [SerializeField] private GameObject reelR;
     [SerializeField] private float ySpeed = 0.0f;
+    [SerializeField] private float resetY = 0.0f;
 
     private float firstPositionL;
     private float firstPositionC;
@@ -43,6 +44,10 @@ public class ReelController : MonoBehaviour
     bool hazureChange = false;
     int hazureNumKeeper = 0;
 
+    float initialazeYkakeru = 0.0f;
+
+    [SerializeField] RectTransform rt;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -50,6 +55,11 @@ public class ReelController : MonoBehaviour
         firstPositionC = reelC.transform.position.y;
         firstPositionR = reelR.transform.position.y;
         ReelZugaraPositionInit();
+        initialazeYkakeru = (rt.sizeDelta.y * rt.localScale.y) / rt.sizeDelta.y;
+        Debug.Log($"rt.sizeDelta.x: {initialazeYkakeru}");
+
+        ySpeed = -300 * rt.localScale.y;
+
     }
 
     // Update is called once per frame
@@ -65,7 +75,7 @@ public class ReelController : MonoBehaviour
             if (canMoveL)
             {
                 reelL.transform.Translate(0, ySpeed * deltaTIme, 0);
-                if (reelL.transform.position.y <= 1.0f + oya.transform.position.y)
+                if (reelL.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                 {
                     reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, oya.transform.position.z);
                 }
@@ -83,7 +93,7 @@ public class ReelController : MonoBehaviour
             if (canMoveC)
             {
                 reelC.transform.Translate(0, ySpeed * deltaTIme, 0);
-                if (reelC.transform.position.y <= 1.0f + oya.transform.position.y)
+                if (reelC.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                 {
                     reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, oya.transform.position.z);
 
@@ -102,7 +112,7 @@ public class ReelController : MonoBehaviour
             if (canMoveR)
             {
                 reelR.transform.Translate(0, ySpeed * deltaTIme, 0);
-                if (reelR.transform.position.y <= 1.0f + oya.transform.position.y)
+                if (reelR.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                 {
                     reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, oya.transform.position.z);
 
@@ -176,9 +186,9 @@ public class ReelController : MonoBehaviour
                 if (reelLStoped) break;
                 if (koyakuok)
                 {
-                    if (reelLeftZugaraNum[num] + oya.transform.position.y + 0.1f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[num] + oya.transform.position.y - 0.1f)
+                    if (reelLeftZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
-                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[num] + oya.transform.position.y, oya.transform.position.z);
+                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelLStoped = true;
                        
@@ -187,7 +197,7 @@ public class ReelController : MonoBehaviour
                     else
                     {
                         reelL.transform.Translate(0, ySpeed * Time.deltaTime, 0);
-                        if (reelL.transform.position.y <= 1.0f + oya.transform.position.y)
+                        if (reelL.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                         {
                             reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, oya.transform.position.z);
 
@@ -202,9 +212,9 @@ public class ReelController : MonoBehaviour
                         hazureNumKeeper = koyakuNum;
                         hazureChange = true;
                     }
-                    if (reelLeftZugaraNum[koyakuNum] + oya.transform.position.y + 0.1f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[koyakuNum] + oya.transform.position.y - 0.1f)
+                    if (reelLeftZugaraNum[koyakuNum] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[koyakuNum] + oya.transform.position.y - 1.0f)
                     {
-                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[koyakuNum] + oya.transform.position.y, oya.transform.position.z);
+                        reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[koyakuNum] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelLStoped = true;
                         hazureChange = false;
@@ -214,7 +224,7 @@ public class ReelController : MonoBehaviour
                     else
                     {
                         reelL.transform.Translate(0, ySpeed * Time.deltaTime, 0);
-                        if (reelL.transform.position.y <= 1.0f + oya.transform.position.y)
+                        if (reelL.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                         {
                             reelL.transform.position = new Vector3(reelL.transform.position.x, firstPositionL, oya.transform.position.z);
 
@@ -226,9 +236,9 @@ public class ReelController : MonoBehaviour
                 if (reelCStoped) break;
                 if (koyaku)
                 {
-                    if (reelCenterZugaraNum[num] + oya.transform.position.y + 0.1f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[num] + oya.transform.position.y - 0.1f)
+                    if (reelCenterZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
-                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[num] + oya.transform.position.y, oya.transform.position.z);
+                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelCStoped = true;
                         
@@ -237,7 +247,7 @@ public class ReelController : MonoBehaviour
                     else
                     {
                         reelC.transform.Translate(0, ySpeed * Time.deltaTime, 0);
-                        if (reelC.transform.position.y <= 1.0f + oya.transform.position.y)
+                        if (reelC.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                         {
                             reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, oya.transform.position.z);
 
@@ -255,9 +265,9 @@ public class ReelController : MonoBehaviour
                         hazureNumKeeper = koyakuNum;
                         hazureChange = true;
                     }
-                    if (reelCenterZugaraNum[koyakuNum] + oya.transform.position.y + 0.1f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[koyakuNum] + oya.transform.position.y - 0.1f)
+                    if (reelCenterZugaraNum[koyakuNum] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[koyakuNum] + oya.transform.position.y - 1.0f)
                     {
-                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[koyakuNum] + oya.transform.position.y, oya.transform.position.z);
+                        reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[koyakuNum] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelCStoped = true;
                         hazureChange = false;
@@ -267,7 +277,7 @@ public class ReelController : MonoBehaviour
                     else
                     {
                         reelC.transform.Translate(0, ySpeed * Time.deltaTime, 0);
-                        if (reelC.transform.position.y <= 1.0f + oya.transform.position.y)
+                        if (reelC.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                         {
                             reelC.transform.position = new Vector3(reelC.transform.position.x, firstPositionC, oya.transform.position.z);
 
@@ -279,9 +289,9 @@ public class ReelController : MonoBehaviour
                 if (reelRStoped) break;
                 if (koyaku)
                 {
-                    if (reelRightZugaraNum[num] + oya.transform.position.y + 0.1f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[num] + oya.transform.position.y - 0.1f)
+                    if (reelRightZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
-                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] + oya.transform.position.y, oya.transform.position.z);
+                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
                         
@@ -290,7 +300,7 @@ public class ReelController : MonoBehaviour
                     else
                     {
                         reelR.transform.Translate(0, ySpeed * Time.deltaTime, 0);
-                        if (reelR.transform.position.y <= 1.0f + oya.transform.position.y)
+                        if (reelR.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                         {
                             reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, oya.transform.position.z);
 
@@ -308,9 +318,9 @@ public class ReelController : MonoBehaviour
                         hazureNumKeeper = koyakuNum;
                         hazureChange = true;
                     }
-                    if (reelRightZugaraNum[koyakuNum] + oya.transform.position.y + 0.1f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[koyakuNum] + oya.transform.position.y - 0.1f)
+                    if (reelRightZugaraNum[koyakuNum] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[koyakuNum] + oya.transform.position.y - 1.0f)
                     {
-                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[koyakuNum] + oya.transform.position.y, oya.transform.position.z);
+                        reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[koyakuNum] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
                         hazureChange = false;
@@ -320,7 +330,7 @@ public class ReelController : MonoBehaviour
                     else
                     {
                         reelR.transform.Translate(0, ySpeed * Time.deltaTime, 0);
-                        if (reelR.transform.position.y <= 1.0f + oya.transform.position.y)
+                        if (reelR.transform.position.y <= resetY * initialazeYkakeru + oya.transform.position.y)
                         {
                             reelR.transform.position = new Vector3(reelR.transform.position.x, firstPositionR, oya.transform.position.z);
 
@@ -374,23 +384,23 @@ public class ReelController : MonoBehaviour
     void ReelZugaraPositionInit()
     {
 
-        reelLeftZugaraNum.Add(0, 4.1f);
-        reelLeftZugaraNum.Add(1, 2.9f);
-        reelLeftZugaraNum.Add(2, 6.3f);
-        reelLeftZugaraNum.Add(3, 5.2f);
-        reelLeftZugaraNum.Add(4, 1.5f);
+        reelLeftZugaraNum.Add(0, 25.0f);
+        reelLeftZugaraNum.Add(1, 45.0f);
+        reelLeftZugaraNum.Add(2, 80.0f);
+        reelLeftZugaraNum.Add(3, 63.0f);
+        reelLeftZugaraNum.Add(4, 2.0f);
 
-        reelCenterZugaraNum.Add(0, 5.15f);
-        reelCenterZugaraNum.Add(1, 4.0f);
-        reelCenterZugaraNum.Add(2, 1.44f);
-        reelCenterZugaraNum.Add(3, 2.85f);
-        reelCenterZugaraNum.Add(4, 6.3f);
+        reelCenterZugaraNum.Add(0, 43.0f);
+        reelCenterZugaraNum.Add(1, 63.0f);
+        reelCenterZugaraNum.Add(2, 0.0f);
+        reelCenterZugaraNum.Add(3, 23.0f);
+        reelCenterZugaraNum.Add(4, 80.0f);
 
-        reelRightZugaraNum.Add(0, 2.9f);
-        reelRightZugaraNum.Add(1, 6.25f);
-        reelRightZugaraNum.Add(2, 5.1f);
-        reelRightZugaraNum.Add(3, 1.4f);
-        reelRightZugaraNum.Add(4, 4.0f);
+        reelRightZugaraNum.Add(0, 80.0f);
+        reelRightZugaraNum.Add(1, 26.0f);
+        reelRightZugaraNum.Add(2, 62.0f);
+        reelRightZugaraNum.Add(3, 0.8f);
+        reelRightZugaraNum.Add(4, 44.0f);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
