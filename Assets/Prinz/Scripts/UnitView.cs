@@ -78,7 +78,13 @@ public class UnitView : MonoBehaviour
         Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
         if (!presenter.AllowDetection) return;
         presenter.OnEnterRange(other);
-        AttackRangeSprite.color = Color.red;
+        AttackRangeSprite.color = Color.softRed;
     }
 
+    public void OnExitRange(Collider2D other)
+    {
+        Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
+        presenter.OnExitRange(other);
+        if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
+    }
 }

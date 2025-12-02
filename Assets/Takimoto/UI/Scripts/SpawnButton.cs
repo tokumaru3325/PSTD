@@ -32,6 +32,8 @@ public class SpawnButton : MonoBehaviour
 
     const string SPAWN_TAG = "SpawnPos";
 
+    private int TeamNumber;   //[2025/12/02] プリンス : "TeamNumber"追加
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -76,7 +78,9 @@ public class SpawnButton : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag(_playerTag).GetComponent<Player>();
         _enemy = GameObject.FindGameObjectWithTag(_enemyTag).GetComponent<Player>();
 
-        objectPoolTest.CreatePool(10);        
+
+        objectPoolTest.CreatePool(10);
+
     }
 
     // Update is called once per frame
@@ -98,7 +102,7 @@ public class SpawnButton : MonoBehaviour
             }
 
             _imageComp.fillAmount += Time.fixedDeltaTime / Unit.BaseUnitCoolDown;
-            if (_timer > Unit.BaseUnitCoolDown) //HERE USE UNITDATA INSTEAD !!!!!
+            if (_timer > Unit.BaseUnitCoolDown)
             {
                 _buttonComp.interactable = true;
                 _imageComp.fillAmount = 0;
@@ -122,9 +126,16 @@ public class SpawnButton : MonoBehaviour
     public void OnButtonDown_Spawn()
     {
         //Monsterをスポーンさせる
+
+        //[2025/12/02] プリンス START
+        if (_player.gameObject.CompareTag("Player1")) TeamNumber = 1;
+        else if (_player.gameObject.CompareTag("Player2")) TeamNumber = 2;
+        else Debug.LogError("No player tag found, TeamNumber not set");
+        //[2025/12/02] プリンス END
+
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
-        objectPoolTest.GetObj(mySpawnPos, Unit, enemyPos); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        objectPoolTest.GetObj(mySpawnPos, Unit, enemyPos, TeamNumber); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         _buttonComp.interactable = false;
         _timer = 0.0f;

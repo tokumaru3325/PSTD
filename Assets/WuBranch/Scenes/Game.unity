@@ -14144,11 +14144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 111.599976
+      value: -260
       objectReference: {fileID: 0}
     - target: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -488
       objectReference: {fileID: 0}
     - target: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14778,6 +14778,14 @@ PrefabInstance:
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3708421179
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3597016787
       objectReference: {fileID: 0}
     - target: {fileID: 3866086402458862461, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16522,7 +16530,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 121.5, y: -127}
+  m_AnchoredPosition: {x: 87.5, y: -452}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1258896934
@@ -16849,7 +16857,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -71, y: -127}
+  m_AnchoredPosition: {x: -105, y: -452}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1274933575
@@ -17642,11 +17650,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 356
       objectReference: {fileID: 0}
     - target: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -483
       objectReference: {fileID: 0}
     - target: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -17752,6 +17760,14 @@ PrefabInstance:
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 367408599
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3597016787
       objectReference: {fileID: 0}
     - target: {fileID: 3866086402458862461, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_LocalPosition.x

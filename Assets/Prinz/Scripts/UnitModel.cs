@@ -39,6 +39,7 @@ public abstract class UnitModel
     public M_MapPosition EnemyPlayerPos { get; private set; }
 
     public List<M_MapPosition> Route { get; private set; }
+    public int CurrentRouteIndex { get; private set; }
 
     public bool IsDead => Health <= 0f;
 
@@ -82,6 +83,16 @@ public abstract class UnitModel
             targets.Add(t);
     }
 
+    public void RemoveTarget(UnitPresenter t)
+    {
+        targets.Remove(t);
+    }
+
+    public void ClearTargets()
+    {
+        targets.Clear();
+    }
+
     public List<UnitPresenter> Targets => targets;
 
     public abstract void Tick(UnitPresenter presenter);
@@ -95,11 +106,11 @@ public abstract class UnitModel
 
     public UnitPresenter GetPrimaryTarget()
     {
-        if(targets[0] == null) return null;
+        if(targets.Count == 0) return null;
         return targets.First();
     }
 
-    public void SetEnemyPolayerPos(M_MapPosition pos)
+    public void SetEnemyPlayerPos(M_MapPosition pos)
     {
         EnemyPlayerPos = pos;
     }
@@ -158,6 +169,11 @@ public abstract class UnitModel
             MoveDirection = direction;
             Debug.Log($"MoveDirection: {MoveDirection}");
         }
+    }
+
+    public void SetCurrentRouteIndex(int ri)
+    {
+        CurrentRouteIndex = ri;
     }
 #endregion
 }

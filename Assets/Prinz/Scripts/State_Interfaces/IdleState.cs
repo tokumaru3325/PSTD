@@ -4,6 +4,7 @@ public class IdleState : IUnitState
 {
     private readonly UnitModel _model;
     private readonly UnitPresenter _presenter;
+    private float _idleTime;
 
     public IdleState(UnitModel model, UnitPresenter presenter)
     {
@@ -11,14 +12,22 @@ public class IdleState : IUnitState
         _presenter = presenter;
     }
 
-    public void OnEnter() 
-    {
+    public void OnEnter()
+    { 
         Debug.LogWarning("Enter IdleState");
+        _idleTime = 0f;
+        _presenter.OnEnterState();
     }
     public void OnExit() { }
 
     public IUnitState OnUpdate(float dt)
     {
+        if(_idleTime < 1.0f)
+        {
+            _idleTime += dt;
+            return null;
+        }
+
         if(_model.HasTargetInRange() == true)
         {
             return new AttackState(_model, _presenter);
@@ -28,6 +37,8 @@ public class IdleState : IUnitState
         {
             return new MoveState(_model, _presenter);
         }
+
+        //_idleTime = 0f;
 
         return null;
     }

@@ -15,7 +15,8 @@ public class DeadState : IUnitState
     public void OnEnter() 
     {
         Debug.LogWarning("Enter DeadState");
-        
+        _presenter.OnEnterState();
+        _presenter.Release();
     }
     public void OnExit() { }
 
