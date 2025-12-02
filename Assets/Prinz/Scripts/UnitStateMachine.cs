@@ -8,6 +8,7 @@ public class UnitStateMachine
 
     public void Initialize(IUnitState startState)
     {
+        Debug.Log("Initializing State Machine");
         Current = startState;
         Current?.OnEnter();
     }
@@ -23,9 +24,11 @@ public class UnitStateMachine
         }
     }
 
-/*    public void TrySetState(IUnitState newState)
+    public void TrySetState(IUnitState newState)
     {
+        Debug.LogWarning("TrySetState() called");
+        Current.OnExit();
         Current = newState;
         Current?.OnEnter();
-    }*/
+    }
 }

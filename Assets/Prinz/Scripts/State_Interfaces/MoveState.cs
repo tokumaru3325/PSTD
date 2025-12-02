@@ -15,6 +15,7 @@ public class MoveState : IUnitState
 
     public void OnEnter() 
     {
+        Debug.LogWarning("Enter MoveState");
         _presenter?.View?.PlayMove();
     }
     public void OnExit()
@@ -26,7 +27,7 @@ public class MoveState : IUnitState
     {
         Move(_model.MoveSpeed, _model.MoveDirection, dt);
 
-        if (_model.HasEnemyInRange() ) //ターゲットがいる場合
+        if (_model.HasTargetInRange() ) //ターゲットがいる場合
         {
             return new AttackState(_model, _presenter);
         }

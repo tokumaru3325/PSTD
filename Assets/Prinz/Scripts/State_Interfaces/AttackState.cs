@@ -14,6 +14,7 @@ public class AttackState : IUnitState
 
     public void OnEnter() 
     {
+        Debug.LogWarning("Enter AttackState");
         _attackTimer = 0f;
         _presenter.View.PlayAttack();
     }
@@ -24,33 +25,35 @@ public class AttackState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-
-    //    if (_model.TargetEnemy == null)
-     //   {
-     //       return new MoveState(_model, _presenter);
-     //   }
-
         // Enemy is too far → go back to walking
-        if (!_model.HasEnemyInRange())
+        if (_model.HasTargetInRange() == false)
         {
+            Debug.Log("Target is too far");
             return new MoveState(_model, _presenter);
         }
 
-/*        var target = _model.GetPrimaryTarget();
+        ////
+        var target = _model.GetPrimaryTarget();
+        if (target == null || target.Model.IsDead)
+        {
+            Debug.LogError("Target is null or dead");
+            return new IdleState(_model, _presenter);
+        }
 
-        if (target == null || target.IsDead)
-            return new IdleState();
-
-        PerformAttack(target);
+/*        //PerformAttack(target);
         return this;*/
+     
 
+        ////
         _attackTimer += dt;
 
         if (_attackTimer >= 1f / _model.AttackSpeed)
         {
             _attackTimer = 0f;
-         //   _model.TargetEnemy.TakeDamage(_model.AttackPower);
+            target.TakeDamage(_model.AttackPower);
+            //   _model.TargetEnemy.TakeDamage(_model.AttackPower);
         }
+
 
         return null;
     }

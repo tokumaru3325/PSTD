@@ -11,11 +11,24 @@ public class IdleState : IUnitState
         _presenter = presenter;
     }
 
-    public void OnEnter() { }
+    public void OnEnter() 
+    {
+        Debug.LogWarning("Enter IdleState");
+    }
     public void OnExit() { }
 
     public IUnitState OnUpdate(float dt)
     {
+        if(_model.HasTargetInRange() == true)
+        {
+            return new AttackState(_model, _presenter);
+        }
+
+        if(_model.HasTargetInRange() == false)
+        {
+            return new MoveState(_model, _presenter);
+        }
+
         return null;
     }
 }

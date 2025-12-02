@@ -21,7 +21,7 @@ public class UnitPresenter: MonoBehaviour
             FaceLeft(transform);
         else FaceRight(transform);
 
-        //   model.OnHealthChanged += OnHealthChanged;
+        //Model.OnHealthChanged += OnHealthChanged;
     }
 
 /*    private void InitializeModel()
@@ -45,7 +45,7 @@ public class UnitPresenter: MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Application.targetFrameRate = 60;
+    //    Application.targetFrameRate = 60;
  
     }
 
@@ -100,10 +100,15 @@ public class UnitPresenter: MonoBehaviour
     public void TakeDamage(float dmg)
     {
         Model.SetHealth(Model.Health - dmg);
+        Debug.LogWarning($"Taking {dmg} damage, {Model.Health} HP remaining.");
     }
 
     public bool IsEnemyInRange(float range) { /* ...*/ return false; }
-    public void PerformMeleeAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void PerformMeleeAttack(float dmg)
+    {
+        
+        View?.PlayAttack();
+    }
     public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
     public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
 
@@ -168,12 +173,13 @@ public class UnitPresenter: MonoBehaviour
         Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
 
         // Only accept valid UnitPresenters with opposite team
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) return;
-        if (target.Model.PlayerSide == Model.PlayerSide) return;
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
+        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
 
         Model.AddTarget(target);
+        Debug.Log("Target added");
 
         // Tell the FSM that we may need to switch state
-    //    _stateMachine.TrySetState(new IdleState());
+        _stateMachine.TrySetState(new IdleState(Model, this));
     }
 }

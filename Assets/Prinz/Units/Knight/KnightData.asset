@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KnightData
   PlayerSide: 1
   MaxHealth: 10
-  BaseAttackPower: 1
+  BaseAttackPower: 5
   BaseAttackSpeed: 1
   BaseAttackRange: 1
   BaseMoveSpeed: 2

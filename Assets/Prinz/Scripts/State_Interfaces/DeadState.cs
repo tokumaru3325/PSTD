@@ -11,7 +11,10 @@ public class DeadState : IUnitState
         _presenter = presenter;
     }
 
-    public void OnEnter() { }
+    public void OnEnter() 
+    {
+        Debug.LogWarning("Enter DeadState");
+    }
     public void OnExit() { }
 
     public IUnitState OnUpdate(float dt)

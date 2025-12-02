@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 //[Serializable]
@@ -81,18 +82,17 @@ public abstract class UnitModel
 
     public abstract void Tick(UnitPresenter presenter);
 
-    public bool HasEnemyInRange()
+    public bool HasTargetInRange()
     {
         if(targets.Count == 0) return false;
 
         return true;
     }
 
-    public UnitPresenter ClosestEnemy()
+    public UnitPresenter GetPrimaryTarget()
     {
-       // targets.ForEach
-
-        return null;
+        if(targets[0] == null) return null;
+        return targets.First();
     }
 
 

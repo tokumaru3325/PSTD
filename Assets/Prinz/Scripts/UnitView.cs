@@ -7,6 +7,7 @@ public class UnitView : MonoBehaviour
     public Transform AttackRangeTransform { get; private set; }
     public BoxCollider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
+    public KnightAttackRange AttackRange { get; private set; }
 
     public Animator Animator;
 
@@ -29,12 +30,14 @@ public class UnitView : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Application.targetFrameRate = 60;
+     //   Application.targetFrameRate = 60;
     }
 
     private void Awake()
     {
         presenter = GetComponent<UnitPresenter>();
+     //   AttackRange = GetComponentInChildren<KnightAttackRange>();
+      //  AttackRange.SetView(this);
         AttackRangeTransform = transform.Find("KnightAttackRangeClose");
         AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
@@ -72,9 +75,10 @@ public class UnitView : MonoBehaviour
 
     public void OnEnterRange(Collider2D other)
     {
-        Debug.LogError($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
         if (!presenter.AllowDetection) return;
         presenter.OnEnterRange(other);
+        AttackRangeSprite.color = Color.red;
     }
 
 }

@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class KnightAttackRange : MonoBehaviour
 {
+    public UnitView View { get; private set; }
+
+    private void Awake()
+    {
+        View = GetComponentInParent<UnitView>();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -28,6 +35,7 @@ public class KnightAttackRange : MonoBehaviour
     {
         if (other.gameObject.tag == "Unit")
         {
+            View.OnEnterRange(other);
             Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Collision with {other.gameObject.name}");
         }
     }
