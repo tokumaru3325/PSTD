@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -153,7 +153,11 @@ public abstract class UnitModel
 
     public void SetMoveDirection (Vector3 direction)
     {
-        MoveDirection = direction;
+        if (MoveDirection != direction)
+        {
+            MoveDirection = direction;
+            Debug.Log($"MoveDirection: {MoveDirection}");
+        }
     }
 #endregion
 }
