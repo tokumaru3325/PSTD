@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ObjectPoolTest : MonoBehaviour
 {
@@ -17,13 +18,14 @@ public class ObjectPoolTest : MonoBehaviour
         {
             GameObject gameObject = Instantiate(prefabObj);
             UnitPresenter obj = gameObject.GetComponent<UnitPresenter>();
+            obj.SetPool(this);
             obj.gameObject.SetActive(false);
             pool.Add(obj);
         }
     }
 
     //使う時に場所を指定して表示する
-    public UnitPresenter GetObj(Vector3 position, UnitData data, Vector3 enemyPos)
+    public UnitPresenter GetObj(Vector3 position, UnitData data, Vector3 enemyPos, int TeamNumber) //[2025/12/02] プリンス : "TeamNumber"追加
     {
         //使ってないものを探す
         for(int i = 0; i < pool.Count; i++)
@@ -31,10 +33,8 @@ public class ObjectPoolTest : MonoBehaviour
             if (pool[i].gameObject.activeSelf == false)
             {
                 UnitPresenter Unit = pool[i];
-                //Unit.gameObject.transform.position = position;
-                Unit.Initialize(data, position, enemyPos);
+                Unit.Initialize(data, position, enemyPos, TeamNumber); //[2025/12/02] プリンス : "TeamNumber"追加
                 Unit.gameObject.SetActive(true);
-             //   Monster.ElapsedTime = 0;
 
                 return Unit;                
             }
@@ -46,7 +46,8 @@ public class ObjectPoolTest : MonoBehaviour
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, position, enemyPos);
+            newUnit.Initialize(data, position, enemyPos, TeamNumber); //[2025/12/02] プリンス : "TeamNumber"追加
+            newUnit.SetPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
          //   newMonster.ElapsedTime = 0;
@@ -61,8 +62,15 @@ public class ObjectPoolTest : MonoBehaviour
     //[2025/11/20]　プリンス　Start
     public void Release(UnitPresenter unit)
     {
-        unit.gameObject.SetActive(false);
-        //reset animator, vfx, etc.
+        for (int i = 0; i < pool.Count; i++)
+        {
+            if (pool[i] == unit)
+            {
+                pool[i].gameObject.SetActive(false);
+                //reset animator, vfx, etc.
+                return;
+            }
+        }
     }
     //[2025/11/20]　プリンス　End
 }

@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 436639955}
   m_Layer: 0
   m_Name: SpawnKnightButtonManager2
-  m_TagString: Untagged
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   SpawnButtonPrefab: {fileID: 1540506499}
   objectPoolTest: {fileID: 1642653469}
   spawnPosition: {x: -2, y: 0, z: 0}
+  _playerTag: 
+  _enemyTag: 
 --- !u!4 &436639956
 Transform:
   m_ObjectHideFlags: 0
@@ -25591,7 +25593,7 @@ GameObject:
   - component: {fileID: 1110059503}
   m_Layer: 0
   m_Name: SpawnKnightButtonManager
-  m_TagString: Untagged
+  m_TagString: Player1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25612,6 +25614,8 @@ MonoBehaviour:
   SpawnButtonPrefab: {fileID: 1451669646}
   objectPoolTest: {fileID: 2078422202}
   spawnPosition: {x: 2, y: 0, z: 0}
+  _playerTag: 
+  _enemyTag: 
 --- !u!4 &1110059504
 Transform:
   m_ObjectHideFlags: 0

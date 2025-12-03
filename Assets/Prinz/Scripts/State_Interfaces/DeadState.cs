@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DeadState : IUnitState
@@ -11,10 +12,20 @@ public class DeadState : IUnitState
         _presenter = presenter;
     }
 
-    public void OnEnter() { }
+    public void OnEnter() 
+    {
+        Debug.LogWarning("Enter DeadState");
+        _presenter.OnEnterState();
+        _presenter.Release();
+    }
     public void OnExit() { }
 
     public IUnitState OnUpdate(float dt)
+    {
+        return null;
+    }
+
+    public IUnitState OnFixedUpdate(float fdt)
     {
         return null;
     }

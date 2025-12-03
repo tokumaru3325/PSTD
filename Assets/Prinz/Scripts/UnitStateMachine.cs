@@ -8,6 +8,7 @@ public class UnitStateMachine
 
     public void Initialize(IUnitState startState)
     {
+        Debug.Log("Initializing State Machine");
         Current = startState;
         Current?.OnEnter();
     }
@@ -18,14 +19,30 @@ public class UnitStateMachine
         if (next != null)
         {
             Current.OnExit();
+            Current = null; //test ??
             Current = next;
             Current.OnEnter();
         }
     }
 
-/*    public void TrySetState(IUnitState newState)
+    public void FixedTick(float fixeddeltaTime)
     {
+        var next = Current?.OnFixedUpdate(fixeddeltaTime);
+        if (next != null)
+        {
+            Current.OnExit();
+            Current = null; //test ??
+            Current = next;
+            Current.OnEnter();
+        }
+    }
+
+    public void TrySetState(IUnitState newState)
+    {
+        Debug.LogWarning("TrySetState() called");
+        Current.OnExit();
+        Current = null; //test ??
         Current = newState;
         Current?.OnEnter();
-    }*/
+    }
 }
