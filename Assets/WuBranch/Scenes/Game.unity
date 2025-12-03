@@ -18116,6 +18116,7 @@ GameObject:
   - component: {fileID: 1856881037}
   - component: {fileID: 1856881036}
   - component: {fileID: 1856881035}
+  - component: {fileID: 1856881038}
   m_Layer: 5
   m_Name: Slot
   m_TagString: Untagged
@@ -18186,7 +18187,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1856881036}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1856881038}
+        m_TargetAssemblyTypeName: V_Slot, Assembly-CSharp
+        m_MethodName: OpenSlot
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1856881036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18225,6 +18238,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1856881033}
   m_CullTransparentMesh: 1
+--- !u!114 &1856881038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856881033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa47e1f3e109bc4498325855f9f8462f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::V_Slot
 --- !u!1 &1892872861
 GameObject:
   m_ObjectHideFlags: 0
