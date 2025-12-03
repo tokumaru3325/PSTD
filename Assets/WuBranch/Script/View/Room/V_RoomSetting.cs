@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class V_RoomCreator : MonoBehaviour
+public class V_RoomSetting : MonoBehaviour
 {
     /// <summary>
     /// 作成ボタン
@@ -15,6 +15,12 @@ public class V_RoomCreator : MonoBehaviour
     /// </summary>
     [SerializeField]
     private Button _cancelBtn;
+
+    /// <summary>
+    /// 部屋を作る人
+    /// </summary>
+    [SerializeField]
+    private C_RoomCreator _creator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,8 +44,7 @@ public class V_RoomCreator : MonoBehaviour
     {
         // データを準備
 
-        // シーンを変更
-        SceneManager.LoadScene("Room", LoadSceneMode.Single);
+        _creator.CreateLobby();
     }
 
     /// <summary>
@@ -50,6 +55,6 @@ public class V_RoomCreator : MonoBehaviour
         // 初期化
 
         // シーンを変更
-        SceneManager.LoadScene("Title", LoadSceneMode.Single);
+        SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
     }
 }
