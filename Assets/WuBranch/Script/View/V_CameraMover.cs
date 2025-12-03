@@ -43,7 +43,7 @@ public class V_CameraMover : MonoBehaviour, IPointerUpHandler, IPointerDownHandl
         _cameraMover.OnArriveSide += OnArriveSide;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (_isPressed)
         {
