@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/WuBranch/Scenes/Game.unity
     guid: 2af4bca664b206844a17d6ca0c9125a3
+  - enabled: 1
+    path: Assets/tokumaru/Scene/Slot.unity
+    guid: 7d85126068fe6744899cc67f90ed1895
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
