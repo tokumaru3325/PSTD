@@ -5,6 +5,18 @@ using UnityEngine.UI;
 public class V_MultiMode : MonoBehaviour
 {
     /// <summary>
+    /// 一人モードボタン
+    /// </summary>
+    [SerializeField]
+    private Button _singleBtn;
+
+    /// <summary>
+    /// マルチモードボタン
+    /// </summary>
+    [SerializeField]
+    private Button _multiBtn;
+
+    /// <summary>
     /// ロビーを作るボタン
     /// </summary>
     [SerializeField]
@@ -23,25 +35,41 @@ public class V_MultiMode : MonoBehaviour
     private Button _backBtn;
 
     /// <summary>
-    /// ひとつ前の画面
+    /// モード画面
     /// </summary>
     [SerializeField]
-    private GameObject _preScene;
+    private GameObject _modeScene;
 
-    void Awake()
-    {
-        gameObject.SetActive(false);
-    }
+    /// <summary>
+    /// マルチ画面
+    /// </summary>
+    [SerializeField]
+    private GameObject _multiScene;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    async void Start()
     {
+        if (_singleBtn)
+            _singleBtn.onClick.AddListener(OpenSingle);
+        if (_multiBtn)
+            _multiBtn.onClick.AddListener(OpenMulti);
         if (_hostBtn)
             _hostBtn.onClick.AddListener(CreateLobby);
         if (_clientBtn)
             _clientBtn.onClick.AddListener(SearchLobby);
         if (_backBtn)
-            _backBtn.onClick.AddListener(BackToTitle);
+            _backBtn.onClick.AddListener(OpenMode);
+    }
+
+    public void OpenSingle()
+    {
+        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+
+    public void OpenMulti()
+    {
+        _modeScene.SetActive(false);
+        _multiScene.SetActive(true);
     }
 
     /// <summary>
@@ -61,11 +89,11 @@ public class V_MultiMode : MonoBehaviour
     }
 
     /// <summary>
-    /// 前の画面に戻る
+    /// モードシーン
     /// </summary>
-    public void BackToTitle()
+    public void OpenMode()
     {
-        gameObject.SetActive(false);
-        _preScene.SetActive(true);
+        _modeScene.SetActive(true);
+        _multiScene.SetActive(false);
     }
 }
