@@ -11,14 +11,17 @@ public class UnitPresenter: MonoBehaviour
 
     private UnitStateMachine _stateMachine;
 
+    public ObjectPoolTest Pool { get; private set; }
+
     UnitData Data;
 
-    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos)
+    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, int TeamNumber)
     {
         View = GetComponent<UnitView>();
         CreateModelFromData(data);
+        Model.SetPlayerSide(TeamNumber);
 
-        M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
+            M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
         Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
         gameObject.transform.position = up;
@@ -28,7 +31,7 @@ public class UnitPresenter: MonoBehaviour
         {
             M_MapPosition start = _mapManager.ConvertToMapPos(transform.position);
             M_MapPosition end = _mapManager.ConvertToMapPos(enemyPos);
-            Model.SetEnemyPolayerPos(end);
+            Model.SetEnemyPlayerPos(end);
             Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end));
         }
 
@@ -37,7 +40,12 @@ public class UnitPresenter: MonoBehaviour
             FaceLeft(transform);
         else FaceRight(transform);
 
-        //   model.OnHealthChanged += OnHealthChanged;
+        Model.OnHealthChanged += OnHealthChanged;
+    }
+
+    public void SetPool(ObjectPoolTest pool)
+    {
+        Pool = pool;
     }
 
 /*    private void InitializeModel()
@@ -53,14 +61,21 @@ public class UnitPresenter: MonoBehaviour
         Model.SetMoveDirection(Data.MoveDirection);
     }*/
 
-    private void OnHealthChanged()
+    private void OnHealthChanged(float health, float maxHealth)
     {
-        View.UpdateHealth(Model.Health);
+        if (Model.IsDead)
+        {
+            _stateMachine.TrySetState(new DeadState(Model, this));
+            return;
+        }
+
+        View.UpdateHealth(health);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
     }
 
     protected void CreateModelFromData(UnitData data)
@@ -100,9 +115,23 @@ public class UnitPresenter: MonoBehaviour
         }
     }
 
+    public void Release()
+    {
+        Pool?.Release(this);
+    }
+
+    public void OnEnterState()
+    {
+        if(_stateMachine.Current is IdleState)
+        {
+            Model.ClearTargets();
+        }
+    }
+
     private void OnDisable()
     {
-      //  model.OnHealthChanged -= OnHealthChanged;
+    //    Model.OnHealthChanged -= OnHealthChanged;
+     
         Model = null; // clear model to avoid stale state when pooled
     }
 
@@ -114,15 +143,27 @@ public class UnitPresenter: MonoBehaviour
      //   ShowRange(true);
     }
 
+    void FixedUpdate()
+    {
+        _stateMachine?.FixedTick(Time.fixedDeltaTime);
+    }
+
     public C_MapManager MapManager { get { return _mapManager; } }
 
     public void TakeDamage(float dmg)
     {
-        Model.SetHealth(Model.Health - dmg);
+        if(Model.IsDead) return;
+        Model?.SetHealth(Model.Health - dmg);
+        Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
 
     public bool IsEnemyInRange(float range) { /* ...*/ return false; }
-    public void PerformMeleeAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void PerformMeleeAttack(UnitPresenter target)
+    {
+        float damage = Model.AttackPower;
+        target.TakeDamage(damage);
+        View?.PlayAttack();
+    }
     public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
     public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
 
@@ -187,12 +228,23 @@ public class UnitPresenter: MonoBehaviour
         Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
 
         // Only accept valid UnitPresenters with opposite team
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) return;
-        if (target.Model.PlayerSide == Model.PlayerSide) return;
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
+        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
 
         Model.AddTarget(target);
+        Debug.Log("Target added");
 
         // Tell the FSM that we may need to switch state
-    //    _stateMachine.TrySetState(new IdleState());
+        _stateMachine.TrySetState(new AttackState(Model, this));
+    }
+
+    public void OnExitRange(Collider2D other)
+    {
+        Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
+        Model.RemoveTarget(target);
+        Debug.Log("Target removed");
+
+        _stateMachine.TrySetState(new IdleState(Model, this));
     }
 }

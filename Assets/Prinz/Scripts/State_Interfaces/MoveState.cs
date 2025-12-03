@@ -9,7 +9,7 @@ public class MoveState : IUnitState
     private readonly UnitPresenter _presenter;
 
     private C_MapManager _mapManager;
-    private int _currentRouteIndex = 0;
+//    private int _currentRouteIndex = 0; //絶対ダメ
     private Vector3 target;
 
     public MoveState(UnitModel model, UnitPresenter presenter)
@@ -21,18 +21,29 @@ public class MoveState : IUnitState
 
     public void OnEnter() 
     {
-        _presenter?.View?.PlayMove();
+        Debug.LogWarning("Enter MoveState");
+        _presenter.OnEnterState();
+        _presenter.View.PlayMove();
     }
     public void OnExit()
     {
         _presenter?.View?.StopMove();
+        
     }
 
     public IUnitState OnUpdate(float dt)
     {
-        Move(_model.MoveSpeed, _model.MoveDirection, dt);
 
-        if (_model.HasEnemyInRange()) //ターゲットがいる場合
+        return null;
+    }
+
+    public IUnitState OnFixedUpdate(float fdt)
+    {
+        DebugShowRoute();
+
+        Move(_model.MoveSpeed, _model.MoveDirection, fdt);
+
+        if (_model.HasTargetInRange() ) //ターゲットがいる場合
         {
             return new AttackState(_model, _presenter);
         }
@@ -69,28 +80,29 @@ public class MoveState : IUnitState
 
     //    _presenter.transform.Translate(direction * movespeed * step);
 
-        _presenter.View?.PlayMove();
+    //    _presenter.View.PlayMove();
     }
 
     private void GetDistanceToTarget()
     {
-        if (_currentRouteIndex < _model.Route.Count - 1)
+        int cri = _model.CurrentRouteIndex;
+        if (cri < _model.Route.Count - 1)
         {
             //M_MapPosition currentMP = _mapManager.ConvertToMapPos(_presenter.transform.position);
-            Vector3 NextTargetPos = _mapManager.ConvertToUnityPos(_model.Route[_currentRouteIndex + 1]);
+            Vector3 NextTargetPos = _mapManager.ConvertToUnityPos(_model.Route[cri + 1]);
                 float Distance = Vector3.Distance(_presenter.transform.position, NextTargetPos);
             //Debug.Log($"current route: {_presenter.transform.position}, target: {NextTargetPos}, distance: {Distance}");
 
             if (Distance <= 0.001f)
             {
                 Debug.Log("next route");
-                _currentRouteIndex++;
+                _model.SetCurrentRouteIndex(cri + 1);
             }
 
-            Vector3 current = _mapManager.ConvertToUnityPos(_model.Route[_currentRouteIndex]);
+            Vector3 current = _mapManager.ConvertToUnityPos(_model.Route[cri]);
             target = current;
-            if (_currentRouteIndex + 1 < _model.Route.Count)
-                target = _mapManager.ConvertToUnityPos(_model.Route[_currentRouteIndex + 1]);
+            if (cri + 1 < _model.Route.Count)
+                target = _mapManager.ConvertToUnityPos(_model.Route[cri + 1]);
             _model.SetMoveDirection(target - current);
         }
     }
