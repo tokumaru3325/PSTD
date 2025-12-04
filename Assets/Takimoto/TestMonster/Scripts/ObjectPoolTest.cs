@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ObjectPoolTest : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class ObjectPoolTest : MonoBehaviour
     }
 
     //使う時に場所を指定して表示する
-    public UnitPresenter GetObj(Vector3 position, UnitData data, Vector3 enemyPos, int TeamNumber) //[2025/12/02] プリンス : "TeamNumber"追加
+    public UnitPresenter GetObj(Vector3 position, UnitData data, Vector3 enemyPos, string playerTag) //[2025/12/02] プリンス : "playerTag"追加
     {
         //使ってないものを探す
         for(int i = 0; i < pool.Count; i++)
@@ -33,7 +33,7 @@ public class ObjectPoolTest : MonoBehaviour
             if (pool[i].gameObject.activeSelf == false)
             {
                 UnitPresenter Unit = pool[i];
-                Unit.Initialize(data, position, enemyPos, TeamNumber); //[2025/12/02] プリンス : "TeamNumber"追加
+                Unit.Initialize(data, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
                 Unit.gameObject.SetActive(true);
 
                 return Unit;                
@@ -46,7 +46,7 @@ public class ObjectPoolTest : MonoBehaviour
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, position, enemyPos, TeamNumber); //[2025/12/02] プリンス : "TeamNumber"追加
+            newUnit.Initialize(data, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
             newUnit.SetPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);

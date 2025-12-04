@@ -21,31 +21,28 @@ public class KnightAttackRange : MonoBehaviour
         
     }
 
-/*    private void OnCollisionEnter(Collider2D other)
-    {
-        Debug.LogWarning("Collision ! in range script");
-    }*/
+    /*    private void OnCollisionEnter(Collider2D other)
+        {
+            Debug.LogWarning("Collision ! in range script");
+        }*/
 
-/*    private void OnCollisionEnter2D(Collision2D other)
-    {
-        Debug.LogWarning("Collision ! in range script");
-    }*/
+    /*    private void OnCollisionEnter2D(Collision2D other)
+        {
+            Debug.LogWarning("Collision ! in range script");
+        }*/
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Unit")
-        {
-            View?.OnEnterRange(other);
-            Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Collision with {other.gameObject.name}");
-        }
+        View?.OnEnterRange(other);
+        Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Collision with {other.gameObject.name}");
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Unit")
-        {
+     //   if (other.gameObject.tag == "Unit")
+     //   {
             View?.OnExitRange(other);
             Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Exit col with {other.gameObject.name}");
-        }
+      //  }
     }
 }

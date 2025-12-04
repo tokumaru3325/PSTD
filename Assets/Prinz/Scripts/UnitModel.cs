@@ -11,7 +11,7 @@ public abstract class UnitModel
     public UnitModel(UnitData data)
     {
         Data = data;
-        PlayerSide = data.PlayerSide;
+    //    PlayerSide = data.PlayerSide;
         MaxHealth = data.MaxHealth;
         Health = data.MaxHealth;
         AttackPower = data.BaseAttackPower;
@@ -24,7 +24,7 @@ public abstract class UnitModel
     }
 
     // プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
-    public int      PlayerSide { get; private set; }
+    public string      PlayerSide { get; private set; }
 
     public float    MaxHealth { get; private set; }
     public float    Health { get; private set; }
@@ -61,19 +61,26 @@ public abstract class UnitModel
     //owner
     public UnitPresenter Owner { get; private set; }
 
-    public void Bind(UnitPresenter presenter)
+    public void BindOwner(UnitPresenter presenter)
     {
         Owner = presenter;
     }
 
+    public C_PlayerTowerController EnemyPlayer {  get; private set; }
+
+    public void BindEnemyPlayer (C_PlayerTowerController enemyPlayer)
+    {
+        EnemyPlayer = enemyPlayer;
+    }
+
     //target enemy
 
-/*    public UnitPresenter TargetEnemy { get; private set; }
+    /*    public UnitPresenter TargetEnemy { get; private set; }
 
-    public void SetTarget(UnitPresenter enemy)
-    {
-        TargetEnemy = enemy;
-    }*/
+        public void SetTarget(UnitPresenter enemy)
+        {
+            TargetEnemy = enemy;
+        }*/
 
     private readonly List<UnitPresenter> targets = new();
 
@@ -107,7 +114,14 @@ public abstract class UnitModel
     public UnitPresenter GetPrimaryTarget()
     {
         if(targets.Count == 0) return null;
-        return targets.First();
+        foreach (var t in targets)
+        {
+            if (t != null)
+            {
+                return t;
+            }
+        }
+        return null;
     }
 
     public void SetEnemyPlayerPos(M_MapPosition pos)
@@ -127,7 +141,7 @@ public abstract class UnitModel
         OnHealthChanged?.Invoke(Health, MaxHealth);
     }
 
-    public void SetPlayerSide(int playerSide)
+    public void SetPlayerSide(string playerSide)
     {
         PlayerSide = playerSide;
     }
