@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleButton : MonoBehaviour
+public class V_Slot : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,13 +16,8 @@ public class TitleButton : MonoBehaviour
         
     }
 
-    public void OnButtonDown_Start()
+    public void OpenSlot()
     {
-        SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
-    }
-
-    public void OnButtonDown_Quit()
-    {
-        Application.Quit();
+        SceneManager.LoadScene("Slot", LoadSceneMode.Additive);
     }
 }
