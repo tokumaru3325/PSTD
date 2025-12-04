@@ -15,13 +15,15 @@ public class UnitPresenter: MonoBehaviour
 
     UnitData Data;
 
-    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, int TeamNumber)
+    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
         CreateModelFromData(data);
-        Model.SetPlayerSide(TeamNumber);
+        Model.SetPlayerSide(PlayerTag);
 
-            M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
+        BindEnemyPlayer();
+
+        M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
         Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
         gameObject.transform.position = up;
@@ -41,6 +43,17 @@ public class UnitPresenter: MonoBehaviour
         else FaceRight(transform);
 
         Model.OnHealthChanged += OnHealthChanged;
+    }
+
+    private void BindEnemyPlayer()
+    {
+        GameObject playerObject = GameObject.FindWithTag("Player1");
+        if (playerObject.gameObject.CompareTag(Model.PlayerSide))
+        {
+            playerObject = GameObject.FindWithTag("Player2");
+        }
+        else
+            Model?.BindEnemyPlayer(playerObject.GetComponent<C_PlayerTowerController>());
     }
 
     public void SetPool(ObjectPoolTest pool)
@@ -113,6 +126,8 @@ public class UnitPresenter: MonoBehaviour
             Debug.LogError("Unknown data type: " + data.GetType());
             return;
         }
+
+        Model.BindOwner(this);
     }
 
     public void Release()
@@ -122,10 +137,7 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnEnterState()
     {
-        if(_stateMachine.Current is IdleState)
-        {
-            Model.ClearTargets();
-        }
+
     }
 
     private void OnDisable()
@@ -219,29 +231,51 @@ public class UnitPresenter: MonoBehaviour
         View?.ShowAttackRange(show);
     }
 
-    public bool AllowDetection =>
-       _stateMachine.Current is MoveState ||
-       _stateMachine.Current is IdleState;
+    public bool AllowDetection => true;
+    //   _stateMachine.Current is MoveState ||
+     //  _stateMachine.Current is IdleState;
 
     public void OnEnterRange(Collider2D other)
     {
+        if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return; //敵の城でもUnitでもないモノを無視する
         Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
 
-        // Only accept valid UnitPresenters with opposite team
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
-        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
+        if (other.gameObject.CompareTag("Unit"))
+        {
+            bool flowcontrol = HandleUnitTarget(other);
+            if (!flowcontrol)
+            {
+                return;
+            }
+        }
+        else HandlePlayerTarget(other);
 
-        Model.AddTarget(target);
-        Debug.Log("Target added");
 
         // Tell the FSM that we may need to switch state
         _stateMachine.TrySetState(new AttackState(Model, this));
+    }
+
+    private void HandlePlayerTarget(Collider2D other)
+    {
+        
+    }
+
+    private bool HandleUnitTarget(Collider2D other)
+    {
+        // Only accept valid UnitPresenters with opposite team
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return false; }
+        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return false; }
+
+        Model.AddTarget(target);
+        Debug.Log("Target added");
+        return true;
     }
 
     public void OnExitRange(Collider2D other)
     {
         Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
+        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
         Model.RemoveTarget(target);
         Debug.Log("Target removed");
 

@@ -15,12 +15,12 @@ public class AttackState : IUnitState
     public void OnEnter() 
     {
         Debug.LogWarning("Enter AttackState");
-        _presenter.OnEnterState();
+     //   _presenter.OnEnterState();
         _attackTimer = 0f;
     }
     public void OnExit()
     {
-     //   _presenter.View.StopAttack();
+        _presenter.View.StopAttack();
     }
 
     public IUnitState OnUpdate(float dt)
@@ -31,7 +31,7 @@ public class AttackState : IUnitState
         if (_model.HasTargetInRange() == false)
         {
             Debug.Log("Target is too far");
-            return new MoveState(_model, _presenter);
+            return new IdleState(_model, _presenter);
         }
 
         ////

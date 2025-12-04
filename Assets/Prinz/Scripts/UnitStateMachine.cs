@@ -39,10 +39,13 @@ public class UnitStateMachine
 
     public void TrySetState(IUnitState newState)
     {
+        if (Current == newState) return;
+
         Debug.LogWarning("TrySetState() called");
         Current.OnExit();
         Current = null; //test ??
         Current = newState;
-        Current?.OnEnter();
+        Current.OnEnter();
+    
     }
 }

@@ -27,8 +27,8 @@ public class MoveState : IUnitState
     }
     public void OnExit()
     {
+        Debug.LogWarning("Exit MoveState");
         _presenter?.View?.StopMove();
-        
     }
 
     public IUnitState OnUpdate(float dt)
@@ -80,7 +80,7 @@ public class MoveState : IUnitState
 
     //    _presenter.transform.Translate(direction * movespeed * step);
 
-    //    _presenter.View.PlayMove();
+        _presenter.View.PlayMove();
     }
 
     private void GetDistanceToTarget()
