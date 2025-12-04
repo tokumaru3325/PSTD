@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -22,6 +23,18 @@ public class V_RoomSetting : MonoBehaviour
     [SerializeField]
     private C_RoomCreator _creator;
 
+    /// <summary>
+    /// 部屋名の入力
+    /// </summary>
+    [SerializeField]
+    private TMP_InputField _roomNameInput;
+
+    /// <summary>
+    /// パスワードの入力
+    /// </summary>
+    [SerializeField]
+    private TMP_InputField _passwordInput;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,8 +56,11 @@ public class V_RoomSetting : MonoBehaviour
     public void CreateRoom()
     {
         // データを準備
-
-        _creator.CreateLobby();
+        M_RoomData data = new M_RoomData();
+        data.Name = _roomNameInput.text;
+        data.Password = _passwordInput.text;
+        data.MaxMembers = 2;
+        _creator.CreateLobby(data);
     }
 
     /// <summary>

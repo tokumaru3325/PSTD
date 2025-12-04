@@ -15,7 +15,22 @@ public class C_RoomCreator : MonoBehaviour
     //ロビーデータ設定用キー
     private const string s_HostAddressKey = "HostAddress";
 
+    /// <summary>
+    /// 部屋の名前のキー
+    /// </summary>
+    private const string ROOM_NAME_KEY = "RoomName";
+
+    /// <summary>
+    /// 部屋のパスワードのキー
+    /// </summary>
+    private const string ROOM_PASSWORD_KEY = "RoomPassword";
+
     public ulong LobbyID { get; private set; }
+
+    /// <summary>
+    /// 部屋の情報
+    /// </summary>
+    private M_RoomData _roomData;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,6 +48,7 @@ public class C_RoomCreator : MonoBehaviour
     /// <param name="data">部屋データ</param>
     public void CreateLobby(M_RoomData data)
     {
+        _roomData = data;
         SteamAPICall_t hCreateLobby = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, data.MaxMembers);
         _onLobbyCreated.Set(hCreateLobby);
     }
@@ -51,6 +67,8 @@ public class C_RoomCreator : MonoBehaviour
             s_HostAddressKey,
             SteamUser.GetSteamID().ToString());
 
+        SetRoomInfo(result.m_ulSteamIDLobby);
+
         //ロビーID保存
         LobbyID = result.m_ulSteamIDLobby;
 
@@ -58,5 +76,15 @@ public class C_RoomCreator : MonoBehaviour
         NetworkManager.Singleton.StartHost();
         //シーンを切り替え
         NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
+    }
+
+    /// <summary>
+    /// 部屋の情報を設定
+    /// </summary>
+    private void SetRoomInfo(ulong LobbyID)
+    {
+        CSteamID steamID = new CSteamID(LobbyID);
+        SteamMatchmaking.SetLobbyData(steamID, ROOM_NAME_KEY, _roomData.Name);
+        SteamMatchmaking.SetLobbyData(steamID, ROOM_PASSWORD_KEY, _roomData.Password);
     }
 }
