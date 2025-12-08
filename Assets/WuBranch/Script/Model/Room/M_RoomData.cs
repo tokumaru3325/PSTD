@@ -1,7 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Steamworks;
+using UnityEngine;
 
 public struct M_RoomData
 {
+    /// <summary>
+    /// 部屋ID
+    /// </summary>
+    public CSteamID LobbyID;
+
     /// <summary>
     /// 部屋名
     /// </summary>
@@ -17,5 +24,19 @@ public struct M_RoomData
     /// </summary>
     public int MaxMembers;
 
+    /// <summary>
+    /// 今の人数
+    /// </summary>
+    public int MemberNums;
 
+    /// <summary>
+    /// 選んだ城
+    /// </summary>
+    public int CastleIndex;
+
+    /// <summary>
+    /// プレイヤーの状態
+    /// <ID, 状態>
+    /// </summary>
+    public Dictionary<string, GameReadyState> State;
 }

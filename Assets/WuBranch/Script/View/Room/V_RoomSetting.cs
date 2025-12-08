@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -57,9 +59,13 @@ public class V_RoomSetting : MonoBehaviour
     {
         // データを準備
         M_RoomData data = new M_RoomData();
+        data.LobbyID = CSteamID.Nil;
         data.Name = _roomNameInput.text;
         data.Password = _passwordInput.text;
         data.MaxMembers = 2;
+        data.MemberNums = 1;
+        data.CastleIndex = 0;
+        data.State = new Dictionary<string, GameReadyState>();
         _creator.CreateLobby(data);
     }
 
@@ -69,7 +75,8 @@ public class V_RoomSetting : MonoBehaviour
     public void CancelCreatingRoom()
     {
         // 初期化
-
+        _roomNameInput.text = "";
+        _passwordInput.text = "";
         // シーンを変更
         SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
     }
