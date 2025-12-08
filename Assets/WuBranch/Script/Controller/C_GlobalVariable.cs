@@ -23,27 +23,27 @@ public class C_GlobalVariable : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
     }
 
     /// <summary>
-    /// マルチの役割を設定
+    /// プレイヤーの自身の名前を設定
     /// </summary>
-    /// <param name="role">役割</param>
-    public void SetMultiRole(MultiRoleType role)
+    /// <param name="name">名前</param>
+    public void SetMyName(string name)
     {
-        _datas.SetRole(role);
+        _datas.SetMyName(name);
     }
 
     /// <summary>
-    /// ゲームモードをゲット
+    /// プレイヤーの自身の名前を取得
     /// </summary>
-    /// <returns></returns>
-    public MultiRoleType GetMultiRole()
+    /// <returns>名前</returns>
+    public string GetMyName()
     {
-        return _datas.MultiRole;
+        return _datas.MyName;
     }
 }

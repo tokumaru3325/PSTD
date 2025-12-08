@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -29,6 +30,12 @@ public class V_MultiMode : MonoBehaviour
     private Button _clientBtn;
 
     /// <summary>
+    /// 名前の入力
+    /// </summary>
+    [SerializeField]
+    private TMP_InputField _nameInput;
+
+    /// <summary>
     /// バックボタン
     /// </summary>
     [SerializeField]
@@ -46,6 +53,11 @@ public class V_MultiMode : MonoBehaviour
     [SerializeField]
     private GameObject _multiScene;
 
+    /// <summary>
+    /// 共通変数
+    /// </summary>
+    private C_GlobalVariable _globalVariable;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
@@ -59,6 +71,9 @@ public class V_MultiMode : MonoBehaviour
             _clientBtn.onClick.AddListener(SearchLobby);
         if (_backBtn)
             _backBtn.onClick.AddListener(OpenMode);
+        if (_nameInput)
+            _nameInput.onValueChanged.AddListener(OnNameInputChanged);
+        _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
     }
 
     public void OpenSingle()
@@ -77,6 +92,8 @@ public class V_MultiMode : MonoBehaviour
     /// </summary>
     public void CreateLobby()
     {
+        _globalVariable.SetMyName(_nameInput.text);
+        _nameInput.text = "";
         SceneManager.LoadScene("RoomCreate", LoadSceneMode.Single);
     }
 
@@ -85,6 +102,8 @@ public class V_MultiMode : MonoBehaviour
     /// </summary>
     public void SearchLobby()
     {
+        _globalVariable.SetMyName(_nameInput.text);
+        _nameInput.text = "";
         SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
 
@@ -95,5 +114,19 @@ public class V_MultiMode : MonoBehaviour
     {
         _modeScene.SetActive(true);
         _multiScene.SetActive(false);
+    }
+
+    public void OnNameInputChanged(string value)
+    {
+        if (value.Length == 0)
+        {
+            _hostBtn.interactable = false;
+            _clientBtn.interactable = false;
+        }
+        else
+        {
+            _hostBtn.interactable = true;
+            _clientBtn.interactable = true;
+        }
     }
 }
