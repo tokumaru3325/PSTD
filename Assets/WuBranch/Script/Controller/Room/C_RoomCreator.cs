@@ -1,6 +1,4 @@
-﻿using Netcode.Transports;
-using Steamworks;
-using System;
+﻿using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,19 +11,14 @@ public class C_RoomCreator : MonoBehaviour
     private CallResult<LobbyCreated_t> _onLobbyCreated;
 
     //ロビーデータ設定用キー
-    private const string s_HostAddressKey = "HostAddress";
-
-    /// <summary>
-    /// 部屋の名前のキー
-    /// </summary>
-    private const string ROOM_NAME_KEY = "RoomName";
-
-    /// <summary>
-    /// 部屋のパスワードのキー
-    /// </summary>
-    private const string ROOM_PASSWORD_KEY = "RoomPassword";
+    private const string HOST_ADDRESS_KEY = "HostAddress";
 
     public ulong LobbyID { get; private set; }
+
+    /// <summary>
+    /// 共通変数
+    /// </summary>
+    private C_GlobalVariable _globalVariable;
 
     /// <summary>
     /// 部屋の情報
@@ -40,6 +33,7 @@ public class C_RoomCreator : MonoBehaviour
         {
             _onLobbyCreated = CallResult<LobbyCreated_t>.Create(OnCreateLobby);
         }
+        _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
     }
 
     /// <summary>
@@ -61,13 +55,15 @@ public class C_RoomCreator : MonoBehaviour
             return;
         }
 
+        CSteamID steamID = new CSteamID(result.m_ulSteamIDLobby);
         //ホストのアドレス（SteamID）を登録
         SteamMatchmaking.SetLobbyData(
-            new CSteamID(result.m_ulSteamIDLobby),
-            s_HostAddressKey,
+            steamID,
+            HOST_ADDRESS_KEY,
             SteamUser.GetSteamID().ToString());
 
-        SetRoomInfo(result.m_ulSteamIDLobby);
+        SetRoomInfo(steamID);
+        SetMemberInfo(steamID);
 
         //ロビーID保存
         LobbyID = result.m_ulSteamIDLobby;
@@ -81,10 +77,17 @@ public class C_RoomCreator : MonoBehaviour
     /// <summary>
     /// 部屋の情報を設定
     /// </summary>
-    private void SetRoomInfo(ulong LobbyID)
+    private void SetRoomInfo(CSteamID LobbyID)
     {
-        CSteamID steamID = new CSteamID(LobbyID);
-        SteamMatchmaking.SetLobbyData(steamID, ROOM_NAME_KEY, _roomData.Name);
-        SteamMatchmaking.SetLobbyData(steamID, ROOM_PASSWORD_KEY, _roomData.Password);
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.GAME_ID_KEY, RoomParams.GAME_ID_VALUE);
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.VERSION_KEY, RoomParams.VERSION_VALUE);
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_NAME_KEY, _roomData.Name);
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_PASSWORD_KEY, _roomData.Password);
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_LEADER_KEY, _globalVariable.GetMyName());
+    }
+
+    private void SetMemberInfo(CSteamID LobbyID)
+    {
+        //SteamMatchmaking.SetLobbyMemberData(LobbyI,);
     }
 }
