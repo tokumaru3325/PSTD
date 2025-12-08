@@ -24,7 +24,7 @@ public class IdleState : IUnitState
     {
         if(_idleTime < 0.1f)
         {
-            if (_model.HasTargetInRange() == true)
+            if (_model.HasTargetInRange() == true || _model.IsPlayerInRange == true)
             {
                 return new AttackState(_model, _presenter);
             }
