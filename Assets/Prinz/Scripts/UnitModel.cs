@@ -43,9 +43,11 @@ public abstract class UnitModel
 
     public bool IsDead => Health <= 0f;
 
+    public bool IsPlayerInRange { get; private set; }
+
     public event Action<float, float> OnHealthChanged;
 
-
+    //=====================================================================================================
     #region Range 
     public float    AttackRange { get; private set; }
     public float    BaseAttackRange { get; private set; }
@@ -57,7 +59,7 @@ public abstract class UnitModel
         RangeMultiplier = factor;
     }
     #endregion
-
+    //=====================================================================================================
     //owner
     public UnitPresenter Owner { get; private set; }
 
@@ -111,6 +113,15 @@ public abstract class UnitModel
         return true;
     }
 
+    public bool HasPlayerInRange()
+    {
+        return IsPlayerInRange;
+    }
+    public void SetPlayerInRange(bool isPlayerInRange)
+    {
+        IsPlayerInRange = isPlayerInRange;
+    }
+
     public UnitPresenter GetPrimaryTarget()
     {
         if(targets.Count == 0) return null;
@@ -133,8 +144,8 @@ public abstract class UnitModel
     {
         Route = route;
     }
-
-#region Setter
+    //=====================================================================================================
+    #region Setter
     public void SetHealth(float amount)
     {
         Health = Mathf.Clamp(amount, 0.0f, MaxHealth);
@@ -189,5 +200,6 @@ public abstract class UnitModel
     {
         CurrentRouteIndex = ri;
     }
-#endregion
+    #endregion
+    //=====================================================================================================
 }

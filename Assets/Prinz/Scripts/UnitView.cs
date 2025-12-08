@@ -41,6 +41,7 @@ public class UnitView : MonoBehaviour
         AttackRangeTransform = transform.Find("KnightAttackRangeClose");
         AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
+        AttackRangeSprite.color = Color.lightGreen;
         Animator = GetComponent<Animator>();
     }
     // Update is called once per frame
