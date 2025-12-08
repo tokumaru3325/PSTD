@@ -14770,11 +14770,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 997660852378255683, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_Name
-      value: PlayerTower1
+      value: PlayerTower2
+      objectReference: {fileID: 0}
+    - target: {fileID: 997660852378255683, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 997660852378255683, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_TagString
       value: Player2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814192218691804247, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2006088874959494327, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455022636056576398, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455022636056576398, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618791477507155424, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2663007256665380277, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2663007256665380277, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: GlobalObjectIdHash
@@ -14829,6 +14861,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4379640958023116589, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379640958023116589, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_TagString
       value: SpawnPos
       objectReference: {fileID: 0}
@@ -14836,6 +14872,10 @@ PrefabInstance:
       propertyPath: _healthGauge
       value: 
       objectReference: {fileID: 1053291751}
+    - target: {fileID: 6464707831175749915, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6800343670885911245, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.2
@@ -14843,6 +14883,10 @@ PrefabInstance:
     - target: {fileID: 6800343670885911245, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7675344068892475168, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17736,7 +17780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 997660852378255683, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 997660852378255683, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_TagString
@@ -17749,6 +17793,18 @@ PrefabInstance:
     - target: {fileID: 1505670444452139519, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1814192218691804247, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2006088874959494327, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618791477507155424, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2663007256665380277, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
@@ -17811,6 +17867,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4379640958023116589, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379640958023116589, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_TagString
       value: SpawnPos
       objectReference: {fileID: 0}
@@ -17838,6 +17898,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0dfcbc9f85c0a724987c32614bd3e923, type: 2}
+    - target: {fileID: 6464707831175749915, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6662387296350973895, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: _flashSpeedCurve.m_Curve.Array.size
       value: 4
@@ -17957,6 +18021,10 @@ PrefabInstance:
     - target: {fileID: 6800343670885911245, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 7675344068892475168, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
