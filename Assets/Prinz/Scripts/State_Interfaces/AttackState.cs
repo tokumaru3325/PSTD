@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class AttackState : IUnitState
@@ -15,31 +16,40 @@ public class AttackState : IUnitState
     public void OnEnter() 
     {
         Debug.LogWarning("Enter AttackState");
-        _presenter.OnEnterState();
+     //   _presenter.OnEnterState();
         _attackTimer = 0f;
     }
     public void OnExit()
     {
-     //   _presenter.View.StopAttack();
+        _presenter.View.StopAttack();
     }
 
     public IUnitState OnUpdate(float dt)
     {
     //    if(_model.IsDead) return new DeadState(_model, _presenter);
 
+
         // Enemy is too far → go back to walking
         if (_model.HasTargetInRange() == false)
         {
-            Debug.Log("Target is too far");
-            return new MoveState(_model, _presenter);
+            if (_model.IsPlayerInRange == false)
+            {
+                Debug.Log("Target is too far");
+                return new IdleState(_model, _presenter);
+            }
         }
+
+
 
         ////
         var target = _model?.GetPrimaryTarget();
         if (target == null || target.Model.IsDead)
         {
-            Debug.LogError("Target is null or dead");
-            return new IdleState(_model, _presenter);
+            if (_model.IsPlayerInRange == false)
+            {
+                Debug.LogError("Target is null or dead");
+                return new IdleState(_model, _presenter);
+            }
         }
 
         ////
@@ -48,9 +58,14 @@ public class AttackState : IUnitState
         if (_attackTimer >= 1f / _model.AttackSpeed)
         {
             _attackTimer = 0f;
-            _presenter.PerformMeleeAttack(target);
-        //    _presenter?.View?.PlayAttack();
-        //    target.TakeDamage(_model.AttackPower);
+            if (_model.IsPlayerInRange == true && _model.HasTargetInRange() == false)
+            {
+                _presenter.PerformPlayerAttack();
+            }
+            else
+            {
+                _presenter.PerformMeleeAttack(target);
+            }
         }
 
 

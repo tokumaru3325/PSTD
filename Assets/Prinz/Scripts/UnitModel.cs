@@ -11,7 +11,7 @@ public abstract class UnitModel
     public UnitModel(UnitData data)
     {
         Data = data;
-        PlayerSide = data.PlayerSide;
+    //    PlayerSide = data.PlayerSide;
         MaxHealth = data.MaxHealth;
         Health = data.MaxHealth;
         AttackPower = data.BaseAttackPower;
@@ -24,7 +24,7 @@ public abstract class UnitModel
     }
 
     // プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
-    public int      PlayerSide { get; private set; }
+    public string      PlayerSide { get; private set; }
 
     public float    MaxHealth { get; private set; }
     public float    Health { get; private set; }
@@ -43,9 +43,11 @@ public abstract class UnitModel
 
     public bool IsDead => Health <= 0f;
 
+    public bool IsPlayerInRange { get; private set; }
+
     public event Action<float, float> OnHealthChanged;
 
-
+    //=====================================================================================================
     #region Range 
     public float    AttackRange { get; private set; }
     public float    BaseAttackRange { get; private set; }
@@ -57,23 +59,30 @@ public abstract class UnitModel
         RangeMultiplier = factor;
     }
     #endregion
-
+    //=====================================================================================================
     //owner
     public UnitPresenter Owner { get; private set; }
 
-    public void Bind(UnitPresenter presenter)
+    public void BindOwner(UnitPresenter presenter)
     {
         Owner = presenter;
     }
 
+    public C_PlayerTowerController EnemyPlayer {  get; private set; }
+
+    public void BindEnemyPlayer (C_PlayerTowerController enemyPlayer)
+    {
+        EnemyPlayer = enemyPlayer;
+    }
+
     //target enemy
 
-/*    public UnitPresenter TargetEnemy { get; private set; }
+    /*    public UnitPresenter TargetEnemy { get; private set; }
 
-    public void SetTarget(UnitPresenter enemy)
-    {
-        TargetEnemy = enemy;
-    }*/
+        public void SetTarget(UnitPresenter enemy)
+        {
+            TargetEnemy = enemy;
+        }*/
 
     private readonly List<UnitPresenter> targets = new();
 
@@ -104,10 +113,26 @@ public abstract class UnitModel
         return true;
     }
 
+    public bool HasPlayerInRange()
+    {
+        return IsPlayerInRange;
+    }
+    public void SetPlayerInRange(bool isPlayerInRange)
+    {
+        IsPlayerInRange = isPlayerInRange;
+    }
+
     public UnitPresenter GetPrimaryTarget()
     {
         if(targets.Count == 0) return null;
-        return targets.First();
+        foreach (var t in targets)
+        {
+            if (t != null)
+            {
+                return t;
+            }
+        }
+        return null;
     }
 
     public void SetEnemyPlayerPos(M_MapPosition pos)
@@ -119,15 +144,15 @@ public abstract class UnitModel
     {
         Route = route;
     }
-
-#region Setter
+    //=====================================================================================================
+    #region Setter
     public void SetHealth(float amount)
     {
         Health = Mathf.Clamp(amount, 0.0f, MaxHealth);
         OnHealthChanged?.Invoke(Health, MaxHealth);
     }
 
-    public void SetPlayerSide(int playerSide)
+    public void SetPlayerSide(string playerSide)
     {
         PlayerSide = playerSide;
     }
@@ -175,5 +200,6 @@ public abstract class UnitModel
     {
         CurrentRouteIndex = ri;
     }
-#endregion
+    #endregion
+    //=====================================================================================================
 }

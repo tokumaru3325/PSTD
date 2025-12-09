@@ -22,16 +22,16 @@ public class IdleState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-        if(_idleTime < 1.0f)
+        if(_idleTime < 0.1f)
         {
+            if (_model.HasTargetInRange() == true || _model.IsPlayerInRange == true)
+            {
+                return new AttackState(_model, _presenter);
+            }
             _idleTime += dt;
             return null;
         }
 
-        if(_model.HasTargetInRange() == true)
-        {
-            return new AttackState(_model, _presenter);
-        }
 
         if(_model.HasTargetInRange() == false)
         {

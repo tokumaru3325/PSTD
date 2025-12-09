@@ -41,6 +41,7 @@ public class UnitView : MonoBehaviour
         AttackRangeTransform = transform.Find("KnightAttackRangeClose");
         AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
+        AttackRangeSprite.color = Color.lightGreen;
         Animator = GetComponent<Animator>();
     }
     // Update is called once per frame
@@ -75,16 +76,17 @@ public class UnitView : MonoBehaviour
 
     public void OnEnterRange(Collider2D other)
     {
-        Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
         if (!presenter.AllowDetection) return;
+
+        Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        if (presenter.Model.Targets.Count > 0) AttackRangeSprite.color = Color.softRed;
         presenter.OnEnterRange(other);
-        AttackRangeSprite.color = Color.softRed;
     }
 
     public void OnExitRange(Collider2D other)
     {
         Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
-        presenter.OnExitRange(other);
         if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
+        presenter.OnExitRange(other);
     }
 }

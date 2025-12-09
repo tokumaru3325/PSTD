@@ -32,8 +32,6 @@ public class SpawnButton : MonoBehaviour
 
     const string SPAWN_TAG = "SpawnPos";
 
-    private int TeamNumber;   //[2025/12/02] プリンス : "TeamNumber"追加
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -127,15 +125,9 @@ public class SpawnButton : MonoBehaviour
     {
         //Monsterをスポーンさせる
 
-        //[2025/12/02] プリンス START
-        if (_player.gameObject.CompareTag("Player1")) TeamNumber = 1;
-        else if (_player.gameObject.CompareTag("Player2")) TeamNumber = 2;
-        else Debug.LogError("No player tag found, TeamNumber not set");
-        //[2025/12/02] プリンス END
-
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
-        objectPoolTest.GetObj(mySpawnPos, Unit, enemyPos, TeamNumber); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        objectPoolTest.GetObj(mySpawnPos, Unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         _buttonComp.interactable = false;
         _timer = 0.0f;
