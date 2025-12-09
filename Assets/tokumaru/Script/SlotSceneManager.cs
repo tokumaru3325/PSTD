@@ -2,10 +2,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public delegate void SlotResult(int i);
+public delegate void MoneySlotResult(int i);
+public delegate void MonsterSlotResult(int some,int strength,int hatena);
+public delegate void BuffSlotResult(int some, int target, int strength);
+
 public class SlotSceneManager : MonoBehaviour
 {
-    private static SlotResult ak = (int i) => { };
+    private static MoneySlotResult moneySlotResult = (int i) => { };
+    private static MonsterSlotResult monsterSlotResult = (int some,int target,int strength) => { };
+    private static BuffSlotResult buffSlotResult = (int some,int target,int strength) => { };
     private static bool open = false;
     private static int slotType = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,8 +37,30 @@ public class SlotSceneManager : MonoBehaviour
         }
     }
 
-    public static void SetFunc(SlotResult sr)
+    /// <summary>
+    /// 引数int型1つ
+    /// </summary>
+    /// <param name="sr"></param>
+    public static void AddFuncToMoneySlot(MoneySlotResult sr)
     {
-        ak += sr;
+        moneySlotResult += sr;
+    }
+
+    /// <summary>
+    /// 引数int型3つ
+    /// </summary>
+    /// <param name="sr"></param>
+    public static void AddFuncToMonsterSlot(MonsterSlotResult sr)
+    {
+       monsterSlotResult += sr;
+    }
+
+    /// <summary>
+    /// 引数int型3つ
+    /// </summary>
+    /// <param name="sr"></param>
+    public static void AddFuncToBuffSlot(BuffSlotResult sr)
+    {
+        buffSlotResult += sr;
     }
 }
