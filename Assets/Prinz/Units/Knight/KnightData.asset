@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628cc78ecbcd38644973c142d3543641, type: 3}
   m_Name: KnightData
   m_EditorClassIdentifier: Assembly-CSharp::KnightData
-  PlayerSide: 1
   MaxHealth: 10
   BaseAttackPower: 1
-  BaseAttackSpeed: 5
+  BaseAttackSpeed: 3
   BaseAttackRange: 1
   BaseMoveSpeed: 5
   BaseUnitCost: 0
