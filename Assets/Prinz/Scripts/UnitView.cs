@@ -14,9 +14,21 @@ public class UnitView : MonoBehaviour
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void StopAttack() => Animator.SetTrigger("StopAttack");
     public void PlayHeal() => Animator.SetTrigger("Heal");
-    public void PlayMove() => Animator.SetBool("Move", true);
-    public void StopMove() => Animator.SetBool("Move", false);
-    public void PlayDeath() => Animator.SetTrigger("Die");
+    public void PlayMove(bool move) => Animator.SetBool("Move", move);
+    public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
+    public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
+    public void PlayDeath(bool dead) => Animator.SetBool("Dead", dead);
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+
+    }
+
+    private void Awake()
+    {
+        InitializeView();
+    }
 
     public void UpdateHealth(float hp)
     {
@@ -27,23 +39,31 @@ public class UnitView : MonoBehaviour
         if (AttackRangeSprite != null)
             AttackRangeSprite.enabled = show;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
+    public void EnableAttackRange(bool enable)
+    {
+        AttackRangeTransform.gameObject.SetActive(enable);
     }
 
-    private void Awake()
+    public void OnDeathAnimationEnd()
+    {
+        Debug.LogWarning("Death animation ended");
+    //    PlayDeath(false);
+        presenter.Release();
+    }
+
+    public void InitializeView()
     {
         presenter = GetComponent<UnitPresenter>();
-     //   AttackRange = GetComponentInChildren<KnightAttackRange>();
-      //  AttackRange.SetView(this);
+        //   AttackRange = GetComponentInChildren<KnightAttackRange>();
+        //  AttackRange.SetView(this);
         AttackRangeTransform = transform.Find("KnightAttackRangeClose");
         AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
         AttackRangeSprite.color = Color.lightGreen;
         Animator = GetComponent<Animator>();
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,21 +77,6 @@ public class UnitView : MonoBehaviour
             //   presenter.SetRangeBuff(-2.0f);
             Debug.Log("debuff range button pressed");
         }
-    }
-
-/*    private void OnCollisionEnter2D(Collision2D other)
-    {
-        Debug.LogError("Colliding called in view");
-        presenter.OnCollisionEnter2D(other);
-    }*/
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-     //   Debug.LogError($"VIEW : exit trigger with {other.gameObject.name}");
     }
 
     public void OnEnterRange(Collider2D other)

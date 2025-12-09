@@ -21,14 +21,14 @@ public class MoveState : IUnitState
 
     public void OnEnter() 
     {
-        Debug.LogWarning("Enter MoveState");
+        Debug.LogWarning($"Enter MoveState {_model.PlayerSide}");
         _presenter.OnEnterState();
-        _presenter.View.PlayMove();
+        _presenter.View.PlayMove(true);
     }
     public void OnExit()
     {
-        Debug.LogWarning("Exit MoveState");
-        _presenter?.View?.StopMove();
+     //   Debug.LogWarning("Exit MoveState");
+        _presenter?.View?.PlayMove(false);
     }
 
     public IUnitState OnUpdate(float dt)
@@ -66,9 +66,9 @@ public class MoveState : IUnitState
     public void Move(float movespeed, Vector3 direction, float dt)
     {
         //スプライトの向きを設定する
-        if (direction.x < 0) // TODO : call it when change direction not everyframe
+/*        if (direction.x < 0) // TODO : call it when change direction not everyframe
             _presenter.FaceLeft(_presenter.transform);
-        else _presenter.FaceRight(_presenter.transform);
+        else _presenter.FaceRight(_presenter.transform);*/
 
 
         //移動
@@ -80,7 +80,7 @@ public class MoveState : IUnitState
 
     //    _presenter.transform.Translate(direction * movespeed * step);
 
-        _presenter.View.PlayMove();
+        _presenter.View.PlayMove(true);
     }
 
     private void GetDistanceToTarget()

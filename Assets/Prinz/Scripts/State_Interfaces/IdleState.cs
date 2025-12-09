@@ -14,7 +14,7 @@ public class IdleState : IUnitState
 
     public void OnEnter()
     { 
-        Debug.LogWarning("Enter IdleState");
+        Debug.LogWarning($"Enter IdleState {_model.PlayerSide}");
         _idleTime = 0f;
         _presenter.OnEnterState();
     }
@@ -22,7 +22,7 @@ public class IdleState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-        if(_idleTime < 0.1f)
+        if(_idleTime < 0.5f)
         {
             if (_model.HasTargetInRange() == true || _model.IsPlayerInRange == true)
             {
@@ -35,6 +35,7 @@ public class IdleState : IUnitState
 
         if(_model.HasTargetInRange() == false)
         {
+            _presenter.Model.Targets.Clear();
             return new MoveState(_model, _presenter);
         }
 
