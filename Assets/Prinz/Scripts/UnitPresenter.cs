@@ -29,6 +29,9 @@ public class UnitPresenter: MonoBehaviour
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
 
+        Model.OnHealthChanged += OnHealthChanged;
+        Model.OnDirectionChanged += OnDirectionChanged;
+
         //敵のプレヤーを取得して記録する
         BindEnemyPlayer();
 
@@ -47,11 +50,7 @@ public class UnitPresenter: MonoBehaviour
         }
 
         //キャラクタの向きを初期化する
-        if (data.MoveDirection.x < 0)
-            FaceLeft(transform);
-        else FaceRight(transform);
-
-        Model.OnHealthChanged += OnHealthChanged;
+        UpdateDirection(data.MoveDirection);
     }
 
     public C_MapManager MapManager { get { return _mapManager; } }
@@ -135,6 +134,7 @@ public class UnitPresenter: MonoBehaviour
     #region 解除 - Release
     public void Release()
     {
+        Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
         Pool?.Release(this);
     }
 
@@ -165,15 +165,50 @@ public class UnitPresenter: MonoBehaviour
     {
         _stateMachine?.FixedTick(Time.fixedDeltaTime);
     }
+    private void PrepareDeath()
+    {
+        CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
+
+        col.enabled = false;
+        View.EnableAttackRange(false);
+    }
     private void OnHealthChanged(float health, float maxHealth)
     {
         if (Model.IsDead)
         {
+            PrepareDeath();
             _stateMachine.TrySetState(new DeadState(Model, this));
             return;
         }
 
         View.UpdateHealth(health);
+    }
+
+    private void OnDirectionChanged(Vector3 direction, Vector3 moveDirection)
+    {
+        if (direction == Vector3.up)
+        {
+            View.FaceUP(true);
+            View.FaceDOWN(false);
+        }
+        else if (direction == Vector3.down)
+        {
+            View.FaceDOWN(true);
+            View.FaceUP(false);
+        }
+        else if (direction == Vector3.left)
+        {
+            View.FaceDOWN(false);
+            View.FaceUP(false);
+            FaceLeft(transform);
+        }
+        else if (direction == Vector3.right)
+        {
+            View.FaceDOWN(false);
+            View.FaceUP(false);
+            FaceRight(transform);
+        }
+        else { Debug.LogError($"Unexpected direction"); }
     }
     public void FaceRight(Transform transform)
     {
@@ -183,6 +218,11 @@ public class UnitPresenter: MonoBehaviour
     public void FaceLeft(Transform transform)
     {
         transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void UpdateDirection(Vector3 direction)
+    {
+        Model.SetMoveDirection(direction);
     }
     #endregion
     //=====================================================================================================
@@ -219,6 +259,10 @@ public class UnitPresenter: MonoBehaviour
     }
     public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
     public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
+    public void PerformDeath()
+    {
+        View?.PlayDeath(true);
+    }
 
     #endregion
     //=====================================================================================================
@@ -259,12 +303,14 @@ public class UnitPresenter: MonoBehaviour
         View?.ShowAttackRange(show);
     }
 
-    public bool AllowDetection => true;
+    public bool AllowDetection =>
+        false == _stateMachine.Current is DeadState;
     //   _stateMachine.Current is MoveState ||
      //  _stateMachine.Current is IdleState;
 
     public void OnEnterRange(Collider2D other)
     {
+        if (Model.IsDead) return;
         //敵の城でもUnitでもないモノを無視する
         if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return; 
         Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
@@ -304,6 +350,7 @@ public class UnitPresenter: MonoBehaviour
         // Only accept valid UnitPresenters with opposite team
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return false; }
         if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return false; }
+        if(target.Model.IsDead) return false;
 
         Model.AddTarget(target);
         Debug.Log("Target added");
@@ -312,19 +359,20 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnExitRange(Collider2D other)
     {
+        if (Model.IsDead) return;
         Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         //敵のプレヤーが範囲内から離れたら
         if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer) { Model.SetPlayerInRange(false); }             
 
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
         if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
+        if (target.Model.IsDead) return;
+
         Model.RemoveTarget(target);
         Debug.Log("Target removed");
 
         _stateMachine.TrySetState(new IdleState(Model, this));
     }
-
-    public bool IsEnemyInRange(float range) { /* ...*/ return false; }
     #endregion
     //=====================================================================================================
 }

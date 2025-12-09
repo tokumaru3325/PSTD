@@ -47,6 +47,8 @@ public abstract class UnitModel
 
     public event Action<float, float> OnHealthChanged;
 
+    public event Action<Vector3, Vector3> OnDirectionChanged;
+
     //=====================================================================================================
     #region Range 
     public float AttackRange { get; private set; }
@@ -192,6 +194,7 @@ public abstract class UnitModel
         if (MoveDirection != direction)
         {
             MoveDirection = direction;
+            OnDirectionChanged?.Invoke(direction, MoveDirection);
             Debug.Log($"MoveDirection: {MoveDirection}");
         }
     }

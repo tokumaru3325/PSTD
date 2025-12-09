@@ -15,7 +15,7 @@ public class AttackState : IUnitState
 
     public void OnEnter() 
     {
-     //   Debug.LogWarning("Enter AttackState");
+        Debug.LogWarning($"Enter AttackState {_model.PlayerSide}");
      //   _presenter.OnEnterState();
         _attackTimer = 0f;
     }
@@ -39,6 +39,10 @@ public class AttackState : IUnitState
         var target = _model?.GetPrimaryTarget();
         if (target == null || target.Model.IsDead)
         {
+            if (target != null)
+            {
+                _model.Targets.Remove(target);
+            }
             if (_model.IsPlayerInRange == false)
             {
                 Debug.LogError("Target is null or dead");
@@ -60,7 +64,7 @@ public class AttackState : IUnitState
             else
             {
                 _presenter.PerformMeleeAttack(target);
-                Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");
+            //    Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");
             }
         }
 

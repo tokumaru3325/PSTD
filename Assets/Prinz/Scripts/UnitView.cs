@@ -14,9 +14,21 @@ public class UnitView : MonoBehaviour
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void StopAttack() => Animator.SetTrigger("StopAttack");
     public void PlayHeal() => Animator.SetTrigger("Heal");
-    public void PlayMove() => Animator.SetBool("Move", true);
-    public void StopMove() => Animator.SetBool("Move", false);
-    public void PlayDeath() => Animator.SetTrigger("Die");
+    public void PlayMove(bool move) => Animator.SetBool("Move", move);
+    public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
+    public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
+    public void PlayDeath(bool dead) => Animator.SetBool("Dead", dead);
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+
+    }
+
+    private void Awake()
+    {
+        InitializeView();
+    }
 
     public void UpdateHealth(float hp)
     {
@@ -27,15 +39,17 @@ public class UnitView : MonoBehaviour
         if (AttackRangeSprite != null)
             AttackRangeSprite.enabled = show;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
+    public void EnableAttackRange(bool enable)
+    {
+        AttackRangeTransform.gameObject.SetActive(enable);
     }
 
-    private void Awake()
+    public void OnDeathAnimationEnd()
     {
-        InitializeView();
+        Debug.LogWarning("Death animation ended");
+    //    PlayDeath(false);
+        presenter.Release();
     }
 
     public void InitializeView()
