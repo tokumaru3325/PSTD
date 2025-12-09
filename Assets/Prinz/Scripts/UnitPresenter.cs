@@ -202,6 +202,8 @@ public class UnitPresenter: MonoBehaviour
     //プレヤーに対する攻撃
     public void PerformPlayerAttack()
     {
+        if(Model.EnemyPlayer.IsDead()) return;
+        View?.StopAttack();
         float damage = Model.AttackPower;
         Model.EnemyPlayer.DecreaseHP(damage);
         View?.PlayAttack();
@@ -210,6 +212,7 @@ public class UnitPresenter: MonoBehaviour
     public void PerformMeleeAttack(UnitPresenter target)
     {
         if (target.Model.IsDead) return;
+        View?.StopAttack();
         float damage = Model.AttackPower;
         target.TakeDamage(damage);
         View?.PlayAttack();
@@ -291,6 +294,7 @@ public class UnitPresenter: MonoBehaviour
     private bool HandlePlayerTarget(Collider2D other)
     {
         if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
+        if (player.IsDead()) {  return false; }
         Model.SetPlayerInRange(true);
         return true;
     }
