@@ -19,7 +19,7 @@ public class UnitStateMachine
         if (next != null)
         {
             Current.OnExit();
-            Current = null; //test ??
+            Current = null;
             Current = next;
             Current.OnEnter();
         }
@@ -31,7 +31,7 @@ public class UnitStateMachine
         if (next != null)
         {
             Current.OnExit();
-            Current = null; //test ??
+            Current = null;
             Current = next;
             Current.OnEnter();
         }
@@ -43,7 +43,7 @@ public class UnitStateMachine
 
         Debug.LogWarning("TrySetState() called");
         Current.OnExit();
-        Current = null; //test ??
+        Current = null;
         Current = newState;
         Current.OnEnter();
     

@@ -21,13 +21,13 @@ public class MoveState : IUnitState
 
     public void OnEnter() 
     {
-        Debug.LogWarning("Enter MoveState");
+    //    Debug.LogWarning("Enter MoveState");
         _presenter.OnEnterState();
         _presenter.View.PlayMove();
     }
     public void OnExit()
     {
-        Debug.LogWarning("Exit MoveState");
+     //   Debug.LogWarning("Exit MoveState");
         _presenter?.View?.StopMove();
     }
 

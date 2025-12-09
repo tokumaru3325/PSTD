@@ -25,6 +25,7 @@ public class UnitPresenter: MonoBehaviour
     public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
+        View.InitializeView();
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
 
@@ -140,9 +141,9 @@ public class UnitPresenter: MonoBehaviour
 
     private void OnDisable()
     {
-    //    Model.OnHealthChanged -= OnHealthChanged;
-     
+        //    Model.OnHealthChanged -= OnHealthChanged;
         Model = null; // clear model to avoid stale state when pooled
+        _stateMachine = null;
     }
     #endregion
     //=====================================================================================================
@@ -208,6 +209,7 @@ public class UnitPresenter: MonoBehaviour
     //ユニットに対する攻撃
     public void PerformMeleeAttack(UnitPresenter target)
     {
+        if (target.Model.IsDead) return;
         float damage = Model.AttackPower;
         target.TakeDamage(damage);
         View?.PlayAttack();

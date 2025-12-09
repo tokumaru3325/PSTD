@@ -11,7 +11,7 @@ public abstract class UnitModel
     public UnitModel(UnitData data)
     {
         Data = data;
-    //    PlayerSide = data.PlayerSide;
+        //    PlayerSide = data.PlayerSide;
         MaxHealth = data.MaxHealth;
         Health = data.MaxHealth;
         AttackPower = data.BaseAttackPower;
@@ -24,17 +24,17 @@ public abstract class UnitModel
     }
 
     // プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
-    public string      PlayerSide { get; private set; }
+    public string PlayerSide { get; private set; }
 
-    public float    MaxHealth { get; private set; }
-    public float    Health { get; private set; }
-    public float    AttackPower { get; private set; }
-    public float    AttackSpeed { get; private set; }
+    public float MaxHealth { get; private set; }
+    public float Health { get; private set; }
+    public float AttackPower { get; private set; }
+    public float AttackSpeed { get; private set; }
 
-    public float    MoveSpeed { get; private set; }
-    public int      UnitCost { get; private set; }
-    public float    UnitCoolDown { get; private set; }
-    public Vector3  MoveDirection { get; private set; }
+    public float MoveSpeed { get; private set; }
+    public int UnitCost { get; private set; }
+    public float UnitCoolDown { get; private set; }
+    public Vector3 MoveDirection { get; private set; }
 
     public M_MapPosition EnemyPlayerPos { get; private set; }
 
@@ -49,9 +49,9 @@ public abstract class UnitModel
 
     //=====================================================================================================
     #region Range 
-    public float    AttackRange { get; private set; }
-    public float    BaseAttackRange { get; private set; }
-    public float    RangeMultiplier { get; private set; } = 1.0f;
+    public float AttackRange { get; private set; }
+    public float BaseAttackRange { get; private set; }
+    public float RangeMultiplier { get; private set; } = 1.0f;
     public float CurrentRange => BaseAttackRange * RangeMultiplier;
 
     public void SetRangeBuff(float factor)
@@ -68,9 +68,9 @@ public abstract class UnitModel
         Owner = presenter;
     }
 
-    public C_PlayerTowerController EnemyPlayer {  get; private set; }
+    public C_PlayerTowerController EnemyPlayer { get; private set; }
 
-    public void BindEnemyPlayer (C_PlayerTowerController enemyPlayer)
+    public void BindEnemyPlayer(C_PlayerTowerController enemyPlayer)
     {
         EnemyPlayer = enemyPlayer;
     }
@@ -108,7 +108,7 @@ public abstract class UnitModel
 
     public bool HasTargetInRange()
     {
-        if(targets.Count == 0) return false;
+        if (targets.Count == 0) return false;
 
         return true;
     }
@@ -124,7 +124,7 @@ public abstract class UnitModel
 
     public UnitPresenter GetPrimaryTarget()
     {
-        if(targets.Count == 0) return null;
+        if (targets.Count == 0) return null;
         foreach (var t in targets)
         {
             if (t != null)
@@ -187,7 +187,7 @@ public abstract class UnitModel
         UnitCoolDown = MathF.Max(amount, 0);
     }
 
-    public void SetMoveDirection (Vector3 direction)
+    public void SetMoveDirection(Vector3 direction)
     {
         if (MoveDirection != direction)
         {

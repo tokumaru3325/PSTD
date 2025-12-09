@@ -35,15 +35,21 @@ public class UnitView : MonoBehaviour
 
     private void Awake()
     {
+        InitializeView();
+    }
+
+    public void InitializeView()
+    {
         presenter = GetComponent<UnitPresenter>();
-     //   AttackRange = GetComponentInChildren<KnightAttackRange>();
-      //  AttackRange.SetView(this);
+        //   AttackRange = GetComponentInChildren<KnightAttackRange>();
+        //  AttackRange.SetView(this);
         AttackRangeTransform = transform.Find("KnightAttackRangeClose");
         AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
         AttackRangeSprite.color = Color.lightGreen;
         Animator = GetComponent<Animator>();
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,21 +63,6 @@ public class UnitView : MonoBehaviour
             //   presenter.SetRangeBuff(-2.0f);
             Debug.Log("debuff range button pressed");
         }
-    }
-
-/*    private void OnCollisionEnter2D(Collision2D other)
-    {
-        Debug.LogError("Colliding called in view");
-        presenter.OnCollisionEnter2D(other);
-    }*/
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-     //   Debug.LogError($"VIEW : exit trigger with {other.gameObject.name}");
     }
 
     public void OnEnterRange(Collider2D other)
