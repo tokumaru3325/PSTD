@@ -10,9 +10,6 @@ public class C_RoomCreator : MonoBehaviour
     /// </summary>
     private CallResult<LobbyCreated_t> _onLobbyCreated;
 
-    //ロビーデータ設定用キー
-    private const string HOST_ADDRESS_KEY = "HostAddress";
-
     public ulong LobbyID { get; private set; }
 
     /// <summary>
@@ -31,7 +28,7 @@ public class C_RoomCreator : MonoBehaviour
         //SteamManagerの初期化が完了していたら
         if (SteamManager.Initialized)
         {
-            _onLobbyCreated = CallResult<LobbyCreated_t>.Create(OnCreateLobby);
+            _onLobbyCreated = CallResult<LobbyCreated_t>.Create(OnLobbyCreated);
         }
         _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
     }
@@ -40,28 +37,31 @@ public class C_RoomCreator : MonoBehaviour
     /// ロビー作成（ゲームをホスト）
     /// </summary>
     /// <param name="data">部屋データ</param>
-    public void CreateLobby(M_RoomData data)
+    public void CreateLobby(string roomName, string pwd)
     {
-        _roomData = data;
-        SteamAPICall_t hCreateLobby = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, data.MaxMembers);
+        _roomData = new M_RoomData();
+        _roomData.LobbyID = CSteamID.Nil;
+        _roomData.Name = roomName;
+        _roomData.Password = pwd;
+        _roomData.MaxMembers = 2;
+        _roomData.MemberNums = 1;
+        _roomData.CastleIndex = 0;
+        _roomData.State = GameReadyState.Preparing;
+        _globalVariable.SetRoomData(_roomData);
+        SteamAPICall_t hCreateLobby = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, _roomData.MaxMembers);
         _onLobbyCreated.Set(hCreateLobby);
     }
 
-    private void OnCreateLobby(LobbyCreated_t result, bool bIOFailure)
+    private void OnLobbyCreated(LobbyCreated_t result, bool bIOFailure)
     {
         //ロビー作成成功していなかった場合
         if (result.m_eResult != EResult.k_EResultOK || bIOFailure)
         {
+            Debug.LogError($"Create Lobby Failed: {result.m_eResult}");
             return;
         }
 
         CSteamID steamID = new CSteamID(result.m_ulSteamIDLobby);
-        //ホストのアドレス（SteamID）を登録
-        SteamMatchmaking.SetLobbyData(
-            steamID,
-            HOST_ADDRESS_KEY,
-            SteamUser.GetSteamID().ToString());
-
         SetRoomInfo(steamID);
         SetMemberInfo(steamID);
 
@@ -79,15 +79,24 @@ public class C_RoomCreator : MonoBehaviour
     /// </summary>
     private void SetRoomInfo(CSteamID LobbyID)
     {
+        //ホストのアドレス（SteamID）を登録
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.HOST_ADDRESS_KEY, SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.GAME_ID_KEY, RoomParams.GAME_ID_VALUE);
         SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.VERSION_KEY, RoomParams.VERSION_VALUE);
         SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_NAME_KEY, _roomData.Name);
-        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_PASSWORD_KEY, _roomData.Password);
+        string hasPwd = _roomData.Password.Length != 0 ? "1" : "0";
+        SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_PASSWORD_KEY, hasPwd);
         SteamMatchmaking.SetLobbyData(LobbyID, RoomParams.ROOM_LEADER_KEY, _globalVariable.GetMyName());
     }
 
+    /// <summary>
+    /// メンバー情報を設定
+    /// </summary>
+    /// <param name="LobbyID"></param>
     private void SetMemberInfo(CSteamID LobbyID)
     {
-        //SteamMatchmaking.SetLobbyMemberData(LobbyI,);
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_NAME_KEY, _globalVariable.GetMyName());
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_CASTLE_KEY, _roomData.CastleIndex.ToString());
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_STATE_KEY, ((int)_roomData.State).ToString());
     }
 }

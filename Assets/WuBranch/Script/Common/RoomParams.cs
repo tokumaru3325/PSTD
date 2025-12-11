@@ -38,6 +38,11 @@ public static class RoomParams
     public const int METADATA_VALUE_SIZE = 8192;
 
     /// <summary>
+    /// 部屋のIDのキー、ホストのSteamIDを保存、ホストに接続するために使用
+    /// </summary>
+    public const string HOST_ADDRESS_KEY = "HostAddress";
+
+    /// <summary>
     /// 部屋の名前のキー
     /// </summary>
     public const string ROOM_NAME_KEY = "RoomName";
@@ -51,4 +56,19 @@ public static class RoomParams
     /// 部屋主の名前のキー
     /// </summary>
     public const string ROOM_LEADER_KEY = "Leader";
+
+    /// <summary>
+    /// メンバーの名前のキー
+    /// </summary>
+    public const string MEMBER_NAME_KEY = "MemberName";
+
+    /// <summary>
+    /// メンバーが選んだ城のキー
+    /// </summary>
+    public const string MEMBER_CASTLE_KEY = "MemberCastle";
+
+    /// <summary>
+    /// メンバー状態のキー
+    /// </summary>
+    public const string MEMBER_STATE_KEY = "MemberState";
 }
