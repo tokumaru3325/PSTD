@@ -18,20 +18,39 @@ public class C_RoomSeeker : MonoBehaviour
         //SteamManagerの初期化が完了していたら
         if (SteamManager.Initialized)
         {
-            _onLobbyMatched = CallResult<LobbyMatchList_t>.Create(OnMatchLobby);
-            SteamMatchmaking.AddRequestLobbyListResultCountFilter(RoomParams.MAX_LOBBY_COUNT);
-            SteamMatchmaking.AddRequestLobbyListStringFilter(RoomParams.GAME_ID_KEY, RoomParams.GAME_ID_VALUE, ELobbyComparison.k_ELobbyComparisonEqual);
-            SteamMatchmaking.AddRequestLobbyListStringFilter(RoomParams.VERSION_KEY, RoomParams.VERSION_VALUE, ELobbyComparison.k_ELobbyComparisonEqual);
-            SteamAPICall_t hSteamAPICall = SteamMatchmaking.RequestLobbyList();
-            _onLobbyMatched.Set(hSteamAPICall);
+            FindRoom();
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            M_RoomFrontData fakeData = new M_RoomFrontData(CSteamID.Nil, "TestRoom", "1", "Leader", 2, 1);
+            OnFoundRoomData?.Invoke(fakeData);
+        }
     }
 
+    /// <summary>
+    /// 部屋を探す
+    /// </summary>
+    public void FindRoom(string condition = "")
+    {
+        _onLobbyMatched = CallResult<LobbyMatchList_t>.Create(OnMatchLobby);
+        SteamMatchmaking.AddRequestLobbyListResultCountFilter(RoomParams.MAX_LOBBY_COUNT);
+        SteamMatchmaking.AddRequestLobbyListStringFilter(RoomParams.GAME_ID_KEY, RoomParams.GAME_ID_VALUE, ELobbyComparison.k_ELobbyComparisonEqual);
+        SteamMatchmaking.AddRequestLobbyListStringFilter(RoomParams.VERSION_KEY, RoomParams.VERSION_VALUE, ELobbyComparison.k_ELobbyComparisonEqual);
+        if (condition != "")
+            SteamMatchmaking.AddRequestLobbyListStringFilter(RoomParams.ROOM_NAME_KEY, condition, ELobbyComparison.k_ELobbyComparisonEqualToOrGreaterThan);
+        SteamAPICall_t hSteamAPICall = SteamMatchmaking.RequestLobbyList();
+        _onLobbyMatched.Set(hSteamAPICall);
+    }
+
+    /// <summary>
+    /// ロビーが見つかったときの処理
+    /// </summary>
+    /// <param name="param">ロビーのデータ</param>
+    /// <param name="bIOFailure"></param>
     private void OnMatchLobby(LobbyMatchList_t param, bool bIOFailure)
     {
         uint lobbyCount = param.m_nLobbiesMatching;
