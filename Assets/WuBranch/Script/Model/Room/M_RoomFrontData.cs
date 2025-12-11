@@ -38,7 +38,7 @@ public class M_RoomFrontData
     {
         LobbyID = ID;
         Name = name;
-        HavePwd = pwd.Length != 0;
+        HavePwd = pwd.Equals("1");
         LeaderName = leader;
         MaxMembers = maxMembers;
         MemberNums = memberNum;

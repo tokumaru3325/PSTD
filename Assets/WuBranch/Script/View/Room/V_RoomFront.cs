@@ -54,9 +54,21 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private GameObject _lock;
 
     /// <summary>
+    /// パスワード入力パネル
+    /// </summary>
+    [SerializeField]
+    private V_PwdDialogue _pwdInputPanel;
+
+    /// <summary>
     /// 部屋をコントロール物
     /// </summary>
     private C_RoomFront _myController;
+
+    /// <summary>
+    /// マウスが押した座標
+    /// </summary>
+    private Vector2 MouseDownPos;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -64,6 +76,7 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         _background = GetComponent<Image>();
         _myController = GetComponent<C_RoomFront>();
         _myController.OnInitedData += SetScreen;
+        _pwdInputPanel = FindFirstObjectByType<V_PwdDialogue>(FindObjectsInactive.Include);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -79,13 +92,24 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerDown(PointerEventData eventData)
     {
         _background.color = _pressedColor;
+        MouseDownPos = eventData.position;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         _background.color = _hoverColor;
+        if (MouseDownPos.x == eventData.position.x && MouseDownPos.y == eventData.position.y)
+        {
+            if (_myController.GetData().HavePwd)
+                OpenPwdInputPanel();
+            else
+                _myController.JoinLobby();
+        }
     }
 
+    /// <summary>
+    /// 画面の初期化
+    /// </summary>
     private void SetScreen()
     {
         M_RoomFrontData data = _myController.GetData();
@@ -93,5 +117,17 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         _leader.text = data.LeaderName;
         _lock.SetActive(data.HavePwd);
         _member.text = data.MemberNums + "/" + data.MaxMembers;
+    }
+
+    /// <summary>
+    /// パスワード入力パネルを開く
+    /// </summary>
+    private void OpenPwdInputPanel()
+    {
+        if (_pwdInputPanel)
+        {
+            Debug.Log("found");
+            _pwdInputPanel.Open(_myController);
+        }
     }
 }
