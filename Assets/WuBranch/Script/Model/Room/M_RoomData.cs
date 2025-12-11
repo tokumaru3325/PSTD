@@ -38,5 +38,5 @@ public struct M_RoomData
     /// プレイヤーの状態
     /// <ID, 状態>
     /// </summary>
-    public Dictionary<string, GameReadyState> State;
+    public GameReadyState State;
 }
