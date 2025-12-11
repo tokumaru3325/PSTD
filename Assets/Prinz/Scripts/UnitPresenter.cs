@@ -22,6 +22,10 @@ public class UnitPresenter: MonoBehaviour
     {
 
     }
+
+    private void OnEnable()
+    {
+    }
     public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
@@ -34,6 +38,9 @@ public class UnitPresenter: MonoBehaviour
 
         //敵のプレヤーを取得して記録する
         BindEnemyPlayer();
+
+        Model.ClearTargets();
+        Model.SetPlayerInRange(false);
 
         M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
@@ -51,6 +58,12 @@ public class UnitPresenter: MonoBehaviour
 
         //キャラクタの向きを初期化する
         UpdateDirection(data.MoveDirection);
+
+        _stateMachine.Initialize(new IdleState(Model, this));
+        CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
+
+        col.enabled = true;
+        View.EnableAttackRange(true);
     }
 
     public C_MapManager MapManager { get { return _mapManager; } }
@@ -104,19 +117,19 @@ public class UnitPresenter: MonoBehaviour
         {
             Model = new KnightModel(kd);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is ArcherData ad)
         {
             Model = new ArcherModel(ad);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is MageData md)
         {
             Model = new MageModel(md);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else
         {
@@ -142,14 +155,14 @@ public class UnitPresenter: MonoBehaviour
     private void OnDisable()
     {
         //    Model.OnHealthChanged -= OnHealthChanged;
-        Model = null; // clear model to avoid stale state when pooled
         _stateMachine = null;
+        Model = null; // clear model to avoid stale state when pooled
     }
     #endregion
     //=====================================================================================================
     public void OnEnterState()
     {
-
+        View.UpdateAttackRangeSpriteColor();
     }
     //=====================================================================================================
     #region 更新 - Update
@@ -208,7 +221,7 @@ public class UnitPresenter: MonoBehaviour
             View.FaceUP(false);
             FaceRight(transform);
         }
-        else { Debug.LogError($"Unexpected direction"); }
+        else { Debug.LogError("Unexpected direction"); }
     }
     public void FaceRight(Transform transform)
     {
@@ -232,7 +245,7 @@ public class UnitPresenter: MonoBehaviour
     {
         if(Model.IsDead) return;
         Model?.SetHealth(Model.Health - dmg);
-        Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
+    //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
     public void SpawnProjectile(GameObject prefab, float speed, float damage)
     {
@@ -298,11 +311,6 @@ public class UnitPresenter: MonoBehaviour
     }
     //=====================================================================================================
     #region 範囲 - range
-    public void ShowRange(bool show)
-    {
-        View?.ShowAttackRange(show);
-    }
-
     public bool AllowDetection =>
         false == _stateMachine.Current is DeadState;
     //   _stateMachine.Current is MoveState ||
@@ -313,7 +321,7 @@ public class UnitPresenter: MonoBehaviour
         if (Model.IsDead) return;
         //敵の城でもUnitでもないモノを無視する
         if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return; 
-        Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
+     //   Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
 
         if (other.gameObject.CompareTag("Unit"))
         {
@@ -348,30 +356,41 @@ public class UnitPresenter: MonoBehaviour
     private bool HandleUnitTarget(Collider2D other)
     {
         // Only accept valid UnitPresenters with opposite team
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return false; }
-        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return false; }
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return false; }
+        if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return false; }
         if(target.Model.IsDead) return false;
 
         Model.AddTarget(target);
-        Debug.Log("Target added");
+    //    Debug.Log("Target added");
         return true;
     }
 
     public void OnExitRange(Collider2D other)
     {
         if (Model.IsDead) return;
-        Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
+    //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         //敵のプレヤーが範囲内から離れたら
         if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer) { Model.SetPlayerInRange(false); }             
 
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
-        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
-        if (target.Model.IsDead) return;
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
+        if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return; }
+        if (target.Model.IsDead)
+        {
+            Model.RemoveTarget(target);
+            return;
+        }
 
         Model.RemoveTarget(target);
-        Debug.Log("Target removed");
+        //    Debug.Log("Target removed");
 
-        _stateMachine.TrySetState(new IdleState(Model, this));
+        if (IsValidTargetExist() == false)
+            _stateMachine.TrySetState(new IdleState(Model, this));
+    }
+
+    public bool IsValidTargetExist()
+    {
+        if(Model?.Targets.Count == 0 && Model?.IsPlayerInRange == false) return false;
+        return true;
     }
     #endregion
     //=====================================================================================================

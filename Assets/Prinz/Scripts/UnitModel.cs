@@ -115,10 +115,6 @@ public abstract class UnitModel
         return true;
     }
 
-    public bool HasPlayerInRange()
-    {
-        return IsPlayerInRange;
-    }
     public void SetPlayerInRange(bool isPlayerInRange)
     {
         IsPlayerInRange = isPlayerInRange;
@@ -131,7 +127,7 @@ public abstract class UnitModel
         {
             if (t != null)
             {
-                return t;
+                if(t.Model?.IsDead == false) return t;
             }
         }
         return null;
