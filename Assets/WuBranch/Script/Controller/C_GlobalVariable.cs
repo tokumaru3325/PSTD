@@ -46,4 +46,13 @@ public class C_GlobalVariable : MonoBehaviour
     {
         return _datas.MyName;
     }
+
+    /// <summary>
+    /// 作った部屋の情報をセット
+    /// </summary>
+    /// <param name="data">部屋のデータ</param>
+    public void SetRoomData(M_RoomData data)
+    {
+        _datas.SetRoom(data);
+    }
 }
