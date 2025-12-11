@@ -7,7 +7,6 @@ public class UnitView : MonoBehaviour
     public Transform AttackRangeTransform { get; private set; }
     public BoxCollider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
-    public KnightAttackRange AttackRange { get; private set; }
 
     public Animator Animator;
 
@@ -34,11 +33,6 @@ public class UnitView : MonoBehaviour
     {
         // update sprite, bar, etc.
     }
-    public void ShowAttackRange(bool show)
-    {
-        if (AttackRangeSprite != null)
-            AttackRangeSprite.enabled = show;
-    }
 
     public void EnableAttackRange(bool enable)
     {
@@ -47,7 +41,7 @@ public class UnitView : MonoBehaviour
 
     public void OnDeathAnimationEnd()
     {
-        Debug.LogWarning("Death animation ended");
+    //    Debug.LogWarning("Death animation ended");
     //    PlayDeath(false);
         presenter.Release();
     }
@@ -55,43 +49,42 @@ public class UnitView : MonoBehaviour
     public void InitializeView()
     {
         presenter = GetComponent<UnitPresenter>();
-        //   AttackRange = GetComponentInChildren<KnightAttackRange>();
-        //  AttackRange.SetView(this);
+        Animator = GetComponent<Animator>();
+
         AttackRangeTransform = transform.Find("KnightAttackRangeClose");
         AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
+
         AttackRangeSprite.color = Color.lightGreen;
-        Animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            //    presenter.SetRangeBuff(2.0f);
-            Debug.Log("buff range button pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            //   presenter.SetRangeBuff(-2.0f);
-            Debug.Log("debuff range button pressed");
-        }
+
     }
 
     public void OnEnterRange(Collider2D other)
     {
         if (!presenter.AllowDetection) return;
 
-        Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
-        if (presenter.Model.Targets.Count > 0) AttackRangeSprite.color = Color.softRed;
+    //    Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        UpdateAttackRangeSpriteColor();
+    //    if (presenter.Model.Targets.Count > 0) AttackRangeSprite.color = Color.softRed;
         presenter.OnEnterRange(other);
     }
 
     public void OnExitRange(Collider2D other)
     {
-        Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
-        if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
+    //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
+        UpdateAttackRangeSpriteColor();
+    //    if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
         presenter.OnExitRange(other);
+    }
+
+    public void UpdateAttackRangeSpriteColor()
+    {
+        if (presenter.IsValidTargetExist()) AttackRangeSprite.color = Color.softRed;
+        else AttackRangeSprite.color = Color.lightGreen;
     }
 }
