@@ -46,27 +46,12 @@ public class V_RoomSetting : MonoBehaviour
             _cancelBtn.onClick.AddListener(CancelCreatingRoom);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
     /// 部屋を作る
     /// </summary>
     public void CreateRoom()
     {
-        // データを準備
-        M_RoomData data = new M_RoomData();
-        data.LobbyID = CSteamID.Nil;
-        data.Name = _roomNameInput.text;
-        data.Password = _passwordInput.text;
-        data.MaxMembers = 2;
-        data.MemberNums = 1;
-        data.CastleIndex = 0;
-        data.State = new Dictionary<string, GameReadyState>();
-        _creator.CreateLobby(data);
+        _creator.CreateLobby(_roomNameInput.text, _passwordInput.text);
     }
 
     /// <summary>
