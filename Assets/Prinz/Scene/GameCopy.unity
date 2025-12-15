@@ -786,6 +786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   debugText: {fileID: 0}
+  _mapManager: {fileID: 1084309508}
   allAttackRanges: []
 --- !u!1 &410087039
 GameObject:

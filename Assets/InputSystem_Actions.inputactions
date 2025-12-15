@@ -1013,6 +1013,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleDisplayPath",
+                    "type": "Button",
+                    "id": "6c00e16d-7fe5-42c6-bf49-4205298a4a3c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1035,6 +1044,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "TestDisplayText",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ddd688de-f1b1-4b9e-ac42-3c31f9b74993",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ToggleDisplayPath",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

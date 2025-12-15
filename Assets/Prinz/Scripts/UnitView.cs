@@ -8,6 +8,9 @@ public class UnitView : MonoBehaviour
     public BoxCollider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
 
+    [SerializeField]
+    private V_HealthGauge _healthGauge;
+
     public Animator Animator;
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
@@ -31,7 +34,8 @@ public class UnitView : MonoBehaviour
 
     public void UpdateHealth(float hp)
     {
-        // update sprite, bar, etc.
+        _healthGauge.SetGauge(hp);
+        Debug.LogWarning("SetGauge called in View");
     }
 
     public void EnableAttackRange(bool enable)
@@ -43,6 +47,7 @@ public class UnitView : MonoBehaviour
     {
     //    Debug.LogWarning("Death animation ended");
     //    PlayDeath(false);
+        _healthGauge.HideGauge();
         presenter.Release();
     }
 
@@ -56,6 +61,7 @@ public class UnitView : MonoBehaviour
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
 
         AttackRangeSprite.color = Color.lightGreen;
+        _healthGauge.ShowGauge();
     }
 
     // Update is called once per frame

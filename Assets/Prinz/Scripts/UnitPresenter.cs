@@ -9,6 +9,8 @@ public class UnitPresenter: MonoBehaviour
 
     private C_MapManager _mapManager;
 
+    public CapsuleCollider2D Collider;
+
     private UnitStateMachine _stateMachine;
 
     public ObjectPoolTest Pool { get; private set; }
@@ -29,9 +31,11 @@ public class UnitPresenter: MonoBehaviour
     public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
+        Collider = GetComponent<CapsuleCollider2D>();
         View.InitializeView();
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
+        View.UpdateHealth(Model.Health / Model.MaxHealth);
 
         Model.OnHealthChanged += OnHealthChanged;
         Model.OnDirectionChanged += OnDirectionChanged;
@@ -60,10 +64,10 @@ public class UnitPresenter: MonoBehaviour
         UpdateDirection(data.MoveDirection);
 
         _stateMachine.Initialize(new IdleState(Model, this));
-        CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
 
-        col.enabled = true;
+        Collider.enabled = true;
         View.EnableAttackRange(true);
+
     }
 
     public C_MapManager MapManager { get { return _mapManager; } }
@@ -180,9 +184,7 @@ public class UnitPresenter: MonoBehaviour
     }
     private void PrepareDeath()
     {
-        CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
-
-        col.enabled = false;
+        Collider.enabled = false;
         View.EnableAttackRange(false);
     }
     private void OnHealthChanged(float health, float maxHealth)
@@ -194,7 +196,7 @@ public class UnitPresenter: MonoBehaviour
             return;
         }
 
-        View.UpdateHealth(health);
+        View.UpdateHealth(health / maxHealth);
     }
 
     private void OnDirectionChanged(Vector3 direction, Vector3 moveDirection)
@@ -394,4 +396,17 @@ public class UnitPresenter: MonoBehaviour
     }
     #endregion
     //=====================================================================================================
+    //=====================================================================================================
+    #region Capsule Collider
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.collider.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
+        _stateMachine.TrySetState(new IdleState(Model, this));
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        
+    }
+    #endregion
 }

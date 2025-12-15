@@ -11,15 +11,21 @@ public class DebugManager : MonoBehaviour
     public TextMeshProUGUI debugText;
     private string logBuffer = "";
     private int maxLogLines = 20; // Adjust as needed
-    private InputAction _debugAction;
+    private InputAction _debugAttackRangeDisplay;
+    private InputAction _debugPathDisplay;
     private bool _isAttackRangeVisible = true;
+    private bool _isPathVisible = false;
+
+    [SerializeField]
+    private C_MapManager _mapManager;
 
     public List<GameObject> allAttackRanges = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _debugAction = InputSystem.actions.FindAction("ToggleAttackRangeVisibility");
+        _debugAttackRangeDisplay = InputSystem.actions.FindAction("ToggleAttackRangeVisibility");
+        _debugPathDisplay = InputSystem.actions.FindAction("ToggleDisplayPath");
 
         GetAllAttackRanges();
     }
@@ -27,9 +33,14 @@ public class DebugManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_debugAction.WasPressedThisFrame())
+        if(_debugAttackRangeDisplay.WasPressedThisFrame())
         {
             ToggleAttackRangeVisibility();
+        }
+
+        if( _debugPathDisplay.WasPressedThisFrame())
+        {
+            ToggleDisplayPath();
         }
     }
 
@@ -71,6 +82,12 @@ public class DebugManager : MonoBehaviour
             }
         }
         _isAttackRangeVisible = !_isAttackRangeVisible;
+    }
+
+    private void ToggleDisplayPath()
+    {
+        _isPathVisible = !_isPathVisible;
+        _mapManager.SetPathVisibility(_isPathVisible);
     }
 
     void HandleLog(string logString, string stackTrace, LogType type)

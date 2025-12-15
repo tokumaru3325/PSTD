@@ -24,7 +24,7 @@ public class IdleState : IUnitState
     {
         if(_idleTime < 0.5f)
         {
-            if (/*_model.HasTargetInRange() == true || _model.IsPlayerInRange == true*/ _presenter.IsValidTargetExist())
+            if (_presenter.IsValidTargetExist())
             {
                 return new AttackState(_model, _presenter);
             }
@@ -33,7 +33,7 @@ public class IdleState : IUnitState
         }
 
 
-        if(/*_model.HasTargetInRange() == false || */_presenter.IsValidTargetExist() == false)
+        if(_presenter.IsValidTargetExist() == false)
         {
             _presenter.Model.ClearTargets();
             return new MoveState(_model, _presenter);
