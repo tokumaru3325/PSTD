@@ -195,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbc539c5571f814c92a1df644375d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
+  Collider: {fileID: 3894400537274865863}
 --- !u!114 &1176192426932201083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +222,7 @@ GameObject:
   - component: {fileID: 2754155897233298723}
   - component: {fileID: 3157940442003379890}
   - component: {fileID: 6411228956345704117}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +325,7 @@ GameObject:
   - component: {fileID: 9146011062017105215}
   - component: {fileID: 6666963436523536888}
   m_Layer: 7
-  m_Name: KnightAttackRangeClose
+  m_Name: AttackRange
   m_TagString: AttackRange
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -472,7 +473,7 @@ GameObject:
   - component: {fileID: 704744234522023253}
   - component: {fileID: 5615554439074459549}
   - component: {fileID: 3647802367039846870}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Burn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +548,7 @@ GameObject:
   - component: {fileID: 5366452596417043236}
   - component: {fileID: 3886517782245778221}
   - component: {fileID: 5640435546096879849}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -623,7 +624,7 @@ GameObject:
   - component: {fileID: 2546999611082380816}
   - component: {fileID: 6711728042304234792}
   - component: {fileID: 8879648960189104079}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: HealthGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}

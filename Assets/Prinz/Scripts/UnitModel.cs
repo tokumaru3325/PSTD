@@ -142,6 +142,11 @@ public abstract class UnitModel
     {
         Route = route;
     }
+
+    public UnitData GetDataType()
+    {
+        return Data;
+    }
     //=====================================================================================================
     #region Setter
     public void SetHealth(float amount)

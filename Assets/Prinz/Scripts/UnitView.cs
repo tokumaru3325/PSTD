@@ -5,7 +5,7 @@ public class UnitView : MonoBehaviour
 {
     private UnitPresenter presenter;
     public Transform AttackRangeTransform { get; private set; }
-    public BoxCollider2D AttackRangeCollider { get; private set; }
+    public Collider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
 
     [SerializeField]
@@ -29,7 +29,7 @@ public class UnitView : MonoBehaviour
 
     private void Awake()
     {
-        InitializeView();
+    //    InitializeView();
     }
 
     public void UpdateHealth(float hp)
@@ -56,8 +56,18 @@ public class UnitView : MonoBehaviour
         presenter = GetComponent<UnitPresenter>();
         Animator = GetComponent<Animator>();
 
-        AttackRangeTransform = transform.Find("KnightAttackRangeClose");
-        AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
+        AttackRangeTransform = transform.Find("AttackRange");
+        var DataType = presenter.Model?.GetDataType();
+        if (DataType is KnightData)
+        {
+            AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
+        }
+        else if (DataType is ArcherData || DataType is MageData)
+        {
+            AttackRangeCollider = AttackRangeTransform.GetComponent<CircleCollider2D>();
+        }
+        else { Debug.LogError("Collider reference not found"); }
+
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
 
         AttackRangeSprite.color = Color.lightGreen;

@@ -32,9 +32,9 @@ public class UnitPresenter: MonoBehaviour
     {
         View = GetComponent<UnitView>();
         Collider = GetComponent<CapsuleCollider2D>();
-        View.InitializeView();
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
+        View.InitializeView();
         View.UpdateHealth(Model.Health / Model.MaxHealth);
 
         Model.OnHealthChanged += OnHealthChanged;
@@ -67,6 +67,8 @@ public class UnitPresenter: MonoBehaviour
 
         Collider.enabled = true;
         View.EnableAttackRange(true);
+
+        Debug.LogWarning($"Data type is : {Model.GetDataType()}");
 
     }
 
