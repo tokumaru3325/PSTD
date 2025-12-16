@@ -66,7 +66,7 @@ public class V_MultiMode : MonoBehaviour
         if (_multiBtn)
             _multiBtn.onClick.AddListener(OpenMulti);
         if (_hostBtn)
-            _hostBtn.onClick.AddListener(CreateLobby);
+            _hostBtn.onClick.AddListener(SearchLobby);
         if (_clientBtn)
             _clientBtn.onClick.AddListener(SearchLobby);
         if (_backBtn)
