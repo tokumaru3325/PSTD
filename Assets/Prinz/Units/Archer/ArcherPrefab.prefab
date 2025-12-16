@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: -8861092835309122477}
   m_Layer: 6
   m_Name: ArcherPrefab
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +179,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 20
-  m_Sprite: {fileID: 7405984442354353934, guid: 405a55021bedc3a4992df35429bda52b, type: 3}
+  m_Sprite: {fileID: -5511726396876724605, guid: 627433eac6cc6f443a4616e2a918e75c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -264,7 +264,7 @@ Animator:
   m_GameObject: {fileID: 2367091793331110442}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 83721a65324f61d46b1aa351b1855512, type: 2}
+  m_Controller: {fileID: 9100000, guid: c006496e363d44a438de02a617c358ac, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
