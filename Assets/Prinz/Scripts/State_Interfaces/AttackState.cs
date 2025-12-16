@@ -60,7 +60,7 @@ public class AttackState : IUnitState
             }
             else
             {
-                _presenter.PerformMeleeAttack(target);
+                _presenter.PerformBasicAttack(target);
             //    Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");
             }
         }
