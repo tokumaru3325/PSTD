@@ -266,7 +266,7 @@ public class UnitPresenter: MonoBehaviour
         View?.PlayAttack();
     }
     //ユニットに対する攻撃
-    public void PerformMeleeAttack(UnitPresenter target)
+    public void PerformBasicAttack(UnitPresenter target)
     {
         if (target.Model.IsDead) return;
         View?.StopAttack();
