@@ -14,9 +14,9 @@ public class IdleState : IUnitState
 
     public void OnEnter()
     { 
-        Debug.LogWarning($"Enter IdleState {_model.PlayerSide}");
-        _idleTime = 0f;
+    //    Debug.LogWarning($"Enter IdleState {_model.PlayerSide}");
         _presenter.OnEnterState();
+        _idleTime = 0f;
     }
     public void OnExit() { }
 
@@ -24,7 +24,7 @@ public class IdleState : IUnitState
     {
         if(_idleTime < 0.5f)
         {
-            if (_model.HasTargetInRange() == true || _model.IsPlayerInRange == true)
+            if (_presenter.IsValidTargetExist())
             {
                 return new AttackState(_model, _presenter);
             }
@@ -33,9 +33,9 @@ public class IdleState : IUnitState
         }
 
 
-        if(_model.HasTargetInRange() == false)
+        if(_presenter.IsValidTargetExist() == false)
         {
-            _presenter.Model.Targets.Clear();
+            _presenter.Model.ClearTargets();
             return new MoveState(_model, _presenter);
         }
 

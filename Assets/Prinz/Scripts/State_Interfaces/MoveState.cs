@@ -21,7 +21,7 @@ public class MoveState : IUnitState
 
     public void OnEnter() 
     {
-        Debug.LogWarning($"Enter MoveState {_model.PlayerSide}");
+    //    Debug.LogWarning($"Enter MoveState {_model.PlayerSide}");
         _presenter.OnEnterState();
         _presenter.View.PlayMove(true);
     }
@@ -95,7 +95,7 @@ public class MoveState : IUnitState
 
             if (Distance <= 0.001f)
             {
-                Debug.Log("next route");
+            //    Debug.Log("next route");
                 _model.SetCurrentRouteIndex(cri + 1);
             }
 

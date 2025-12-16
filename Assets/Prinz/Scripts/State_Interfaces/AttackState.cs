@@ -15,8 +15,8 @@ public class AttackState : IUnitState
 
     public void OnEnter() 
     {
-        Debug.LogWarning($"Enter AttackState {_model.PlayerSide}");
-     //   _presenter.OnEnterState();
+     //   Debug.LogWarning($"Enter AttackState {_model.PlayerSide}");
+        _presenter.OnEnterState();
         _attackTimer = 0f;
     }
     public void OnExit()
@@ -26,26 +26,23 @@ public class AttackState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-        // Enemy is too far → go back to walking
-        if (_model.HasTargetInRange() == false)
+        // Enemy is too far → go back to idle
+        if (_presenter.IsValidTargetExist() == false)
         {
-            if (_model.IsPlayerInRange == false)
-            {
-                Debug.Log("Target is too far");
-                return new IdleState(_model, _presenter);
-            }
+            //    Debug.Log("Target is too far");
+            return new IdleState(_model, _presenter);
         }
         ////
         var target = _model?.GetPrimaryTarget();
-        if (target == null || target.Model.IsDead)
+        if (target == null)
         {
-            if (target != null)
+/*            if (target != null)
             {
                 _model.Targets.Remove(target);
-            }
+            }*/
             if (_model.IsPlayerInRange == false)
             {
-                Debug.LogError("Target is null or dead");
+            //    Debug.LogError("Target is null or dead");
                 return new IdleState(_model, _presenter);
             }
         }
@@ -63,7 +60,7 @@ public class AttackState : IUnitState
             }
             else
             {
-                _presenter.PerformMeleeAttack(target);
+                _presenter.PerformBasicAttack(target);
             //    Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");
             }
         }

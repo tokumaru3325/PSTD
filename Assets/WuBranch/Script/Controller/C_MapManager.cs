@@ -20,6 +20,9 @@ public class C_MapManager : MonoBehaviour
     [SerializeField]
     private float MAP_INIT_POS_Y;
 
+    //デバッグ用
+    public bool IsPathVisible { get; private set; }
+
     async UniTaskVoid Awake()
     {
         Map = new M_Map();
@@ -33,25 +36,42 @@ public class C_MapManager : MonoBehaviour
 
     void Start()
     {
-
+        IsPathVisible = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.G))
+        /*        if(Input.GetKeyDown(KeyCode.G))
+                {
+                    DrawPath();
+                }*/
+
+        if (IsPathVisible)
         {
-            List<M_MapPosition> route = C_PathSearch.GetPath(GetAllRoute(), new M_MapPosition(4, 5), new M_MapPosition(31, 16));
-            for(int index = 0; index < route.Count; index++)
-            {
-                Color txtColor = Color.blue;
-                if(index == 0 || index == route.Count-1)
-                    txtColor = Color.red;
-                Vector3 pos = ConvertToUnityPos(route[index]);
-                Debug.DrawLine(pos + Vector3.left, pos - Vector3.left, txtColor, 100f, false);
-            }
+            DrawPath();
         }
     }
+
+    //[START] 2025/12/14 プリンス：デバッガーから使えるように、関数化した
+    public void DrawPath()
+    {
+        List<M_MapPosition> route = C_PathSearch.GetPath(GetAllRoute(), new M_MapPosition(4, 5), new M_MapPosition(31, 16));
+        for (int index = 0; index < route.Count; index++)
+        {
+            Color txtColor = Color.blue;
+            if (index == 0 || index == route.Count - 1)
+                txtColor = Color.red;
+            Vector3 pos = ConvertToUnityPos(route[index]);
+            Debug.DrawLine(pos + Vector3.left, pos - Vector3.left, txtColor, 0f, false);
+        }
+    }
+
+    public void SetPathVisibility(bool visible)
+    {
+        IsPathVisible = visible;
+    }
+    //[END] 2025/12/14 プリンス
 
     /// <summary>
     /// マップを読み込む

@@ -14,15 +14,14 @@ public class DeadState : IUnitState
 
     public void OnEnter() 
     {
-        Debug.LogWarning($"Enter DeadState {_model.PlayerSide}");
+     //   Debug.LogWarning($"Enter DeadState {_model.PlayerSide}");
+        _presenter.OnEnterState();
         _presenter.PerformDeath();
-     //   _presenter.OnEnterState();
      
     }
     public void OnExit()
     {
-        //    _presenter.Release();
-        Debug.LogWarning("!!!!!!!!!!!!!!!!EXIT DeadState");
+    //    Debug.LogWarning("!!!!!!!!!!!!!!!!EXIT DeadState");
     }
 
     public IUnitState OnUpdate(float dt)

@@ -5,9 +5,11 @@ public class UnitView : MonoBehaviour
 {
     private UnitPresenter presenter;
     public Transform AttackRangeTransform { get; private set; }
-    public BoxCollider2D AttackRangeCollider { get; private set; }
+    public Collider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
-    public KnightAttackRange AttackRange { get; private set; }
+
+    [SerializeField]
+    private V_HealthGauge _healthGauge;
 
     public Animator Animator;
 
@@ -27,17 +29,13 @@ public class UnitView : MonoBehaviour
 
     private void Awake()
     {
-        InitializeView();
+    //    InitializeView();
     }
 
     public void UpdateHealth(float hp)
     {
-        // update sprite, bar, etc.
-    }
-    public void ShowAttackRange(bool show)
-    {
-        if (AttackRangeSprite != null)
-            AttackRangeSprite.enabled = show;
+        _healthGauge.SetGauge(hp);
+        Debug.LogWarning("SetGauge called in View");
     }
 
     public void EnableAttackRange(bool enable)
@@ -47,51 +45,62 @@ public class UnitView : MonoBehaviour
 
     public void OnDeathAnimationEnd()
     {
-        Debug.LogWarning("Death animation ended");
+    //    Debug.LogWarning("Death animation ended");
     //    PlayDeath(false);
+        _healthGauge.HideGauge();
         presenter.Release();
     }
 
     public void InitializeView()
     {
         presenter = GetComponent<UnitPresenter>();
-        //   AttackRange = GetComponentInChildren<KnightAttackRange>();
-        //  AttackRange.SetView(this);
-        AttackRangeTransform = transform.Find("KnightAttackRangeClose");
-        AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
-        AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
-        AttackRangeSprite.color = Color.lightGreen;
         Animator = GetComponent<Animator>();
+
+        AttackRangeTransform = transform.Find("AttackRange");
+        var DataType = presenter.Model?.GetDataType();
+        if (DataType is KnightData)
+        {
+            AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
+        }
+        else if (DataType is ArcherData || DataType is MageData)
+        {
+            AttackRangeCollider = AttackRangeTransform.GetComponent<CircleCollider2D>();
+        }
+        else { Debug.LogError("Collider reference not found"); }
+
+        AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
+
+        AttackRangeSprite.color = Color.lightGreen;
+        _healthGauge.ShowGauge();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            //    presenter.SetRangeBuff(2.0f);
-            Debug.Log("buff range button pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            //   presenter.SetRangeBuff(-2.0f);
-            Debug.Log("debuff range button pressed");
-        }
+
     }
 
     public void OnEnterRange(Collider2D other)
     {
         if (!presenter.AllowDetection) return;
 
-        Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
-        if (presenter.Model.Targets.Count > 0) AttackRangeSprite.color = Color.softRed;
+    //    Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        UpdateAttackRangeSpriteColor();
+    //    if (presenter.Model.Targets.Count > 0) AttackRangeSprite.color = Color.softRed;
         presenter.OnEnterRange(other);
     }
 
     public void OnExitRange(Collider2D other)
     {
-        Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
-        if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
+    //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
+        UpdateAttackRangeSpriteColor();
+    //    if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
         presenter.OnExitRange(other);
+    }
+
+    public void UpdateAttackRangeSpriteColor()
+    {
+        if (presenter.IsValidTargetExist()) AttackRangeSprite.color = Color.softRed;
+        else AttackRangeSprite.color = Color.lightGreen;
     }
 }
