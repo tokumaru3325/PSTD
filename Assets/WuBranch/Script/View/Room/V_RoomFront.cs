@@ -126,7 +126,6 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (_pwdInputPanel)
         {
-            Debug.Log("found");
             _pwdInputPanel.Open(_myController);
         }
     }

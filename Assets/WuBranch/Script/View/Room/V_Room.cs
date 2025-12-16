@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +12,12 @@ public class V_Room : MonoBehaviour
     [SerializeField]
     private Button _backBtn;
 
+    /// <summary>
+    /// 部屋名表示テキスト
+    /// </summary>
+    [SerializeField]
+    private TextMeshProUGUI _roomNameTxt;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,17 +25,13 @@ public class V_Room : MonoBehaviour
             _backBtn.onClick.AddListener(BackToSelectMode);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
     /// 前の画面に戻る
     /// </summary>
     public void BackToSelectMode()
     {
-        SceneManager.LoadScene("Title", LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
+
+
 }

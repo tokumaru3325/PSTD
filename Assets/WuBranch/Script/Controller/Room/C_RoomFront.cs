@@ -26,9 +26,18 @@ public class C_RoomFront : MonoBehaviour
     //ロビー入室コールバック
     private Callback<LobbyEnter_t> _lobbyEnter;
 
+    /// <summary>
+    /// 共通変数
+    /// </summary>
+    private C_GlobalVariable _globalVariable;
+
     void Start()
     {
-        _lobbyEnter = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+        if (SteamManager.Initialized)
+        {
+            _lobbyEnter = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+        }
+        _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
     }
 
     /// <summary>
@@ -102,6 +111,8 @@ public class C_RoomFront : MonoBehaviour
         //ホストに接続
         bool result = NetworkManager.Singleton.StartClient();
         OnJoinResultRecieved?.Invoke(true, "");
+
+        _globalVariable.SetRoomRole(MultiRoleType.Client);
 
         //シーンを切り替え
         NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
