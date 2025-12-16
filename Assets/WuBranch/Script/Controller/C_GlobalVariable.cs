@@ -30,6 +30,24 @@ public class C_GlobalVariable : MonoBehaviour
     }
 
     /// <summary>
+    /// 部屋の役割を設定
+    /// </summary>
+    /// <param name="role">役割</param>
+    public void SetRoomRole(MultiRoleType role)
+    {
+        _datas.SetRole(role);
+    }
+
+    /// <summary>
+    /// 部屋の役割を取得
+    /// </summary>
+    /// <returns>役割</returns>
+    public MultiRoleType GetRoomRole()
+    {
+        return _datas.MultiRole;
+    }
+
+    /// <summary>
     /// プレイヤーの自身の名前を設定
     /// </summary>
     /// <param name="name">名前</param>
