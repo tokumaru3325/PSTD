@@ -30,38 +30,26 @@ public abstract class UnitModel
     public float Health { get; private set; }
     public float AttackPower { get; private set; }
     public float AttackSpeed { get; private set; }
-
     public float MoveSpeed { get; private set; }
     public int UnitCost { get; private set; }
     public float UnitCoolDown { get; private set; }
     public Vector3 MoveDirection { get; private set; }
-
     public M_MapPosition EnemyPlayerPos { get; private set; }
-
     public List<M_MapPosition> Route { get; private set; }
     public int CurrentRouteIndex { get; private set; }
-
     public bool IsDead => Health <= 0f;
-
     public bool IsPlayerInRange { get; private set; }
 
     public event Action<float, float> OnHealthChanged;
 
     public event Action<Vector3, Vector3> OnDirectionChanged;
+    public abstract void Tick(UnitPresenter presenter);
 
-    //=====================================================================================================
-    #region Range 
-    public float AttackRange { get; private set; }
-    public float BaseAttackRange { get; private set; }
-    public float RangeMultiplier { get; private set; } = 1.0f;
-    public float CurrentRange => BaseAttackRange * RangeMultiplier;
-
-    public void SetRangeBuff(float factor)
+    public UnitData GetDataType()
     {
-        RangeMultiplier = factor;
+        return Data;
     }
-    #endregion
-    //=====================================================================================================
+
     //owner
     public UnitPresenter Owner { get; private set; }
 
@@ -77,15 +65,21 @@ public abstract class UnitModel
         EnemyPlayer = enemyPlayer;
     }
 
-    //target enemy
+    //=====================================================================================================
+    #region Range 
+    public float AttackRange { get; private set; }
+    public float BaseAttackRange { get; private set; }
+    public float RangeMultiplier { get; private set; } = 1.0f;
+    public float CurrentRange => BaseAttackRange * RangeMultiplier;
 
-    /*    public UnitPresenter TargetEnemy { get; private set; }
-
-        public void SetTarget(UnitPresenter enemy)
-        {
-            TargetEnemy = enemy;
-        }*/
-
+    public void SetRangeBuff(float factor)
+    {
+        RangeMultiplier = factor;
+    }
+    #endregion
+    //=====================================================================================================
+    //=====================================================================================================
+    #region Targets
     private readonly List<UnitPresenter> targets = new();
 
     public void AddTarget(UnitPresenter t)
@@ -105,8 +99,6 @@ public abstract class UnitModel
     }
 
     public List<UnitPresenter> Targets => targets;
-
-    public abstract void Tick(UnitPresenter presenter);
 
     public bool HasTargetInRange()
     {
@@ -132,21 +124,8 @@ public abstract class UnitModel
         }
         return null;
     }
-
-    public void SetEnemyPlayerPos(M_MapPosition pos)
-    {
-        EnemyPlayerPos = pos;
-    }
-
-    public void SetRoute(List<M_MapPosition> route)
-    {
-        Route = route;
-    }
-
-    public UnitData GetDataType()
-    {
-        return Data;
-    }
+    #endregion
+    //=====================================================================================================
     //=====================================================================================================
     #region Setter
     public void SetHealth(float amount)
@@ -203,6 +182,14 @@ public abstract class UnitModel
     public void SetCurrentRouteIndex(int ri)
     {
         CurrentRouteIndex = ri;
+    }
+    public void SetEnemyPlayerPos(M_MapPosition pos)
+    {
+        EnemyPlayerPos = pos;
+    }
+    public void SetRoute(List<M_MapPosition> route)
+    {
+        Route = route;
     }
     #endregion
     //=====================================================================================================
