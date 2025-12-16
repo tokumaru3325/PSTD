@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +18,19 @@ public class V_Slot : MonoBehaviour
 
     public void OpenSlot()
     {
-        SceneManager.LoadScene("Slot", LoadSceneMode.Additive);
+        //SceneManager.LoadScene("Slot", LoadSceneMode.Additive);
+        int random = (int)Random.Range(0, 3);
+        if(random == 0)
+        {
+            SlotSceneManager.ChangeSceneToMoney();
+        }
+        else if(random == 1)
+        {
+            SlotSceneManager.ChangeSceneToMonster();
+        }
+        else
+        {
+            SlotSceneManager.ChangeSceneToBuff();
+        }
     }
 }
