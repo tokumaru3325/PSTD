@@ -2285,6 +2285,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1745658304}
   - component: {fileID: 1745658305}
+  - component: {fileID: 1745658307}
+  - component: {fileID: 1745658306}
   m_Layer: 5
   m_Name: Player_Host
   m_TagString: Untagged
@@ -2340,6 +2342,33 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1745658306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745658303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e65346f6dc7084d906ba6489c6a05e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::V_Host
+  _playerNameTxt: {fileID: 1964484332}
+  _castleViewer: {fileID: 0}
+--- !u!114 &1745658307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745658303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dce6fad661d9bc5418c1c1a6bc05887b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_Host
+  _target: 0
 --- !u!1 &1811506712
 GameObject:
   m_ObjectHideFlags: 0
