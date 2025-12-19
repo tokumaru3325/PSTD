@@ -13,7 +13,11 @@ public class UnitPresenter: MonoBehaviour
 
     private UnitStateMachine _stateMachine;
 
+    [SerializeField]
+    private DebugManager _debugManager;
+
     public ObjectPoolTest Pool { get; private set; }
+
 
     UnitData Data;
 
@@ -27,6 +31,7 @@ public class UnitPresenter: MonoBehaviour
 
     private void OnEnable()
     {
+
     }
     public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
@@ -36,9 +41,12 @@ public class UnitPresenter: MonoBehaviour
         Model.SetPlayerSide(PlayerTag);
         View.InitializeView();
         View.UpdateHealth(Model.Health / Model.MaxHealth);
+        BindDebugManager();
 
         Model.OnHealthChanged += OnHealthChanged;
         Model.OnDirectionChanged += OnDirectionChanged;
+        Model.OnUnitSpawn += OnUnitSpawn;
+
 
         //敵のプレヤーを取得して記録する
         BindEnemyPlayer();
@@ -70,6 +78,7 @@ public class UnitPresenter: MonoBehaviour
 
         Debug.LogWarning($"Data type is : {Model.GetDataType()}");
 
+        Model.NotifySpawn();
     }
 
     public C_MapManager MapManager { get { return _mapManager; } }
@@ -122,18 +131,21 @@ public class UnitPresenter: MonoBehaviour
         if (data is KnightData kd)
         {
             Model = new KnightModel(kd);
+            Model.SetUnitID(UnitID.Knight);
             _stateMachine = new UnitStateMachine();
         //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is ArcherData ad)
         {
             Model = new ArcherModel(ad);
+            Model.SetUnitID(UnitID.Archer);
             _stateMachine = new UnitStateMachine();
         //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is MageData md)
         {
             Model = new MageModel(md);
+            Model.SetUnitID(UnitID.Mage);
             _stateMachine = new UnitStateMachine();
         //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
@@ -146,6 +158,20 @@ public class UnitPresenter: MonoBehaviour
         Model.BindOwner(this);
     }
 
+    private void BindDebugManager()
+    {
+        GameObject dm = GameObject.FindGameObjectWithTag("DebugManager");
+        if (dm != null)
+        {
+            _debugManager = dm.GetComponent<DebugManager>();
+        }
+    }
+
+    public void OnUnitSpawn(UnitPresenter owner)
+    {
+        _debugManager.OnUnitSpawn(owner);
+    }
+
     #endregion
     //=====================================================================================================
 
@@ -154,6 +180,10 @@ public class UnitPresenter: MonoBehaviour
     public void Release()
     {
         Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
+        Model.OnHealthChanged -= OnHealthChanged;
+        Model.OnDirectionChanged -= OnDirectionChanged;
+    //    Model.OnUnitSpawn -= OnUnitSpawn;
+
         Pool?.Release(this);
     }
 
@@ -166,8 +196,15 @@ public class UnitPresenter: MonoBehaviour
     }
     #endregion
     //=====================================================================================================
-    public void OnEnterState()
+    public void OnEnterState(IUnitState EnteringState)
     {
+        if (EnteringState == null) return;
+
+        if(EnteringState is DeadState)
+        {
+
+        }
+
         View.UpdateAttackRangeSpriteColor();
     }
     //=====================================================================================================
@@ -186,6 +223,7 @@ public class UnitPresenter: MonoBehaviour
     }
     private void PrepareDeath()
     {
+        View.UpdateHealth(Model.Health / Model.MaxHealth);
         Collider.enabled = false;
         View.EnableAttackRange(false);
     }
@@ -247,7 +285,7 @@ public class UnitPresenter: MonoBehaviour
     #region 攻撃 - attack
     public void TakeDamage(float dmg)
     {
-        if(Model.IsDead) return;
+    //    if(Model.IsDead) return;
         Model?.SetHealth(Model.Health - dmg);
     //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
@@ -257,22 +295,21 @@ public class UnitPresenter: MonoBehaviour
         View?.PlayAttack();
     }
     //プレヤーに対する攻撃
-    public void PerformPlayerAttack()
+    public void PerformPlayerAttack(float dt)
     {
         if(Model.EnemyPlayer.IsDead()) return;
-        View?.StopAttack();
-        float damage = Model.AttackPower;
-        Model.EnemyPlayer.DecreaseHP(damage);
-        View?.PlayAttack();
+        Model.PlayerAttack(dt);
     }
     //ユニットに対する攻撃
-    public void PerformBasicAttack(UnitPresenter target)
+    public void PerformBasicAttack(UnitPresenter target, float dt)
     {
-        if (target.Model.IsDead) return;
-        View?.StopAttack();
+     //   if (target.Model.IsDead) return;
+        Model.BasicAttack(target, dt); //moving logic to model
+
+/*        View?.StopAttack();
         float damage = Model.AttackPower;
         target.TakeDamage(damage);
-        View?.PlayAttack();
+        View?.PlayAttack();*/
     }
     public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
     public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }

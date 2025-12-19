@@ -4,9 +4,22 @@ using System.Linq;
 using UnityEngine;
 
 //[Serializable]
+public enum UnitID
+{
+    Knight,
+    Archer,
+    Mage
+}
 public abstract class UnitModel
 {
     protected UnitData Data;
+
+    public UnitID UnitID {  get; protected set; }
+
+    public void SetUnitID(UnitID unitID)
+    {
+        this.UnitID = unitID;
+    }
 
     public UnitModel(UnitData data)
     {
@@ -43,7 +56,18 @@ public abstract class UnitModel
     public event Action<float, float> OnHealthChanged;
 
     public event Action<Vector3, Vector3> OnDirectionChanged;
+
+    public event Action<UnitPresenter> OnUnitSpawn;
     public abstract void Tick(UnitPresenter presenter);
+
+    public abstract void BasicAttack(UnitPresenter presenter, float dt);
+    public abstract void PlayerAttack(float dt);
+    public bool CanAttack {  get; private set; }
+
+    public void AllowAttack(bool canattack)
+    {
+        CanAttack = canattack;
+    }
 
     public UnitData GetDataType()
     {
@@ -63,6 +87,11 @@ public abstract class UnitModel
     public void BindEnemyPlayer(C_PlayerTowerController enemyPlayer)
     {
         EnemyPlayer = enemyPlayer;
+    }
+
+    public void NotifySpawn()
+    {
+        OnUnitSpawn?.Invoke(Owner);
     }
 
     //=====================================================================================================

@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
   Collider: {fileID: 3894400537274865863}
+  _debugManager: {fileID: 0}
 --- !u!114 &1176192426932201083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,7 +394,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
   m_Color: {r: 0.6864803, g: 1, b: 0.5330188, a: 1}
   m_FlipX: 0
   m_FlipY: 0
