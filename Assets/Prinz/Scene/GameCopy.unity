@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Unit: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
   SpawnButtonPrefab: {fileID: 1340633583}
   objectPoolTest: {fileID: 407917817}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -396,7 +395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Unit: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
   SpawnButtonPrefab: {fileID: 347814045}
   objectPoolTest: {fileID: 1234037404}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -586,6 +584,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_CameraMover
   _direction: 3
   _cameraMover: {fileID: 330585548}
+--- !u!1 &236772666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 236772668}
+  - component: {fileID: 236772667}
+  m_Layer: 0
+  m_Name: CPU
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &236772667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236772666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 208abb7dfc3accc46a2ca1f078d273dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CPU
+  KnightSpawner: {fileID: 1892872861}
+  ArcherSpawner: {fileID: 28402135}
+  MageSpawner: {fileID: 2071353528}
+  KnightObjectPool: {fileID: 1325767628}
+  ArcherObjectPool: {fileID: 1234037404}
+  MageObjectPool: {fileID: 1770270220}
+  _CPUTag: Player2
+  _soloPlayerTag: Player1
+  _spawnCoolDown: 2
+--- !u!4 &236772668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236772666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.79077, y: -1.01959, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &325777656
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Unit: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
   SpawnButtonPrefab: {fileID: 1746258612}
   objectPoolTest: {fileID: 1275259321}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -1083,6 +1133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 2447710678042578469, guid: 109610ebff528bd499d61dd9e4e72655, type: 3}
+  UnitData: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
 --- !u!4 &407917818
 Transform:
   m_ObjectHideFlags: 0
@@ -14522,6 +14573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 2367091793331110442, guid: f0ad92acde2ae224789b6af09851b860, type: 3}
+  UnitData: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
 --- !u!4 &517087020
 Transform:
   m_ObjectHideFlags: 0
@@ -17248,6 +17300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 2367091793331110442, guid: f0ad92acde2ae224789b6af09851b860, type: 3}
+  UnitData: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
 --- !u!4 &1234037405
 Transform:
   m_ObjectHideFlags: 0
@@ -17719,6 +17772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
+  UnitData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
 --- !u!4 &1275259322
 Transform:
   m_ObjectHideFlags: 0
@@ -17809,6 +17863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
+  UnitData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
 --- !u!4 &1325767629
 Transform:
   m_ObjectHideFlags: 0
@@ -18164,6 +18219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 6781292948723307380, guid: 1d30240a23a3b564e876d4c82d8f9318, type: 3}
+  UnitData: {fileID: 0}
 --- !u!4 &1407226765
 Transform:
   m_ObjectHideFlags: 0
@@ -18178,145 +18234,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 432052315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1435787375
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1435787380}
-  - component: {fileID: 1435787379}
-  - component: {fileID: 1435787378}
-  - component: {fileID: 1435787377}
-  - component: {fileID: 1435787376}
-  m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!54 &1435787376
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435787375}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!65 &1435787377
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435787375}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1435787378
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435787375}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1435787379
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435787375}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1435787380
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435787375}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.08101, y: -1.55161, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1493924739
 GameObject:
@@ -18834,6 +18751,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
   prefabObj: {fileID: 2447710678042578469, guid: 109610ebff528bd499d61dd9e4e72655, type: 3}
+  UnitData: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
 --- !u!4 &1770270221
 Transform:
   m_ObjectHideFlags: 0
@@ -19467,7 +19385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Unit: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
   SpawnButtonPrefab: {fileID: 563820934}
   objectPoolTest: {fileID: 1325767628}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -21522,7 +21439,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Unit: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
   SpawnButtonPrefab: {fileID: 1921021095}
   objectPoolTest: {fileID: 517087019}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -23473,7 +23389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3118c033c4961a4f8eb082a91b95c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
-  Unit: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
   SpawnButtonPrefab: {fileID: 944368926}
   objectPoolTest: {fileID: 1770270220}
   spawnPosition: {x: 0, y: 0, z: 0}
@@ -24805,4 +24720,4 @@ SceneRoots:
   - {fileID: 1319896984}
   - {fileID: 432052315}
   - {fileID: 367282167}
-  - {fileID: 1435787380}
+  - {fileID: 236772668}
