@@ -49,7 +49,7 @@ public class UnitStateMachine
      //   Debug.LogWarning("TrySetState() called");
      if(Current is AttackState)
         {
-            
+            //anything
         }
         Current.OnExit();
         Current = null;

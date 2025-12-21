@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//[Serializable]
 public enum UnitID
 {
     Knight,
@@ -24,7 +23,6 @@ public abstract class UnitModel
     public UnitModel(UnitData data)
     {
         Data = data;
-        //    PlayerSide = data.PlayerSide;
         MaxHealth = data.MaxHealth;
         Health = data.MaxHealth;
         AttackPower = data.BaseAttackPower;

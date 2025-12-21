@@ -23,7 +23,7 @@ public class AttackState : IUnitState
     public void OnExit()
     {
         //   _presenter.View.StopAttack();
-        Debug.LogError($"Unit {_model.PlayerSide} died with {_attackTimer} remaining on attack timer");
+    //    Debug.LogError($"Unit {_model.PlayerSide} died with {_attackTimer} remaining on attack timer");
         if (_attackTimer < 1f && _target != null) //bad but quick fix to avoid the last attack from being ignored
         {
             if (_model.IsPlayerInRange == true && _model.HasTargetInRange() == false)
