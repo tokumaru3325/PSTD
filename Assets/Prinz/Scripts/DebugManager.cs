@@ -13,7 +13,7 @@ public class DebugManager : MonoBehaviour
     private int maxLogLines = 20; // Adjust as needed
     private InputAction _debugAttackRangeDisplay;
     private InputAction _debugPathDisplay;
-    private bool _isAttackRangeVisible = true;
+    private bool _isAttackRangeVisible = false;
     private bool _isPathVisible = false;
 
     [SerializeField]
