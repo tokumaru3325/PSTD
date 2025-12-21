@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ArcherModel : UnitModel
 {
@@ -8,19 +9,46 @@ public class ArcherModel : UnitModel
 
     public override void Tick(UnitPresenter presenter)
     {
-      //  attackTimer -= Time.deltaTime;
 
-       // presenter.Move(this.MoveSpeed, this.MoveDirection);
+    }
 
+    public override void BasicAttack(UnitPresenter target, float dt)
+    {
+        float timergoal = 1f / AttackSpeed;
 
-/*        if (presenter.IsEnemyInRange(Data.AttackRange) && attackTimer <= 0f)
+        if(attackTimer < timergoal * 0.9f) 
+            Owner.View?.PlayAttack();
+        else
+            Owner.View?.StopAttack();
+
+        attackTimer += dt;
+
+        if (attackTimer >= timergoal)
         {
-            presenter.SpawnProjectile(
-                ArcherData.ProjectilePrefab,
-                ArcherData.ProjectileSpeed,
-                Data.AttackDamage
-            );
-            attackTimer = Data.AttackCooldown;
-        }*/
+            Owner.View?.StopAttack();
+            attackTimer = 0f;
+            float damage = AttackPower;
+            target.TakeDamage(damage);
+        }
+    }
+
+    public override void PlayerAttack(float dt)
+    {
+        float timergoal = 1f / AttackSpeed;
+
+        if (attackTimer < timergoal * 0.9f)
+            Owner.View?.PlayAttack();
+        else
+            Owner.View?.StopAttack();
+
+        attackTimer += dt;
+
+        if (attackTimer >= timergoal)
+        {
+            Owner.View?.StopAttack();
+            attackTimer = 0f;
+            float damage = AttackPower;
+            EnemyPlayer.DecreaseHP(damage);
+        }
     }
 }

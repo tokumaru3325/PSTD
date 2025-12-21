@@ -22,7 +22,7 @@ public class MoveState : IUnitState
     public void OnEnter() 
     {
     //    Debug.LogWarning($"Enter MoveState {_model.PlayerSide}");
-        _presenter.OnEnterState();
+        _presenter.OnEnterState(this);
         _presenter.View.PlayMove(true);
     }
     public void OnExit()

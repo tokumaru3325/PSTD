@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f32a7726e5f8a4cb99996f14493c11, type: 3}
   m_Name: MageData
   m_EditorClassIdentifier: Assembly-CSharp::MageData
-  MaxHealth: 10
-  BaseAttackPower: 0
-  BaseAttackSpeed: 1
+  MaxHealth: 20
+  BaseAttackPower: 5
+  BaseAttackSpeed: 0.5
   BaseAttackRange: 1
-  BaseMoveSpeed: 2
+  BaseMoveSpeed: 3
   BaseUnitCost: 0
   BaseUnitCoolDown: 0
   MoveDirection: {x: -1, y: 0, z: 0}

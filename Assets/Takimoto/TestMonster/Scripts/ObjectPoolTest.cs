@@ -1,11 +1,17 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+
+using UnityEngine.UI;
+using Unity.VisualScripting;
 //using static UnityEditor.Progress;
 
 public class ObjectPoolTest : MonoBehaviour
 {
     [SerializeField] GameObject prefabObj;
+
+    [SerializeField]
+    public UnitData UnitData; //ScriptableObjectをインスペクターに設定する //[2025/12/21] プリンス：SpawnButtonから移した
 
     List<UnitPresenter> pool;
 

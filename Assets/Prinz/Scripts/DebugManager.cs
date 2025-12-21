@@ -13,7 +13,7 @@ public class DebugManager : MonoBehaviour
     private int maxLogLines = 20; // Adjust as needed
     private InputAction _debugAttackRangeDisplay;
     private InputAction _debugPathDisplay;
-    private bool _isAttackRangeVisible = true;
+    private bool _isAttackRangeVisible = false;
     private bool _isPathVisible = false;
 
     [SerializeField]
@@ -55,6 +55,19 @@ public class DebugManager : MonoBehaviour
      //   Application.logMessageReceived -= HandleLog;
     }
 
+    public void OnUnitSpawn(UnitPresenter owner)
+    {
+        Debug.LogWarning($"OnUnitSpawn called in debug manager with visibility = {_isAttackRangeVisible}");
+        Transform AttackRange;
+        AttackRange = owner.transform.Find("AttackRange");
+        if (AttackRange == null)
+        {
+            Debug.LogError("OnUnitSpawn did not find any AttackRange");
+            return;
+        }
+        allAttackRanges.Add(AttackRange.gameObject);
+        ApplyVisibility();
+    }
     private void GetAllAttackRanges()
     {
         allAttackRanges.Clear();
@@ -72,16 +85,27 @@ public class DebugManager : MonoBehaviour
 
     private void ToggleAttackRangeVisibility()
     {
+        _isAttackRangeVisible = !_isAttackRangeVisible;
         GetAllAttackRanges();
+        ApplyVisibility();
+    }
+
+    private void ApplyVisibility()
+    {
         foreach (GameObject AttackRange in allAttackRanges)
         {
-            if (AttackRange == enabled)
+            if (AttackRange != enabled)
             {
-                SpriteRenderer sr = AttackRange.GetComponent<SpriteRenderer>();
-                sr.enabled = _isAttackRangeVisible;
+                continue;
             }
+            EnableAttackRangeSprite(AttackRange);
         }
-        _isAttackRangeVisible = !_isAttackRangeVisible;
+    }
+
+    private void EnableAttackRangeSprite(GameObject AttackRange)
+    {
+        SpriteRenderer sr = AttackRange.GetComponent<SpriteRenderer>();
+        sr.enabled = _isAttackRangeVisible;
     }
 
     private void ToggleDisplayPath()

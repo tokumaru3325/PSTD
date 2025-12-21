@@ -9,27 +9,45 @@ public class MageModel : UnitModel
 
     public override void Tick(UnitPresenter presenter)
     {
-     //   attackTimer -= Time.deltaTime;
 
-     //   presenter.Move(this.MoveSpeed, this.MoveDirection);
+    }
+    public override void BasicAttack(UnitPresenter target, float dt)
+    {
+        float timergoal = 1f / AttackSpeed;
 
-     //   if (attackTimer > 0f)
-     //       return;
+        if (attackTimer < timergoal * 0.9f)
+            Owner.View?.PlayAttack();
+        else
+            Owner.View?.StopAttack();
 
-       /* // Priority 1: Heal nearby ally
-        if (presenter.TryGetLowHpAlly(out UnitPresenter ally))
+        attackTimer += dt;
+
+        if (attackTimer >= timergoal)
         {
-            ally.ReceiveHeal(MageData.HealAmount);
-            presenter.PlayHealVFX();
-            attackTimer = Data.AttackCooldown;
-            return;
+            Owner.View?.StopAttack();
+            attackTimer = 0f;
+            float damage = AttackPower;
+            target.TakeDamage(damage);
         }
+    }
 
-        // Priority 2: Attack enemy
-        if (presenter.IsEnemyInRange(Data.AttackRange))
+    public override void PlayerAttack(float dt)
+    {
+        float timergoal = 1f / AttackSpeed;
+
+        if (attackTimer < timergoal * 0.9f)
+            Owner.View?.PlayAttack();
+        else
+            Owner.View?.StopAttack();
+
+        attackTimer += dt;
+
+        if (attackTimer >= timergoal)
         {
-            presenter.PerformMagicAttack(Data.AttackDamage);
-            attackTimer = Data.AttackCooldown;
-        }*/
+            Owner.View?.StopAttack();
+            attackTimer = 0f;
+            float damage = AttackPower;
+            EnemyPlayer.DecreaseHP(damage);
+        }
     }
 }

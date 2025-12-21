@@ -15,7 +15,7 @@ public class IdleState : IUnitState
     public void OnEnter()
     { 
     //    Debug.LogWarning($"Enter IdleState {_model.PlayerSide}");
-        _presenter.OnEnterState();
+        _presenter.OnEnterState(this);
         _idleTime = 0f;
     }
     public void OnExit() { }

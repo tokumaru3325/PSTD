@@ -47,10 +47,13 @@ public class UnitStateMachine
         if (Current == newState) return;
 
      //   Debug.LogWarning("TrySetState() called");
+     if(Current is AttackState)
+        {
+            //anything
+        }
         Current.OnExit();
         Current = null;
         Current = newState;
         Current.OnEnter();
-    
     }
 }

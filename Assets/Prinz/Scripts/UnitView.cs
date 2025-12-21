@@ -35,7 +35,7 @@ public class UnitView : MonoBehaviour
     public void UpdateHealth(float hp)
     {
         _healthGauge.SetGauge(hp);
-        Debug.LogWarning("SetGauge called in View");
+    //    Debug.LogWarning("SetGauge called in View");
     }
 
     public void EnableAttackRange(bool enable)
@@ -100,7 +100,13 @@ public class UnitView : MonoBehaviour
 
     public void UpdateAttackRangeSpriteColor()
     {
-        if (presenter.IsValidTargetExist()) AttackRangeSprite.color = Color.softRed;
-        else AttackRangeSprite.color = Color.lightGreen;
+        Color c;
+
+        if (presenter.IsValidTargetExist()) c = Color.softRed;
+        else c = Color.lightGreen;
+
+        //alpha変更
+        c.a = 0.3f;
+        AttackRangeSprite.color = c;
     }
 }
