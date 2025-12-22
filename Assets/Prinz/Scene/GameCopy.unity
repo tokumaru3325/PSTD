@@ -621,7 +621,8 @@ MonoBehaviour:
   MageObjectPool: {fileID: 1770270220}
   _CPUTag: Player2
   _soloPlayerTag: Player1
-  _spawnCoolDown: 2
+  _spawnCoolDown: 5
+  _spawnDelay: 0.5
 --- !u!4 &236772668
 Transform:
   m_ObjectHideFlags: 0
