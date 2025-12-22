@@ -49,6 +49,14 @@ public abstract class UnitModel
     public List<M_MapPosition> Route { get; private set; }
     public int CurrentRouteIndex { get; private set; }
     public bool IsDead => Health <= 0f;
+    /// <summary>
+    /// HPが50%以下だったらTrue
+    /// </summary>
+    public bool IsBadlyWounded => Health < MaxHealth / 2.0f;
+    /// <summary>
+    /// HPが100%以下だったらTrue
+    /// </summary>
+    public bool IsWounded => Health < MaxHealth;
     public bool IsPlayerInRange { get; private set; }
 
     public event Action<float, float> OnHealthChanged;
@@ -107,7 +115,7 @@ public abstract class UnitModel
     //=====================================================================================================
     //=====================================================================================================
     #region Targets
-    private readonly List<UnitPresenter> targets = new();
+    protected readonly List<UnitPresenter> targets = new();
 
     public void AddTarget(UnitPresenter t)
     {
@@ -139,7 +147,7 @@ public abstract class UnitModel
         IsPlayerInRange = isPlayerInRange;
     }
 
-    public UnitPresenter GetPrimaryTarget()
+    public virtual UnitPresenter GetPrimaryTarget()
     {
         if (targets.Count == 0) return null;
         foreach (var t in targets)
