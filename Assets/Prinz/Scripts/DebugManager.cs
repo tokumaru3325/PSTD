@@ -1,12 +1,24 @@
 using Newtonsoft.Json.Bson;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class DebugManager : MonoBehaviour
 {
+    [Serializable]
+    public struct DebugLogSettings
+    {
+        [SerializeField] public bool debugLogEnabled;
+        [SerializeField] public bool debugLogWarningEnabled;
+        [SerializeField] public bool debugLogErrorEnabled;
+        [SerializeField] public bool RuntimeLogEnabled;
+
+    }
 
     public TextMeshProUGUI debugText;
     private string logBuffer = "";
@@ -15,6 +27,7 @@ public class DebugManager : MonoBehaviour
     private InputAction _debugPathDisplay;
     private bool _isAttackRangeVisible = false;
     private bool _isPathVisible = false;
+    public DebugLogSettings _debugLogVisibility;
 
     [SerializeField]
     private C_MapManager _mapManager;
@@ -26,6 +39,7 @@ public class DebugManager : MonoBehaviour
     {
         _debugAttackRangeDisplay = InputSystem.actions.FindAction("ToggleAttackRangeVisibility");
         _debugPathDisplay = InputSystem.actions.FindAction("ToggleDisplayPath");
+        _debugLogVisibility = new  DebugLogSettings();
 
         GetAllAttackRanges();
     }
@@ -57,12 +71,12 @@ public class DebugManager : MonoBehaviour
 
     public void OnUnitSpawn(UnitPresenter owner)
     {
-        Debug.LogWarning($"OnUnitSpawn called in debug manager with visibility = {_isAttackRangeVisible}");
+        Log($"OnUnitSpawn called in debug manager with visibility = {_isAttackRangeVisible}", LogType.Warning);
         Transform AttackRange;
         AttackRange = owner.transform.Find("AttackRange");
         if (AttackRange == null)
         {
-            Debug.LogError("OnUnitSpawn did not find any AttackRange");
+            Log("OnUnitSpawn did not find any AttackRange", LogType.Error);
             return;
         }
         allAttackRanges.Add(AttackRange.gameObject);
@@ -74,12 +88,12 @@ public class DebugManager : MonoBehaviour
 
         GameObject[] AttackRanges = GameObject.FindGameObjectsWithTag("AttackRange");
         int cnt = 0;
-        Debug.Log("GameObjects with 'AttackRange' tag:");
+        Log("GameObjects with 'AttackRange' tag:", LogType.Log);
         foreach (GameObject AttackRange in AttackRanges)
         {
             cnt++;
             allAttackRanges.Add(AttackRange);
-            Debug.Log($"{AttackRange.name} number: {cnt}");
+            Log($"{AttackRange.name} number: {cnt}", LogType.Log);
         }
     }
 
@@ -114,16 +128,40 @@ public class DebugManager : MonoBehaviour
         _mapManager.SetPathVisibility(_isPathVisible);
     }
 
-    void HandleLog(string logString, string stackTrace, LogType type)
+    void HandleRuntimeLog(string logString, LogType type)
     {
-        // Optionally filter by LogType
-        if (type == LogType.Error || type == LogType.Exception || type == LogType.Warning || type == LogType.Log)
+        if (false == _debugLogVisibility.RuntimeLogEnabled) return;
+
+        LogMessage(logString);
+    }
+
+    public void Log(string logString, LogType type)
+    {
+        if (_debugLogVisibility.RuntimeLogEnabled)
         {
-            LogMessage(logString);
+            HandleRuntimeLog(logString, type);
+        }
+
+        HandleEditorLog(logString, type);
+    }
+
+    void HandleEditorLog(string logString, LogType type)
+    {
+        if (type == LogType.Log)
+        {
+            Debug.Log(logString);
+        }
+        if(type == LogType.Warning)
+        {
+            Debug.LogWarning(logString);
+        }
+        if(type == LogType.Error)
+        {
+            Debug.LogError(logString);
         }
     }
 
-    public void LogMessage(string message)
+    private void LogMessage(string message)
     {
         logBuffer += message + "\n";
         // Simple line limit
