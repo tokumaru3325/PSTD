@@ -38,7 +38,7 @@ public class SpawnButton : MonoBehaviour
         //ボタンの画像をモンスターのアイコンに変える
         //    Button.image.sprite = Monster.MonsterIcon;
 
-        objectPoolTest.CreatePool(10);
+        objectPoolTest.CreatePool(100);
         _unit = objectPoolTest.UnitData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
 
         Image[] Images = SpawnButtonPrefab.GetComponentsInChildren<Image>();
