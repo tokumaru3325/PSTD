@@ -25,10 +25,20 @@ public class BuffManager : MonoBehaviour
 
     //private List<BuffType> _currentBuff = new List<BuffType>();
 
-    public async UniTask AddBuff(BuffType buff)
+    private void Start()
+    {
+        SlotSceneManager.OnSlotBuffResult += ReceiveSlotResult;
+    }
+
+    private void ReceiveSlotResult(BuffType buffType)
+    {
+        AddBuff(buffType);
+    }
+
+    public async UniTask AddBuff(BuffType buffType)
     {
         BuffTypeData addBuff = null;
-        switch (buff)
+        switch (buffType)
         {
         case BuffType.AttackPower:
                 addBuff = _attackPowerData;               
