@@ -1101,12 +1101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9e9437acd207c48a5de8118e094311, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  debugText: {fileID: 0}
   _debugLogVisibility:
     debugLogEnabled: 1
     debugLogWarningEnabled: 1
     debugLogErrorEnabled: 1
-    RuntimeLogEnabled: 1
+    RuntimeLogEnabled: 0
+    debugLogColliders: 0
+  debugText: {fileID: 0}
   _mapManager: {fileID: 1084309508}
   allAttackRanges: []
 --- !u!1 &407917816

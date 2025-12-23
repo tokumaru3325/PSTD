@@ -6,15 +6,16 @@ public class HealState : IUnitState
     private readonly UnitPresenter _me;
     private UnitPresenter _target;
 
-    public HealState(UnitModel model, UnitPresenter presenter)
+    public HealState(UnitModel model, UnitPresenter presenter, UnitPresenter target)
     {
         _mymodel = model;
         _me = presenter;
+        _target = target;
     }
 
     public void OnEnter()
     {
-        _me.Log($"Enter AttackState {_mymodel.PlayerSide}", LogType.Warning);
+        _me.Log($"Enter HealState {_mymodel.PlayerSide}", LogType.Warning);
 
         _me.OnEnterState(this);
         _target = _mymodel?.GetPrimaryTarget();
@@ -32,7 +33,7 @@ public class HealState : IUnitState
             return new IdleState(_mymodel, _me);
         }
         ////
-        _target = _mymodel?.GetPrimaryTarget();
+    //    _target = _mymodel?.GetPrimaryTarget();
         if (_target == null)
         {
             if (_mymodel.IsPlayerInRange == false)
@@ -41,19 +42,11 @@ public class HealState : IUnitState
                 return new IdleState(_mymodel, _me);
             }
         }
+        else 
+        {
+            _me.PerformHealSpell(_target, dt);
+        }
 
-        if (_mymodel.IsPlayerInRange == true && _mymodel.HasTargetInRange() == false)
-        {
-            _me.PerformPlayerAttack(dt);
-        }
-        else
-        {
-            if (_me.IsSameTeamAs(_target))
-            {
-                _me.PerformBasicAttack(_target, dt);
-                //    Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");
-            }
-        }
         return null;
     }
 

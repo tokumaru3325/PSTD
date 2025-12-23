@@ -21,7 +21,7 @@ public class MoveState : IUnitState
 
     public void OnEnter() 
     {
-    //    Debug.LogWarning($"Enter MoveState {_model.PlayerSide}");
+        _me.Log($"Enter MoveState {_mymodel.PlayerSide}", LogType.Warning);
         _me.OnEnterState(this);
         _me.View.PlayMove(true);
     }
@@ -43,17 +43,22 @@ public class MoveState : IUnitState
 
         Move(_mymodel.TotalMoveSpeed, _mymodel.MoveDirection, fdt);
 
-        if (_mymodel.HasTargetInRange() ) //ターゲットがいる場合
+/*        if (_mymodel.HasTargetInRange() ) //ターゲットがいる場合
         {
             var target = _mymodel.GetPrimaryTarget();
             if (_me.IsSameTeamAs(target))
             {
-                return new HealState(_mymodel, _me);
+                return new HealState(_mymodel, _me, target);
             }
             else
             {
-                return new AttackState(_mymodel, _me);
+                return new AttackState(_mymodel, _me, target);
             }
+        }*/
+
+        if(_me.IsValidTargetExist())
+        {
+            return new IdleState(_mymodel, _me);
         }
 
         return null;

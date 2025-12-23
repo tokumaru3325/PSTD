@@ -20,6 +20,8 @@ public class UnitView : MonoBehaviour
     public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
     public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
     public void PlayDeath(bool dead) => Animator.SetBool("Dead", dead);
+    public void PlayVictoryDance(bool win) => Animator.SetBool("VictoryDance", win);
+    public void PlayDefeatAnimation(bool lose) => Animator.SetBool("DefeatAnim", lose);
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

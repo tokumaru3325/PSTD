@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using UnityEngine;
 
 public class M_Tower
@@ -17,6 +18,11 @@ public class M_Tower
     /// 体力が変化したときに発火するイベント
     /// </summary>
     public event Action<float> OnHPChanged;
+
+    //[2025/12/23] プリンス START
+    public string _playerTag { get; private set; }
+    public event Action<string> OnPlayerDeath;
+    //[2025/12/23] プリンス END
 
     public M_Tower(float maxHP)
     {
@@ -41,5 +47,17 @@ public class M_Tower
     {
         HP = Mathf.Clamp(hp, 0, MAX_HP);
         OnHPChanged?.Invoke(HP);
+        //[2025/12/23] プリンス START
+        if ( HP <= 0 )
+        {
+            OnPlayerDeath?.Invoke(_playerTag);
+        }
+        //[2025/12/23] プリンス END
     }
+    //[2025/12/23] プリンス START
+    public void SetPlayerTag(string tag)
+    {
+        _playerTag = tag;
+    }
+    //[2025/12/23] プリンス END
 }

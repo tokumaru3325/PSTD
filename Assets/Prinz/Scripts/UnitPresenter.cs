@@ -16,6 +16,9 @@ public class UnitPresenter: MonoBehaviour
 
     private C_MapManager _mapManager;
 
+    [SerializeField]
+    public M_Tower _playerTower;
+
     public CapsuleCollider2D Collider;
 
     private UnitStateMachine _stateMachine;
@@ -57,6 +60,8 @@ public class UnitPresenter: MonoBehaviour
 
         //敵のプレヤーを取得して記録する
         BindEnemyPlayer();
+        _playerTower = Model.EnemyPlayer.GetM_Tower();
+        _playerTower.OnPlayerDeath += OnPlayerDeathNotify;
 
         Model.ClearTargets();
         Model.SetPlayerInRange(false);
@@ -177,10 +182,26 @@ public class UnitPresenter: MonoBehaviour
         }
     }
 
-    public void OnUnitSpawn(UnitPresenter owner)
+    private void OnUnitSpawn(UnitPresenter owner)
     {
      //   DebugManager.OnUnitSpawn(owner);
         _debugManager.OnUnitSpawn(owner);
+    }
+
+    private void OnPlayerDeathNotify(string tag)
+    {
+        Log($"{tag} died and notified this Unit", LogType.Warning);
+        if (Model.PlayerSide != tag)
+        {
+            Log($"{Model.PlayerSide} unit wants to go to VictoryState", LogType.Warning);
+            _stateMachine.TrySetState(new VictoryState(Model, this));
+            return;
+        }
+        else
+        {
+            Log($"{Model.PlayerSide} unit wants to go to DefeatState", LogType.Warning);
+            _stateMachine.TrySetState(new DefeatState(Model, this));
+        }
     }
 
     #endregion
@@ -276,22 +297,22 @@ public class UnitPresenter: MonoBehaviour
         {
             View.FaceDOWN(false);
             View.FaceUP(false);
-            FaceLeft(transform);
+            FaceLeft();
         }
         else if (direction == Vector3.right)
         {
             View.FaceDOWN(false);
             View.FaceUP(false);
-            FaceRight(transform);
+            FaceRight();
         }
         else { Log("Unexpected direction", LogType.Error); }
     }
-    public void FaceRight(Transform transform)
+    public void FaceRight()
     {
         transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
     }
 
-    public void FaceLeft(Transform transform)
+    public void FaceLeft()
     {
         transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
     }
@@ -332,15 +353,31 @@ public class UnitPresenter: MonoBehaviour
         target.TakeDamage(damage);
         View?.PlayAttack();*/
     }
+
+    public void PerformHealSpell(UnitPresenter target, float dt)
+    {
+        Model.Heal(target, dt);
+    }
     public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
     public void ReceiveHeal(float amount)
     {
         Model?.SetHealth(Model.Health + amount);
-        View?.PlayHeal();
+        View?.PlayAttack();
+    //    View?.PlayHeal();
     }
     public void PerformDeath()
     {
         View?.PlayDeath(true);
+    }
+
+    public void PerformVictoryAnimation()
+    {
+        View?.PlayVictoryDance(true);
+    }
+
+    public void PerformDefeatAnimation()
+    {
+        View?.PlayDefeatAnimation(true);
     }
 
     #endregion
@@ -384,7 +421,7 @@ public class UnitPresenter: MonoBehaviour
 
     public bool IsSameTeamAs(UnitPresenter target)
     {
-        return target.Model.PlayerSide == Model.PlayerSide;
+        return target?.Model?.PlayerSide == Model.PlayerSide;
     }
 
 
@@ -413,7 +450,10 @@ public class UnitPresenter: MonoBehaviour
             }
         }
 
-        _stateMachine.TrySetState(new AttackState(Model, this));
+        if (Model.GetPrimaryTarget() != null)
+        {
+            _stateMachine.TrySetState(new IdleState(Model, this));
+        }
     }
 
 
