@@ -301,7 +301,7 @@ public class ReelController : MonoBehaviour
                         reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
-
+                        SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
                         // Debug.Log("reelRstop");
                     }
                     else
@@ -331,7 +331,7 @@ public class ReelController : MonoBehaviour
                         no = true;
                         reelRStoped = true;
                         hazureChange = false;
-
+                        SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
                         //Debug.Log("reelRstop");
                     }
                     else
