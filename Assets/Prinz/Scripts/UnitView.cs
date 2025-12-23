@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class UnitView : MonoBehaviour
 {
-    private UnitPresenter presenter;
+    public UnitPresenter presenter;
     public Transform AttackRangeTransform { get; private set; }
     public Collider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
@@ -86,7 +86,6 @@ public class UnitView : MonoBehaviour
 
     //    Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
         UpdateAttackRangeSpriteColor();
-    //    if (presenter.Model.Targets.Count > 0) AttackRangeSprite.color = Color.softRed;
         presenter.OnEnterRange(other);
     }
 
@@ -94,7 +93,6 @@ public class UnitView : MonoBehaviour
     {
     //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
         UpdateAttackRangeSpriteColor();
-    //    if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
         presenter.OnExitRange(other);
     }
 
