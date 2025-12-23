@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683bf32dafc0cfd4895677e6143acaa8, type: 3}
   m_Name: BuffAttackSpeedData
   m_EditorClassIdentifier: Assembly-CSharp::BuffAttackSpeedData
-  BuffValue: 0
-  BuffTime: 0
+  BuffValue: 2
+  BuffTime: 5000
