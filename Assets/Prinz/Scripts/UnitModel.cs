@@ -121,11 +121,13 @@ public abstract class UnitModel
     {
         if (!targets.Contains(t))
             targets.Add(t);
+        Owner.Log($"Added target : {t}", LogType.Warning);
     }
 
     public void RemoveTarget(UnitPresenter t)
     {
         targets.Remove(t);
+        Owner.Log($"Removed target : {t}", LogType.Warning);
     }
 
     public void ClearTargets()
