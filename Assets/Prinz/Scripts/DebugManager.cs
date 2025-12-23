@@ -8,8 +8,21 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 
-public class DebugManager : MonoBehaviour
+public class DebugManager : MonoBehaviour 
 {
+    #region Singleton Implementation
+
+    private static readonly Lazy<DebugManager> instance =
+        new Lazy<DebugManager>(() => new DebugManager());
+
+    public static DebugManager Instance => instance.Value;
+
+    private DebugManager()
+    {
+    }
+
+    #endregion
+
     [Serializable]
     public struct DebugLogSettings
     {
