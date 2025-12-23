@@ -7,6 +7,8 @@ public delegate void MoneySlotResult(int i);
 public delegate void MonsterSlotResult(int some, int strength, int hatena);
 public delegate void BuffSlotResult(int some, int target, int strength);
 
+
+
 public class SlotSceneManager : MonoBehaviour
 {
     private static MoneySlotResult moneySlotResult = (int i) => { };
