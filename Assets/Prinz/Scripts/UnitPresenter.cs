@@ -1,9 +1,13 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 
 public class UnitPresenter: MonoBehaviour
 {
+
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
@@ -14,7 +18,7 @@ public class UnitPresenter: MonoBehaviour
     private UnitStateMachine _stateMachine;
 
     [SerializeField]
-    private DebugManager _debugManager;
+    private DebugManager _debugManager;  //make it to singleton
 
     public ObjectPoolTest Pool { get; private set; }
 
@@ -56,7 +60,8 @@ public class UnitPresenter: MonoBehaviour
 
         M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
-        Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
+        Log($"mp: {mp.X}/{mp.Y}, up: {up}", LogType.Log);
+    //    Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
         gameObject.transform.position = up;
 
         // 位置をマップ座標に変換
@@ -76,7 +81,8 @@ public class UnitPresenter: MonoBehaviour
         Collider.enabled = true;
         View.EnableAttackRange(true);
 
-        Debug.LogWarning($"Data type is : {Model.GetDataType()}");
+        Log($"Data type is : {Model.GetDataType()}", LogType.Warning);
+     //   Debug.LogWarning($"Data type is : {Model.GetDataType()}");
 
         Model.NotifySpawn();
     }
@@ -169,6 +175,7 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnUnitSpawn(UnitPresenter owner)
     {
+     //   DebugManager.OnUnitSpawn(owner);
         _debugManager.OnUnitSpawn(owner);
     }
 
@@ -221,22 +228,32 @@ public class UnitPresenter: MonoBehaviour
     {
         _stateMachine?.FixedTick(Time.fixedDeltaTime);
     }
+
+    /// <summary>
+    /// この関数を使って、DebugLogの表示をDebugManagerのInspector上で設定することが出来る
+    /// 使い方：Log("「○○メッセージ」", 「LogType.Log、LogType.Warning、LogType.Errorのいずれを選ぶ」);
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="type"></param>
+    public void Log(string message, LogType type)
+    {
+        _debugManager.Log(message, type);
+    }
+
     private void PrepareDeath()
     {
-        View.UpdateHealth(Model.Health / Model.MaxHealth);
+     //   View.UpdateHealth(Model.Health / Model.MaxHealth);
         Collider.enabled = false;
         View.EnableAttackRange(false);
     }
     private void OnHealthChanged(float health, float maxHealth)
     {
+        View.UpdateHealth(health / maxHealth);
         if (Model.IsDead)
         {
             PrepareDeath();
             _stateMachine.TrySetState(new DeadState(Model, this));
-            return;
         }
-
-        View.UpdateHealth(health / maxHealth);
     }
 
     private void OnDirectionChanged(Vector3 direction, Vector3 moveDirection)
@@ -263,7 +280,7 @@ public class UnitPresenter: MonoBehaviour
             View.FaceUP(false);
             FaceRight(transform);
         }
-        else { Debug.LogError("Unexpected direction"); }
+        else { Log("Unexpected direction", LogType.Error); }
     }
     public void FaceRight(Transform transform)
     {
@@ -333,7 +350,7 @@ public class UnitPresenter: MonoBehaviour
     {
         if (View?.AttackRangeTransform == null)
         {
-            Debug.LogError("AttackRangeTransform not found");
+            Log("AttackRangeTransform not found", LogType.Error);
             return;
         }
         float newRange = Model.CurrentRange;
@@ -355,14 +372,15 @@ public class UnitPresenter: MonoBehaviour
     public bool AllowDetection =>
         false == _stateMachine.Current is DeadState;
     //   _stateMachine.Current is MoveState ||
-     //  _stateMachine.Current is IdleState;
+    //  _stateMachine.Current is IdleState;
 
     public void OnEnterRange(Collider2D other)
     {
         if (Model.IsDead) return;
+
         //敵の城でもUnitでもないモノを無視する
-        if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return; 
-     //   Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
+        if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return;
+        Log($"PRESENTER : EnterRange trigger with {other.gameObject.name}", LogType.Warning);
 
         if (other.gameObject.CompareTag("Unit"))
         {
@@ -381,11 +399,27 @@ public class UnitPresenter: MonoBehaviour
             }
         }
 
-
-        // Tell the FSM that we may need to switch state
         _stateMachine.TrySetState(new AttackState(Model, this));
     }
 
+
+    private bool HandleUnitTarget(Collider2D other)
+    {
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return false; }
+        if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
+        {
+            if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return false; }
+        }
+        if (target.Model.IsDead) return false;
+
+        if (target.Model.PlayerSide == Model.PlayerSide && false == target.Model.IsWounded)
+        {
+            return false;
+        }
+        Model.AddTarget(target);
+        Log("Target added", LogType.Log);
+        return true;
+    }
     private bool HandlePlayerTarget(Collider2D other)
     {
         if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
@@ -394,27 +428,21 @@ public class UnitPresenter: MonoBehaviour
         return true;
     }
 
-    private bool HandleUnitTarget(Collider2D other)
-    {
-        // Only accept valid UnitPresenters with opposite team
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return false; }
-        if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return false; }
-        if(target.Model.IsDead) return false;
-
-        Model.AddTarget(target);
-    //    Debug.Log("Target added");
-        return true;
-    }
-
     public void OnExitRange(Collider2D other)
     {
         if (Model.IsDead) return;
-    //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
+        //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         //敵のプレヤーが範囲内から離れたら
-        if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer) { Model.SetPlayerInRange(false); }             
+        if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer)
+        {
+            Model.SetPlayerInRange(false);
+        }             
 
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
-        if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return; }
+        if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
+        {
+            if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return; }
+        }
         if (target.Model.IsDead)
         {
             Model.RemoveTarget(target);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using System.Collections;
 
 public class CPU : MonoBehaviour
 {
@@ -37,6 +38,9 @@ public class CPU : MonoBehaviour
     [SerializeField]
     private float _spawnCoolDown;
 
+    [SerializeField]
+    private float _spawnDelay;
+
     private float _spawnTimer = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -54,7 +58,7 @@ public class CPU : MonoBehaviour
 
         if( _spawnTimer > _spawnCoolDown )
         {
-            Spawn1OfEach();
+            SpawnEachOnce(_spawnDelay);
             _spawnTimer = 0;
         }
     }
@@ -91,10 +95,17 @@ public class CPU : MonoBehaviour
 
         return new(-999, -999, -999);
     }
-    public void Spawn1OfEach()
+
+    private void SpawnEachOnce(float delay)
+    {
+        StartCoroutine(SpawnWithDelay(delay));
+    }
+    private IEnumerator SpawnWithDelay(float delay)
     {
         CPUSpawnKnight();
+        yield return new WaitForSeconds(delay);
         CPUSpawnArcher();
+        yield return new WaitForSeconds(delay);
         CPUSpawnMage();
     }
 

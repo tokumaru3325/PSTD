@@ -10,7 +10,7 @@ public abstract class UnitData : ScriptableObject
 //    public int      PlayerSide;
 
     public float    MaxHealth;
-    public int      BaseAttackPower;
+    public float    BaseAttackPower;
     public float    BaseAttackSpeed;
     public float    BaseAttackRange;
     public float    BaseMoveSpeed;
