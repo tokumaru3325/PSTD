@@ -1,10 +1,13 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 public class UnitPresenter: MonoBehaviour
 {
+
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
@@ -15,7 +18,7 @@ public class UnitPresenter: MonoBehaviour
     private UnitStateMachine _stateMachine;
 
     [SerializeField]
-    private DebugManager _debugManager;
+    private DebugManager _debugManager;  //make it to singleton
 
     public ObjectPoolTest Pool { get; private set; }
 
@@ -172,6 +175,7 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnUnitSpawn(UnitPresenter owner)
     {
+     //   DebugManager.OnUnitSpawn(owner);
         _debugManager.OnUnitSpawn(owner);
     }
 
@@ -376,8 +380,7 @@ public class UnitPresenter: MonoBehaviour
 
         //敵の城でもUnitでもないモノを無視する
         if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return;
-
-        //   Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
+        Log($"PRESENTER : EnterRange trigger with {other.gameObject.name}", LogType.Warning);
 
         if (other.gameObject.CompareTag("Unit"))
         {
@@ -399,13 +402,6 @@ public class UnitPresenter: MonoBehaviour
         _stateMachine.TrySetState(new AttackState(Model, this));
     }
 
-    private bool HandlePlayerTarget(Collider2D other)
-    {
-        if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
-        if (player.IsDead()) {  return false; }
-        Model.SetPlayerInRange(true);
-        return true;
-    }
 
     private bool HandleUnitTarget(Collider2D other)
     {
@@ -416,8 +412,19 @@ public class UnitPresenter: MonoBehaviour
         }
         if (target.Model.IsDead) return false;
 
+        if (target.Model.PlayerSide == Model.PlayerSide && false == target.Model.IsWounded)
+        {
+            return false;
+        }
         Model.AddTarget(target);
         Log("Target added", LogType.Log);
+        return true;
+    }
+    private bool HandlePlayerTarget(Collider2D other)
+    {
+        if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
+        if (player.IsDead()) {  return false; }
+        Model.SetPlayerInRange(true);
         return true;
     }
 
