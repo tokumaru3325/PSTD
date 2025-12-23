@@ -197,7 +197,7 @@ public class ReelController : MonoBehaviour
 
             case ReelMover.State.nextreelC:
                 if (reelLStoped) break;
-                if (slotType == 0)
+                if (koyaku)
                 {
                     if (reelLeftZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
@@ -248,13 +248,14 @@ public class ReelController : MonoBehaviour
                 break;
             case ReelMover.State.nextreelR:
                 if (reelCStoped) break;
-                if (slotType == 0)
+                if (koyaku)
                 {
                     if (reelCenterZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelC.transform.position.y && reelC.transform.position.y >= reelCenterZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
                         reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelCStoped = true;
+
 
                         // Debug.Log("reelCstop");
                     }
@@ -302,13 +303,26 @@ public class ReelController : MonoBehaviour
                 break;
             case ReelMover.State.nextBet:
                 if (reelRStoped) break;
-                if (slotType == 0)
+                if (koyaku)
                 {
                     if (reelRightZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelR.transform.position.y && reelR.transform.position.y >= reelRightZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
                         reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
+                        switch (slotType)
+                        {
+                            case 0:
+                                SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
+                                break;
+                            case 1:
+                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL, slotResultC, slotResultR);
+                                break;
+                            case 2:
+                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
+                                break;
+
+                        }
                         SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
                         SlotSceneManager.reelMoving = false;
                         // Debug.Log("reelRstop");
@@ -347,7 +361,7 @@ public class ReelController : MonoBehaviour
                                 SlotSceneManager.BroadcastMonsterSlotResult(slotResultL,slotResultC,slotResultR);
                                 break;
                             case 2:
-                                SlotSceneManager.BroadcastBuffSlotResult(slotResultL, slotResultC, slotResultR);
+                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
                                 break;
 
                         }

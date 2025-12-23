@@ -1,11 +1,12 @@
-﻿using UnityEditor.SceneManagement;
+﻿using System;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public delegate void MoneySlotResult(int i);
 public delegate void MonsterSlotResult(int some, int strength, int hatena);
-public delegate void BuffSlotResult(int some, int target, int strength);
+public delegate void BuffSlotResult(BuffType type);
 
 
 
@@ -13,12 +14,17 @@ public class SlotSceneManager : MonoBehaviour
 {
     private static MoneySlotResult moneySlotResult = (int i) => { };
     private static MonsterSlotResult monsterSlotResult = (int some, int target, int strength) => { };
-    private static BuffSlotResult buffSlotResult = (int some, int target, int strength) => { };
+    private static BuffSlotResult buffSlotResult = (BuffType type) => { };
     private static bool openMoney = false;
     private static bool openMonster = false;
     private static bool openBuff = false;
     public static int slotType = 0;
     public static bool reelMoving = false;
+
+    //2025/12/23 滝本海大 start
+    public static Action<BuffType> OnSlotBuffResult;
+    //2025/12/23 滝本海大 end
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -117,9 +123,13 @@ public class SlotSceneManager : MonoBehaviour
     public static void AddFuncToBuffSlot(BuffSlotResult sr)
     {
         buffSlotResult += sr;
+
+        //2025/12/23 滝本海大 start
+        //OnSlotBuffResult?.Invoke(BuffType.None);
+        //2025/12/23 滝本海大 end
     }
 
-    public static void BroadcastMoneySlotResult(int i)
+public static void BroadcastMoneySlotResult(int i)
     {
         moneySlotResult(i);
     }
@@ -129,8 +139,11 @@ public class SlotSceneManager : MonoBehaviour
         monsterSlotResult(some, strength, hatena);
     }
 
-    public static void BroadcastBuffSlotResult(int some, int target, int strength)
+    public static void BroadcastBuffSlotResult(BuffType type)
     {
-        buffSlotResult(some, target, strength);
+        buffSlotResult(type);
+        //2025/12/23 滝本海大 start
+        OnSlotBuffResult?.Invoke(type);
+        //2025/12/23 滝本海大 end
     }
 }
