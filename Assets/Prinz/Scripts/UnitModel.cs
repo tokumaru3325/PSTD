@@ -36,7 +36,6 @@ public abstract class UnitModel
 
     // プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
     public string PlayerSide { get; private set; }
-
     public float MaxHealth { get; private set; }
     public float Health { get; private set; }
     public float AttackPower { get; private set; }

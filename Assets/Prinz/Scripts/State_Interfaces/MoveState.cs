@@ -5,8 +5,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class MoveState : IUnitState
 {
-    private readonly UnitModel _model;
-    private readonly UnitPresenter _presenter;
+    private readonly UnitModel _mymodel;
+    private readonly UnitPresenter _me;
 
     private C_MapManager _mapManager;
 //    private int _currentRouteIndex = 0; //絶対ダメ
@@ -14,21 +14,21 @@ public class MoveState : IUnitState
 
     public MoveState(UnitModel model, UnitPresenter presenter)
     {
-        _model = model;
-        _presenter = presenter;
+        _mymodel = model;
+        _me = presenter;
         _mapManager = presenter.MapManager;
     }
 
     public void OnEnter() 
     {
     //    Debug.LogWarning($"Enter MoveState {_model.PlayerSide}");
-        _presenter.OnEnterState(this);
-        _presenter.View.PlayMove(true);
+        _me.OnEnterState(this);
+        _me.View.PlayMove(true);
     }
     public void OnExit()
     {
      //   Debug.LogWarning("Exit MoveState");
-        _presenter?.View?.PlayMove(false);
+        _me?.View?.PlayMove(false);
     }
 
     public IUnitState OnUpdate(float dt)
@@ -41,11 +41,19 @@ public class MoveState : IUnitState
     {
         DebugShowRoute();
 
-        Move(_model.MoveSpeed, _model.MoveDirection, fdt);
+        Move(_mymodel.MoveSpeed, _mymodel.MoveDirection, fdt);
 
-        if (_model.HasTargetInRange() ) //ターゲットがいる場合
+        if (_mymodel.HasTargetInRange() ) //ターゲットがいる場合
         {
-            return new AttackState(_model, _presenter);
+            var target = _mymodel.GetPrimaryTarget();
+            if (target.IsSameTeamAs(_me))
+            {
+                return new HealState(_mymodel, _me);
+            }
+            else
+            {
+                return new AttackState(_mymodel, _me);
+            }
         }
 
         return null;
@@ -53,57 +61,49 @@ public class MoveState : IUnitState
 
     private void DebugShowRoute()
     {
-        for (int index = 0; index < _model.Route.Count; index++)
+        for (int index = 0; index < _mymodel.Route.Count; index++)
         {
             Color txtColor = Color.blue;
-            if (index == 0 || index == _model.Route.Count - 1)
+            if (index == 0 || index == _mymodel.Route.Count - 1)
                 txtColor = Color.red;
-            Vector3 pos = _mapManager.ConvertToUnityPos(_model.Route[index]);
+            Vector3 pos = _mapManager.ConvertToUnityPos(_mymodel.Route[index]);
             Debug.DrawLine(pos + Vector3.left, pos - Vector3.left, txtColor, 100f, false);
         }
     }
 
     public void Move(float movespeed, Vector3 direction, float dt)
     {
-        //スプライトの向きを設定する
-/*        if (direction.x < 0) // TODO : call it when change direction not everyframe
-            _presenter.FaceLeft(_presenter.transform);
-        else _presenter.FaceRight(_presenter.transform);*/
-
-
         //移動
         float step = movespeed * dt;
 
         GetDistanceToTarget();
 
-        _presenter.transform.position = Vector3.MoveTowards(_presenter.transform.position, target, step);    
+        _me.transform.position = Vector3.MoveTowards(_me.transform.position, target, step);    
 
-    //    _presenter.transform.Translate(direction * movespeed * step);
-
-        _presenter.View.PlayMove(true);
+        _me.View.PlayMove(true);
     }
 
     private void GetDistanceToTarget()
     {
-        int cri = _model.CurrentRouteIndex;
-        if (cri < _model.Route.Count - 1)
+        int cri = _mymodel.CurrentRouteIndex;
+        if (cri < _mymodel.Route.Count - 1)
         {
             //M_MapPosition currentMP = _mapManager.ConvertToMapPos(_presenter.transform.position);
-            Vector3 NextTargetPos = _mapManager.ConvertToUnityPos(_model.Route[cri + 1]);
-                float Distance = Vector3.Distance(_presenter.transform.position, NextTargetPos);
+            Vector3 NextTargetPos = _mapManager.ConvertToUnityPos(_mymodel.Route[cri + 1]);
+                float Distance = Vector3.Distance(_me.transform.position, NextTargetPos);
             //Debug.Log($"current route: {_presenter.transform.position}, target: {NextTargetPos}, distance: {Distance}");
 
             if (Distance <= 0.001f)
             {
             //    Debug.Log("next route");
-                _model.SetCurrentRouteIndex(cri + 1);
+                _mymodel.SetCurrentRouteIndex(cri + 1);
             }
 
-            Vector3 current = _mapManager.ConvertToUnityPos(_model.Route[cri]);
+            Vector3 current = _mapManager.ConvertToUnityPos(_mymodel.Route[cri]);
             target = current;
-            if (cri + 1 < _model.Route.Count)
-                target = _mapManager.ConvertToUnityPos(_model.Route[cri + 1]);
-            _model.SetMoveDirection(target - current);
+            if (cri + 1 < _mymodel.Route.Count)
+                target = _mapManager.ConvertToUnityPos(_mymodel.Route[cri + 1]);
+            _mymodel.SetMoveDirection(target - current);
         }
     }
 }

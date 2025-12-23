@@ -11,6 +11,9 @@ public class UnitPresenter: MonoBehaviour
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
+    [SerializeField]
+    public BuffData BuffData;
+
     private C_MapManager _mapManager;
 
     public CapsuleCollider2D Collider;
@@ -329,7 +332,11 @@ public class UnitPresenter: MonoBehaviour
         View?.PlayAttack();*/
     }
     public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
-    public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
+    public void ReceiveHeal(float amount)
+    {
+        Model?.SetHealth(Model.Health + amount);
+        View?.PlayHeal();
+    }
     public void PerformDeath()
     {
         View?.PlayDeath(true);
@@ -358,7 +365,7 @@ public class UnitPresenter: MonoBehaviour
         // Adjust collider width AND sprite size by scaling the child object
         Vector3 scale = View.AttackRangeTransform.localScale;
         scale.x = newRange;     // grow horizontally
-        scale.y = newRange;     // grow vertically (if needed)
+        scale.y = newRange;     // grow vertically
         View.AttackRangeTransform.localScale = scale;
     }
 
@@ -373,6 +380,12 @@ public class UnitPresenter: MonoBehaviour
         false == _stateMachine.Current is DeadState;
     //   _stateMachine.Current is MoveState ||
     //  _stateMachine.Current is IdleState;
+
+    public bool IsSameTeamAs(UnitPresenter target)
+    {
+        return target.Model.PlayerSide == Model.PlayerSide;
+    }
+
 
     public void OnEnterRange(Collider2D other)
     {
@@ -408,11 +421,11 @@ public class UnitPresenter: MonoBehaviour
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return false; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
         {
-            if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return false; }
+            if (target.IsSameTeamAs(this)) { /*Debug.LogError("Target invalid : same team");*/ return false; }
         }
         if (target.Model.IsDead) return false;
 
-        if (target.Model.PlayerSide == Model.PlayerSide && false == target.Model.IsWounded)
+        if (target.IsSameTeamAs(this) && false == target.Model.IsWounded)
         {
             return false;
         }
@@ -441,7 +454,7 @@ public class UnitPresenter: MonoBehaviour
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
         {
-            if (target.Model.PlayerSide == Model.PlayerSide) { /*Debug.LogError("Target invalid : same team");*/ return; }
+            if (target.IsSameTeamAs(this)) { /*Debug.LogError("Target invalid : same team");*/ return; }
         }
         if (target.Model.IsDead)
         {
