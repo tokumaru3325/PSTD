@@ -5,6 +5,7 @@ public class IdleState : IUnitState
     private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
     private float _idleTime;
+    private float _idleWaitTime = 0;
 
     public IdleState(UnitModel model, UnitPresenter presenter)
     {
@@ -13,8 +14,8 @@ public class IdleState : IUnitState
     }
 
     public void OnEnter()
-    { 
-    //    Debug.LogWarning($"Enter IdleState {_model.PlayerSide}");
+    {
+        _me.Log($"Enter IdleState {_mymodel.PlayerSide}", LogType.Warning);
         _me.OnEnterState(this);
         _idleTime = 0f;
     }
@@ -22,18 +23,25 @@ public class IdleState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-        if(_idleTime < 0.5f)
+        if(_idleTime <= _idleWaitTime) //ディレイ
         {
             if (_me.IsValidTargetExist())
             {
                 var target = _mymodel.GetPrimaryTarget();
-                if (_me.IsSameTeamAs(target))
+                if (target != null)
                 {
-                    return new HealState(_mymodel, _me);
+                    if (_me.IsSameTeamAs(target))
+                    {
+                        return new HealState(_mymodel, _me, target); //味方だったら回復する
+                    }
+                    if (false == _me.IsSameTeamAs(target)) //敵だったら攻撃する
+                    {
+                        return new AttackState(_mymodel, _me, target);
+                    }
                 }
-                else if (false == _me.IsSameTeamAs(target))
+                if (_mymodel.IsPlayerInRange)
                 {
-                    return new AttackState(_mymodel, _me);
+                    return new AttackPlayerState(_mymodel, _me);
                 }
             }
             _idleTime += dt;
