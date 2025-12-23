@@ -4,9 +4,15 @@ using static UnityEngine.GraphicsBuffer;
 public class MageModel : UnitModel
 {
     private float attackTimer;
+    public float HealPower {  get; private set; }
+    public float HealSpeed { get; private set; }
     private MageData MageData => (MageData)Data;
 
-    public MageModel(MageData data) : base(data) { }
+    public MageModel(MageData data) : base(data) 
+    { 
+        HealPower = data.BaseHealPower;
+        HealSpeed = data.BaseHealSpeed;
+    }
 
     public override void Tick(UnitPresenter presenter)
     {
@@ -20,7 +26,7 @@ public class MageModel : UnitModel
         {
             if (t != null && t.Model?.IsDead == false)
             {
-                if(t.Model?.PlayerSide == PlayerSide)
+                if(t.IsSameTeamAs(Owner))
                 {
                     if (t.Model.IsBadlyWounded)
                     {
@@ -28,7 +34,7 @@ public class MageModel : UnitModel
                         return t;
                     }
                 }
-                if(t.Model?.PlayerSide != PlayerSide)
+                if(false == t.IsSameTeamAs(Owner))
                 {
                     return t;
                 }
@@ -95,21 +101,21 @@ public class MageModel : UnitModel
 
     public void Heal(UnitPresenter target, float dt)
     {
-        float timergoal = 1f / AttackSpeed;
+        float timergoal = 1f / HealSpeed;
 
-        if (attackTimer < timergoal * 0.9f)
-            Owner.View?.PlayAttack();
+        if (HealSpeed < timergoal * 0.9f)
+            Owner.View?.PlayAttack(); //回復アニメーションがまだない
         else
-            Owner.View?.StopAttack();
+            Owner.View?.StopAttack(); //回復アニメーションがまだない
 
-        attackTimer += dt;
+        HealSpeed += dt;
 
-        if (attackTimer >= timergoal)
+        if (HealSpeed >= timergoal)
         {
             Owner.View?.StopAttack();
-            attackTimer = 0f;
-            float damage = -AttackPower;
-            target.TakeDamage(damage);
+            HealSpeed = 0f;
+            float heal = HealPower;
+            target.ReceiveHeal(heal);
         }
     }
 }
