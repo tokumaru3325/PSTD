@@ -75,6 +75,11 @@ public abstract class UnitModel
     public abstract void Tick(UnitPresenter presenter);
 
     public abstract void BasicAttack(UnitPresenter presenter, float dt);
+
+    public virtual void Heal(UnitPresenter presenter, float dt)
+    {
+        Owner.Log("This Unit is not supposed to Heal", LogType.Error);
+    }
     public abstract void PlayerAttack(float dt);
     public bool CanAttack {  get; private set; }
 

@@ -99,8 +99,10 @@ public class MageModel : UnitModel
         }
     }
 
-    public void Heal(UnitPresenter target, float dt)
+    public override void Heal(UnitPresenter target, float dt)
     {
+    //    Owner.Log("Heal performed in MageModel", LogType.Warning);
+
         float timergoal = 1f / HealSpeed;
 
         if (HealSpeed < timergoal * 0.9f)
