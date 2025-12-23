@@ -288,6 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dbc539c5571f814c92a1df644375d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitPresenter
+  BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
   Collider: {fileID: 6048914596800514237}
   _debugManager: {fileID: 0}
 --- !u!114 &-8861092835309122477

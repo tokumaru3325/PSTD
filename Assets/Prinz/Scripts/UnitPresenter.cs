@@ -11,6 +11,9 @@ public class UnitPresenter: MonoBehaviour
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
+    [SerializeField]
+    public BuffData BuffData;
+
     private C_MapManager _mapManager;
 
     public CapsuleCollider2D Collider;
