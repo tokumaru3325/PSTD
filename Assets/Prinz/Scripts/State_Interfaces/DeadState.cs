@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class DeadState : IUnitState
 {
-    private readonly UnitModel _model;
-    private readonly UnitPresenter _presenter;
+    private readonly UnitModel _mymodel;
+    private readonly UnitPresenter _me;
 
     public DeadState(UnitModel model, UnitPresenter presenter)
     {
-        _model = model;
-        _presenter = presenter;
+        _mymodel = model;
+        _me = presenter;
     }
 
     public void OnEnter() 
     {
      //   Debug.LogWarning($"Enter DeadState {_model.PlayerSide}");
-        _presenter.OnEnterState(this);
-        _presenter.PerformDeath();
+        _me.OnEnterState(this);
+        _me.PerformDeath();
      
     }
     public void OnExit()

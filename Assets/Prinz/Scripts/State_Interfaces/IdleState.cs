@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class IdleState : IUnitState
 {
-    private readonly UnitModel _model;
-    private readonly UnitPresenter _presenter;
+    private readonly UnitModel _mymodel;
+    private readonly UnitPresenter _me;
     private float _idleTime;
 
     public IdleState(UnitModel model, UnitPresenter presenter)
     {
-        _model = model;
-        _presenter = presenter;
+        _mymodel = model;
+        _me = presenter;
     }
 
     public void OnEnter()
     { 
     //    Debug.LogWarning($"Enter IdleState {_model.PlayerSide}");
-        _presenter.OnEnterState(this);
+        _me.OnEnterState(this);
         _idleTime = 0f;
     }
     public void OnExit() { }
@@ -24,22 +24,28 @@ public class IdleState : IUnitState
     {
         if(_idleTime < 0.5f)
         {
-            if (_presenter.IsValidTargetExist())
+            if (_me.IsValidTargetExist())
             {
-                return new AttackState(_model, _presenter);
+                var target = _mymodel.GetPrimaryTarget();
+                if (target.IsSameTeamAs(_me))
+                {
+                    return new HealState(_mymodel, _me);
+                }
+                else
+                {
+                    return new AttackState(_mymodel, _me);
+                }
             }
             _idleTime += dt;
             return null;
         }
 
 
-        if(_presenter.IsValidTargetExist() == false)
+        if(_me.IsValidTargetExist() == false)
         {
-            _presenter.Model.ClearTargets();
-            return new MoveState(_model, _presenter);
+            _me.Model.ClearTargets();
+            return new MoveState(_mymodel, _me);
         }
-
-        //_idleTime = 0f;
 
         return null;
     }
