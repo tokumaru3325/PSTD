@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 3727698447696346905}
   - component: {fileID: 2245212278689883765}
   - component: {fileID: 1511903859530921725}
+  - component: {fileID: 1194358888919311864}
   m_Layer: 0
   m_Name: slotN
   m_TagString: Untagged
@@ -340,6 +341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReelMover
   state: 0
+  someSlot: 0
 --- !u!82 &2245212278689883765
 AudioSource:
   m_ObjectHideFlags: 0
@@ -459,8 +461,37 @@ MonoBehaviour:
   ySpeed: -300
   resetY: -20
   reelMover: {fileID: 3727698447696346905}
+  slotSceneManager: {fileID: 0}
+  resultTextManager: {fileID: 0}
   audioSource: {fileID: 2245212278689883765}
   rt: {fileID: 2893400254584363266}
+--- !u!114 &1194358888919311864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3459793081694859314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc0c60a1c85423f49a937ce1d0fcca01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReelImageSaver
+  monaySprite:
+  - {fileID: 21300000, guid: b0a25b6e5f574cb4c87c90e15ea5ff6b, type: 3}
+  - {fileID: 21300000, guid: 3fc3abbf82fa1f24b8964bf8778c68ef, type: 3}
+  - {fileID: 21300000, guid: f823e6668382eb648b107961ce89aeea, type: 3}
+  monsterSprite:
+  - {fileID: -6479238500457043136, guid: 7912f328bd6c81447b937dbaa884dbdc, type: 3}
+  - {fileID: -6479238500457043136, guid: 7912f328bd6c81447b937dbaa884dbdc, type: 3}
+  - {fileID: -6479238500457043136, guid: 7912f328bd6c81447b937dbaa884dbdc, type: 3}
+  buffSprite:
+  - {fileID: -3006076003678603734, guid: ad5f3b16eaf6fa04d9feb6ca0453fcb3, type: 3}
+  - {fileID: -3006076003678603734, guid: ad5f3b16eaf6fa04d9feb6ca0453fcb3, type: 3}
+  - {fileID: -3006076003678603734, guid: ad5f3b16eaf6fa04d9feb6ca0453fcb3, type: 3}
+  reelL: {fileID: 4212445422853879871}
+  reelC: {fileID: 7906635146774679267}
+  reelR: {fileID: 5457856450291124346}
 --- !u!1 &3729147062490993126
 GameObject:
   m_ObjectHideFlags: 0

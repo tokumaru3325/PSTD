@@ -7,6 +7,8 @@ public delegate void MoneySlotResult(int i);
 public delegate void MonsterSlotResult(int some, int strength, int hatena);
 public delegate void BuffSlotResult(int some, int target, int strength);
 
+
+
 public class SlotSceneManager : MonoBehaviour
 {
     private static MoneySlotResult moneySlotResult = (int i) => { };
@@ -117,17 +119,17 @@ public class SlotSceneManager : MonoBehaviour
         buffSlotResult += sr;
     }
 
-    public void BroadcastMoneySlotResult(int i)
+    public static void BroadcastMoneySlotResult(int i)
     {
         moneySlotResult(i);
     }
 
-    public void BroadcastMonsterSlotResult(int some, int strength, int hatena)
+    public static void BroadcastMonsterSlotResult(int some, int strength, int hatena)
     {
         monsterSlotResult(some, strength, hatena);
     }
 
-    public void BroadcastBuffSlotResult(int some, int target, int strength)
+    public static void BroadcastBuffSlotResult(int some, int target, int strength)
     {
         buffSlotResult(some, target, strength);
     }
