@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 
 public class DebugManager : MonoBehaviour 
 {
-    #region Singleton Implementation
+/*    #region Singleton Implementation
 
     private static readonly Lazy<DebugManager> instance =
         new Lazy<DebugManager>(() => new DebugManager());
@@ -21,17 +21,19 @@ public class DebugManager : MonoBehaviour
     {
     }
 
-    #endregion
+    #endregion*/
 
     [Serializable]
-    public struct DebugLogSettings
+    public class DebugLogSettings
     {
         [SerializeField] public bool debugLogEnabled;
         [SerializeField] public bool debugLogWarningEnabled;
         [SerializeField] public bool debugLogErrorEnabled;
         [SerializeField] public bool RuntimeLogEnabled;
-
+        [SerializeField] public bool debugLogColliders;
     }
+    [SerializeField]
+    public DebugLogSettings _debugLogVisibility;
 
     public TextMeshProUGUI debugText;
     private string logBuffer = "";
@@ -40,7 +42,6 @@ public class DebugManager : MonoBehaviour
     private InputAction _debugPathDisplay;
     private bool _isAttackRangeVisible = false;
     private bool _isPathVisible = false;
-    public DebugLogSettings _debugLogVisibility;
 
     [SerializeField]
     private C_MapManager _mapManager;
@@ -52,7 +53,7 @@ public class DebugManager : MonoBehaviour
     {
         _debugAttackRangeDisplay = InputSystem.actions.FindAction("ToggleAttackRangeVisibility");
         _debugPathDisplay = InputSystem.actions.FindAction("ToggleDisplayPath");
-        _debugLogVisibility = new  DebugLogSettings();
+    //    _debugLogVisibility = new  DebugLogSettings();
 
         GetAllAttackRanges();
     }
@@ -141,18 +142,18 @@ public class DebugManager : MonoBehaviour
         _mapManager.SetPathVisibility(_isPathVisible);
     }
 
-    void HandleRuntimeLog(string logString, LogType type)
+/*    void HandleRuntimeLog(string logString, LogType type)
     {
         if (false == _debugLogVisibility.RuntimeLogEnabled) return;
 
         LogMessage(logString);
-    }
+    }*/
 
     public void Log(string logString, LogType type)
     {
         if (_debugLogVisibility.RuntimeLogEnabled)
         {
-            HandleRuntimeLog(logString, type);
+          //  HandleRuntimeLog(logString, type);
         }
 
         HandleEditorLog(logString, type);
@@ -160,21 +161,21 @@ public class DebugManager : MonoBehaviour
 
     void HandleEditorLog(string logString, LogType type)
     {
-        if (type == LogType.Log)
+        if (type == LogType.Log && _debugLogVisibility.debugLogEnabled)
         {
             Debug.Log(logString);
         }
-        if(type == LogType.Warning)
+        if(type == LogType.Warning && _debugLogVisibility.debugLogWarningEnabled)
         {
             Debug.LogWarning(logString);
         }
-        if(type == LogType.Error)
+        if(type == LogType.Error && _debugLogVisibility.debugLogErrorEnabled)
         {
             Debug.LogError(logString);
         }
     }
 
-    private void LogMessage(string message)
+/*    private void LogMessage(string message)
     {
         logBuffer += message + "\n";
         // Simple line limit
@@ -185,5 +186,5 @@ public class DebugManager : MonoBehaviour
             logBuffer = string.Join("\n", lines);
         }
         debugText.text = logBuffer;
-    }
+    }*/
 }
