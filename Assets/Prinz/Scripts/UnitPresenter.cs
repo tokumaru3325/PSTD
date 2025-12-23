@@ -164,6 +164,7 @@ public class UnitPresenter: MonoBehaviour
             return;
         }
 
+        Model.BindBuffData(BuffData);
         Model.BindOwner(this);
     }
 
@@ -360,7 +361,7 @@ public class UnitPresenter: MonoBehaviour
             Log("AttackRangeTransform not found", LogType.Error);
             return;
         }
-        float newRange = Model.CurrentRange;
+        float newRange = Model.TotalAttackRange;
 
         // Adjust collider width AND sprite size by scaling the child object
         Vector3 scale = View.AttackRangeTransform.localScale;
@@ -369,11 +370,11 @@ public class UnitPresenter: MonoBehaviour
         View.AttackRangeTransform.localScale = scale;
     }
 
-    public void SetRangeBuff(float factor)
+/*    public void SetRangeBuff(float factor)
     {
         Model?.SetRangeBuff(factor);
         ApplyAttackRange();
-    }
+    }*/
     //=====================================================================================================
     #region 範囲 - range
     public bool AllowDetection =>
@@ -421,11 +422,11 @@ public class UnitPresenter: MonoBehaviour
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return false; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
         {
-            if (target.IsSameTeamAs(this)) { /*Debug.LogError("Target invalid : same team");*/ return false; }
+            if (IsSameTeamAs(target)) { /*Debug.LogError("Target invalid : same team");*/ return false; }
         }
         if (target.Model.IsDead) return false;
 
-        if (target.IsSameTeamAs(this) && false == target.Model.IsWounded)
+        if (IsSameTeamAs(target) && false == target.Model.IsWounded)
         {
             return false;
         }
@@ -454,7 +455,7 @@ public class UnitPresenter: MonoBehaviour
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
         {
-            if (target.IsSameTeamAs(this)) { /*Debug.LogError("Target invalid : same team");*/ return; }
+            if (IsSameTeamAs(target)) { /*Debug.LogError("Target invalid : same team");*/ return; }
         }
         if (target.Model.IsDead)
         {

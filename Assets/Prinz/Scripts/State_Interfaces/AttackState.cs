@@ -53,9 +53,10 @@ public class AttackState : IUnitState
         }
         else
         {
-            if (_target.IsSameTeamAs(_me))
+            if (false == _me.IsSameTeamAs(_target))
             {
                 _me.PerformBasicAttack(_target, dt);
+            //    _me.Log("PerformBasicAttack() called in AttackState", LogType.Warning);
                 //    Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");
             }
         }

@@ -14,7 +14,7 @@ public class ArcherModel : UnitModel
 
     public override void BasicAttack(UnitPresenter target, float dt)
     {
-        float timergoal = 1f / AttackSpeed;
+        float timergoal = 1f / TotalAttackSpeed;
 
         if(attackTimer < timergoal * 0.9f) 
             Owner.View?.PlayAttack();
@@ -27,14 +27,14 @@ public class ArcherModel : UnitModel
         {
             Owner.View?.StopAttack();
             attackTimer = 0f;
-            float damage = AttackPower;
+            float damage = TotalAttackPower;
             target.TakeDamage(damage);
         }
     }
 
     public override void PlayerAttack(float dt)
     {
-        float timergoal = 1f / AttackSpeed;
+        float timergoal = 1f / TotalAttackSpeed;
 
         if (attackTimer < timergoal * 0.9f)
             Owner.View?.PlayAttack();
@@ -47,7 +47,7 @@ public class ArcherModel : UnitModel
         {
             Owner.View?.StopAttack();
             attackTimer = 0f;
-            float damage = AttackPower;
+            float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);
         }
     }

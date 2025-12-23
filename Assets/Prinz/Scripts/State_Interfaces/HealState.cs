@@ -48,7 +48,7 @@ public class HealState : IUnitState
         }
         else
         {
-            if (_target.IsSameTeamAs(_me))
+            if (_me.IsSameTeamAs(_target))
             {
                 _me.PerformBasicAttack(_target, dt);
                 //    Debug.LogWarning($"attack timer now : {_attackTimer} | attack timer when fired : {tmpAT}");

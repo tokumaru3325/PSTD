@@ -41,12 +41,12 @@ public class MoveState : IUnitState
     {
         DebugShowRoute();
 
-        Move(_mymodel.MoveSpeed, _mymodel.MoveDirection, fdt);
+        Move(_mymodel.TotalMoveSpeed, _mymodel.MoveDirection, fdt);
 
         if (_mymodel.HasTargetInRange() ) //ターゲットがいる場合
         {
             var target = _mymodel.GetPrimaryTarget();
-            if (target.IsSameTeamAs(_me))
+            if (_me.IsSameTeamAs(target))
             {
                 return new HealState(_mymodel, _me);
             }
