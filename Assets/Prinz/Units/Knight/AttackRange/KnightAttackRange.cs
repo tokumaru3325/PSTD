@@ -34,15 +34,12 @@ public class KnightAttackRange : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         View?.OnEnterRange(other);
-        Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Collision with {other.gameObject.name}");
+        View?.presenter.Log($"KNIGHTATTACKRANGE.cs : Collision with {other.gameObject.name}", LogType.Warning);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-     //   if (other.gameObject.tag == "Unit")
-     //   {
-            View?.OnExitRange(other);
-            Debug.LogWarning($"KNIGHTATTACKRANGE.cs : Exit col with {other.gameObject.name}");
-      //  }
+        View?.OnExitRange(other);
+        View?.presenter.Log($"KNIGHTATTACKRANGE.cs : Exit col with {other.gameObject.name}", LogType.Warning);
     }
 }
