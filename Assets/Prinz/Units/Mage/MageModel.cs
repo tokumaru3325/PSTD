@@ -26,7 +26,7 @@ public class MageModel : UnitModel
         {
             if (t != null && t.Model?.IsDead == false)
             {
-                if(t.IsSameTeamAs(Owner))
+                if(Owner.IsSameTeamAs(t))
                 {
                     if (t.Model.IsBadlyWounded)
                     {
@@ -34,7 +34,7 @@ public class MageModel : UnitModel
                         return t;
                     }
                 }
-                if(false == t.IsSameTeamAs(Owner))
+                if(false == Owner.IsSameTeamAs(t))
                 {
                     return t;
                 }
@@ -61,7 +61,7 @@ public class MageModel : UnitModel
 
     public override void BasicAttack(UnitPresenter target, float dt)
     {
-        float timergoal = 1f / AttackSpeed;
+        float timergoal = 1f / TotalAttackSpeed;
 
         if (attackTimer < timergoal * 0.9f)
             Owner.View?.PlayAttack();
@@ -74,14 +74,14 @@ public class MageModel : UnitModel
         {
             Owner.View?.StopAttack();
             attackTimer = 0f;
-            float damage = AttackPower;
+            float damage = TotalAttackPower;
             target.TakeDamage(damage);
         }
     }
 
     public override void PlayerAttack(float dt)
     {
-        float timergoal = 1f / AttackSpeed;
+        float timergoal = 1f / TotalAttackSpeed;
 
         if (attackTimer < timergoal * 0.9f)
             Owner.View?.PlayAttack();
@@ -94,7 +94,7 @@ public class MageModel : UnitModel
         {
             Owner.View?.StopAttack();
             attackTimer = 0f;
-            float damage = AttackPower;
+            float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);
         }
     }

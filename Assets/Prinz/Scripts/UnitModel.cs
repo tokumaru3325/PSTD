@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,6 +13,11 @@ public enum UnitID
 public abstract class UnitModel
 {
     protected UnitData Data;
+    protected BuffData BuffData;
+    public void BindBuffData(BuffData data)
+    {
+        BuffData = data;
+    }
 
     public UnitID UnitID {  get; protected set; }
 
@@ -39,8 +45,11 @@ public abstract class UnitModel
     public float MaxHealth { get; private set; }
     public float Health { get; private set; }
     public float AttackPower { get; private set; }
+    public float TotalAttackPower => AttackPower + BuffData.AttackPower;
     public float AttackSpeed { get; private set; }
+    public float TotalAttackSpeed => AttackSpeed + BuffData.AttackSpeed;
     public float MoveSpeed { get; private set; }
+    public float TotalMoveSpeed => MoveSpeed + BuffData.MoveSpeed;
     public int UnitCost { get; private set; }
     public float UnitCoolDown { get; private set; }
     public Vector3 MoveDirection { get; private set; }
@@ -102,14 +111,15 @@ public abstract class UnitModel
     //=====================================================================================================
     #region Range 
     public float AttackRange { get; private set; }
-    public float BaseAttackRange { get; private set; }
+    public float TotalAttackRange => AttackRange + BuffData.AttackRange;
+/*    public float BaseAttackRange { get; private set; }
     public float RangeMultiplier { get; private set; } = 1.0f;
     public float CurrentRange => BaseAttackRange * RangeMultiplier;
-
-    public void SetRangeBuff(float factor)
+*/
+/*    public void SetRangeBuff(float factor)
     {
         RangeMultiplier = factor;
-    }
+    }*/
     #endregion
     //=====================================================================================================
     //=====================================================================================================

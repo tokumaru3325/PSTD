@@ -27,11 +27,11 @@ public class IdleState : IUnitState
             if (_me.IsValidTargetExist())
             {
                 var target = _mymodel.GetPrimaryTarget();
-                if (target.IsSameTeamAs(_me))
+                if (_me.IsSameTeamAs(target))
                 {
                     return new HealState(_mymodel, _me);
                 }
-                else
+                else if (false == _me.IsSameTeamAs(target))
                 {
                     return new AttackState(_mymodel, _me);
                 }
