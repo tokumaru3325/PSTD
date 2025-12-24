@@ -4,16 +4,23 @@ using UnityEngine;
 public class ResultTextManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI m_TextMeshProUGUI;
+    private bool textChange = false;
+    float currentTimer = 0.0f;
+    float resetSecond = 3.0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         m_TextMeshProUGUI.SetText("");
+        currentTimer = resetSecond;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (textChange)
+        {
+            TextReset();
+        }
     }
 
     public void TextChange(int slotNum,int resultNum,bool koyaku)
@@ -56,12 +63,53 @@ public class ResultTextManager : MonoBehaviour
             else
             {
                 m_TextMeshProUGUI.SetText("何かの効果を誰かに向かってどれだけ");
+                switch (resultNum)
+                {
+                    case 0:
+                        m_TextMeshProUGUI.SetText("はずれ");
+                        break;
+                    case 1:
+                        m_TextMeshProUGUI.SetText("攻撃力上昇!!!");
+                        break;
+                    case 2:
+                        m_TextMeshProUGUI.SetText("攻撃速度上昇!!!");
+                        break;
+                    case 3:
+                        m_TextMeshProUGUI.SetText("攻撃速度範囲拡大!!!");
+                        break;
+                    case 4:
+                        m_TextMeshProUGUI.SetText("移動速度上昇!!!");
+                        break;
+                    default:
+                        m_TextMeshProUGUI.SetText("はずれ");
+                        break;
+
+                }
             }
         }
+        textChange = true;
     }
 
     public void ResetText()
     {
         m_TextMeshProUGUI.SetText("");
+        textChange = false;
+        currentTimer = resetSecond;
+    }
+
+    public void EnterCurrentTimer()
+    {
+        currentTimer = resetSecond;
+    }
+
+    void TextReset()
+    {
+        currentTimer -= 1 * Time.deltaTime;
+        if(currentTimer <= 0.0f)
+        {
+            m_TextMeshProUGUI.SetText("");
+            textChange = false;
+            currentTimer = resetSecond;
+        }
     }
 }
