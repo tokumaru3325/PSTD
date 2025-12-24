@@ -11,8 +11,8 @@ public class UnitPresenter: MonoBehaviour
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
-    [SerializeField]
-    public BuffData BuffData;
+//    [SerializeField]
+//    public BuffData BuffData;
 
     private C_MapManager _mapManager;
 
@@ -43,7 +43,7 @@ public class UnitPresenter: MonoBehaviour
     {
 
     }
-    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
+    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
         Collider = GetComponent<CapsuleCollider2D>();
@@ -81,16 +81,18 @@ public class UnitPresenter: MonoBehaviour
             Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end));
         }
 
-        //キャラクタの向きを初期化する
-        UpdateDirection(data.MoveDirection);
-
         _stateMachine.Initialize(new IdleState(Model, this));
 
         Collider.enabled = true;
         View.EnableAttackRange(true);
 
+        //キャラクタの向きを初期化する
+        UpdateDirection(data.MoveDirection);
+
         Log($"Data type is : {Model.GetDataType()}", LogType.Warning);
-     //   Debug.LogWarning($"Data type is : {Model.GetDataType()}");
+        //   Debug.LogWarning($"Data type is : {Model.GetDataType()}");
+
+        Model.BindBuffData(buffdata);
 
         Model.NotifySpawn();
     }
@@ -169,7 +171,7 @@ public class UnitPresenter: MonoBehaviour
             return;
         }
 
-        Model.BindBuffData(BuffData);
+        
         Model.BindOwner(this);
     }
 

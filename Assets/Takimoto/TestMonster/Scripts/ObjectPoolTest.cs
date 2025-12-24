@@ -12,6 +12,8 @@ public class ObjectPoolTest : MonoBehaviour
 
     [SerializeField]
     public UnitData UnitData; //ScriptableObjectをインスペクターに設定する //[2025/12/21] プリンス：SpawnButtonから移した
+    [SerializeField]
+    public BuffDataBase BuffData;
 
     List<UnitPresenter> pool;
 
@@ -39,7 +41,8 @@ public class ObjectPoolTest : MonoBehaviour
             if (pool[i].gameObject.activeSelf == false)
             {
                 UnitPresenter Unit = pool[i];
-                Unit.Initialize(data, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
+            //    if(playerTag == "Player1")
+                Unit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
                 Unit.gameObject.SetActive(true);
 
                 return Unit;                
@@ -52,7 +55,7 @@ public class ObjectPoolTest : MonoBehaviour
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
+            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
             newUnit.SetPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);

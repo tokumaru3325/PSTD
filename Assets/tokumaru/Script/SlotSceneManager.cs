@@ -21,8 +21,11 @@ public class SlotSceneManager : MonoBehaviour
     public static int slotType = 0;
     public static bool reelMoving = false;
 
+    public static string playerTag;
+    public static string enemyTag;
+
     //2025/12/23 滝本海大 start
-    public static Action<BuffType> OnSlotBuffResult;
+    public static Action<BuffType, string, string> OnSlotBuffResult;
     //2025/12/23 滝本海大 end
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,7 +38,7 @@ public class SlotSceneManager : MonoBehaviour
     {
     }
 
-    public static void ChangeSceneToMoney()
+    public static void ChangeSceneToMoney(string ptag, string etag)
     {
         if (reelMoving) return;
         if (!openMonster && !openBuff)
@@ -43,6 +46,8 @@ public class SlotSceneManager : MonoBehaviour
             if (openMoney == false)
             {
                 SceneManager.LoadScene("Slot", LoadSceneMode.Additive);
+                playerTag = ptag;
+                enemyTag = etag;
                 openMoney = true;
                 slotType = 0;
                 Debug.Log("openMoney");
@@ -56,7 +61,7 @@ public class SlotSceneManager : MonoBehaviour
         }
     }
 
-    public static void ChangeSceneToMonster()
+    public static void ChangeSceneToMonster(string ptag, string etag)
     {
         if (reelMoving) return;
         if (!openMoney && !openBuff)
@@ -64,6 +69,8 @@ public class SlotSceneManager : MonoBehaviour
             if (openMonster == false)
             {
                 SceneManager.LoadScene("Slot", LoadSceneMode.Additive);
+                playerTag = ptag;
+                enemyTag = etag;
                 openMonster = true;
                 slotType = 1;
                 Debug.Log("openMonster");
@@ -77,7 +84,7 @@ public class SlotSceneManager : MonoBehaviour
         }
     }
 
-    public static void ChangeSceneToBuff()
+    public static void ChangeSceneToBuff(string ptag, string etag)
     {
         if (reelMoving) return;
         if (!openMoney && !openMonster)
@@ -85,6 +92,8 @@ public class SlotSceneManager : MonoBehaviour
             if (openBuff == false)
             {
                 SceneManager.LoadScene("Slot", LoadSceneMode.Additive);
+                playerTag = ptag;
+                enemyTag = etag;
                 openBuff = true;
                 slotType = 2;
                 Debug.Log("openBuff");
@@ -143,7 +152,7 @@ public static void BroadcastMoneySlotResult(int i)
     {
         buffSlotResult(type);
         //2025/12/23 滝本海大 start
-        OnSlotBuffResult?.Invoke(type);
+        OnSlotBuffResult?.Invoke(type, playerTag, enemyTag);
         //2025/12/23 滝本海大 end
     }
 }
