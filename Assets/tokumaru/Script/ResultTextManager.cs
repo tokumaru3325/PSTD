@@ -75,7 +75,7 @@ public class ResultTextManager : MonoBehaviour
                         m_TextMeshProUGUI.SetText("攻撃速度上昇!!!");
                         break;
                     case 3:
-                        m_TextMeshProUGUI.SetText("攻撃速度範囲拡大!!!");
+                        m_TextMeshProUGUI.SetText("攻撃範囲拡大!!!");
                         break;
                     case 4:
                         m_TextMeshProUGUI.SetText("移動速度上昇!!!");
