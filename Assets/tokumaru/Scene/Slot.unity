@@ -642,6 +642,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2009350636}
     m_Modifications:
+    - target: {fileID: 1194358888919311864, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: 'buffSprite.Array.data[0]'
+      value: 
+      objectReference: {fileID: -7790998921479422818, guid: 43fe459b7c77f6c4ba1b7d3d6838b8ce, type: 3}
+    - target: {fileID: 1194358888919311864, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: 'buffSprite.Array.data[1]'
+      value: 
+      objectReference: {fileID: -5669606019782705460, guid: 231c1a442a9b0ef41b6760e6255a2e31, type: 3}
+    - target: {fileID: 1194358888919311864, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: 'buffSprite.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8362059311784080691, guid: f24afcb301428164284f238945c71883, type: 3}
     - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
       propertyPath: slotSceneManager
       value: 
