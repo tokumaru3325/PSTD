@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0fe3e1afbc76e54680bdd7629758d15, type: 3}
-  m_Name: BuffData
+  m_Name: BuffDataPlayer1
   m_EditorClassIdentifier: Assembly-CSharp::BuffData

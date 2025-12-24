@@ -13,8 +13,8 @@ public enum UnitID
 public abstract class UnitModel
 {
     protected UnitData Data;
-    protected BuffData BuffData;
-    public void BindBuffData(BuffData data)
+    protected BuffDataBase BuffData;
+    public void BindBuffData(BuffDataBase data)
     {
         BuffData = data;
     }

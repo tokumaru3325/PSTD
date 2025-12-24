@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "BuffData", menuName = "Scriptable Objects/BuffData")]
-public class BuffData : ScriptableObject
+[CreateAssetMenu(fileName = "BuffDataParent", menuName = "Scriptable Objects/BuffDataParent")]
+public abstract class BuffDataParent : ScriptableObject
 {
     public float AttackPower = 0;
     public float AttackSpeed = 0;
