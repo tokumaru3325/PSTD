@@ -16,7 +16,9 @@ public enum BuffType
 public class BuffManager : MonoBehaviour
 {
     [SerializeField]
-    private BuffData _buffData;
+    private BuffDataPlayer1 _buffData1;
+    [SerializeField]
+    private BuffDataPlayer2 _buffData2;
 
     [SerializeField]
     private BuffAttackPowerData _attackPowerData;
@@ -30,12 +32,12 @@ public class BuffManager : MonoBehaviour
         SlotSceneManager.OnSlotBuffResult += ReceiveSlotResult;
     }
 
-    private void ReceiveSlotResult(BuffType buffType)
+    private void ReceiveSlotResult(BuffType buffType, string playertag, string enemytag)
     {
-        AddBuff(buffType);
+        AddBuff(buffType, playertag, enemytag);
     }
 
-    public async UniTask AddBuff(BuffType buffType)
+    public async UniTask AddBuff(BuffType buffType, string playertag, string enemytag)
     {
         BuffTypeData addBuff = null;
         switch (buffType)
@@ -57,14 +59,23 @@ public class BuffManager : MonoBehaviour
 
         if (addBuff)
         {
-            _buffData.AttackPower += addBuff.BuffValue;
-            await UniTask.Delay(addBuff.BuffTime);
-            _buffData.AttackPower -= addBuff.BuffValue;
+            if (playertag == "Player1")
+            {
+                _buffData1.AttackPower += addBuff.BuffValue;
+                await UniTask.Delay(addBuff.BuffTime);
+                _buffData1.AttackPower -= addBuff.BuffValue;
+            }
+            else if (playertag == "Player2")
+            {
+                _buffData2.AttackPower += addBuff.BuffValue;
+                await UniTask.Delay(addBuff.BuffTime);
+                _buffData2.AttackPower -= addBuff.BuffValue;
+            }
         }        
     }
 
     public void TestButtonDown()
     {
-        AddBuff(BuffType.AttackPower);
+        AddBuff(BuffType.AttackPower, "Player1", "Player2");
     }
 }
