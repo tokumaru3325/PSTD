@@ -10,6 +10,8 @@ TagManager:
   - Player1
   - Player2
   - SpawnPos
+  - Peon
+  - DebugManager
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - UI
   - Units
   - AttackRanges
-  - 
+  - Player
   - 
   - 
   - 

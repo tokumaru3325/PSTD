@@ -2,43 +2,58 @@ using UnityEngine;
 
 public class IdleState : IUnitState
 {
-    private readonly UnitModel _model;
-    private readonly UnitPresenter _presenter;
+    private readonly UnitModel _mymodel;
+    private readonly UnitPresenter _me;
     private float _idleTime;
+    private float _idleWaitTime = 0;
 
     public IdleState(UnitModel model, UnitPresenter presenter)
     {
-        _model = model;
-        _presenter = presenter;
+        _mymodel = model;
+        _me = presenter;
     }
 
     public void OnEnter()
-    { 
-        Debug.LogWarning("Enter IdleState");
+    {
+        _me.Log($"Enter IdleState {_mymodel.PlayerSide}", LogType.Warning);
+        _me.OnEnterState(this);
         _idleTime = 0f;
-        _presenter.OnEnterState();
     }
     public void OnExit() { }
 
     public IUnitState OnUpdate(float dt)
     {
-        if(_idleTime < 1.0f)
+        if(_idleTime <= _idleWaitTime) //ディレイ
         {
+            if (_me.IsValidTargetExist())
+            {
+                var target = _mymodel.GetPrimaryTarget();
+                if (target != null)
+                {
+                    if (_me.IsSameTeamAs(target))
+                    {
+                        return new HealState(_mymodel, _me, target); //味方だったら回復する
+                    }
+                    if (false == _me.IsSameTeamAs(target)) //敵だったら攻撃する
+                    {
+                        return new AttackState(_mymodel, _me, target);
+                    }
+                }
+                if (_mymodel.IsPlayerInRange)
+                {
+                    return new AttackPlayerState(_mymodel, _me);
+                }
+            }
             _idleTime += dt;
             return null;
         }
 
-        if(_model.HasTargetInRange() == true)
-        {
-            return new AttackState(_model, _presenter);
-        }
 
-        if(_model.HasTargetInRange() == false)
+        if(_me.IsValidTargetExist() == false)
         {
-            return new MoveState(_model, _presenter);
+            _me.Model.ClearTargets();
+            return new MoveState(_mymodel, _me);
         }
-
-        //_idleTime = 0f;
 
         return null;
     }

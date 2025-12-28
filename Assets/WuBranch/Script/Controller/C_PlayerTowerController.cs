@@ -23,6 +23,10 @@ public class C_PlayerTowerController : MonoBehaviour
     {
         _playerModel = new M_Tower(Max_HP);
         _playerModel.OnHPChanged += OnUpdateHP;
+        //[2025/12/23] プリンス START
+    //    _playerModel.OnDeath += OnDeathNotify;
+        _playerModel.SetPlayerTag(tag);
+        //[2025/12/23] プリンス END
     }
 
     // Update is called once per frame
@@ -82,4 +86,11 @@ public class C_PlayerTowerController : MonoBehaviour
     {
         return _playerModel.HP <= 0;
     }
+
+    //[2025/12/23] プリンス START
+    public M_Tower GetM_Tower()
+    {
+        return _playerModel;
+    }
+    //[2025/12/23] プリンス END
 }

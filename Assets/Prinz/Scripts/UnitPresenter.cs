@@ -1,29 +1,75 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 
 public class UnitPresenter: MonoBehaviour
 {
+
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
+//    [SerializeField]
+//    public BuffData BuffData;
+
     private C_MapManager _mapManager;
+
+    [SerializeField]
+    public M_Tower _playerTower;
+
+    public CapsuleCollider2D Collider;
 
     private UnitStateMachine _stateMachine;
 
+    [SerializeField]
+    private DebugManager _debugManager;  //make it to singleton
+
     public ObjectPoolTest Pool { get; private set; }
+
 
     UnitData Data;
 
-    public void Initialize(UnitData data, Vector3 currentPos, Vector3 enemyPos, int TeamNumber)
+    //=====================================================================================================
+    #region 初期化 - Initialization
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+
+    }
+
+    private void OnEnable()
+    {
+
+    }
+    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
+        Collider = GetComponent<CapsuleCollider2D>();
         CreateModelFromData(data);
-        Model.SetPlayerSide(TeamNumber);
+        Model.SetPlayerSide(PlayerTag);
+        View.InitializeView();
+        View.UpdateHealth(Model.Health / Model.MaxHealth);
+        BindDebugManager();
 
-            M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
+        Model.OnHealthChanged += OnHealthChanged;
+        Model.OnDirectionChanged += OnDirectionChanged;
+        Model.OnUnitSpawn += OnUnitSpawn;
+
+
+        //敵のプレヤーを取得して記録する
+        BindEnemyPlayer();
+        _playerTower = Model.EnemyPlayer.GetM_Tower();
+        _playerTower.OnPlayerDeath += OnPlayerDeathNotify;
+
+        Model.ClearTargets();
+        Model.SetPlayerInRange(false);
+
+        M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
-        Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
+        Log($"mp: {mp.X}/{mp.Y}, up: {up}", LogType.Log);
+    //    Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
         gameObject.transform.position = up;
 
         // 位置をマップ座標に変換
@@ -35,12 +81,37 @@ public class UnitPresenter: MonoBehaviour
             Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end));
         }
 
-        //キャラクタの向きを初期化する
-        if (data.MoveDirection.x < 0)
-            FaceLeft(transform);
-        else FaceRight(transform);
+        _stateMachine.Initialize(new IdleState(Model, this));
 
-        Model.OnHealthChanged += OnHealthChanged;
+        Collider.enabled = true;
+        View.EnableAttackRange(true);
+
+        //キャラクタの向きを初期化する
+        UpdateDirection(data.MoveDirection);
+
+        Log($"Data type is : {Model.GetDataType()}", LogType.Warning);
+        //   Debug.LogWarning($"Data type is : {Model.GetDataType()}");
+
+        Model.BindBuffData(buffdata);
+
+        Model.NotifySpawn();
+    }
+
+    public C_MapManager MapManager { get { return _mapManager; } }
+    private void BindEnemyPlayer()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player1");
+    //    if(playerObject == null) { Debug.LogError("No player found when binding"); }
+        if (playerObject.CompareTag(Model.PlayerSide))
+        {
+            //    playerObject = GameObject.FindWithTag("Player2");
+            playerObject = GameObject.FindGameObjectWithTag("Player2");
+            Model?.BindEnemyPlayer(playerObject.GetComponent<C_PlayerTowerController>());
+        }
+        else
+        {
+            Model?.BindEnemyPlayer(playerObject.GetComponent<C_PlayerTowerController>());
+        }
     }
 
     public void SetPool(ObjectPoolTest pool)
@@ -61,23 +132,6 @@ public class UnitPresenter: MonoBehaviour
         Model.SetMoveDirection(Data.MoveDirection);
     }*/
 
-    private void OnHealthChanged(float health, float maxHealth)
-    {
-        if (Model.IsDead)
-        {
-            _stateMachine.TrySetState(new DeadState(Model, this));
-            return;
-        }
-
-        View.UpdateHealth(health);
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
     protected void CreateModelFromData(UnitData data)
     {
         if (data == null)
@@ -93,48 +147,102 @@ public class UnitPresenter: MonoBehaviour
         if (data is KnightData kd)
         {
             Model = new KnightModel(kd);
+            Model.SetUnitID(UnitID.Knight);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is ArcherData ad)
         {
             Model = new ArcherModel(ad);
+            Model.SetUnitID(UnitID.Archer);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is MageData md)
         {
             Model = new MageModel(md);
+            Model.SetUnitID(UnitID.Mage);
             _stateMachine = new UnitStateMachine();
-            _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else
         {
             Debug.LogError("Unknown data type: " + data.GetType());
             return;
         }
+
+        
+        Model.BindOwner(this);
     }
 
-    public void Release()
+    private void BindDebugManager()
     {
-        Pool?.Release(this);
-    }
-
-    public void OnEnterState()
-    {
-        if(_stateMachine.Current is IdleState)
+        GameObject dm = GameObject.FindGameObjectWithTag("DebugManager");
+        if (dm != null)
         {
-            Model.ClearTargets();
+            _debugManager = dm.GetComponent<DebugManager>();
         }
     }
 
-    private void OnDisable()
+    private void OnUnitSpawn(UnitPresenter owner)
     {
-    //    Model.OnHealthChanged -= OnHealthChanged;
-     
-        Model = null; // clear model to avoid stale state when pooled
+     //   DebugManager.OnUnitSpawn(owner);
+        _debugManager.OnUnitSpawn(owner);
     }
 
+    private void OnPlayerDeathNotify(string tag)
+    {
+        Log($"{tag} died and notified this Unit", LogType.Warning);
+        if (Model.PlayerSide != tag)
+        {
+            Log($"{Model.PlayerSide} unit wants to go to VictoryState", LogType.Warning);
+            _stateMachine.TrySetState(new VictoryState(Model, this));
+            return;
+        }
+        else
+        {
+            Log($"{Model.PlayerSide} unit wants to go to DefeatState", LogType.Warning);
+            _stateMachine.TrySetState(new DefeatState(Model, this));
+        }
+    }
+
+    #endregion
+    //=====================================================================================================
+
+    //=====================================================================================================
+    #region 解除 - Release
+    public void Release()
+    {
+        Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
+        Model.OnHealthChanged -= OnHealthChanged;
+        Model.OnDirectionChanged -= OnDirectionChanged;
+    //    Model.OnUnitSpawn -= OnUnitSpawn;
+
+        Pool?.Release(this);
+    }
+
+
+    private void OnDisable()
+    {
+        //    Model.OnHealthChanged -= OnHealthChanged;
+        _stateMachine = null;
+        Model = null; // clear model to avoid stale state when pooled
+    }
+    #endregion
+    //=====================================================================================================
+    public void OnEnterState(IUnitState EnteringState)
+    {
+        if (EnteringState == null) return;
+
+        if(EnteringState is DeadState)
+        {
+
+        }
+
+        View.UpdateAttackRangeSpriteColor();
+    }
+    //=====================================================================================================
+    #region 更新 - Update
     // Update is called once per frame
     void Update()
     {
@@ -148,25 +256,134 @@ public class UnitPresenter: MonoBehaviour
         _stateMachine?.FixedTick(Time.fixedDeltaTime);
     }
 
-    public C_MapManager MapManager { get { return _mapManager; } }
+    /// <summary>
+    /// この関数を使って、DebugLogの表示をDebugManagerのInspector上で設定することが出来る
+    /// 使い方：Log("「○○メッセージ」", 「LogType.Log、LogType.Warning、LogType.Errorのいずれを選ぶ」);
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="type"></param>
+    public void Log(string message, LogType type)
+    {
+        _debugManager.Log(message, type);
+    }
 
+    private void PrepareDeath()
+    {
+     //   View.UpdateHealth(Model.Health / Model.MaxHealth);
+        Collider.enabled = false;
+        View.EnableAttackRange(false);
+    }
+    private void OnHealthChanged(float health, float maxHealth)
+    {
+        View.UpdateHealth(health / maxHealth);
+        if (Model.IsDead)
+        {
+            PrepareDeath();
+            _stateMachine.TrySetState(new DeadState(Model, this));
+        }
+    }
+
+    private void OnDirectionChanged(Vector3 direction, Vector3 moveDirection)
+    {
+        if (direction == Vector3.up)
+        {
+            View.FaceUP(true);
+            View.FaceDOWN(false);
+        }
+        else if (direction == Vector3.down)
+        {
+            View.FaceDOWN(true);
+            View.FaceUP(false);
+        }
+        else if (direction == Vector3.left)
+        {
+            View.FaceDOWN(false);
+            View.FaceUP(false);
+            FaceLeft();
+        }
+        else if (direction == Vector3.right)
+        {
+            View.FaceDOWN(false);
+            View.FaceUP(false);
+            FaceRight();
+        }
+        else { Log("Unexpected direction", LogType.Error); }
+    }
+    public void FaceRight()
+    {
+        transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void FaceLeft()
+    {
+        transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void UpdateDirection(Vector3 direction)
+    {
+        Model.SetMoveDirection(direction);
+    }
+    #endregion
+    //=====================================================================================================
+    //=====================================================================================================
+    #region 攻撃 - attack
     public void TakeDamage(float dmg)
     {
-        if(Model.IsDead) return;
+    //    if(Model.IsDead) return;
         Model?.SetHealth(Model.Health - dmg);
-        Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
+    //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
-
-    public bool IsEnemyInRange(float range) { /* ...*/ return false; }
-    public void PerformMeleeAttack(UnitPresenter target)
+    public void SpawnProjectile(GameObject prefab, float speed, float damage)
     {
-        float damage = Model.AttackPower;
-        target.TakeDamage(damage);
+        // Instantiate, configure velocity and damage here
         View?.PlayAttack();
     }
-    public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
-    public void ReceiveHeal(float amount) { /* ... */ View?.PlayHeal(); }
+    //プレヤーに対する攻撃
+    public void PerformPlayerAttack(float dt)
+    {
+        if(Model.EnemyPlayer.IsDead()) return;
+        Model.PlayerAttack(dt);
+    }
+    //ユニットに対する攻撃
+    public void PerformBasicAttack(UnitPresenter target, float dt)
+    {
+     //   if (target.Model.IsDead) return;
+        Model.BasicAttack(target, dt); //moving logic to model
 
+/*        View?.StopAttack();
+        float damage = Model.AttackPower;
+        target.TakeDamage(damage);
+        View?.PlayAttack();*/
+    }
+
+    public void PerformHealSpell(UnitPresenter target, float dt)
+    {
+        Model.Heal(target, dt);
+    }
+    public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+    public void ReceiveHeal(float amount)
+    {
+        Model?.SetHealth(Model.Health + amount);
+        View?.PlayAttack();
+    //    View?.PlayHeal();
+    }
+    public void PerformDeath()
+    {
+        View?.PlayDeath(true);
+    }
+
+    public void PerformVictoryAnimation()
+    {
+        View?.PlayVictoryDance(true);
+    }
+
+    public void PerformDefeatAnimation()
+    {
+        View?.PlayDefeatAnimation(true);
+    }
+
+    #endregion
+    //=====================================================================================================
     public void PlayHealVFX() { /* particles */ }
 
     public bool TryGetLowHpAlly(out UnitPresenter ally)
@@ -176,75 +393,143 @@ public class UnitPresenter: MonoBehaviour
         return false; 
     }
 
-    public void SpawnProjectile(GameObject prefab, float speed, float damage)
-    {
-        // Instantiate, configure velocity and damage here
-        View?.PlayAttack();
-    }
-
-    public void FaceRight(Transform transform)
-    {
-        transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-    }
-
-    public void FaceLeft(Transform transform)
-    {
-        transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-    }
-
     private void ApplyAttackRange()
     {
         if (View?.AttackRangeTransform == null)
         {
-            Debug.LogError("AttackRangeTransform not found");
+            Log("AttackRangeTransform not found", LogType.Error);
             return;
         }
-        float newRange = Model.CurrentRange;
+        float newRange = Model.TotalAttackRange;
 
         // Adjust collider width AND sprite size by scaling the child object
         Vector3 scale = View.AttackRangeTransform.localScale;
         scale.x = newRange;     // grow horizontally
-        scale.y = newRange;     // grow vertically (if needed)
+        scale.y = newRange;     // grow vertically
         View.AttackRangeTransform.localScale = scale;
     }
 
-    public void SetRangeBuff(float factor)
+/*    public void SetRangeBuff(float factor)
     {
         Model?.SetRangeBuff(factor);
         ApplyAttackRange();
-    }
-
-    public void ShowRange(bool show)
-    {
-        View?.ShowAttackRange(show);
-    }
-
+    }*/
+    //=====================================================================================================
+    #region 範囲 - range
     public bool AllowDetection =>
-       _stateMachine.Current is MoveState ||
-       _stateMachine.Current is IdleState;
+        false == _stateMachine.Current is DeadState;
+    //   _stateMachine.Current is MoveState ||
+    //  _stateMachine.Current is IdleState;
+
+    public bool IsSameTeamAs(UnitPresenter target)
+    {
+        return target?.Model?.PlayerSide == Model.PlayerSide;
+    }
+
 
     public void OnEnterRange(Collider2D other)
     {
-        Debug.LogError($"PRESENTER : EnterRange trigger with {other.gameObject.name}");
+        if (Model.IsDead) return;
 
-        // Only accept valid UnitPresenters with opposite team
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
-        if (target.Model.PlayerSide == Model.PlayerSide) { Debug.LogError("Target invalid : same team"); return; }
+        //敵の城でもUnitでもないモノを無視する
+        if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return;
+        Log($"PRESENTER : EnterRange trigger with {other.gameObject.name}", LogType.Warning);
 
+        if (other.gameObject.CompareTag("Unit"))
+        {
+            bool flowcontrol = HandleUnitTarget(other);
+            if (!flowcontrol)
+            {
+                return;
+            }
+        }
+        else
+        {
+            bool flowcontrol = HandlePlayerTarget(other);
+            if (!flowcontrol)
+            {
+                return;
+            }
+        }
+
+        if (Model.GetPrimaryTarget() != null)
+        {
+            _stateMachine.TrySetState(new IdleState(Model, this));
+        }
+    }
+
+
+    private bool HandleUnitTarget(Collider2D other)
+    {
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return false; }
+        if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
+        {
+            if (IsSameTeamAs(target)) { /*Debug.LogError("Target invalid : same team");*/ return false; }
+        }
+        if (target.Model.IsDead) return false;
+
+        if (IsSameTeamAs(target) && false == target.Model.IsWounded)
+        {
+            return false;
+        }
         Model.AddTarget(target);
-        Debug.Log("Target added");
-
-        // Tell the FSM that we may need to switch state
-        _stateMachine.TrySetState(new AttackState(Model, this));
+        Log("Target added", LogType.Log);
+        return true;
+    }
+    private bool HandlePlayerTarget(Collider2D other)
+    {
+        if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
+        if (player.IsDead()) {  return false; }
+        Model.SetPlayerInRange(true);
+        return true;
     }
 
     public void OnExitRange(Collider2D other)
     {
-        Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
-        if (!other.TryGetComponent<UnitPresenter>(out var target)) { Debug.LogError("No target found"); return; }
-        Model.RemoveTarget(target);
-        Debug.Log("Target removed");
+        if (Model.IsDead) return;
+        //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
+        //敵のプレヤーが範囲内から離れたら
+        if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer)
+        {
+            Model.SetPlayerInRange(false);
+        }             
 
+        if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
+        if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
+        {
+            if (IsSameTeamAs(target)) { /*Debug.LogError("Target invalid : same team");*/ return; }
+        }
+        if (target.Model.IsDead)
+        {
+            Model.RemoveTarget(target);
+            return;
+        }
+
+        Model.RemoveTarget(target);
+        //    Debug.Log("Target removed");
+
+        if (IsValidTargetExist() == false)
+            _stateMachine.TrySetState(new IdleState(Model, this));
+    }
+
+    public bool IsValidTargetExist()
+    {
+        if(Model?.Targets.Count == 0 && Model?.IsPlayerInRange == false) return false;
+        return true;
+    }
+    #endregion
+    //=====================================================================================================
+    //=====================================================================================================
+    #region Capsule Collider
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.collider.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
         _stateMachine.TrySetState(new IdleState(Model, this));
     }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        
+    }
+    #endregion
 }

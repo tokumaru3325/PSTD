@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SpawnButton : MonoBehaviour
 {
-    public UnitData Unit; //ScriptableObjectをインスペクターに設定する
+    private UnitData _unit; //ScriptableObjectをインスペクターに設定する //[2025/12/21] プリンス：ObjectPoolTestに移した
     public Image SpawnButtonPrefab;
 
     private Image _imageComp;
@@ -32,13 +32,14 @@ public class SpawnButton : MonoBehaviour
 
     const string SPAWN_TAG = "SpawnPos";
 
-    private int TeamNumber;   //[2025/12/02] プリンス : "TeamNumber"追加
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         //ボタンの画像をモンスターのアイコンに変える
-    //    Button.image.sprite = Monster.MonsterIcon;
+        //    Button.image.sprite = Monster.MonsterIcon;
+
+        objectPoolTest.CreatePool(100);
+        _unit = objectPoolTest.UnitData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
 
         Image[] Images = SpawnButtonPrefab.GetComponentsInChildren<Image>();
         for(int i = 0; i < Images.Length; i++)
@@ -69,17 +70,19 @@ public class SpawnButton : MonoBehaviour
                 _textComp = Texts[i];
                 _textComp.gameObject.SetActive(false);
                 _textCompStartPosition = _textComp.rectTransform.anchoredPosition;
-                _textComp.SetText("-" + Unit.BaseUnitCost);
+                _textComp.SetText("-" + _unit.BaseUnitCost);
                 break;
             }
         }
+
 
         //_player = FindAnyObjectByType<Player>();
         _player = GameObject.FindGameObjectWithTag(_playerTag).GetComponent<Player>();
         _enemy = GameObject.FindGameObjectWithTag(_enemyTag).GetComponent<Player>();
 
 
-        objectPoolTest.CreatePool(10);
+
+
 
     }
 
@@ -101,8 +104,8 @@ public class SpawnButton : MonoBehaviour
                 _textComp.rectTransform.anchoredPosition += new Vector2(0.0f, 50.0f) * Time.fixedDeltaTime;
             }
 
-            _imageComp.fillAmount += Time.fixedDeltaTime / Unit.BaseUnitCoolDown;
-            if (_timer > Unit.BaseUnitCoolDown)
+            _imageComp.fillAmount += Time.fixedDeltaTime / _unit.BaseUnitCoolDown;
+            if (_timer > _unit.BaseUnitCoolDown)
             {
                 _buttonComp.interactable = true;
                 _imageComp.fillAmount = 0;
@@ -112,7 +115,7 @@ public class SpawnButton : MonoBehaviour
         else
         {
             //Debug.Log($"_player:{_player}, Unit:{Unit}, cost:{Unit.UnitCost}");
-            if (_player.Money <= Unit.BaseUnitCost)
+            if (_player.Money <= _unit.BaseUnitCost)
             {
                 _buttonComp.interactable = false;
             }
@@ -127,19 +130,13 @@ public class SpawnButton : MonoBehaviour
     {
         //Monsterをスポーンさせる
 
-        //[2025/12/02] プリンス START
-        if (_player.gameObject.CompareTag("Player1")) TeamNumber = 1;
-        else if (_player.gameObject.CompareTag("Player2")) TeamNumber = 2;
-        else Debug.LogError("No player tag found, TeamNumber not set");
-        //[2025/12/02] プリンス END
-
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
-        objectPoolTest.GetObj(mySpawnPos, Unit, enemyPos, TeamNumber); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        objectPoolTest.GetObj(mySpawnPos, _unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         _buttonComp.interactable = false;
         _timer = 0.0f;
-        _player.Money -= Unit.BaseUnitCost;
+        _player.Money -= _unit.BaseUnitCost;
 
         _textComp.gameObject.SetActive(true);
         _textComp.rectTransform.anchoredPosition = _textCompStartPosition;

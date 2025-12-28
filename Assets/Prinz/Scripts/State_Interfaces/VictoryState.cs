@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class VictoryState : IUnitState
+{
+    private readonly UnitModel _mymodel;
+    private readonly UnitPresenter _me;
+
+    public VictoryState(UnitModel model, UnitPresenter presenter)
+    {
+        _mymodel = model;
+        _me = presenter;
+    }
+
+    public void OnEnter()
+    {
+        //   Debug.LogWarning($"Enter DeadState {_model.PlayerSide}");
+        _me.OnEnterState(this);
+        _me.PerformVictoryAnimation();
+    }
+    public void OnExit()
+    {
+        //    Debug.LogWarning("!!!!!!!!!!!!!!!!EXIT DeadState");
+    }
+
+    public IUnitState OnUpdate(float dt)
+    {
+
+        return null;
+    }
+
+    public IUnitState OnFixedUpdate(float fdt)
+    {
+        return null;
+    }
+}

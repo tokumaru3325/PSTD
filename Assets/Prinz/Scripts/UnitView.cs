@@ -3,30 +3,26 @@ using UnityEngine.InputSystem;
 
 public class UnitView : MonoBehaviour
 {
-    private UnitPresenter presenter;
+    public UnitPresenter presenter;
     public Transform AttackRangeTransform { get; private set; }
-    public BoxCollider2D AttackRangeCollider { get; private set; }
+    public Collider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
-    public KnightAttackRange AttackRange { get; private set; }
+
+    [SerializeField]
+    private V_HealthGauge _healthGauge;
 
     public Animator Animator;
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void StopAttack() => Animator.SetTrigger("StopAttack");
     public void PlayHeal() => Animator.SetTrigger("Heal");
-    public void PlayMove() => Animator.SetBool("Move", true);
-    public void StopMove() => Animator.SetBool("Move", false);
-    public void PlayDeath() => Animator.SetTrigger("Die");
+    public void PlayMove(bool move) => Animator.SetBool("Move", move);
+    public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
+    public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
+    public void PlayDeath(bool dead) => Animator.SetBool("Dead", dead);
+    public void PlayVictoryDance(bool win) => Animator.SetBool("VictoryDance", win);
+    public void PlayDefeatAnimation(bool lose) => Animator.SetBool("DefeatAnim", lose);
 
-    public void UpdateHealth(float hp)
-    {
-        // update sprite, bar, etc.
-    }
-    public void ShowAttackRange(bool show)
-    {
-        if (AttackRangeSprite != null)
-            AttackRangeSprite.enabled = show;
-    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,56 +31,82 @@ public class UnitView : MonoBehaviour
 
     private void Awake()
     {
-        presenter = GetComponent<UnitPresenter>();
-     //   AttackRange = GetComponentInChildren<KnightAttackRange>();
-      //  AttackRange.SetView(this);
-        AttackRangeTransform = transform.Find("KnightAttackRangeClose");
-        AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
-        AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
-        Animator = GetComponent<Animator>();
+    //    InitializeView();
     }
+
+    public void UpdateHealth(float hp)
+    {
+        _healthGauge.SetGauge(hp);
+    //    Debug.LogWarning("SetGauge called in View");
+    }
+
+    public void EnableAttackRange(bool enable)
+    {
+        AttackRangeTransform.gameObject.SetActive(enable);
+    }
+
+    public void OnDeathAnimationEnd()
+    {
+    //    Debug.LogWarning("Death animation ended");
+    //    PlayDeath(false);
+        _healthGauge.HideGauge();
+        presenter.Release();
+    }
+
+    public void InitializeView()
+    {
+        presenter = GetComponent<UnitPresenter>();
+        Animator = GetComponent<Animator>();
+
+        AttackRangeTransform = transform.Find("AttackRange");
+        var DataType = presenter.Model?.GetDataType();
+        if (DataType is KnightData)
+        {
+            AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
+        }
+        else if (DataType is ArcherData || DataType is MageData)
+        {
+            AttackRangeCollider = AttackRangeTransform.GetComponent<CircleCollider2D>();
+        }
+        else { Debug.LogError("Collider reference not found"); }
+
+        AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
+
+        AttackRangeSprite.color = Color.lightGreen;
+        _healthGauge.ShowGauge();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            //    presenter.SetRangeBuff(2.0f);
-            Debug.Log("buff range button pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            //   presenter.SetRangeBuff(-2.0f);
-            Debug.Log("debuff range button pressed");
-        }
-    }
 
-/*    private void OnCollisionEnter2D(Collision2D other)
-    {
-        Debug.LogError("Colliding called in view");
-        presenter.OnCollisionEnter2D(other);
-    }*/
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-     //   Debug.LogError($"VIEW : exit trigger with {other.gameObject.name}");
     }
 
     public void OnEnterRange(Collider2D other)
     {
-        Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
         if (!presenter.AllowDetection) return;
+
+    //    Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        UpdateAttackRangeSpriteColor();
         presenter.OnEnterRange(other);
-        AttackRangeSprite.color = Color.softRed;
     }
 
     public void OnExitRange(Collider2D other)
     {
-        Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
+    //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
+        UpdateAttackRangeSpriteColor();
         presenter.OnExitRange(other);
-        if(presenter.Model.Targets.Count == 0) AttackRangeSprite.color = Color.lightGreen;
+    }
+
+    public void UpdateAttackRangeSpriteColor()
+    {
+        Color c;
+
+        if (presenter.IsValidTargetExist()) c = Color.softRed;
+        else c = Color.lightGreen;
+
+        //alpha変更
+        c.a = 0.3f;
+        AttackRangeSprite.color = c;
     }
 }

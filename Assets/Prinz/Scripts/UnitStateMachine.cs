@@ -13,13 +13,18 @@ public class UnitStateMachine
         Current?.OnEnter();
     }
 
+    public void ClearState()
+    {
+        Current = null;
+    }
+
     public void Tick(float deltaTime) //これで更新の頻度が調整できる（処理が重くなる場合）
     {
         var next = Current?.OnUpdate(deltaTime);
         if (next != null)
         {
             Current.OnExit();
-            Current = null; //test ??
+            Current = null;
             Current = next;
             Current.OnEnter();
         }
@@ -31,7 +36,7 @@ public class UnitStateMachine
         if (next != null)
         {
             Current.OnExit();
-            Current = null; //test ??
+            Current = null;
             Current = next;
             Current.OnEnter();
         }
@@ -39,10 +44,16 @@ public class UnitStateMachine
 
     public void TrySetState(IUnitState newState)
     {
-        Debug.LogWarning("TrySetState() called");
+        if (Current == newState) return;
+
+     //   Debug.LogWarning("TrySetState() called");
+     if(Current is AttackState)
+        {
+            //anything
+        }
         Current.OnExit();
-        Current = null; //test ??
+        Current = null;
         Current = newState;
-        Current?.OnEnter();
+        Current.OnEnter();
     }
 }

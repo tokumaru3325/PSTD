@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Win32.SafeHandles;
+using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
@@ -32,6 +34,10 @@ public class ReelController : MonoBehaviour
 
     [SerializeField] ReelMover reelMover;
 
+    [SerializeField] SlotSceneManager slotSceneManager;
+
+    [SerializeField] ResultTextManager resultTextManager;
+
     [SerializeField] AudioSource audioSource;
 
     Dictionary<int, float> reelLeftZugaraNum = new Dictionary<int, float>();
@@ -45,6 +51,10 @@ public class ReelController : MonoBehaviour
     int hazureNumKeeper = 0;
 
     float initialazeYkakeru = 0.0f;
+
+    int slotResultL = 0;
+    int slotResultC = 0;
+    int slotResultR = 0;
 
     [SerializeField] RectTransform rt;
 
@@ -85,7 +95,7 @@ public class ReelController : MonoBehaviour
                 if (!reelLStoped)
                 {
 
-                    ReelStopper(koyakuNum, koyaku);
+                    ReelStopper(koyakuNum, SlotSceneManager.slotType);
 
                 }
             }
@@ -104,7 +114,7 @@ public class ReelController : MonoBehaviour
                 if (!reelCStoped)
                 {
 
-                    ReelStopper(koyakuNum, koyaku);
+                    ReelStopper(koyakuNum, SlotSceneManager.slotType);
 
                 }
             }
@@ -123,7 +133,7 @@ public class ReelController : MonoBehaviour
                 if (!reelRStoped)
                 {
 
-                    ReelStopper(koyakuNum, koyaku);
+                    ReelStopper(koyakuNum, SlotSceneManager.slotType);
 
                 }
             }
@@ -134,49 +144,52 @@ public class ReelController : MonoBehaviour
     {
         //if (Keyboard.current.spaceKey.wasPressedThisFrame)
         //{
-            switch (reelMover.state)
-            {
-                case ReelMover.State.nextBet:
-                    if (reelLStoped && reelCStoped && reelRStoped)
-                    {
-                        reelMover.StateChange();
-                        reelLStoped = false;
-                        reelCStoped = false;
-                        reelRStoped = false;
-                        audioSource.PlayOneShot(betSE);
-                    }
+        switch (reelMover.state)
+        {
+            case ReelMover.State.nextBet:
+                if (reelLStoped && reelCStoped && reelRStoped)
+                {
+                    reelMover.StateChange();
+                    reelLStoped = false;
+                    reelCStoped = false;
+                    reelRStoped = false;
+                    audioSource.PlayOneShot(betSE);
+                }
 
-                    break;
-                case ReelMover.State.nextLeber:
-                    reelMover.StateChange();
-                    SetZugara();
-                    audioSource.PlayOneShot(leberOnSE);
-                    canMoveL = true;
-                    canMoveC = true;
-                    canMoveR = true;
-                    break;
-                case ReelMover.State.nextreelL:
-                    audioSource.PlayOneShot(stopSE);
-                    reelMover.StateChange();
-                    canMoveL = false;
-                    break;
-                case ReelMover.State.nextreelC:
-                    if (!reelLStoped) break;
-                    audioSource.PlayOneShot(stopSE);
-                    reelMover.StateChange();
-                    canMoveC = false;
-                    break;
-                case ReelMover.State.nextreelR:
-                    if (!reelCStoped) break;
-                    audioSource.PlayOneShot(stopSE);
-                    reelMover.StateChange();
-                    canMoveR = false;
-                    break;
-            }
+                break;
+            case ReelMover.State.nextLeber:
+                resultTextManager.ResetText();
+                reelMover.StateChange();
+                SetZugara();
+                audioSource.PlayOneShot(leberOnSE);
+                canMoveL = true;
+                canMoveC = true;
+                canMoveR = true;
+                SlotSceneManager.reelMoving = true;
+                break;
+            case ReelMover.State.nextreelL:
+                audioSource.PlayOneShot(stopSE);
+                reelMover.StateChange();
+                canMoveL = false;
+                break;
+            case ReelMover.State.nextreelC:
+                if (!reelLStoped) break;
+                audioSource.PlayOneShot(stopSE);
+                reelMover.StateChange();
+                canMoveC = false;
+                break;
+            case ReelMover.State.nextreelR:
+                if (!reelCStoped) break;
+                audioSource.PlayOneShot(stopSE);
+                reelMover.StateChange();
+                canMoveR = false;
+                resultTextManager.TextChange((int)reelMover.someSlot, koyakuNum, koyaku);
+                break;
+        }
         //}
     }
 
-    bool ReelStopper(int num, bool koyakuok)
+    bool ReelStopper(int num, int slotType)
     {
         bool no = false;
         switch (reelMover.state)
@@ -184,15 +197,15 @@ public class ReelController : MonoBehaviour
 
             case ReelMover.State.nextreelC:
                 if (reelLStoped) break;
-                if (koyakuok)
+                if (koyaku)
                 {
                     if (reelLeftZugaraNum[num] * initialazeYkakeru + oya.transform.position.y + 1.0f >= reelL.transform.position.y && reelL.transform.position.y >= reelLeftZugaraNum[num] + oya.transform.position.y - 1.0f)
                     {
                         reelL.transform.position = new Vector3(reelL.transform.position.x, reelLeftZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelLStoped = true;
-                       
-                       // Debug.Log("reelLstop");
+
+                        // Debug.Log("reelLstop");
                     }
                     else
                     {
@@ -209,6 +222,7 @@ public class ReelController : MonoBehaviour
                     if (!hazureChange)
                     {
                         koyakuNum = (int)Random.Range(0.0f, 5.0f);
+                        slotResultL = koyakuNum;
                         hazureNumKeeper = koyakuNum;
                         hazureChange = true;
                     }
@@ -218,7 +232,7 @@ public class ReelController : MonoBehaviour
                         no = true;
                         reelLStoped = true;
                         hazureChange = false;
-                       
+
                         //Debug.Log("reelLstop");
                     }
                     else
@@ -231,7 +245,7 @@ public class ReelController : MonoBehaviour
                         }
                     }
                 }
-                    break;
+                break;
             case ReelMover.State.nextreelR:
                 if (reelCStoped) break;
                 if (koyaku)
@@ -241,7 +255,8 @@ public class ReelController : MonoBehaviour
                         reelC.transform.position = new Vector3(reelC.transform.position.x, reelCenterZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelCStoped = true;
-                        
+
+
                         // Debug.Log("reelCstop");
                     }
                     else
@@ -262,6 +277,7 @@ public class ReelController : MonoBehaviour
                         {
                             koyakuNum = (int)Random.Range(0.0f, 5.0f);
                         } while (hazureNumKeeper == koyakuNum);
+                        slotResultC = koyakuNum;
                         hazureNumKeeper = koyakuNum;
                         hazureChange = true;
                     }
@@ -271,7 +287,7 @@ public class ReelController : MonoBehaviour
                         no = true;
                         reelCStoped = true;
                         hazureChange = false;
-                        
+
                         // Debug.Log("reelCstop");
                     }
                     else
@@ -284,7 +300,7 @@ public class ReelController : MonoBehaviour
                         }
                     }
                 }
-                    break;
+                break;
             case ReelMover.State.nextBet:
                 if (reelRStoped) break;
                 if (koyaku)
@@ -294,7 +310,21 @@ public class ReelController : MonoBehaviour
                         reelR.transform.position = new Vector3(reelR.transform.position.x, reelRightZugaraNum[num] * initialazeYkakeru + oya.transform.position.y, oya.transform.position.z);
                         no = true;
                         reelRStoped = true;
-                        
+                        switch (slotType)
+                        {
+                            case 0:
+                                SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
+                                break;
+                            case 1:
+                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL, slotResultC, slotResultR);
+                                break;
+                            case 2:
+                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
+                                break;
+
+                        }
+                        SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
+                        SlotSceneManager.reelMoving = false;
                         // Debug.Log("reelRstop");
                     }
                     else
@@ -315,6 +345,7 @@ public class ReelController : MonoBehaviour
                         {
                             koyakuNum = (int)Random.Range(0.0f, 5.0f);
                         } while (hazureNumKeeper == koyakuNum);
+                        slotResultR = koyakuNum;
                         hazureNumKeeper = koyakuNum;
                         hazureChange = true;
                     }
@@ -324,7 +355,17 @@ public class ReelController : MonoBehaviour
                         no = true;
                         reelRStoped = true;
                         hazureChange = false;
-                       
+                        switch (slotType)
+                        {
+                            case 1:
+                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL,slotResultC,slotResultR);
+                                break;
+                            case 2:
+                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
+                                break;
+
+                        }
+                        SlotSceneManager.reelMoving = false;
                         //Debug.Log("reelRstop");
                     }
                     else
@@ -337,7 +378,7 @@ public class ReelController : MonoBehaviour
                         }
                     }
                 }
-                    break;
+                break;
             default:
                 break;
         }
@@ -346,7 +387,7 @@ public class ReelController : MonoBehaviour
 
     void SetZugara()
     {
-        int random = (int)Random.Range(0.0f, 100.0f);
+        int random = Random.Range(0, 65);
         if (random >= 0 && random <= 19)
         {
             koyakuNum = 0;
@@ -372,18 +413,13 @@ public class ReelController : MonoBehaviour
             koyakuNum = 4;
             koyaku = true;
         }
-        else
-        {
-            koyakuNum = 100;
-            koyaku = false;
-        }
 
         Debug.Log(koyakuNum);
     }
 
     void ReelZugaraPositionInit()
     {
-
+        
         reelLeftZugaraNum.Add(0, 25.0f);
         reelLeftZugaraNum.Add(1, 45.0f);
         reelLeftZugaraNum.Add(2, 80.0f);

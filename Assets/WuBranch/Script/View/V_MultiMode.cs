@@ -78,7 +78,7 @@ public class V_MultiMode : MonoBehaviour
 
     public void OpenSingle()
     {
-        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
     }
 
     public void OpenMulti()
