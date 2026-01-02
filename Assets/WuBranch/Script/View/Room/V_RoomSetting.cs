@@ -52,6 +52,7 @@ public class V_RoomSetting : MonoBehaviour
     public void CreateRoom()
     {
         _creator.CreateLobby(_roomNameInput.text, _passwordInput.text);
+        ClosePanel();
     }
 
     /// <summary>
@@ -59,10 +60,18 @@ public class V_RoomSetting : MonoBehaviour
     /// </summary>
     public void CancelCreatingRoom()
     {
-        // 初期化
+        ClosePanel();
+        // シーンを変更
+        //SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
+    }
+
+    /// <summary>
+    /// パネルを閉じる
+    /// </summary>
+    private void ClosePanel()
+    {
         _roomNameInput.text = "";
         _passwordInput.text = "";
-        // シーンを変更
-        SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
+        gameObject.SetActive(false);
     }
 }

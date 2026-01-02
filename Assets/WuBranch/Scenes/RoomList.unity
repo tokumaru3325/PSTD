@@ -493,8 +493,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_RoomList
   _backBtn: {fileID: 1317973448}
   _reloadBtn: {fileID: 1975205629}
+  _createBtn: {fileID: 251499315}
   _searchInput: {fileID: 2049867647}
   _content: {fileID: 628263960}
+  _createPanel: {fileID: 374260705}
 --- !u!114 &102878172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,8 +1176,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: d49fa5cd2b64c0a4db81e7bf5dcb4cd7, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1414,7 +1416,7 @@ GameObject:
   - component: {fileID: 374260706}
   - component: {fileID: 374260707}
   m_Layer: 0
-  m_Name: RoomCreater
+  m_Name: CreateRoomPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
