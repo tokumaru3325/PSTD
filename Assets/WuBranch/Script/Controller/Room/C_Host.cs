@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class C_Host : MonoBehaviour
 {
-    
-
     /// <summary>
     /// 対象のマルチタイプ
     /// </summary>
@@ -30,8 +28,8 @@ public class C_Host : MonoBehaviour
 
     void Start()
     {
-       
+
     }
 
-    
+
 }

@@ -32,6 +32,10 @@ public class C_RoomList : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// 受付を作る
+    /// </summary>
+    /// <param name="data">受付のデータ</param>
     private void CreateRoomFront(M_RoomFrontData data)
     {
         GameObject roomObject = Instantiate(_roomFrontPrefab);

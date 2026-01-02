@@ -59,7 +59,7 @@ public class V_MultiMode : MonoBehaviour
     private C_GlobalVariable _globalVariable;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    async void Start()
+    void Start()
     {
         if (_singleBtn)
             _singleBtn.onClick.AddListener(OpenSingle);
