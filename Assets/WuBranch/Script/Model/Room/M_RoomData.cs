@@ -29,14 +29,4 @@ public struct M_RoomData
     /// </summary>
     public int MemberNums;
 
-    /// <summary>
-    /// 選んだ城
-    /// </summary>
-    public int CastleIndex;
-
-    /// <summary>
-    /// プレイヤーの状態
-    /// <ID, 状態>
-    /// </summary>
-    public GameReadyState State;
 }
