@@ -1,3 +1,4 @@
+using Steamworks;
 using UnityEngine;
 
 public class M_GlobalVariable
@@ -10,9 +11,17 @@ public class M_GlobalVariable
     public string MyName { get; private set; }
 
     /// <summary>
-    /// 作った部屋の情報
+    /// マルチモードのルームID
     /// </summary>
-    public M_RoomData RoomData { get; private set; }
+    /// <value></value>
+    public CSteamID RoomID { get; private set; }
+
+    public M_GlobalVariable()
+    {
+        MultiRole = MultiRoleType.None;
+        MyName = "";
+        RoomID = CSteamID.Nil;
+    }
 
     /// <summary>
     /// マルチの役割を設定
@@ -33,11 +42,11 @@ public class M_GlobalVariable
     }
 
     /// <summary>
-    /// 作った部屋の情報をセット
+    /// ルームIDを設定
     /// </summary>
-    /// <param name="data">データ</param>
-    public void SetRoom(M_RoomData data)
+    /// <param name="ID">ルームID</param>
+    public void SetRoomID(CSteamID ID)
     {
-        RoomData = data;
+        RoomID = ID;
     }
 }

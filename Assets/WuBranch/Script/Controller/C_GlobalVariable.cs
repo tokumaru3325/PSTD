@@ -1,3 +1,4 @@
+using Steamworks;
 using UnityEngine;
 
 /// <summary>
@@ -66,20 +67,20 @@ public class C_GlobalVariable : MonoBehaviour
     }
 
     /// <summary>
-    /// 作った部屋の情報をセット
+    /// ルームIDを設定
     /// </summary>
-    /// <param name="data">部屋のデータ</param>
-    public void SetRoomData(M_RoomData data)
+    /// <param name="ID">ルームID</param>
+    public void SetRoomID(CSteamID ID)
     {
-        _datas.SetRoom(data);
+        _datas.SetRoomID(ID);
     }
 
     /// <summary>
-    /// 作った部屋の情報を取得
+    /// ルームIDを取得
     /// </summary>
-    /// <returns>部屋の情報</returns>
-    public M_RoomData GetRoomData()
+    /// <returns>ルームID</returns>
+    public CSteamID GetRoomID()
     {
-        return _datas.RoomData;
+        return _datas.RoomID;
     }
 }
