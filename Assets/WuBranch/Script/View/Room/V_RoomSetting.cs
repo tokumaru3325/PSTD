@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using Steamworks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class V_RoomSetting : MonoBehaviour
@@ -32,6 +29,12 @@ public class V_RoomSetting : MonoBehaviour
     private TMP_InputField _roomNameInput;
 
     /// <summary>
+    /// 部屋名のエラーメッセージ
+    /// </summary>
+    [SerializeField]
+    private TextMeshProUGUI _roomNameErrTxt;
+
+    /// <summary>
     /// パスワードの入力
     /// </summary>
     [SerializeField]
@@ -44,6 +47,7 @@ public class V_RoomSetting : MonoBehaviour
             _createBtn.onClick.AddListener(CreateRoom);
         if (_cancelBtn)
             _cancelBtn.onClick.AddListener(CancelCreatingRoom);
+        SetNameErrTxt("");
     }
 
     /// <summary>
@@ -51,6 +55,11 @@ public class V_RoomSetting : MonoBehaviour
     /// </summary>
     public void CreateRoom()
     {
+        if (_roomNameInput.text.Equals(""))
+        {
+            SetNameErrTxt("部屋名を入力してください");
+            return;
+        }
         _creator.CreateLobby(_roomNameInput.text, _passwordInput.text);
         ClosePanel();
     }
@@ -73,5 +82,11 @@ public class V_RoomSetting : MonoBehaviour
         _roomNameInput.text = "";
         _passwordInput.text = "";
         gameObject.SetActive(false);
+    }
+
+    private void SetNameErrTxt(string msg)
+    {
+        if (_roomNameErrTxt)
+            _roomNameErrTxt.text = msg;
     }
 }

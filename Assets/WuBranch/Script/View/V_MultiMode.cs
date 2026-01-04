@@ -64,7 +64,7 @@ public class V_MultiMode : MonoBehaviour
         if (_singleBtn)
             _singleBtn.onClick.AddListener(OpenSingle);
         if (_multiBtn)
-            _multiBtn.onClick.AddListener(OpenMulti);
+            _multiBtn.onClick.AddListener(SearchLobby);
         if (_hostBtn)
             _hostBtn.onClick.AddListener(SearchLobby);
         if (_clientBtn)
@@ -83,8 +83,8 @@ public class V_MultiMode : MonoBehaviour
 
     public void OpenMulti()
     {
-        _modeScene.SetActive(false);
-        _multiScene.SetActive(true);
+        // _modeScene.SetActive(false);
+        // _multiScene.SetActive(true);
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public class V_MultiMode : MonoBehaviour
     public void CreateLobby()
     {
         _globalVariable.SetMyName(_nameInput.text);
-        _nameInput.text = "";
+        //_nameInput.text = "";
         SceneManager.LoadScene("RoomCreate", LoadSceneMode.Single);
     }
 
@@ -103,7 +103,7 @@ public class V_MultiMode : MonoBehaviour
     public void SearchLobby()
     {
         _globalVariable.SetMyName(_nameInput.text);
-        _nameInput.text = "";
+        //_nameInput.text = "";
         SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
 
@@ -120,13 +120,15 @@ public class V_MultiMode : MonoBehaviour
     {
         if (value.Length == 0)
         {
-            _hostBtn.interactable = false;
-            _clientBtn.interactable = false;
+            _multiBtn.interactable = false;
+            // _hostBtn.interactable = false;
+            // _clientBtn.interactable = false;
         }
         else
         {
-            _hostBtn.interactable = true;
-            _clientBtn.interactable = true;
+            _multiBtn.interactable = true;
+            // _hostBtn.interactable = true;
+            // _clientBtn.interactable = true;
         }
     }
 }

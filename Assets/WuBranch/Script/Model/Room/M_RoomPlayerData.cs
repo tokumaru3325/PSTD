@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class M_RoomPlayerData
+public struct M_RoomPlayerData
 {
     /// <summary>
     /// 選んだ城

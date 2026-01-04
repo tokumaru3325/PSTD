@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(C_RoomList))]
 public class V_RoomList : MonoBehaviour
@@ -100,9 +101,25 @@ public class V_RoomList : MonoBehaviour
     /// 新しい受付が作成されたときの処理
     /// </summary>
     /// <param name="room">受付</param>
-    private void OnCreatedRoomFront(GameObject room)
+    private void OnCreatedRoomFront(List<GameObject> rooms)
     {
-        room.transform.SetParent(_content.transform);
+        ClearRoomList();
+        foreach (GameObject room in rooms)
+        {
+            room.transform.SetParent(_content.transform);
+        }
+    }
+
+    /// <summary>
+    /// 受付リストをクリア
+    /// </summary>
+    private void ClearRoomList()
+    {
+        while (_content.transform.childCount > 0)
+        {
+            GameObject room = _content.transform.GetChild(0).gameObject;
+            Destroy(room);
+        }
     }
 
     /// <summary>

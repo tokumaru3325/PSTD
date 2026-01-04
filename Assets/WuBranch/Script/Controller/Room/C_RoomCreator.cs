@@ -46,8 +46,21 @@ public class C_RoomCreator : MonoBehaviour
     /// <summary>
     /// ロビー作成（ゲームをホスト）
     /// </summary>
-    /// <param name="data">部屋データ</param>
+    /// <param name="roomName">名前</param>
+    /// <param name="pwd">パスワード</param>
     public void CreateLobby(string roomName, string pwd)
+    {
+        InitRoom(roomName, pwd);
+        SteamAPICall_t hCreateLobby = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, _roomData.MaxMembers);
+        _onLobbyCreated.Set(hCreateLobby);
+    }
+
+    /// <summary>
+    /// 部屋を初期化
+    /// </summary>
+    /// <param name="roomName">名前</param>
+    /// <param name="pwd">パスワード</param>
+    private void InitRoom(string roomName, string pwd)
     {
         _roomData = new M_RoomData();
         _roomData.LobbyID = CSteamID.Nil;
@@ -55,11 +68,6 @@ public class C_RoomCreator : MonoBehaviour
         _roomData.Password = pwd;
         _roomData.MaxMembers = 2;
         _roomData.MemberNums = 1;
-        _roomData.CastleIndex = 0;
-        _roomData.State = GameReadyState.Preparing;
-        _globalVariable.SetRoomData(_roomData);
-        SteamAPICall_t hCreateLobby = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, _roomData.MaxMembers);
-        _onLobbyCreated.Set(hCreateLobby);
     }
 
     /// <summary>
@@ -77,8 +85,9 @@ public class C_RoomCreator : MonoBehaviour
         }
 
         CSteamID steamID = new CSteamID(result.m_ulSteamIDLobby);
+        _globalVariable.SetRoomID(steamID);
         SetRoomInfo(steamID);
-        SetMemberInfo(steamID);
+        InitMyInfo(steamID);
 
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
 
@@ -103,14 +112,14 @@ public class C_RoomCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// メンバー情報を設定
+    /// 自身の情報を先に設定
     /// </summary>
     /// <param name="LobbyID"></param>
-    private void SetMemberInfo(CSteamID LobbyID)
+    private void InitMyInfo(CSteamID LobbyID)
     {
         SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_NAME_KEY, _globalVariable.GetMyName());
-        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_CASTLE_KEY, _roomData.CastleIndex.ToString());
-        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_STATE_KEY, ((int)_roomData.State).ToString());
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_CASTLE_KEY, ((int)CastleType.Castle1).ToString());
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_STATE_KEY, ((int)GameReadyState.Preparing).ToString());
     }
 
     /// <summary>
@@ -120,22 +129,54 @@ public class C_RoomCreator : MonoBehaviour
     /// <param name="response"></param>
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
+        // true から false に遷移すると、接続承認応答が処理されます。
+        response.Pending = true;
+
         // ホストの場合は自動承認
         if (request.ClientNetworkId == NetworkManager.Singleton.LocalClientId)
         {
             response.Approved = true;
+            response.Pending = false;
             return;
         }
 
-        // パスワードがない場合は自動承認
-        string password = _globalVariable.GetRoomData().Password;
-        if (string.IsNullOrEmpty(password))
+        // パスワードの確認
+        string password = _roomData.Password;
+        if (!string.IsNullOrEmpty(password))
         {
-            response.Approved = true;
+            string payload = Encoding.UTF8.GetString(request.Payload);
+            // パスワードが違う
+            if (payload != password)
+            {
+                // 接続を許可しない
+                response.Approved = false;
+                response.Pending = false;
+                return;
+            }
+        }
+
+        // 最大人数をチェック
+        if (NetworkManager.Singleton.ConnectedClients.Count >= _roomData.MaxMembers)
+        {
+            // 接続を許可しない
+            response.Approved = false;
+            response.Pending = false;
             return;
         }
 
-        string payload = Encoding.UTF8.GetString(request.Payload);
-        response.Approved = payload == password;
+        response.CreatePlayerObject = false;
+
+        // すべての承認手順を経て、通りました
+        response.Approved = true;
+        response.Pending = false;
+    }
+
+    /// <summary>
+    /// 部屋情報をゲット
+    /// </summary>
+    /// <returns></returns>
+    public M_RoomData GetRoomData()
+    {
+        return _roomData;
     }
 }

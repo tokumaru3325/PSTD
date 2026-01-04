@@ -2,6 +2,7 @@ using UnityEngine;
 using Steamworks;
 using System;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 public class C_RoomSeeker : MonoBehaviour
 {
@@ -10,7 +11,10 @@ public class C_RoomSeeker : MonoBehaviour
     /// </summary>
     private CallResult<LobbyMatchList_t> _onLobbyMatched;
 
-    public Action<M_RoomFrontData> OnFoundRoomData;
+    /// <summary>
+    /// ロビーが見つかった通知, 全部の受付データ
+    /// </summary>
+    public Action<List<M_RoomFrontData>> OnFoundRoomData;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,11 +28,11 @@ public class C_RoomSeeker : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            M_RoomFrontData fakeData = new M_RoomFrontData(CSteamID.Nil, "TestRoom", "1", "Leader", 2, 1);
-            OnFoundRoomData?.Invoke(fakeData);
-        }
+        // if (Input.GetKeyDown(KeyCode.T))
+        // {
+        //     M_RoomFrontData fakeData = new M_RoomFrontData(CSteamID.Nil, "TestRoom", "1", "Leader", 2, 1);
+        //     OnFoundRoomData?.Invoke(fakeData);
+        // }
     }
 
     /// <summary>
@@ -54,11 +58,13 @@ public class C_RoomSeeker : MonoBehaviour
     private void OnMatchLobby(LobbyMatchList_t param, bool bIOFailure)
     {
         uint lobbyCount = param.m_nLobbiesMatching;
+        List<M_RoomFrontData> roomDatas = new();
         for (int index = 0; index < lobbyCount; index++)
         {
             M_RoomFrontData data = CollectRoomFrontData(index);
-            OnFoundRoomData?.Invoke(data);
+            roomDatas.Add(data);
         }
+        OnFoundRoomData?.Invoke(roomDatas);
     }
 
     /// <summary>

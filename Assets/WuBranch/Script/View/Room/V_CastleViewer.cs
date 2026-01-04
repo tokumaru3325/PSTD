@@ -1,5 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+
+[Serializable]
+public class CastleImgPair
+{
+    /// <summary>
+    /// タイプ
+    /// </summary>
+    [SerializeField]
+    public CastleType type;
+
+    /// <summary>
+    /// 画像
+    /// </summary>
+    [SerializeField]
+    public Sprite Image;
+}
 
 public class V_CastleViewer : MonoBehaviour
 {
@@ -7,18 +27,18 @@ public class V_CastleViewer : MonoBehaviour
     /// 城の表示画像
     /// </summary>
     [SerializeField]
-    private Image _viewr;
+    private Image _viewer;
 
     /// <summary>
     /// 全部の城の画像
     /// </summary>
     [SerializeField]
-    private Sprite[] _castleSprites;
+    private CastleImgPair[] _castleSprites;
 
     /// <summary>
     /// 現在の城のインデックス
     /// </summary>
-    private int _currentIndex;
+    private CastleType _currentIndex;
 
     /// <summary>
     /// 前の城ボタン
@@ -32,10 +52,16 @@ public class V_CastleViewer : MonoBehaviour
     [SerializeField]
     private Button _nextBtn;
 
-    void Start()
+    /// <summary>
+    /// 部屋コントローラ
+    /// </summary>
+    [SerializeField]
+    private C_Room _roomController;
+
+    void Awake()
     {
-        _currentIndex = 0;
-        UpdateCastle();
+        _currentIndex = CastleType.Null;
+        _viewer.sprite = null;
     }
 
     /// <summary>
@@ -44,11 +70,12 @@ public class V_CastleViewer : MonoBehaviour
     public void PreCastle()
     {
         _currentIndex--;
-        if (_currentIndex < 0)
+        if (_currentIndex < CastleType.Castle1)
         {
-            _currentIndex = _castleSprites.Length - 1;
+            _currentIndex = CastleType.Castle3;
         }
-        UpdateCastle();
+        _roomController.ChangeCastle(_currentIndex);
+        //UpdateCastle();
     }
 
     /// <summary>
@@ -57,10 +84,21 @@ public class V_CastleViewer : MonoBehaviour
     public void NextCastle()
     {
         _currentIndex++;
-        if (_currentIndex >= _castleSprites.Length)
+        if (_currentIndex > CastleType.Castle3)
         {
-            _currentIndex = 0;
+            _currentIndex = CastleType.Castle1;
         }
+        _roomController.ChangeCastle(_currentIndex);
+        //UpdateCastle();
+    }
+
+    /// <summary>
+    /// 指定された城のタイプを表示
+    /// </summary>
+    /// <param name="type"></param>
+    public void SetCastle(CastleType type)
+    {
+        _currentIndex = type;
         UpdateCastle();
     }
 
@@ -69,22 +107,26 @@ public class V_CastleViewer : MonoBehaviour
     /// </summary>
     private void UpdateCastle()
     {
-        _viewr.sprite = _castleSprites[_currentIndex];
+        var target = _castleSprites.Where(_ => _.type == _currentIndex);
+        if (target.Count() > 0)
+            _viewer.sprite = target.First().Image;
+        else
+            _viewer.sprite = null;
     }
 
     /// <summary>
-    /// クライアントモード時の表示設定
+    /// 閲覧モード
     /// </summary>
-    public void InClientMode()
+    public void ViewMode()
     {
         _preBtn.gameObject.SetActive(false);
         _nextBtn.gameObject.SetActive(false);
     }
 
     /// <summary>
-    /// ホストモード時の表示設定
+    /// 操作モード
     /// </summary>
-    public void InHostMode()
+    public void ControllMode()
     {
         _preBtn.gameObject.SetActive(true);
         _nextBtn.gameObject.SetActive(true);

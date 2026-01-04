@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class C_RoomList : MonoBehaviour
@@ -6,7 +7,7 @@ public class C_RoomList : MonoBehaviour
     /// <summary>
     /// 新しい部屋を作った際の通知
     /// </summary>
-    public Action<GameObject> OnCreated;
+    public Action<List<GameObject>> OnCreated;
 
     /// <summary>
     /// 部屋のプレハブ
@@ -26,25 +27,23 @@ public class C_RoomList : MonoBehaviour
         _roomSeeker.OnFoundRoomData += CreateRoomFront;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
     /// 受付を作る
     /// </summary>
     /// <param name="data">受付のデータ</param>
-    private void CreateRoomFront(M_RoomFrontData data)
+    private void CreateRoomFront(List<M_RoomFrontData> datas)
     {
-        GameObject roomObject = Instantiate(_roomFrontPrefab);
-        C_RoomFront roomFront = roomObject.GetComponent<C_RoomFront>();
-        if (roomFront)
+        List<GameObject> roomFronts = new();
+        foreach (M_RoomFrontData data in datas)
         {
-            roomFront.Init(data);
+            GameObject roomObject = Instantiate(_roomFrontPrefab);
+            C_RoomFront roomFront = roomObject.GetComponent<C_RoomFront>();
+            if (roomFront)
+            {
+                roomFront.Init(data);
+            }
+            roomFronts.Add(roomObject);
         }
-
-        OnCreated?.Invoke(roomObject);
+        OnCreated?.Invoke(roomFronts);
     }
 }

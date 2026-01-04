@@ -92,6 +92,7 @@ public class C_RoomFront : MonoBehaviour
     /// <param name="callback"></param>
     private void OnLobbyEntered(LobbyEnter_t callback)
     {
+        //Debug.LogError($"On Lobby Entered");
         //入室失敗時
         EChatRoomEnterResponse response = (EChatRoomEnterResponse)callback.m_EChatRoomEnterResponse;
         if (response != EChatRoomEnterResponse.k_EChatRoomEnterResponseSuccess)
@@ -101,21 +102,31 @@ public class C_RoomFront : MonoBehaviour
         }
 
         //ホストのSteamIDを取得
+        CSteamID steamID = new CSteamID(callback.m_ulSteamIDLobby);
         string hostAddress = SteamMatchmaking.GetLobbyData(
-            new CSteamID(callback.m_ulSteamIDLobby),
+            steamID,
             RoomParams.HOST_ADDRESS_KEY);
+
+        // ホストもここを通るのでクライアント接続しないように
+        // 同じPCでテストすると、ここをコメントアウトする
+        if (hostAddress == SteamUser.GetSteamID().ToString())
+            return;
+
+        _globalVariable.SetRoomID(steamID);
+        _globalVariable.SetRoomRole(MultiRoleType.Client);
+        InitMyInfo(steamID);
 
         //Netcodeでクライアント接続
         var stp = (SteamNetworkingSocketsTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
         stp.ConnectToSteamID = ulong.Parse(hostAddress);
+
         //ホストに接続
         bool result = NetworkManager.Singleton.StartClient();
         OnJoinResultRecieved?.Invoke(true, "");
 
-        _globalVariable.SetRoomRole(MultiRoleType.Client);
-
         //シーンを切り替え
-        NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
+        SceneManager.LoadScene("Room", LoadSceneMode.Single);
+        //NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
 
         //切断時
         //NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
@@ -139,5 +150,16 @@ public class C_RoomFront : MonoBehaviour
             default:
                 return "予期しないエラーが発生しました。";
         }
+    }
+
+    /// <summary>
+    /// 自身の情報を先に設定
+    /// </summary>
+    /// <param name="LobbyID"></param>
+    private void InitMyInfo(CSteamID LobbyID)
+    {
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_NAME_KEY, _globalVariable.GetMyName());
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_CASTLE_KEY, ((int)CastleType.Castle1).ToString());
+        SteamMatchmaking.SetLobbyMemberData(LobbyID, RoomParams.MEMBER_STATE_KEY, ((int)GameReadyState.Preparing).ToString());
     }
 }
