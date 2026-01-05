@@ -16,9 +16,6 @@ public class UnitPresenter: MonoBehaviour
 
     private C_MapManager _mapManager;
 
-    [SerializeField]
-    public M_Tower _playerTower;
-
     public CapsuleCollider2D Collider;
 
     private UnitStateMachine _stateMachine;
@@ -60,8 +57,7 @@ public class UnitPresenter: MonoBehaviour
 
         //敵のプレヤーを取得して記録する
         BindEnemyPlayer();
-        _playerTower = Model.EnemyPlayer.GetM_Tower();
-        _playerTower.OnPlayerDeath += OnPlayerDeathNotify;
+        M_Tower.OnPlayerDeath += OnPlayerDeathNotify;
 
         Model.ClearTargets();
         Model.SetPlayerInRange(false);
@@ -193,17 +189,18 @@ public class UnitPresenter: MonoBehaviour
     private void OnPlayerDeathNotify(string tag)
     {
         Log($"{tag} died and notified this Unit", LogType.Warning);
-        if (Model.PlayerSide != tag)
+        if (Model?.PlayerSide != tag)
         {
-            Log($"{Model.PlayerSide} unit wants to go to VictoryState", LogType.Warning);
-            _stateMachine.TrySetState(new VictoryState(Model, this));
+            Log($"{Model?.PlayerSide} unit wants to go to VictoryState", LogType.Warning);
+            _stateMachine?.TrySetState(new VictoryState(Model, this));
             return;
         }
         else
         {
-            Log($"{Model.PlayerSide} unit wants to go to DefeatState", LogType.Warning);
-            _stateMachine.TrySetState(new DefeatState(Model, this));
+            Log($"{Model?.PlayerSide} unit wants to go to DefeatState", LogType.Warning);
+            _stateMachine?.TrySetState(new DefeatState(Model, this));
         }
+        _IsGameFinished = true;
     }
 
     #endregion
@@ -234,6 +231,11 @@ public class UnitPresenter: MonoBehaviour
     {
         if (EnteringState == null) return;
 
+        if(_IsGameFinished)
+        {
+
+        }
+
         if(EnteringState is DeadState)
         {
 
@@ -243,9 +245,12 @@ public class UnitPresenter: MonoBehaviour
     }
     //=====================================================================================================
     #region 更新 - Update
+    private bool _IsGameFinished = false;
+
     // Update is called once per frame
     void Update()
     {
+    //    if(_IsGameFinished) return;
         Model?.Tick(this);
         _stateMachine?.Tick(Time.deltaTime);
      //   ShowRange(true);
@@ -253,6 +258,7 @@ public class UnitPresenter: MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_IsGameFinished) return;
         _stateMachine?.FixedTick(Time.fixedDeltaTime);
     }
 
@@ -364,22 +370,30 @@ public class UnitPresenter: MonoBehaviour
     public void ReceiveHeal(float amount)
     {
         Model?.SetHealth(Model.Health + amount);
-        View?.PlayAttack();
+        if (View == null) return;
+        View.ResetAllAnimations();
+        View.PlayAttack();
     //    View?.PlayHeal();
     }
     public void PerformDeath()
     {
-        View?.PlayDeath(true);
+        if (View == null) return;
+        View.ResetAllAnimations();
+        View.PlayDeath(true);
     }
 
     public void PerformVictoryAnimation()
     {
-        View?.PlayVictoryDance(true);
+        if (View == null) return;
+        View.ResetAllAnimations();
+        View.PlayVictoryDance(true);
     }
 
     public void PerformDefeatAnimation()
     {
-        View?.PlayDefeatAnimation(true);
+        if (View == null) return;
+        View.ResetAllAnimations();
+        View.PlayDefeatAnimation(true);
     }
 
     #endregion
