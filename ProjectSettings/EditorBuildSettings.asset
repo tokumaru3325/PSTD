@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/WuBranch/Scenes/Room.unity
     guid: 5fc17b520c2c0cc4d9dfcb4a57948d4d
   - enabled: 1
+    path: Assets/Prinz/Scene/GameCopy.unity
+    guid: d0fe92fa40187934f9f9799ed8ab1bd1
+  - enabled: 0
     path: Assets/WuBranch/Scenes/Game.unity
     guid: 2af4bca664b206844a17d6ca0c9125a3
   - enabled: 1
