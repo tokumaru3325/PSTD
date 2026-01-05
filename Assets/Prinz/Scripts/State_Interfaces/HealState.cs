@@ -18,10 +18,11 @@ public class HealState : IUnitState
         _me.Log($"Enter HealState {_mymodel.PlayerSide}", LogType.Warning);
 
         _me.OnEnterState(this);
-        _target = _mymodel?.GetPrimaryTarget();
+    //    _target = _mymodel?.GetPrimaryTarget();
     }
     public void OnExit()
     {
+       _me.View?.StopAttack();
     }
 
     public IUnitState OnUpdate(float dt)
@@ -33,19 +34,14 @@ public class HealState : IUnitState
             return new IdleState(_mymodel, _me);
         }
         ////
-    //    _target = _mymodel?.GetPrimaryTarget();
+        //    _target = _mymodel?.GetPrimaryTarget();
         if (_target == null)
         {
-            if (_mymodel.IsPlayerInRange == false)
-            {
-                //    Debug.LogError("Target is null or dead");
-                return new IdleState(_mymodel, _me);
-            }
+            //    Debug.LogError("Target is null or dead");
+            return new IdleState(_mymodel, _me);
         }
-        else 
-        {
-            _me.PerformHealSpell(_target, dt);
-        }
+
+        _me.PerformHealSpell(_target, dt);
 
         return null;
     }

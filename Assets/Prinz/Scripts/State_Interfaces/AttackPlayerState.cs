@@ -19,22 +19,19 @@ public class AttackPlayerState : IUnitState
     }
     public void OnExit()
     {
-        //   _presenter.View.StopAttack();
+        _me.View?.StopAttack();
     }
 
     public IUnitState OnUpdate(float dt)
     {
         // Enemy is too far → go back to idle
-        if (_me.IsValidTargetExist() == false)
+        if (_mymodel.IsPlayerInRange == false || _mymodel.HasTargetInRange())
         {
             //    Debug.Log("Target is too far");
             return new IdleState(_mymodel, _me);
         }
 
-        if (_mymodel.IsPlayerInRange == true && _mymodel.HasTargetInRange() == false)
-        {
-            _me.PerformPlayerAttack(dt);
-        }
+        _me.PerformPlayerAttack(dt);
 
         return null;
     }

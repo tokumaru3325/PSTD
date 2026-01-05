@@ -17,7 +17,6 @@ public class DeadState : IUnitState
      //   Debug.LogWarning($"Enter DeadState {_model.PlayerSide}");
         _me.OnEnterState(this);
         _me.PerformDeath();
-     
     }
     public void OnExit()
     {
