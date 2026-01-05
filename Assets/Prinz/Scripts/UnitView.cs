@@ -1,9 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class UnitView : MonoBehaviour
 {
     public UnitPresenter presenter;
+    [SerializeField] private GameObject _unitSprite;
+    private SpriteRenderer _unitSpriteRenderer;
     public Transform AttackRangeTransform { get; private set; }
     public Collider2D AttackRangeCollider { get; private set; }
     public SpriteRenderer AttackRangeSprite { get; private set; }
@@ -15,7 +19,7 @@ public class UnitView : MonoBehaviour
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void StopAttack() => Animator.SetTrigger("StopAttack");
-    public void PlayHeal() => Animator.SetTrigger("Heal");
+//    public void PlayHeal() => Animator.SetTrigger("Heal");
     public void PlayMove(bool move) => Animator.SetBool("Move", move);
     public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
     public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
@@ -26,12 +30,21 @@ public class UnitView : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        
     }
 
     private void Awake()
     {
     //    InitializeView();
+    }
+
+    public void ResetAllAnimations()
+    {
+        StopAttack();
+        PlayDeath(false);
+        PlayMove(false);
+        PlayVictoryDance(false);
+        PlayDefeatAnimation(false);
     }
 
     public void UpdateHealth(float hp)
@@ -56,7 +69,10 @@ public class UnitView : MonoBehaviour
     public void InitializeView()
     {
         presenter = GetComponent<UnitPresenter>();
-        Animator = GetComponent<Animator>();
+    //    Animator = GetComponent<Animator>();
+
+        RandomizeSpriteOffset();
+        _unitSpriteRenderer = _unitSprite.GetComponent<SpriteRenderer>();
 
         AttackRangeTransform = transform.Find("AttackRange");
         var DataType = presenter.Model?.GetDataType();
@@ -73,13 +89,14 @@ public class UnitView : MonoBehaviour
         AttackRangeSprite = AttackRangeTransform.GetComponent<SpriteRenderer>();
 
         AttackRangeSprite.color = Color.lightGreen;
+
         _healthGauge.ShowGauge();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        UpdateOrderInLayer();
     }
 
     public void OnEnterRange(Collider2D other)
@@ -96,6 +113,21 @@ public class UnitView : MonoBehaviour
     //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
         UpdateAttackRangeSpriteColor();
         presenter.OnExitRange(other);
+    }
+
+    private void UpdateOrderInLayer()
+    {
+        float yPosition = _unitSprite.transform.position.y * 100.0f + transform.position.y;
+        _unitSpriteRenderer.sortingOrder = 100 - (int)(yPosition);
+    }
+
+    public void RandomizeSpriteOffset()
+    {
+        float offsetX = Random.Range(-0.2f, 0.2f);
+        float offsetY = Random.Range(-0.2f, 0.2f);
+        Vector3 spritePos = new Vector3(offsetX, offsetY, 0f);
+
+        _unitSprite.transform.Translate(spritePos);
     }
 
     public void UpdateAttackRangeSpriteColor()
