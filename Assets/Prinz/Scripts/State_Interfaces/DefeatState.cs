@@ -13,18 +13,16 @@ public class DefeatState : IUnitState
 
     public void OnEnter()
     {
-        //   Debug.LogWarning($"Enter DeadState {_model.PlayerSide}");
         _me.OnEnterState(this);
         _me.PerformDefeatAnimation();
     }
     public void OnExit()
     {
-        //    Debug.LogWarning("!!!!!!!!!!!!!!!!EXIT DeadState");
+
     }
 
     public IUnitState OnUpdate(float dt)
     {
-
         return null;
     }
 

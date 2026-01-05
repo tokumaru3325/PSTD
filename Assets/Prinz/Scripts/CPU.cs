@@ -43,17 +43,30 @@ public class CPU : MonoBehaviour
 
     private float _spawnTimer = 0;
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _CPU = GameObject.FindGameObjectWithTag(_CPUTag).GetComponent<Player>();
         _soloPlayer = GameObject.FindGameObjectWithTag(_soloPlayerTag).GetComponent<Player>();
+        SubscribeToOnPlayerDeath();
         Initialize();
+    }
+
+    private void SubscribeToOnPlayerDeath()
+    {
+        M_Tower.OnPlayerDeath += OnGameFinished;
+    }
+    private bool _IsGameFinished = false;
+    private void OnGameFinished(string deadplayer)
+    {
+        _IsGameFinished = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_IsGameFinished) return;
         _spawnTimer += Time.deltaTime;
 
         if( _spawnTimer > _spawnCoolDown )

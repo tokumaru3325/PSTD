@@ -71,7 +71,7 @@ public abstract class UnitModel
 
     public event Action<Vector3, Vector3> OnDirectionChanged;
 
-    public event Action<UnitPresenter> OnUnitSpawn;
+    public event Action<UnitPresenter> OnUnitSpawn; //change to static ?
     public abstract void Tick(UnitPresenter presenter);
 
     public abstract void BasicAttack(UnitPresenter presenter, float dt);

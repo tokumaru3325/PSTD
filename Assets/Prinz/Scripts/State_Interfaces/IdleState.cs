@@ -51,7 +51,7 @@ public class IdleState : IUnitState
 
         if(_me.IsValidTargetExist() == false)
         {
-            _me.Model.ClearTargets();
+        //    _me.Model.ClearTargets();
             return new MoveState(_mymodel, _me);
         }
 

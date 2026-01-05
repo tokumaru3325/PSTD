@@ -30,7 +30,7 @@ public class MageModel : UnitModel
                 {
                     if (t.Model.IsBadlyWounded)
                     {
-                        Owner.Log("Why do you even return this", LogType.Error);
+                    //    Owner.Log("Why do you even return this", LogType.Error);
                         return t;
                     }
                 }
@@ -95,7 +95,7 @@ public class MageModel : UnitModel
             Owner.View?.StopAttack();
             attackTimer = 0f;
             float damage = TotalAttackPower;
-            EnemyPlayer.DecreaseHP(damage);
+            EnemyPlayer?.DecreaseHP(damage);
         }
     }
 
@@ -117,7 +117,7 @@ public class MageModel : UnitModel
             Owner.View?.StopAttack();
             HealSpeed = 0f;
             float heal = HealPower;
-            target.ReceiveHeal(heal);
+            target?.ReceiveHeal(heal);
         }
     }
 }

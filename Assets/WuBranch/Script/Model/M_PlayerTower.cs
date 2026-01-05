@@ -21,7 +21,7 @@ public class M_Tower
 
     //[2025/12/23] プリンス START
     public string _playerTag { get; private set; }
-    public event Action<string> OnPlayerDeath;
+    public static Action<string> OnPlayerDeath;
     //[2025/12/23] プリンス END
 
     public M_Tower(float maxHP)
