@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class KnightAttackRange : MonoBehaviour
+public class AttackRange : MonoBehaviour
 {
     public UnitView View { get; private set; }
 

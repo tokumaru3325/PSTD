@@ -20,11 +20,11 @@ public class AttackState : IUnitState
     {
         _me.Log($"Enter AttackState {_mymodel.PlayerSide}", LogType.Warning);
         _me.OnEnterState(this);
-        _target = _mymodel?.GetPrimaryTarget();
+    //    _target = _mymodel?.GetPrimaryTarget();
     }
     public void OnExit()
     {
-
+        _me.View?.StopAttack();
     }
 
     public IUnitState OnUpdate(float dt)

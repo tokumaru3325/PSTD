@@ -33,28 +33,14 @@ public class MoveState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-
         return null;
     }
 
     public IUnitState OnFixedUpdate(float fdt)
     {
-        DebugShowRoute();
+    //    DebugShowRoute();
 
         Move(_mymodel.TotalMoveSpeed, _mymodel.MoveDirection, fdt);
-
-/*        if (_mymodel.HasTargetInRange() ) //ターゲットがいる場合
-        {
-            var target = _mymodel.GetPrimaryTarget();
-            if (_me.IsSameTeamAs(target))
-            {
-                return new HealState(_mymodel, _me, target);
-            }
-            else
-            {
-                return new AttackState(_mymodel, _me, target);
-            }
-        }*/
 
         if(_me.IsValidTargetExist())
         {
@@ -64,7 +50,7 @@ public class MoveState : IUnitState
         return null;
     }
 
-    private void DebugShowRoute()
+/*    private void DebugShowRoute()
     {
         for (int index = 0; index < _mymodel.Route.Count; index++)
         {
@@ -74,7 +60,7 @@ public class MoveState : IUnitState
             Vector3 pos = _mapManager.ConvertToUnityPos(_mymodel.Route[index]);
             Debug.DrawLine(pos + Vector3.left, pos - Vector3.left, txtColor, 100f, false);
         }
-    }
+    }*/
 
     public void Move(float movespeed, Vector3 direction, float dt)
     {

@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    [SerializeField] private float _speed;
+    private Vector3 _target;
+    private Vector3 _position;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,6 +14,18 @@ public class Arrow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Move();
+    }
+
+    public void Initialize(Vector3 position, Vector3 enemyposition)
+    {
+        _position = position;
+        _target = enemyposition;
+    }
+
+    private void Move()
+    {
+        float step = _speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(_position, _target, step);
     }
 }
