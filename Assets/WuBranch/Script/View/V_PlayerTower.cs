@@ -71,18 +71,6 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            HandleDamage(10f);
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            HandleDamage(10f);
-        }
     }
 
     /// <summary>
@@ -108,11 +96,8 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     /// ダメージ処理
     /// </summary>
     /// <param name="Damage"></param>
-    private void HandleDamage(float Damage)
+    public void HandleDamageEffect()
     {
-        // タワーにダメージを与える
-        _playerController.DecreaseHP(Damage);
-
         // エフェクト
         _damageFlash.TriggerFlash();
         _uiShake.Shake();

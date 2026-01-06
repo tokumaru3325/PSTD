@@ -31,6 +31,10 @@ public class V_HealthGauge : MonoBehaviour
         _burnImage.fillAmount = _currentHealthRate;
     }
 
+    /// <summary>
+    /// 体力を更新(パーセント、0～1まで)
+    /// </summary>
+    /// <param name="targetRate">体力パーセント</param>
     public void SetGauge(float targetRate)
     {
         _currentHealthRate = targetRate;
@@ -40,12 +44,18 @@ public class V_HealthGauge : MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// ケージを非表示
+    /// </summary>
     public void HideGauge()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
         rectTransform.DOSizeDelta(new Vector2(-160, -20), 0.5f).SetEase(Ease.OutBack);
     }
 
+    /// <summary>
+    /// ケージを表示
+    /// </summary>
     public void ShowGauge()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();

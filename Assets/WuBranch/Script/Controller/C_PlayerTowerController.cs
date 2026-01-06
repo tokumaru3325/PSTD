@@ -50,7 +50,13 @@ public class C_PlayerTowerController : MonoBehaviour
     /// <param name="damage">ダメージ量</param>
     public void DecreaseHP(float damage)
     {
+        if (_playerModel.HP <= 0)
+            return;
+
         _playerModel.SetHP(_playerModel.HP - damage);
+
+        if(_playerView)
+            _playerView.HandleDamageEffect();
     }
 
     /// <summary>
@@ -68,7 +74,8 @@ public class C_PlayerTowerController : MonoBehaviour
     /// <param name="hp"></param>
     private void OnUpdateHP(float hp)
     {
-        _playerView.UpdateHP(hp, Max_HP);
+        if (_playerView)
+            _playerView.UpdateHP(hp, Max_HP);
     }
 
     /// <summary>

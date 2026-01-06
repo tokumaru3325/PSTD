@@ -23,7 +23,7 @@ public class C_MapManager : MonoBehaviour
     //デバッグ用
     public bool IsPathVisible { get; private set; }
 
-    async UniTaskVoid Awake()
+    void Awake()
     {
         Map = new M_Map();
         // Application.streamingAssetsPath はAssets下のStreamingAssetsフォルダを指す
@@ -31,7 +31,7 @@ public class C_MapManager : MonoBehaviour
         // Path.Combine は、2番目の引数が / や \ で始まると、それを「絶対パス（またはルートからのパス）」とみなしてしまい、1番目の引数を無視します。
         string path = Path.Combine(Application.streamingAssetsPath, "MapData/Stage1.csv");
         // (注意: 実行前にこのパスにファイルを配置しておく必要があります)
-        ReadMap(path);
+        _ = ReadMap(path);
     }
 
     void Start()

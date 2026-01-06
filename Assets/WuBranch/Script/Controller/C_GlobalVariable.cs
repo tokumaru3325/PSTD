@@ -1,3 +1,4 @@
+using Steamworks;
 using UnityEngine;
 
 /// <summary>
@@ -23,27 +24,63 @@ public class C_GlobalVariable : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
     }
 
     /// <summary>
-    /// マルチの役割を設定
+    /// 部屋の役割を設定
     /// </summary>
     /// <param name="role">役割</param>
-    public void SetMultiRole(MultiRoleType role)
+    public void SetRoomRole(MultiRoleType role)
     {
         _datas.SetRole(role);
     }
 
     /// <summary>
-    /// ゲームモードをゲット
+    /// 部屋の役割を取得
     /// </summary>
-    /// <returns></returns>
-    public MultiRoleType GetMultiRole()
+    /// <returns>役割</returns>
+    public MultiRoleType GetRoomRole()
     {
         return _datas.MultiRole;
+    }
+
+    /// <summary>
+    /// プレイヤーの自身の名前を設定
+    /// </summary>
+    /// <param name="name">名前</param>
+    public void SetMyName(string name)
+    {
+        _datas.SetMyName(name);
+    }
+
+    /// <summary>
+    /// プレイヤーの自身の名前を取得
+    /// </summary>
+    /// <returns>名前</returns>
+    public string GetMyName()
+    {
+        return _datas.MyName;
+    }
+
+    /// <summary>
+    /// ルームIDを設定
+    /// </summary>
+    /// <param name="ID">ルームID</param>
+    public void SetRoomID(CSteamID ID)
+    {
+        _datas.SetRoomID(ID);
+    }
+
+    /// <summary>
+    /// ルームIDを取得
+    /// </summary>
+    /// <returns>ルームID</returns>
+    public CSteamID GetRoomID()
+    {
+        return _datas.RoomID;
     }
 }
