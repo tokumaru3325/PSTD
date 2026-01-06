@@ -33,14 +33,30 @@ public class V_Room : MonoBehaviour
     [SerializeField]
     private V_RoomPlayer _clientPlayer;
 
+    [SerializeField]
+    private Button _startBtn;
+
     /// <summary>
     /// コントローラ
     /// </summary>
     private C_Room _myController;
 
+    /// <summary>
+    /// 共通変数
+    /// </summary>
+    private C_GlobalVariable _globalVariable;
+
     void Awake()
     {
         _myController = GetComponent<C_Room>();
+        _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
+        if (_globalVariable && _startBtn)
+        {
+            if (_globalVariable.GetRoomRole() == MultiRoleType.Host)
+                _startBtn.gameObject.SetActive(true);
+            else
+                _startBtn.gameObject.SetActive(false);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -48,10 +64,13 @@ public class V_Room : MonoBehaviour
     {
         if (_backBtn)
             _backBtn.onClick.AddListener(BackToSelectMode);
+        if (_startBtn)
+            _startBtn.onClick.AddListener(StartGame);
 
         _myController.OnLobbyUpdated += UpdatedRoom;
         _myController.OnMemberChanged += UpdatePlayerName;
         _myController.OnMemberUpdated += UpdatePlayerInfo;
+        _myController.OnUpdateStartState += UpdateStartState;
     }
 
     /// <summary>
@@ -60,6 +79,14 @@ public class V_Room : MonoBehaviour
     public void BackToSelectMode()
     {
         _myController.LeaveRoom();
+    }
+
+    /// <summary>
+    /// ゲームスタート
+    /// </summary>
+    public void StartGame()
+    {
+        _myController.StartGame();
     }
 
     /// <summary>
@@ -113,6 +140,18 @@ public class V_Room : MonoBehaviour
         {
             player.SetCastleImg(data.CastleIndex);
             player.SetState(data.State);
+        }
+    }
+
+    /// <summary>
+    /// スタートボタンの状態を更新
+    /// </summary>
+    /// <param name="state">状態、true: インタラクティブ可能,false: インタラクティブ不可能</param>
+    private void UpdateStartState(bool state)
+    {
+        if (_startBtn)
+        {
+            _startBtn.interactable = state;
         }
     }
 }

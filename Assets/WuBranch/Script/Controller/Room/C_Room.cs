@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Steamworks;
+using Unity.Mathematics;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,6 +24,11 @@ public class C_Room : MonoBehaviour
     /// メンバが入室か退室の通知
     /// </summary>
     public Action<CSteamID, string> OnMemberChanged;
+
+    /// <summary>
+    /// スタート状態の通知
+    /// </summary>
+    public Action<bool> OnUpdateStartState;
 
     /// <summary>
     /// 部屋内いるプレイヤ全員の役割
@@ -55,11 +62,17 @@ public class C_Room : MonoBehaviour
     /// </summary>
     private List<CSteamID> _needGetName;
 
+    /// <summary>
+    /// 準備記録
+    /// </summary>
+    private Dictionary<CSteamID, bool> _readyRecords;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         _needGetName = new List<CSteamID>();
         RoleMap = new Dictionary<CSteamID, MultiRoleType>();
+        _readyRecords = new Dictionary<CSteamID, bool>();
         // 初期化するためのデータが用意したか
         bool bInitResult = false;
         _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
@@ -83,7 +96,7 @@ public class C_Room : MonoBehaviour
         {
             _onLobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnLobbyUpdate);
             _onLobbyChatUpdate = Callback<LobbyChatUpdate_t>.Create(OnLobbyChatUpdate);
-            InitRoleMap();
+            InitData();
             InitRoom();
         }
     }
@@ -136,9 +149,10 @@ public class C_Room : MonoBehaviour
         }
         else if (callbackData.m_rgfChatMemberStateChange == (uint)EChatMemberStateChange.k_EChatMemberStateChangeLeft)
         {
-            // 退室
+            // 自分以外のメンバーが退室
             NotifyMemberChange(changedPlayer, "");
             M_RoomPlayerData data = new() { CastleIndex = CastleType.Null, State = GameReadyState.Null };
+            UpdateMemberReady(changedPlayer, data.State);
             NotifyMemberUpdate(changedPlayer, data);
             // 役割マッから削除
             if (RoleMap.ContainsKey(changedPlayer))
@@ -147,13 +161,14 @@ public class C_Room : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤ全員の役割を初期化
+    /// データを初期化(プレイヤ全員の役割、準備記録)
     /// </summary>
-    private void InitRoleMap()
+    private void InitData()
     {
         // ホスト
         CSteamID owner = SteamMatchmaking.GetLobbyOwner(_roomID);
         RoleMap.Add(owner, MultiRoleType.Host);
+        _readyRecords.Add(owner, false);
         // クライアント
         int memberNums = SteamMatchmaking.GetNumLobbyMembers(_roomID);
         for (int index = 0; index < memberNums; index++)
@@ -164,6 +179,7 @@ public class C_Room : MonoBehaviour
                 continue;
 
             RoleMap.Add(player, MultiRoleType.Client);
+            _readyRecords.Add(player, false);
         }
     }
 
@@ -195,19 +211,6 @@ public class C_Room : MonoBehaviour
             //}
         }
         //}
-    }
-
-    /// <summary>
-    /// 自身の情報を初期化
-    /// </summary>
-    private void InitSelfInfo(CSteamID myID)
-    {
-        M_RoomPlayerData data = new() { CastleIndex = CastleType.Castle1, State = GameReadyState.Preparing };
-        NotifyMemberChange(myID, _globalVariable.GetMyName());
-        NotifyMemberUpdate(myID, data);
-        // SteamMatchmaking.SetLobbyMemberData(_ID, RoomParams.MEMBER_NAME_KEY, _globalVariable.GetMyName());
-        // SteamMatchmaking.SetLobbyMemberData(_ID, RoomParams.MEMBER_CASTLE_KEY, ((int)CastleType.Castle1).ToString());
-        // SteamMatchmaking.SetLobbyMemberData(_ID, RoomParams.MEMBER_STATE_KEY, ((int)GameReadyState.Preparing).ToString());
     }
 
     /// <summary>
@@ -248,6 +251,8 @@ public class C_Room : MonoBehaviour
         // 状態の更新
         string stateString = SteamMatchmaking.GetLobbyMemberData(lobbyID, memberID, RoomParams.MEMBER_STATE_KEY);
         data.State = (GameReadyState)int.Parse(stateString);
+        // 状態更新
+        UpdateMemberReady(memberID, data.State);
         // 通知
         NotifyMemberUpdate(memberID, data);
     }
@@ -304,5 +309,61 @@ public class C_Room : MonoBehaviour
     {
         SteamMatchmaking.LeaveLobby(_roomID);
         SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
+    }
+
+    /// <summary>
+    /// 状態更新
+    /// </summary>
+    /// <param name="memberID">メンバID</param>
+    /// <param name="state">状態</param>
+    private void UpdateMemberReady(CSteamID memberID, GameReadyState state)
+    {
+        if (_readyRecords.ContainsKey(memberID))
+        {
+            if (state == GameReadyState.Null)
+                _readyRecords.Remove(memberID);
+            else
+                _readyRecords[memberID] = state == GameReadyState.Ready;
+
+            // 人数は1人以上
+            if (_readyRecords.Count > 1)
+            {
+                NotifyStartState(CheckAllReady());
+            }
+            else
+                NotifyStartState(false);
+        }
+        else
+            Debug.LogError("Got someone's state that who is not in record");
+    }
+
+    /// <summary>
+    /// 全員準備完了か
+    /// </summary>
+    /// <returns>true: はい、false: いいえ</returns>
+    private bool CheckAllReady()
+    {
+        return _readyRecords.All(_ => _.Value);
+    }
+
+    /// <summary>
+    /// スタート状態を通知する
+    /// </summary>
+    /// <param name="result">状態</param>
+    private void NotifyStartState(bool result)
+    {
+        OnUpdateStartState?.Invoke(result);
+    }
+
+    /// <summary>
+    /// ゲームスタート
+    /// </summary>
+    public void StartGame()
+    {
+        if (CheckAllReady())
+        {
+            // マルチのゲームシーンに行きます
+            NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        }
     }
 }
