@@ -65,7 +65,6 @@ public class C_Room : MonoBehaviour
         _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
         if (_globalVariable)
         {
-            MultiRoleType myRole = _globalVariable.GetRoomRole();
             _roomID = _globalVariable.GetRoomID();
             //
             if (_roomID != CSteamID.Nil)
@@ -296,5 +295,14 @@ public class C_Room : MonoBehaviour
     private void NotifyRoomUpdate(string name)
     {
         OnLobbyUpdated?.Invoke(name);
+    }
+
+    /// <summary>
+    /// 退室
+    /// </summary>
+    public void LeaveRoom()
+    {
+        SteamMatchmaking.LeaveLobby(_roomID);
+        SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
 }

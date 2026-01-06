@@ -59,7 +59,7 @@ public class V_Room : MonoBehaviour
     /// </summary>
     public void BackToSelectMode()
     {
-        NetworkManager.Singleton.SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
+        _myController.LeaveRoom();
     }
 
     /// <summary>
