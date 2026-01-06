@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Steamworks;
 
 public class V_PwdDialogue : MonoBehaviour
 {
@@ -17,9 +18,21 @@ public class V_PwdDialogue : MonoBehaviour
     private TextMeshProUGUI _errMsgTxt;
 
     /// <summary>
-    /// 呼び出し元のコントローラー
+    /// 呼び出し元の部屋ID
     /// </summary>
-    private C_RoomFront _callerController;
+    private CSteamID _roomID;
+
+    /// <summary>
+    /// 部屋管理者
+    /// </summary>
+    private C_RoomManager _roomManager;
+
+    void Awake()
+    {
+        _roomManager = FindFirstObjectByType<C_RoomManager>();
+        if (_roomManager)
+            _roomManager.OnJoinResultRecieved += RecieveJoinResult;
+    }
 
     void Start()
     {
@@ -30,10 +43,9 @@ public class V_PwdDialogue : MonoBehaviour
     /// 開く
     /// </summary>
     /// <param name="lobbyID">クリックしたロビーのID</param>
-    public void Open(C_RoomFront caller)
+    public void Open(CSteamID roomID)
     {
-        _callerController = caller;
-        _callerController.OnJoinResultRecieved += RecieveJoinResult;
+        _roomID = roomID;
         gameObject.SetActive(true);
     }
 
@@ -42,8 +54,6 @@ public class V_PwdDialogue : MonoBehaviour
     /// </summary>
     private void Close()
     {
-        if (_callerController)
-            _callerController.OnJoinResultRecieved -= RecieveJoinResult;
         _pwdInput.text = "";
         _errMsgTxt.text = "";
         gameObject.SetActive(false);
@@ -51,8 +61,8 @@ public class V_PwdDialogue : MonoBehaviour
 
     public void Confirm()
     {
-        if (_callerController)
-            _callerController.JoinLobby(_pwdInput.text);
+        if (_roomManager)
+            _roomManager.JoinLobby(_roomID, _pwdInput.text);
     }
 
     public void Cancel()

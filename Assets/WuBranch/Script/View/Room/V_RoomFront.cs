@@ -60,9 +60,14 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private V_PwdDialogue _pwdInputPanel;
 
     /// <summary>
-    /// 部屋をコントロール物
+    /// コントローラー
     /// </summary>
     private C_RoomFront _myController;
+
+    /// <summary>
+    /// 部屋管理者
+    /// </summary>
+    private C_RoomManager _roomManager;
 
     /// <summary>
     /// マウスが押した座標
@@ -77,6 +82,7 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         _myController = GetComponent<C_RoomFront>();
         _myController.OnInitedData += SetScreen;
         _pwdInputPanel = FindFirstObjectByType<V_PwdDialogue>(FindObjectsInactive.Include);
+        _roomManager = FindFirstObjectByType<C_RoomManager>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -103,7 +109,10 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (_myController.GetData().HavePwd)
                 OpenPwdInputPanel();
             else
-                _myController.JoinLobby();
+            {
+                if (_roomManager)
+                    _roomManager.JoinLobby(_myController.GetData().LobbyID);
+            }
         }
     }
 
@@ -126,7 +135,7 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (_pwdInputPanel)
         {
-            _pwdInputPanel.Open(_myController);
+            _pwdInputPanel.Open(_myController.GetData().LobbyID);
         }
     }
 }

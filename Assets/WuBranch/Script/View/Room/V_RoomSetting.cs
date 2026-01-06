@@ -17,10 +17,10 @@ public class V_RoomSetting : MonoBehaviour
     private Button _cancelBtn;
 
     /// <summary>
-    /// 部屋を作る人
+    /// 部屋管理者
     /// </summary>
     [SerializeField]
-    private C_RoomCreator _creator;
+    private C_RoomManager _roomManager;
 
     /// <summary>
     /// 部屋名の入力
@@ -60,7 +60,8 @@ public class V_RoomSetting : MonoBehaviour
             SetNameErrTxt("部屋名を入力してください");
             return;
         }
-        _creator.CreateLobby(_roomNameInput.text, _passwordInput.text);
+        if (_roomManager)
+            _roomManager.CreateLobby(_roomNameInput.text, _passwordInput.text);
         ClosePanel();
     }
 

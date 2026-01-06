@@ -1,15 +1,27 @@
-﻿using System.Text;
+using System;
+using System.Text;
+using Netcode.Transports;
 using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class C_RoomCreator : MonoBehaviour
+public class C_RoomManager : MonoBehaviour
 {
     /// <summary>
     /// ロビー作成コールバック
     /// </summary>
     private CallResult<LobbyCreated_t> _onLobbyCreated;
+
+    /// <summary>
+    /// 入室結果受信
+    /// </summary>
+    public Action<bool, string> OnJoinResultRecieved;
+
+    /// <summary>
+    /// ロビー入室コールバック
+    /// </summary>
+    private Callback<LobbyEnter_t> _lobbyEnter;
 
     /// <summary>
     /// 共通変数
@@ -23,7 +35,7 @@ public class C_RoomCreator : MonoBehaviour
 
     void Awake()
     {
-        if (FindObjectsByType<C_RoomCreator>(FindObjectsSortMode.None).Length > 1)
+        if (FindObjectsByType<C_RoomManager>(FindObjectsSortMode.None).Length > 1)
         {
             Destroy(this.gameObject);
             return;
@@ -39,12 +51,16 @@ public class C_RoomCreator : MonoBehaviour
         if (SteamManager.Initialized)
         {
             _onLobbyCreated = CallResult<LobbyCreated_t>.Create(OnLobbyCreated);
+            _lobbyEnter = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         }
+
         _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
+        if (!_globalVariable)
+            Debug.LogError("Didnot find GlobalVariable!");
     }
 
     /// <summary>
-    /// ロビー作成（ゲームをホスト）
+    /// ロビー作成（ホストになる）
     /// </summary>
     /// <param name="roomName">名前</param>
     /// <param name="pwd">パスワード</param>
@@ -172,11 +188,97 @@ public class C_RoomCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// 部屋情報をゲット
+    /// ロビーに参加
     /// </summary>
-    /// <returns></returns>
-    public M_RoomData GetRoomData()
+    /// <param name="password">パスワード</param>
+    public void JoinLobby(CSteamID lobbyID, string password = "")
     {
-        return _roomData;
+        if (password.Length > 0)
+        {
+            // パスワードの準備
+            byte[] passwordData = Encoding.UTF8.GetBytes(password);
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = passwordData;
+        }
+        // ロビーに参加
+        SteamMatchmaking.JoinLobby(lobbyID);
+    }
+
+    /// <summary>
+    /// ロビー入室コールバック用関数
+    /// </summary>
+    /// <param name="callback"></param>
+    private void OnLobbyEntered(LobbyEnter_t callback)
+    {
+        Debug.LogError($"On Lobby Entered");
+        //入室失敗時
+        EChatRoomEnterResponse response = (EChatRoomEnterResponse)callback.m_EChatRoomEnterResponse;
+        if (response != EChatRoomEnterResponse.k_EChatRoomEnterResponseSuccess)
+        {
+            OnJoinResultRecieved?.Invoke(false, ConvertErrResultToString(response));
+            return;
+        }
+
+        //ホストのSteamIDを取得
+        CSteamID steamID = new CSteamID(callback.m_ulSteamIDLobby);
+        string hostAddress = SteamMatchmaking.GetLobbyData(
+            steamID,
+            RoomParams.HOST_ADDRESS_KEY);
+
+        // ホストもここを通るのでクライアント接続しないように
+        // 同じPCでテストすると、ここをコメントアウトする
+        if (hostAddress == SteamUser.GetSteamID().ToString())
+            return;
+
+        _globalVariable.SetRoomID(steamID);
+        _globalVariable.SetRoomRole(MultiRoleType.Client);
+        InitMyInfo(steamID);
+
+        //Netcodeでクライアント接続
+        var stp = (SteamNetworkingSocketsTransport)NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        stp.ConnectToSteamID = ulong.Parse(hostAddress);
+
+        //ホストに接続
+        bool result = NetworkManager.Singleton.StartClient();
+        OnJoinResultRecieved?.Invoke(true, "");
+
+        //シーンを切り替え
+        SceneManager.LoadScene("Room", LoadSceneMode.Single);
+        //NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
+
+        //切断時
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+    }
+
+    /// <summary>
+    /// 参加結果を文字に変換
+    /// </summary>
+    /// <param name="result">参加結果</param>
+    /// <returns>参加結果文字列</returns>
+    private string ConvertErrResultToString(EChatRoomEnterResponse result)
+    {
+        switch (result)
+        {
+            case EChatRoomEnterResponse.k_EChatRoomEnterResponseDoesntExist:
+                return "ロビーが存在しません。";
+            case EChatRoomEnterResponse.k_EChatRoomEnterResponseFull:
+                return "ロビーが満員です。";
+            case EChatRoomEnterResponse.k_EChatRoomEnterResponseNotAllowed:
+                return "パスワードが違います。";
+            default:
+                return "予期しないエラーが発生しました。";
+        }
+    }
+
+    /// <summary>
+    /// クライアントが切断したとき
+    /// </summary>
+    private void OnClientDisconnect(ulong clientId)
+    {
+        //クライアント切断コールバック
+        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+        //ネットワークマネージャーを破棄（これで新しくNetworkManagerを作る（使う）ことができる）
+        NetworkManager.Singleton.Shutdown();
+        //メインシーンに戻る
+        SceneManager.LoadScene("RoomList");
     }
 }

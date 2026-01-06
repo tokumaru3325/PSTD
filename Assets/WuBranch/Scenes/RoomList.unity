@@ -3204,7 +3204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_RoomSetting
   _createBtn: {fileID: 495800329}
   _cancelBtn: {fileID: 1719197556}
-  _creator: {fileID: 1990040605}
+  _roomManager: {fileID: 1990040606}
   _roomNameInput: {fileID: 1206785951}
   _roomNameErrTxt: {fileID: 1434836341}
   _passwordInput: {fileID: 1712042757}
@@ -6385,7 +6385,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 790881661}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.5
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6714,7 +6714,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1990040604}
-  - component: {fileID: 1990040605}
+  - component: {fileID: 1990040606}
   m_Layer: 0
   m_Name: RoomCreator
   m_TagString: Untagged
@@ -6737,7 +6737,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1990040605
+--- !u!114 &1990040606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6746,9 +6746,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1990040603}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a673c34e074cb64281041b456e783cc, type: 3}
+  m_Script: {fileID: 11500000, guid: eeb7a0b4e55b47648b44cab688838843, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::C_RoomCreator
+  m_EditorClassIdentifier: Assembly-CSharp::C_RoomManager
 --- !u!1 &2017185702
 GameObject:
   m_ObjectHideFlags: 0
