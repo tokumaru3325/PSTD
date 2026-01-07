@@ -141,6 +141,7 @@ public class C_Room : MonoBehaviour
             // 参加
             // 役割マップに追加
             RoleMap.Add(changedPlayer, MultiRoleType.Client);
+            _readyRecords.Add(changedPlayer, false);
             // クライアントが入室するとき、クライアントが自身の情報を初期化するより、ホスト側が先にOnLobbyChatUpdateを呼ぶ可能性がある
             // そうなると、ずっとクライアントの名前が空白になるため、リストに記録して再び名前をゲットするようにした
             _needGetName.Add(changedPlayer);
@@ -307,8 +308,11 @@ public class C_Room : MonoBehaviour
     /// </summary>
     public void LeaveRoom()
     {
+        // steam上
         SteamMatchmaking.LeaveLobby(_roomID);
-        SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
+        // 自身のネットワーク
+        NetworkManager.Singleton.Shutdown();
+        NetworkManager.Singleton.SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
 
     /// <summary>
@@ -327,9 +331,7 @@ public class C_Room : MonoBehaviour
 
             // 人数は1人以上
             if (_readyRecords.Count > 1)
-            {
                 NotifyStartState(CheckAllReady());
-            }
             else
                 NotifyStartState(false);
         }
