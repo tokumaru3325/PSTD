@@ -241,6 +241,7 @@ public class UnitPresenter: MonoBehaviour
 
         }
 
+        UpdateDirection(Model.MoveDirection);
         View.UpdateAttackRangeSpriteColor();
     }
     //=====================================================================================================
@@ -276,6 +277,7 @@ public class UnitPresenter: MonoBehaviour
     private void PrepareDeath()
     {
      //   View.UpdateHealth(Model.Health / Model.MaxHealth);
+        Model.ClearTargets();
         Collider.enabled = false;
         View.EnableAttackRange(false);
     }
@@ -500,7 +502,7 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnExitRange(Collider2D other)
     {
-        if (Model.IsDead) return;
+    //    if (Model.IsDead) return;
         //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         //敵のプレヤーが範囲内から離れたら
         if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer)
