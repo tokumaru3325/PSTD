@@ -75,7 +75,6 @@ public class V_CastleViewer : MonoBehaviour
             _currentIndex = CastleType.Castle3;
         }
         _roomController.ChangeCastle(_currentIndex);
-        //UpdateCastle();
     }
 
     /// <summary>
@@ -89,7 +88,6 @@ public class V_CastleViewer : MonoBehaviour
             _currentIndex = CastleType.Castle1;
         }
         _roomController.ChangeCastle(_currentIndex);
-        //UpdateCastle();
     }
 
     /// <summary>
@@ -130,5 +128,23 @@ public class V_CastleViewer : MonoBehaviour
     {
         _preBtn.gameObject.SetActive(true);
         _nextBtn.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 準備状態により、ボタンの操作可能かどうかが変わる
+    /// </summary>
+    /// <param name="state">準備状態</param>
+    public void ChangeBtnInteractivity(GameReadyState state)
+    {
+        if (state == GameReadyState.Ready)
+        {
+            _preBtn.interactable = false;
+            _nextBtn.interactable = false;
+        }
+        else if (state == GameReadyState.Preparing)
+        {
+            _preBtn.interactable = true;
+            _nextBtn.interactable = true;
+        }
     }
 }
