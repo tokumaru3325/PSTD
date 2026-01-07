@@ -1,4 +1,5 @@
 using Steamworks;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
@@ -26,8 +27,22 @@ public class C_GlobalVariable : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            GameShutdown();
         }
+    }
+
+    /// <summary>
+    /// ゲームをシャットダウン
+    /// </summary>
+    private void GameShutdown()
+    {
+        // ネットワーク上の物も全部シャットダウン
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+        {
+            SteamMatchmaking.LeaveLobby(_datas.RoomID);
+            NetworkManager.Singleton.Shutdown();
+        }
+        Application.Quit();
     }
 
     /// <summary>
