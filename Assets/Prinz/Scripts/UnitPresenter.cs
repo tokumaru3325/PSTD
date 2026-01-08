@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +23,7 @@ public class UnitPresenter: MonoBehaviour
     [SerializeField]
     private DebugManager _debugManager;  //make it to singleton
 
-    public ObjectPoolTest Pool { get; private set; }
+    public UnitObjectPool Pool { get; private set; } //25.1.7 滝本海大 ObjectPoolTestからUnitObjectPoolに変更
 
 
     UnitData Data;
@@ -110,7 +110,7 @@ public class UnitPresenter: MonoBehaviour
         }
     }
 
-    public void SetPool(ObjectPoolTest pool)
+    public void SetPool(UnitObjectPool pool)
     {
         Pool = pool;
     }
@@ -213,7 +213,7 @@ public class UnitPresenter: MonoBehaviour
         Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
         Model.OnHealthChanged -= OnHealthChanged;
         Model.OnDirectionChanged -= OnDirectionChanged;
-    //    Model.OnUnitSpawn -= OnUnitSpawn;
+        //    Model.OnUnitSpawn -= OnUnitSpawn;
 
         Pool?.Release(this);
     }
