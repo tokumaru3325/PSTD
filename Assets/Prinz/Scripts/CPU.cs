@@ -15,12 +15,19 @@ public class CPU : MonoBehaviour
     private UnitData _archerUnit;
     private UnitData _mageUnit;
 
+    //26.1.7 滝本海大　start
+
+    //[SerializeField]
+    //public ObjectPoolTest KnightObjectPool;
+    //[SerializeField]
+    //public ObjectPoolTest ArcherObjectPool;
+    //[SerializeField]
+    //public ObjectPoolTest MageObjectPool;
+
     [SerializeField]
-    public ObjectPoolTest KnightObjectPool;
-    [SerializeField]
-    public ObjectPoolTest ArcherObjectPool;
-    [SerializeField]
-    public ObjectPoolTest MageObjectPool;
+    public UnitObjectPool UnitObjectPool;
+
+    //26.1.7 滝本海大　end
 
     private Player _CPU;
     private Player _soloPlayer;
@@ -90,9 +97,9 @@ public class CPU : MonoBehaviour
     }
     private void InitializeUnitData()
     {
-        _knightUnit = KnightObjectPool.UnitData;
-        _archerUnit = ArcherObjectPool.UnitData;
-        _mageUnit = MageObjectPool.UnitData;
+        _knightUnit = UnitObjectPool.KnightData;
+        _archerUnit = UnitObjectPool.ArcherData;
+        _mageUnit = UnitObjectPool.MageData;
     }
 
     private Vector3 GetSpawnPos(GameObject player)
@@ -124,14 +131,14 @@ public class CPU : MonoBehaviour
 
     private void CPUSpawnKnight()
     {
-        KnightObjectPool.GetObj(_CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag);
+        UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag);
     }
     private void CPUSpawnArcher()
     {
-        ArcherObjectPool.GetObj(_CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag);
+        UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag);
     }
     private void CPUSpawnMage()
     {
-        MageObjectPool.GetObj(_CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag);
+        UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag);
     }
 }
