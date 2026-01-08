@@ -62,8 +62,18 @@ public class UnitView : MonoBehaviour
     {
     //    Debug.LogWarning("Death animation ended");
     //    PlayDeath(false);
-        _healthGauge.HideGauge();
-        presenter.Release();
+        _healthGauge?.HideGauge();
+        presenter?.Release();
+    }
+
+    public void FaceRight()
+    {
+        presenter?.FaceRight();
+    }
+
+    public void FaceLeft()
+    {
+        presenter?.FaceLeft();
     }
 
     public void InitializeView()
