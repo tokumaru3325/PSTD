@@ -98,4 +98,28 @@ public class C_GlobalVariable : MonoBehaviour
     {
         return _datas.RoomID;
     }
+
+    /// <summary>
+    /// プレイヤーが選択した城のタイプを追加または更新
+    /// </summary>
+    /// <param name="playerID">プレイヤーID</param>
+    /// <param name="castleType">城のタイプ</param>
+    public void AddPlayerSelectedCastle(CSteamID playerID, CastleType castleType)
+    {
+        _datas.AddPlayerSelectedCastle(playerID, castleType);
+    }
+
+    /// <summary>
+    /// プレイヤーの選択した城のタイプを削除
+    /// </summary>
+    /// <param name="playerID">プレイヤーID</param>
+    /// <returns>城のタイプ</returns>
+    public CastleType GetPlayerCastle(CSteamID playerID)
+    {
+        if (!_datas.SelectedCastles.ContainsKey(playerID))
+        {
+            return CastleType.Null;
+        }
+        return _datas.SelectedCastles[playerID];
+    }
 }
