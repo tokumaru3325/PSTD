@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5855508591697857976}
   - component: {fileID: 7036576163333254547}
   m_Layer: 0
-  m_Name: PlayerTower1
+  m_Name: PlayerTower2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,11 +101,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_PlayerTower
   _towerStages:
-  - towerSprite: {fileID: 21300000, guid: f9264d9d583859646974245b585b06fd, type: 3}
+  - towerSprite: {fileID: 21300000, guid: 9f1e19f9a4e43e2498f2a47e2204e2e0, type: 3}
     healthThresholdPecent: 1
-  - towerSprite: {fileID: 21300000, guid: 01449ca71df29074795e4d977050ec35, type: 3}
+  - towerSprite: {fileID: 21300000, guid: f36c1095b8f67aa49adf1cb2f3885ba3, type: 3}
     healthThresholdPecent: 0.5
-  - towerSprite: {fileID: 21300000, guid: 2c9b4f75b27e8df4b9af6fe48d6def66, type: 3}
+  - towerSprite: {fileID: 21300000, guid: 90ca737fdc65509429472173c6a01557, type: 3}
     healthThresholdPecent: 0
   _playerController: {fileID: 1860676233158408536}
   _tower: {fileID: 1951261320476271373}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4167798642
+  GlobalObjectIdHash: 1454836057
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -708,7 +708,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 30
-  m_Sprite: {fileID: 21300000, guid: f9264d9d583859646974245b585b06fd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9f1e19f9a4e43e2498f2a47e2204e2e0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
