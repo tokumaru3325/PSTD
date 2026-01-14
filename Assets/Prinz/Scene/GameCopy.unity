@@ -19483,6 +19483,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnButton Knight 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4358865605911075184, guid: e42557626efeaec4eb989953e6491502, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4799648200961598001, guid: e42557626efeaec4eb989953e6491502, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
