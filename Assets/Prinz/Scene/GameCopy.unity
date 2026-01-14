@@ -164,10 +164,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1340633583}
-  objectPoolTest: {fileID: 407917817}
+  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
+  _unitType: 2
 --- !u!1 &18230236
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,10 +397,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 347814045}
-  objectPoolTest: {fileID: 1234037404}
+  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
+  _unitType: 1
 --- !u!4 &28402137
 Transform:
   m_ObjectHideFlags: 0
@@ -765,9 +767,7 @@ MonoBehaviour:
   KnightSpawner: {fileID: 1892872861}
   ArcherSpawner: {fileID: 28402135}
   MageSpawner: {fileID: 2071353528}
-  KnightObjectPool: {fileID: 1325767628}
-  ArcherObjectPool: {fileID: 1234037404}
-  MageObjectPool: {fileID: 1770270220}
+  UnitObjectPool: {fileID: 0}
   _CPUTag: Player2
   _soloPlayerTag: Player1
   _spawnCoolDown: 5
@@ -799,7 +799,7 @@ GameObject:
   - component: {fileID: 258524386}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -861,10 +861,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1746258612}
-  objectPoolTest: {fileID: 1275259321}
+  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
+  _unitType: 0
 --- !u!4 &325777658
 Transform:
   m_ObjectHideFlags: 0
@@ -1302,6 +1303,7 @@ MonoBehaviour:
     debugLogColliders: 0
   debugText: {fileID: 0}
   _mapManager: {fileID: 1084309508}
+  _PlayerTowerController: {fileID: 0}
   allAttackRanges: []
 --- !u!1 &407917816
 GameObject:
@@ -1319,7 +1321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &407917817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1332,9 +1334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 2447710678042578469, guid: 109610ebff528bd499d61dd9e4e72655, type: 3}
-  UnitData: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
-  BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
 --- !u!4 &407917818
 Transform:
   m_ObjectHideFlags: 0
@@ -1513,6 +1512,7 @@ Transform:
   - {fileID: 1407226765}
   - {fileID: 407917818}
   - {fileID: 1770270221}
+  - {fileID: 847823813}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &435596418
@@ -14760,7 +14760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &517087019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14773,9 +14773,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 2367091793331110442, guid: f0ad92acde2ae224789b6af09851b860, type: 3}
-  UnitData: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
-  BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
 --- !u!4 &517087020
 Transform:
   m_ObjectHideFlags: 0
@@ -16390,6 +16387,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 845719444}
   m_CullTransparentMesh: 1
+--- !u!1 &847823811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 847823813}
+  - component: {fileID: 847823812}
+  m_Layer: 0
+  m_Name: UnitObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &847823812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847823811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ea4673595fab4498e6fe829b6d2a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitObjectPool
+  _gameManager: {fileID: 258524386}
+  _debugManager: {fileID: 367282168}
+  _knightPrefab: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
+  _archerPrefab: {fileID: 2367091793331110442, guid: f0ad92acde2ae224789b6af09851b860, type: 3}
+  _magePrefab: {fileID: 2447710678042578469, guid: 109610ebff528bd499d61dd9e4e72655, type: 3}
+  KnightData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
+  ArcherData: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
+  MageData: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
+  BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
+--- !u!4 &847823813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847823811}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.39538, y: 0.37263, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 432052315}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &871263446
 GameObject:
   m_ObjectHideFlags: 0
@@ -17627,7 +17677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1234037404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17640,9 +17690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 2367091793331110442, guid: f0ad92acde2ae224789b6af09851b860, type: 3}
-  UnitData: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
-  BuffData: {fileID: 11400000, guid: 3e628caaa9ea9d140808b78edd0c5dea, type: 2}
 --- !u!4 &1234037405
 Transform:
   m_ObjectHideFlags: 0
@@ -18094,13 +18141,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1275259322}
   - component: {fileID: 1275259321}
+  - component: {fileID: 1275259323}
   m_Layer: 0
   m_Name: K1ObjectPoolTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1275259321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18113,9 +18161,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
-  UnitData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
-  BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
 --- !u!4 &1275259322
 Transform:
   m_ObjectHideFlags: 0
@@ -18131,6 +18176,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 432052315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1275259323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275259320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ea4673595fab4498e6fe829b6d2a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitObjectPool
+  _gameManager: {fileID: 0}
+  _debugManager: {fileID: 0}
+  _knightPrefab: {fileID: 0}
+  _archerPrefab: {fileID: 0}
+  _magePrefab: {fileID: 0}
+  KnightData: {fileID: 0}
+  ArcherData: {fileID: 0}
+  MageData: {fileID: 0}
+  BuffData: {fileID: 0}
 --- !u!1 &1319896982
 GameObject:
   m_ObjectHideFlags: 0
@@ -18192,7 +18258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1325767628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18205,9 +18271,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
-  UnitData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
-  BuffData: {fileID: 11400000, guid: 3e628caaa9ea9d140808b78edd0c5dea, type: 2}
 --- !u!4 &1325767629
 Transform:
   m_ObjectHideFlags: 0
@@ -18562,9 +18625,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 6781292948723307380, guid: 1d30240a23a3b564e876d4c82d8f9318, type: 3}
-  UnitData: {fileID: 0}
-  BuffData: {fileID: 0}
 --- !u!4 &1407226765
 Transform:
   m_ObjectHideFlags: 0
@@ -19636,7 +19696,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1770270220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19649,9 +19709,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 2447710678042578469, guid: 109610ebff528bd499d61dd9e4e72655, type: 3}
-  UnitData: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
-  BuffData: {fileID: 11400000, guid: 3e628caaa9ea9d140808b78edd0c5dea, type: 2}
 --- !u!4 &1770270221
 Transform:
   m_ObjectHideFlags: 0
@@ -20289,10 +20346,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 563820934}
-  objectPoolTest: {fileID: 1325767628}
+  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
+  _unitType: 0
 --- !u!4 &1892872863
 Transform:
   m_ObjectHideFlags: 0
@@ -22343,10 +22401,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1921021095}
-  objectPoolTest: {fileID: 517087019}
+  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
+  _unitType: 1
 --- !u!1 &1997931090
 GameObject:
   m_ObjectHideFlags: 0
@@ -24341,10 +24400,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 944368926}
-  objectPoolTest: {fileID: 1770270220}
+  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
+  _unitType: 2
 --- !u!1 &2137892356
 GameObject:
   m_ObjectHideFlags: 0
