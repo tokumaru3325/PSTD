@@ -316,14 +316,14 @@ public class ReelController : MonoBehaviour
                                 SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
                                 break;
                             case 1:
-                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL, slotResultC, slotResultR);
+                                if (koyakuNum >= 3) koyakuNum = 2;
+                                SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum); //(UnitID)koyakuNum
                                 break;
                             case 2:
                                 SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
                                 break;
 
                         }
-                        SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
                         SlotSceneManager.reelMoving = false;
                         // Debug.Log("reelRstop");
                     }
@@ -358,7 +358,7 @@ public class ReelController : MonoBehaviour
                         switch (slotType)
                         {
                             case 1:
-                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL,slotResultC,slotResultR);
+                                SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum);
                                 break;
                             case 2:
                                 SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);

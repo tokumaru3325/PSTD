@@ -471,7 +471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_Slot
   _playerTag: Player1
   _enemyTag: Player2
-  _slotSelect: 2
+  _slotSelect: 1
 --- !u!114 &34188368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19783,6 +19783,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1826451528}
   m_CullTransparentMesh: 1
+--- !u!1 &1843595824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1843595826}
+  - component: {fileID: 1843595825}
+  m_Layer: 0
+  m_Name: tokball
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1843595825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843595824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb562be976f8d2345bbaf7100cd5d830, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterSponerBySlot
+  _unit:
+  - {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
+  - {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
+  - {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
+  unitObjectPool: {fileID: 169043023}
+  spawnPosition: {x: 0, y: 0, z: 0}
+  _playerTag: Player1
+  _enemyTag: Player2
+--- !u!4 &1843595826
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843595824}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.3169, y: -5.81716, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1856881033
 GameObject:
   m_ObjectHideFlags: 0
@@ -19931,7 +19983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_Slot
   _playerTag: Player1
   _enemyTag: Player2
-  _slotSelect: 2
+  _slotSelect: 0
 --- !u!1 &1892872861
 GameObject:
   m_ObjectHideFlags: 0
@@ -25349,3 +25401,4 @@ SceneRoots:
   - {fileID: 367282167}
   - {fileID: 236772668}
   - {fileID: 2053071484}
+  - {fileID: 1843595826}
