@@ -7,8 +7,6 @@ public class VictoryState : IUnitState
     private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
 
-    private float timer;
-
     public VictoryState(UnitModel model, UnitPresenter presenter)
     {
         _mymodel = model;
@@ -17,9 +15,9 @@ public class VictoryState : IUnitState
 
     public void OnEnter()
     {
-        timer = UnityEngine.Random.Range(0.0f, 60.0f);
         _me.OnEnterState(this);
-    //    _me.PerformVictoryAnimation();
+
+        _me.PerformVictoryAnimation();
     }
     public void OnExit()
     {
@@ -28,24 +26,11 @@ public class VictoryState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-        if(timer < 0)
-            _me.PerformVictoryAnimation();
-
-        timer--;
         return null;
     }
 
     public IUnitState OnFixedUpdate(float fdt)
     {
         return null;
-    }
-
-    private IEnumerator Wait(float delay)
-    {
-        while (delay > 0)
-        {
-            timer--;
-        }
-        yield return null;
     }
 }

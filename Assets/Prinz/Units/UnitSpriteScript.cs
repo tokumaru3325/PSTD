@@ -18,7 +18,14 @@ public class UnitSpriteScript : MonoBehaviour
     {
         _view.OnDeathAnimationEnd();
     }
-
+    public void OnDefeatAnimationStart()
+    {
+        _view.OnDefeatAnimationStart();
+    }
+    public void OnDefeatAnimationEnd()
+    {
+        _view.OnDefeatAnimationEnd();
+    }
     public void FaceLeft()
     {
         _view.FaceLeft();

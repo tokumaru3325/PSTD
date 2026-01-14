@@ -66,6 +66,15 @@ public class UnitView : MonoBehaviour
         presenter?.Release();
     }
 
+    public void OnDefeatAnimationStart()
+    {
+        _healthGauge?.HideGauge();
+    }
+    public void OnDefeatAnimationEnd()
+    {
+        presenter?.FreezeState(true);
+    }
+
     public void FaceRight()
     {
         presenter?.FaceRight();
@@ -150,5 +159,12 @@ public class UnitView : MonoBehaviour
         //alpha変更
         c.a = 0.3f;
         AttackRangeSprite.color = c;
+    }
+
+    public void RenamePrefab(int serialNumber)
+    {
+        string currentName = gameObject.name;
+        string newName = currentName + $"{serialNumber}";
+        gameObject.name = newName;
     }
 }
