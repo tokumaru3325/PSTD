@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class VictoryState : IUnitState
@@ -14,6 +16,7 @@ public class VictoryState : IUnitState
     public void OnEnter()
     {
         _me.OnEnterState(this);
+
         _me.PerformVictoryAnimation();
     }
     public void OnExit()
@@ -23,7 +26,6 @@ public class VictoryState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-
         return null;
     }
 

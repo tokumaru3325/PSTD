@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using Newtonsoft.Json.Bson;
+using System.Threading;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -36,9 +37,24 @@ public class SpawnButton : MonoBehaviour
 
     const string SPAWN_TAG = "SpawnPos";
 
+    //[2026/01/13] START プリンス
+    private bool _isGameEnding = false;
+    private void OnGameEndingNotify(bool gameending, string deadplayertag)
+    {
+        _isGameEnding = gameending;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.GameEnding -= OnGameEndingNotify;
+    }
+    //[2026/01/13] END プリンス
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameManager.GameEnding += OnGameEndingNotify;  //[2026/01/13] プリンス 追加
+
         //ボタンの画像をモンスターのアイコンに変える
         //    Button.image.sprite = Monster.MonsterIcon;
 
@@ -142,6 +158,9 @@ public class SpawnButton : MonoBehaviour
 
     public void OnButtonDown_Spawn()
     {
+        if(_isGameEnding) //[2026/01/13] プリンス 追加
+            return;
+
         //Monsterをスポーンさせる
 
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
