@@ -17,6 +17,10 @@ public class Money : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 2026.01.13 ウー start
+        if (!_player)
+            return;
+        // 2026.01.13 ウー end
         _money = (int)_player.Money;
         _textMoney.SetText(_money.ToString());
     }

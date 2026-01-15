@@ -22,7 +22,7 @@ public class SpawnButton : MonoBehaviour
 
     [SerializeField] Vector3 spawnPosition;
 
-    [SerializeField] 
+    [SerializeField]
     private string _playerTag;
 
     [SerializeField]
@@ -42,18 +42,18 @@ public class SpawnButton : MonoBehaviour
         _unit = objectPoolTest.UnitData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
 
         Image[] Images = SpawnButtonPrefab.GetComponentsInChildren<Image>();
-        for(int i = 0; i < Images.Length; i++)
+        for (int i = 0; i < Images.Length; i++)
         {
             if (Images[i].gameObject.name == "CoolDown")
             {
-                _imageComp = Images[i];    
+                _imageComp = Images[i];
                 break;
             }
         }
         _imageComp.fillAmount = 0;
 
         Button[] Buttons = SpawnButtonPrefab.GetComponentsInChildren<Button>();
-        for(int i = 0; i < Buttons.Length; i++)
+        for (int i = 0; i < Buttons.Length; i++)
         {
             if (Buttons[i].gameObject.name == "Button")
             {
@@ -63,7 +63,7 @@ public class SpawnButton : MonoBehaviour
         }
 
         TextMeshProUGUI[] Texts = SpawnButtonPrefab.GetComponentsInChildren<TextMeshProUGUI>();
-        for(int i = 0; i < Texts.Length; i++)
+        for (int i = 0; i < Texts.Length; i++)
         {
             if (Texts[i].gameObject.name == "Text_Cost")
             {
@@ -90,7 +90,7 @@ public class SpawnButton : MonoBehaviour
     void FixedUpdate()
     {
         if (_bPushed)
-        {            
+        {
             _timer += Time.fixedDeltaTime;
             Debug.Log("_timer:" + _timer);
 
@@ -114,6 +114,10 @@ public class SpawnButton : MonoBehaviour
         }
         else
         {
+            // 2026.01.13 ウー start
+            if (!_player)
+                return;
+            // 2026.01.13 ウー end
             //Debug.Log($"_player:{_player}, Unit:{Unit}, cost:{Unit.UnitCost}");
             if (_player.Money <= _unit.BaseUnitCost)
             {
@@ -123,7 +127,7 @@ public class SpawnButton : MonoBehaviour
             {
                 _buttonComp.interactable = true;
             }
-        }        
+        }
     }
 
     public void OnButtonDown_Spawn()
