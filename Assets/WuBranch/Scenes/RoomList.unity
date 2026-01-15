@@ -6655,7 +6655,7 @@ GameObject:
   - component: {fileID: 1990040604}
   - component: {fileID: 1990040606}
   m_Layer: 0
-  m_Name: RoomCreator
+  m_Name: RoomManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6688,6 +6688,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb7a0b4e55b47648b44cab688838843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::C_RoomManager
+  _gameManagerPrefab: {fileID: 5371979770891300476, guid: adaeee926e56e6d47ad0eb9c06c4e3ca, type: 3}
+  _gameStateManagerPrefab: {fileID: 435278078438320183, guid: ecd18c7b87a19934db67b7f587bf6436, type: 3}
+  _playerManagerPrefab: {fileID: 6915979894104660200, guid: a8a6adb6e7b005c4b960e6f89a1fb3cd, type: 3}
 --- !u!1 &2017185702
 GameObject:
   m_ObjectHideFlags: 0
