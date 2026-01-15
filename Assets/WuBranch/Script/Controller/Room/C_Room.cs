@@ -292,7 +292,7 @@ public class C_Room : MonoBehaviour
         SteamMatchmaking.LeaveLobby(_roomID);
         // 自身のネットワーク
         NetworkManager.Singleton.Shutdown();
-        NetworkManager.Singleton.SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
+        SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
 
     /// <summary>
