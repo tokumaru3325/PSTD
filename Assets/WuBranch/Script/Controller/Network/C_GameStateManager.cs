@@ -28,6 +28,14 @@ public class C_GameStateManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         Debug.LogError($"GameStateManager OnNetworkSpawn, server {IsServer}");
+        Initialize();
+    }
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    private void Initialize()
+    {
         if (IsClient && !IsServer)
         {
             _currentState.OnValueChanged += OnClientGameStateChanged;

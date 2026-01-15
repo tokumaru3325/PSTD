@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
 
+/// <summary>
+/// 城タイプのプレハブ
+/// </summary>
 [Serializable]
 public struct TowerPrefabInfo
 {
@@ -18,6 +22,25 @@ public struct TowerPrefabInfo
     /// </summary>
     [SerializeField]
     public NetworkObject prefab;
+}
+
+/// <summary>
+/// マルチの時各キャラクターのタグ
+/// </summary>
+[Serializable]
+public struct MultiPlayerTags
+{
+    /// <summary>
+    /// マルチのキャラ
+    /// </summary>
+    [SerializeField]
+    public MultiRoleType role;
+
+    /// <summary>
+    /// タグ
+    /// </summary>
+    [SerializeField]
+    public string tag;
 }
 
 public class C_PlayerManager : NetworkBehaviour
@@ -48,6 +71,12 @@ public class C_PlayerManager : NetworkBehaviour
     /// </summary>
     private C_MapManager _mapManager;
 
+    /// <summary>
+    /// サーバプレイヤーのタグ
+    /// </summary>
+    [SerializeField]
+    private MultiPlayerTags[] _multiPlayerTags;
+
     void Awake()
     {
         Debug.LogError($"PlayerManager Awake, server {IsServer}");
@@ -64,6 +93,14 @@ public class C_PlayerManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         Debug.LogError($"PlayerManager On network spawn, server {IsServer}");
+        Initialize();
+    }
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    private void Initialize()
+    {
         InitMyPlayerID();
     }
 
@@ -106,6 +143,7 @@ public class C_PlayerManager : NetworkBehaviour
             return;
         }
 
+        ulong serverID = NetworkManager.ServerClientId;
         // プレイヤーを全員生成
         foreach (ulong ID in NetworkManager.Singleton.ConnectedClientsIds)
         {
@@ -114,8 +152,9 @@ public class C_PlayerManager : NetworkBehaviour
             {
                 CSteamID steamID = _playerSteamIDs[ID];
                 CastleType selectedCastle = _globalVariable.GetPlayerCastle(steamID);
+                bool isServer = ID == serverID;
                 Debug.LogError($"Get player {ID} castle type: {selectedCastle}");
-                _playerInstances.Add(ID, CreatePlayerInstance(ID, selectedCastle));
+                _playerInstances.Add(ID, CreatePlayerInstance(ID, selectedCastle, isServer));
             }
         }
     }
@@ -124,8 +163,10 @@ public class C_PlayerManager : NetworkBehaviour
     /// プレイヤーインスタンス生成
     /// </summary>
     /// <param name="ownerID">所有者ID</param>
+    /// <param name="castleType">選んだ城</param>
+    /// <param name="isServer">サーバか</param>
     /// <returns>プレイヤーインスタンス</returns>
-    private NetworkObject CreatePlayerInstance(ulong ownerID, CastleType castleType)
+    private NetworkObject CreatePlayerInstance(ulong ownerID, CastleType castleType, bool isServer)
     {
         // プレイヤープレハブ取得
         NetworkObject _playerPrefab = GetPlayerPrefab(castleType);
@@ -145,6 +186,7 @@ public class C_PlayerManager : NetworkBehaviour
         }
         else
             playerInstance.transform.position = Vector3.zero;
+        playerInstance.tag = isServer ? GetMyTag(MultiRoleType.Host) : GetMyTag(MultiRoleType.Client);
         playerInstance.SpawnAsPlayerObject(ownerID, true);
         playerInstance.transform.SetParent(this.transform);
         return playerInstance;
@@ -165,5 +207,16 @@ public class C_PlayerManager : NetworkBehaviour
             }
         }
         return null;
+    }
+
+    /// <summary>
+    /// キャラクターによって、タグをゲット
+    /// </summary>
+    /// <param name="role">キャラクター</param>
+    /// <returns>タグ</returns>
+    public string GetMyTag(MultiRoleType role)
+    {
+        var tags = _multiPlayerTags.Where(_ => _.role == role);
+        return tags.FirstOrDefault().tag;
     }
 }
