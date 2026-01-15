@@ -348,8 +348,28 @@ public class C_Room : MonoBehaviour
             foreach (var pair in _playerDatas)
                 _globalVariable.AddPlayerSelectedCastle(pair.Key, pair.Value.CastleIndex);
 
+
+
             // マルチのゲームシーンに行きます
             NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
         }
+    }
+
+    private void TestAllClientRTT()
+    {
+        NetworkTransport transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        Dictionary<ulong, ulong> Rtts = new Dictionary<ulong, ulong>();
+        foreach (var memberID in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            ulong rtt = transport.GetCurrentRtt(memberID);
+            Rtts.Add(memberID, rtt);
+        }
+
+        ComparerRtt(Rtts);
+    }
+
+    private void ComparerRtt(Dictionary<ulong, ulong> rtts)
+    {
+
     }
 }
