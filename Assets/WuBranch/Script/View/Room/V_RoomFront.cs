@@ -56,7 +56,6 @@ public class V_RoomFront : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     /// <summary>
     /// パスワード入力パネル
     /// </summary>
-    [SerializeField]
     private V_PwdDialogue _pwdInputPanel;
 
     /// <summary>

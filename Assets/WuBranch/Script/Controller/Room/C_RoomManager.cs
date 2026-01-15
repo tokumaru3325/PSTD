@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Netcode.Transports;
 using Steamworks;
@@ -33,6 +34,12 @@ public class C_RoomManager : MonoBehaviour
     /// 部屋の情報
     /// </summary>
     private M_RoomData _roomData;
+
+    /// <summary>
+    /// ゲームマネージャー
+    /// </summary>
+    [SerializeField]
+    private NetworkObject _gameManagerPrefab;
 
     void Awake()
     {
@@ -111,6 +118,7 @@ public class C_RoomManager : MonoBehaviour
         _globalVariable.SetRoomRole(MultiRoleType.Host);
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnEnterSceneCompleted;
+        //NetworkManager.Singleton.SceneManager.ActiveSceneSynchronizationEnabled
         NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
     }
 
@@ -297,18 +305,43 @@ public class C_RoomManager : MonoBehaviour
     {
         if (sceneName != "Game")
             return;
-
-        Debug.LogError("Enter Game Scene completed");
+        Debug.LogError($"Enter Game Scene completed {clientsCompleted.Count}");
         // ゲームシーンに入ったときの処理
         if (clientsCompleted.Count == NetworkManager.Singleton.ConnectedClients.Count)
         {
-            // 全クライアントがシーンに入った, サーバでゲーム状態を準備段階に変更
-            C_GameStateManager gameStateManager = FindFirstObjectByType<C_GameStateManager>();
-            if (gameStateManager)
+            // 全クライアントがシーンに入った, サーバでゲームマネージャーを生成
+            // ここでゲームシーンに必要な物(GameManager,GameStateManager,PlayerManager)を生成して初期化すべきですが、
+            // クラスの主旨とは全然違うので、GameManagerのみを生成して、続きはGameManagerの中でやる
+            SpawnGameManager();
+        }
+    }
+
+    /// <summary>
+    /// マネージャーたちを生成
+    /// </summary>
+    private void SpawnGameManager()
+    {
+        // リストからプレハブをゲット
+        NetworkPrefabsList prefabs = NetworkManager.Singleton.NetworkConfig.Prefabs.NetworkPrefabsLists.Find(list => list.name == "GameSceneNetworkPrefabsList");
+        Debug.LogError($"Spawn Game Manager {prefabs.PrefabList.Count}");
+        NetworkPrefab prefab = prefabs.PrefabList.First(p => p.Prefab.name == "GameManager");
+        Debug.LogError($"{prefab}");
+        if (prefab.Prefab.GetComponent<NetworkObject>())
+            Debug.LogError("have net");
+        GameObject targetObj = Instantiate(prefab.Prefab);
+        NetworkObject networkObj = targetObj.GetComponent<NetworkObject>();
+        networkObj.Spawn();
+
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            bool isObserver = networkObj.IsNetworkVisibleTo(client.ClientId);
+            Debug.LogError($"Client {client.ClientId} is observer? : {isObserver}");
+
+            if (!isObserver)
             {
-                gameStateManager.ChangeStateRpc(GameStates.Prepare);
+                // 強制加入試試看，這能確認是否為 Visibility 問題
+                networkObj.NetworkShow(client.ClientId);
             }
         }
-
     }
 }
