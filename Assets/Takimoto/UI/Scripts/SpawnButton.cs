@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using Newtonsoft.Json.Bson;
+using System.Threading;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class SpawnButton : MonoBehaviour
     private Player _player;
     private bool _bPushed = false;
 
-    [SerializeField] ObjectPoolTest objectPoolTest;
+    [SerializeField] UnitObjectPool unitObjectPool;
 
     [SerializeField] Vector3 spawnPosition;
 
@@ -28,18 +29,52 @@ public class SpawnButton : MonoBehaviour
     [SerializeField]
     private string _enemyTag;
 
+    [SerializeField]
+    private UnitID _unitType;
+
     private Player _enemy;
 
+
     const string SPAWN_TAG = "SpawnPos";
+
+    //[2026/01/13] START プリンス
+    private bool _isGameEnding = false;
+    private void OnGameEndingNotify(bool gameending, string deadplayertag)
+    {
+        _isGameEnding = gameending;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.GameEnding -= OnGameEndingNotify;
+    }
+    //[2026/01/13] END プリンス
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameManager.GameEnding += OnGameEndingNotify;  //[2026/01/13] プリンス 追加
+
         //ボタンの画像をモンスターのアイコンに変える
         //    Button.image.sprite = Monster.MonsterIcon;
 
-        objectPoolTest.CreatePool(100);
-        _unit = objectPoolTest.UnitData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+        unitObjectPool.CreatePool(5);
+
+        switch (_unitType)
+        {
+            case UnitID.Knight:
+                _unit = unitObjectPool.KnightData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+                break;
+
+            case UnitID.Archer:
+                _unit = unitObjectPool.ArcherData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+                break;
+
+            case UnitID.Mage:
+                _unit = unitObjectPool.MageData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+                break;
+        }
+        
 
         Image[] Images = SpawnButtonPrefab.GetComponentsInChildren<Image>();
         for (int i = 0; i < Images.Length; i++)
@@ -79,11 +114,6 @@ public class SpawnButton : MonoBehaviour
         //_player = FindAnyObjectByType<Player>();
         _player = GameObject.FindGameObjectWithTag(_playerTag).GetComponent<Player>();
         _enemy = GameObject.FindGameObjectWithTag(_enemyTag).GetComponent<Player>();
-
-
-
-
-
     }
 
     // Update is called once per frame
@@ -132,11 +162,15 @@ public class SpawnButton : MonoBehaviour
 
     public void OnButtonDown_Spawn()
     {
+        if(_isGameEnding) //[2026/01/13] プリンス 追加
+            return;
+
         //Monsterをスポーンさせる
 
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
-        objectPoolTest.GetObj(mySpawnPos, _unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+
+        unitObjectPool.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         _buttonComp.interactable = false;
         _timer = 0.0f;

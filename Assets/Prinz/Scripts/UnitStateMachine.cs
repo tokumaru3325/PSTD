@@ -6,9 +6,12 @@ public class UnitStateMachine
 
     public UnitStateMachine() { }
 
-    public void Initialize(IUnitState startState)
+    public bool IsGameEnding { get; private set; }
+
+    public void Initialize(IUnitState startState, bool gameEnding)
     {
         Debug.Log("Initializing State Machine");
+        IsGameEnding = gameEnding;
         Current = startState;
         Current?.OnEnter();
     }
@@ -45,12 +48,12 @@ public class UnitStateMachine
     public void TrySetState(IUnitState newState)
     {
         if (Current == newState) return;
-
-     //   Debug.LogWarning("TrySetState() called");
-     if(Current is AttackState)
+        if (newState is not VictoryState || newState is not DefeatState)
         {
-            //anything
+            if (IsGameEnding)
+                return;
         }
+
         Current.OnExit();
         Current = null;
         Current = newState;

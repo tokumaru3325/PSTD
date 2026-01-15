@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public enum UnitID
@@ -72,6 +73,15 @@ public abstract class UnitModel
     public event Action<Vector3, Vector3> OnDirectionChanged;
 
     public event Action<UnitPresenter> OnUnitSpawn; //change to static ?
+
+    public static event Action<UnitPresenter> OnUnitDeath;
+
+    public int serialNumber { get; private set; }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    /// <param name="presenter"></param>
     public abstract void Tick(UnitPresenter presenter);
 
     public abstract void BasicAttack(UnitPresenter presenter, float dt);
@@ -113,6 +123,12 @@ public abstract class UnitModel
         OnUnitSpawn?.Invoke(Owner);
     }
 
+    public void NotifyUnitDeath()
+    {
+        Owner.Log($"Unit from {PlayerSide} notified death", LogType.Warning);
+        OnUnitDeath?.Invoke(Owner);
+    }
+
     //=====================================================================================================
     #region Range 
     public float AttackRange { get; private set; }
@@ -147,6 +163,13 @@ public abstract class UnitModel
     public void ClearTargets()
     {
         targets.Clear();
+    }
+
+    public UnitPresenter FindTarget(UnitPresenter target)
+    {
+        if (targets.Contains(target))
+            return target;
+        else return null;
     }
 
     public List<UnitPresenter> Targets => targets;
@@ -241,6 +264,10 @@ public abstract class UnitModel
     public void SetRoute(List<M_MapPosition> route)
     {
         Route = route;
+    }
+    public void SetSerialNumber(int num)
+    {
+        serialNumber = num;
     }
     #endregion
     //=====================================================================================================

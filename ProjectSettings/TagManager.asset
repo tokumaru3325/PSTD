@@ -12,6 +12,7 @@ TagManager:
   - SpawnPos
   - Peon
   - DebugManager
+  - GameManager
   layers:
   - Default
   - TransparentFX

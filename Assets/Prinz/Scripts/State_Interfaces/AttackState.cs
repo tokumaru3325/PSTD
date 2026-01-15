@@ -37,7 +37,7 @@ public class AttackState : IUnitState
         }
         ////
         //    _target = _mymodel?.GetPrimaryTarget();
-        if (_target == null)
+        if (_target == null || _target.Model.IsDead)
         {
             //    Debug.LogError("Target is null or dead");
             return new IdleState(_mymodel, _me);

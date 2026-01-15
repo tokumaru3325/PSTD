@@ -62,8 +62,27 @@ public class UnitView : MonoBehaviour
     {
     //    Debug.LogWarning("Death animation ended");
     //    PlayDeath(false);
-        _healthGauge.HideGauge();
-        presenter.Release();
+        _healthGauge?.HideGauge();
+        presenter?.Release();
+    }
+
+    public void OnDefeatAnimationStart()
+    {
+        _healthGauge?.HideGauge();
+    }
+    public void OnDefeatAnimationEnd()
+    {
+        presenter?.FreezeState(true);
+    }
+
+    public void FaceRight()
+    {
+        presenter?.FaceRight();
+    }
+
+    public void FaceLeft()
+    {
+        presenter?.FaceLeft();
     }
 
     public void InitializeView()
@@ -140,5 +159,12 @@ public class UnitView : MonoBehaviour
         //alpha変更
         c.a = 0.3f;
         AttackRangeSprite.color = c;
+    }
+
+    public void RenamePrefab(int serialNumber)
+    {
+        string currentName = gameObject.name;
+        string newName = currentName + $"{serialNumber}";
+        gameObject.name = newName;
     }
 }
