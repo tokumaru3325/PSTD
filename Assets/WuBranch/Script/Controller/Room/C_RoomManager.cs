@@ -312,7 +312,13 @@ public class C_RoomManager : MonoBehaviour
             // 全クライアントがシーンに入った, サーバでゲームマネージャーを生成
             // ここでゲームシーンに必要な物(GameManager,GameStateManager,PlayerManager)を生成して初期化すべきですが、
             // クラスの主旨とは全然違うので、GameManagerのみを生成して、続きはGameManagerの中でやる
-            SpawnGameManager();
+            C_GameManager gameManager;
+            C_GameStateManager gameStateManager;
+            C_PlayerManager playerManager;
+            SpawnManagers(out gameManager, out gameStateManager, out playerManager);
+
+            gameManager.Initialize(gameStateManager, playerManager);
+
         }
     }
 
@@ -343,5 +349,36 @@ public class C_RoomManager : MonoBehaviour
                 networkObj.NetworkShow(client.ClientId);
             }
         }
+    }
+
+    /// <summary>
+    /// マネージャーたちを生成
+    /// </summary>
+    private void SpawnManagers(out C_GameManager gameManager, out C_GameStateManager gameStateManager, out C_PlayerManager playerManager)
+    {
+        // リストからプレハブをゲット
+        NetworkPrefabsList prefabs = NetworkManager.Singleton.NetworkConfig.Prefabs.NetworkPrefabsLists.Find(list => list.name == "GameSceneNetworkPrefabsList");
+        Dictionary<string, GameObject> prefabMap = prefabs.PrefabList.ToDictionary(p => p.Prefab.name, p => p.Prefab);
+
+        // それぞれのプレハブを生成
+        gameManager = SpawnManager(prefabMap, "GameManager").GetComponent<C_GameManager>();
+        gameStateManager = SpawnManager(prefabMap, "GameStateManager").GetComponent<C_GameStateManager>();
+        playerManager = SpawnManager(prefabMap, "PlayerManager").GetComponent<C_PlayerManager>();
+    }
+
+    /// <summary>
+    /// 指定されたオブジェクトを生成
+    /// </summary>
+    /// <param name="map">プレハブマップ</param>
+    /// <param name="name">指定されたオブジェクトのID</param>
+    private GameObject SpawnManager(Dictionary<string, GameObject> map, string name)
+    {
+        if (map.TryGetValue(name, out GameObject target))
+        {
+            GameObject targetObj = Instantiate(target);
+            targetObj.GetComponent<NetworkObject>().Spawn();
+            return targetObj;
+        }
+        return null;
     }
 }
