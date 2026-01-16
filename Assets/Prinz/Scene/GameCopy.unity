@@ -751,7 +751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &236772667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,7 +767,7 @@ MonoBehaviour:
   KnightSpawner: {fileID: 1892872861}
   ArcherSpawner: {fileID: 28402135}
   MageSpawner: {fileID: 2071353528}
-  UnitObjectPool: {fileID: 0}
+  UnitObjectPool: {fileID: 847823812}
   _CPUTag: Player2
   _soloPlayerTag: Player1
   _spawnCoolDown: 5

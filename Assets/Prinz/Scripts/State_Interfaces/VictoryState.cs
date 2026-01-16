@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class VictoryState : IUnitState
 {
-    private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
 
-    public VictoryState(UnitModel model, UnitPresenter presenter)
+    public VictoryState(UnitPresenter presenter)
     {
-        _mymodel = model;
         _me = presenter;
     }
 
