@@ -119,6 +119,55 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &9903375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9903377}
+  - component: {fileID: 9903376}
+  m_Layer: 0
+  m_Name: Bloom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &9903376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9903375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Postprocessing.Runtime::UnityEngine.Rendering.PostProcessing.PostProcessVolume
+  sharedProfile: {fileID: 11400000, guid: 28ca401cb8a04e942b2474331b6b59b8, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!4 &9903377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9903375}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &18230236
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,10 +532,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 711581320}
-  objectPoolTest: {fileID: 1275259321}
+  unitObjectPool: {fileID: 0}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
+  _unitType: 0
 --- !u!4 &325777658
 Transform:
   m_ObjectHideFlags: 0
@@ -16809,9 +16859,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
-  UnitData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
-  BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
 --- !u!4 &1275259322
 Transform:
   m_ObjectHideFlags: 0
@@ -16901,9 +16948,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390db79328fd1b449b82953159358d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolTest
-  prefabObj: {fileID: 44783697089410271, guid: 6ae8b5a2eda12804e85f7c305dd63651, type: 3}
-  UnitData: {fileID: 11400000, guid: e4e7bc829d79b3a47ad695fadf4e61e1, type: 2}
-  BuffData: {fileID: 11400000, guid: 3e628caaa9ea9d140808b78edd0c5dea, type: 2}
 --- !u!4 &1325767629
 Transform:
   m_ObjectHideFlags: 0
@@ -17856,10 +17900,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1645838153}
-  objectPoolTest: {fileID: 1325767628}
+  unitObjectPool: {fileID: 0}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
+  _unitType: 0
 --- !u!4 &1892872863
 Transform:
   m_ObjectHideFlags: 0
@@ -22911,3 +22956,4 @@ SceneRoots:
   - {fileID: 325777658}
   - {fileID: 1319896984}
   - {fileID: 1325767629}
+  - {fileID: 9903377}
