@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using System.Threading;
 
 public class C_Buff
@@ -86,5 +87,23 @@ public class C_Buff
     public float GetBuffValue()
     {
         return _data.BuffValue;
+    }
+
+    /// <summary>
+    /// バフのエフェクトの色をゲット
+    /// </summary>
+    /// <returns>色</returns>
+    public Color GetEffectColor()
+    {
+        return _data.EffectColor;
+    }
+
+    /// <summary>
+    /// バフのアイコンをゲット
+    /// </summary>
+    /// <returns>アイコン</returns>
+    public Sprite GetIcon()
+    {
+        return _data.BuffIcon;
     }
 }

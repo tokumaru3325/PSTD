@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class V_BuffLIst : MonoBehaviour
+public class V_BuffList : MonoBehaviour
 {
     /// <summary>
     /// 対象のタグ
@@ -61,6 +61,7 @@ public class V_BuffLIst : MonoBehaviour
         {
             V_Buff buffV = CreateBuff();
             buff.BindTimeUpdate(buffV.UpdateTime);
+            buffV.SetIcon(buff.GetIcon());
             _myChilds.Add(buff, buffV);
             buffV.SlideIn();
         }

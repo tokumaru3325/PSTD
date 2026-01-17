@@ -27,6 +27,10 @@ public class BuffManager : MonoBehaviour
     private BuffAttackPowerData _attackPowerData;
     [SerializeField]
     private BuffAttackSpeedData _attackSpeedData;
+    [SerializeField]
+    private BuffTypeData _attackRangeData;
+    [SerializeField]
+    private BuffTypeData _moveSpeedData;
 
     //private List<BuffType> _currentBuff = new List<BuffType>();
     // 2026.01.17 ウー start
@@ -54,10 +58,6 @@ public class BuffManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TestButtonDown();
-        }
     }
 
     private void ReceiveSlotResult(BuffType buffType, string playertag, string enemytag)
@@ -162,18 +162,17 @@ public class BuffManager : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤのタグによって、目標のバフデータをゲット
+    /// タグによって、目標のバフデータをゲット
     /// </summary>
     /// <param name="playerTag">プレイヤのタグ</param>
     /// <returns>バフデータ</returns>
-    private BuffDataBase GetTarget(string playerTag)
+    public BuffDataBase GetTarget(string playerTag)
     {
-        BuffDataBase target = null;
         if (playerTag.Equals("Player1"))
-            target = _buffData1;
+            return _buffData1;
         else if (playerTag.Equals("Player2"))
-            target = _buffData2;
-        return target;
+            return _buffData2;
+        return null;
     }
 
     /// <summary>
@@ -195,9 +194,11 @@ public class BuffManager : MonoBehaviour
                 break;
 
             case BuffType.AttackRange:
+                addBuff = _attackRangeData;
                 break;
 
             case BuffType.MoveSpeed:
+                addBuff = _moveSpeedData;
                 break;
         }
 

@@ -24572,6 +24572,8 @@ MonoBehaviour:
   _buffData2: {fileID: 11400000, guid: 3e628caaa9ea9d140808b78edd0c5dea, type: 2}
   _attackPowerData: {fileID: 11400000, guid: 5a16894523c60404da5b0f941f514b16, type: 2}
   _attackSpeedData: {fileID: 11400000, guid: b1d942ddc5f81194f943de9d1a55d10c, type: 2}
+  _attackRangeData: {fileID: 11400000, guid: 4cd49bb64392fc045bbd26f28687db62, type: 2}
+  _moveSpeedData: {fileID: 11400000, guid: cc7455b83e6c50d459ba864989879e7d, type: 2}
 --- !u!4 &2053071484
 Transform:
   m_ObjectHideFlags: 0
