@@ -6,14 +6,14 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
-public class UnitPresenter: MonoBehaviour
+public class UnitPresenter : MonoBehaviour
 {
 
     public UnitModel Model { get; private set; }
     public UnitView View { get; private set; }
 
-//    [SerializeField]
-//    public BuffData BuffData;
+    //    [SerializeField]
+    //    public BuffData BuffData;
 
     private C_MapManager _mapManager;
 
@@ -61,14 +61,14 @@ public class UnitPresenter: MonoBehaviour
         GameManager.GameEnding -= OnGameEndingNotify;
     }
 
-    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, GameManager gm, DebugManager dm)
+    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, GameManager gm, DebugManager dm, List<C_Buff> buffs)
     {
         View = GetComponent<UnitView>();
         Collider = GetComponent<CapsuleCollider2D>();
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
         View.InitializeView();
-        
+
         BindGameManager(gm);
         BindDebugManager(dm);
 
@@ -81,7 +81,7 @@ public class UnitPresenter: MonoBehaviour
         M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
         Log($"mp: {mp.X}/{mp.Y}, up: {up}", LogType.Log);
-    //    Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
+        //    Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
         gameObject.transform.position = up;
 
         // 位置をマップ座標に変換
@@ -108,13 +108,17 @@ public class UnitPresenter: MonoBehaviour
         Model.BindBuffData(buffdata);
         View.UpdateHealth(Model.Health / Model.MaxHealth);
         Model.NotifySpawn();
+
+        // 2026.01.18 ウー start
+        UpdateBuffEffect(buffs);
+        // 2026.01.18 ウー end
     }
 
     public C_MapManager MapManager { get { return _mapManager; } }
     private void BindEnemyPlayer()
     {
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player1");
-    //    if(playerObject == null) { Debug.LogError("No player found when binding"); }
+        //    if(playerObject == null) { Debug.LogError("No player found when binding"); }
         if (playerObject.CompareTag(Model.PlayerSide))
         {
             //    playerObject = GameObject.FindWithTag("Player2");
@@ -132,18 +136,18 @@ public class UnitPresenter: MonoBehaviour
         Pool = pool;
     }
 
-/*    private void InitializeModel()
-    {
-        Model.SetPlayerSide(Data.PlayerSide);
-        Model.SetMaxHealth(Data.MaxHealth);
-        Model.SetHealth(Data.MaxHealth);
-        Model.SetAttackPower(Data.AttackPower);
-        Model.SetAttackSpeed(Data.AttackSpeed);
-        Model.SetMoveSpeed(Data.MoveSpeed);
-        Model.SetUnitCost(Data.BaseUnitCost);
-        Model.SetUnitCoolDown(Data.BaseUnitCoolDown);
-        Model.SetMoveDirection(Data.MoveDirection);
-    }*/
+    /*    private void InitializeModel()
+        {
+            Model.SetPlayerSide(Data.PlayerSide);
+            Model.SetMaxHealth(Data.MaxHealth);
+            Model.SetHealth(Data.MaxHealth);
+            Model.SetAttackPower(Data.AttackPower);
+            Model.SetAttackSpeed(Data.AttackSpeed);
+            Model.SetMoveSpeed(Data.MoveSpeed);
+            Model.SetUnitCost(Data.BaseUnitCost);
+            Model.SetUnitCoolDown(Data.BaseUnitCoolDown);
+            Model.SetMoveDirection(Data.MoveDirection);
+        }*/
 
     protected void CreateModelFromData(UnitData data)
     {
@@ -162,21 +166,21 @@ public class UnitPresenter: MonoBehaviour
             Model = new KnightModel(kd);
             Model.SetUnitID(UnitID.Knight);
             _stateMachine = new UnitStateMachine();
-        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+            //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is ArcherData ad)
         {
             Model = new ArcherModel(ad);
             Model.SetUnitID(UnitID.Archer);
             _stateMachine = new UnitStateMachine();
-        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+            //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else if (data is MageData md)
         {
             Model = new MageModel(md);
             Model.SetUnitID(UnitID.Mage);
             _stateMachine = new UnitStateMachine();
-        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
+            //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(Model, this) if needed
         }
         else
         {
@@ -184,7 +188,7 @@ public class UnitPresenter: MonoBehaviour
             return;
         }
 
-        
+
         Model.BindOwner(this);
     }
 
@@ -200,11 +204,11 @@ public class UnitPresenter: MonoBehaviour
 
     private void BindGameManager(GameManager gm)
     {
-/*        GameObject gm = GameObject.FindGameObjectWithTag("GameManager");
-        if (gm != null)
-        {
-            _gameManager = gm.GetComponent<GameManager>();
-        }*/
+        /*        GameObject gm = GameObject.FindGameObjectWithTag("GameManager");
+                if (gm != null)
+                {
+                    _gameManager = gm.GetComponent<GameManager>();
+                }*/
 
         _gameManager = gm;
     }
@@ -215,7 +219,7 @@ public class UnitPresenter: MonoBehaviour
         Model.SetSerialNumber(_gameManager.OnUnitSpawn());
         View.RenamePrefab(Model.serialNumber);
 
-    //    Log($"Name set to {gameObject.name}", LogType.Error);
+        //    Log($"Name set to {gameObject.name}", LogType.Error);
     }
 
     private void OnGameEndingNotify(bool ending, string tag)
@@ -272,12 +276,12 @@ public class UnitPresenter: MonoBehaviour
     {
         if (EnteringState == null) return;
 
-        if(_IsGameEnding)
+        if (_IsGameEnding)
         {
 
         }
 
-        if(EnteringState is DeadState)
+        if (EnteringState is DeadState)
         {
 
         }
@@ -389,7 +393,7 @@ public class UnitPresenter: MonoBehaviour
         if (_IsGameEnding) return;
         //    if(Model.IsDead) return;
         Model?.SetHealth(Model.Health - dmg);
-    //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
+        //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
     public void SpawnProjectile(GameObject prefab, float speed, float damage)
     {
@@ -410,10 +414,10 @@ public class UnitPresenter: MonoBehaviour
         //   if (target.Model.IsDead) return;
         Model.BasicAttack(target, dt); //moving logic to model
 
-/*        View?.StopAttack();
-        float damage = Model.AttackPower;
-        target.TakeDamage(damage);
-        View?.PlayAttack();*/
+        /*        View?.StopAttack();
+                float damage = Model.AttackPower;
+                target.TakeDamage(damage);
+                View?.PlayAttack();*/
     }
 
     public void PerformHealSpell(UnitPresenter target, float dt)
@@ -427,7 +431,7 @@ public class UnitPresenter: MonoBehaviour
         if (View == null) return;
         View.ResetAllAnimations();
         View.PlayAttack();
-    //    View?.PlayHeal();
+        //    View?.PlayHeal();
     }
     public void PerformDeath()
     {
@@ -479,7 +483,7 @@ public class UnitPresenter: MonoBehaviour
     #region 範囲 - range
     public bool AllowDetection =>
         false == _stateMachine.Current is DeadState || _IsGameEnding;
-        
+
     //   _stateMachine.Current is MoveState ||
     //  _stateMachine.Current is IdleState;
 
@@ -541,8 +545,8 @@ public class UnitPresenter: MonoBehaviour
     }
     private bool HandlePlayerTarget(Collider2D other)
     {
-        if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
-        if (player.IsDead()) {  return false; }
+        if (!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
+        if (player.IsDead()) { return false; }
         Model.SetPlayerInRange(true);
         return true;
     }
@@ -551,7 +555,7 @@ public class UnitPresenter: MonoBehaviour
     {
         if (_IsGameEnding) return;
         Log($"Unit from {Model.PlayerSide} tries to update targets", LogType.Warning);
-        if(Model?.FindTarget(target) != null)
+        if (Model?.FindTarget(target) != null)
         {
             Log($"Unit from {Model.PlayerSide} updates targets and removes a Unit from {target.Model.PlayerSide}", LogType.Warning);
             Model.RemoveTarget(target);
@@ -560,14 +564,14 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnExitRange(Collider2D other)
     {
-        if(_IsGameEnding) return;
-    //    if (Model.IsDead) return;
+        if (_IsGameEnding) return;
+        //    if (Model.IsDead) return;
         //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         //敵のプレヤーが範囲内から離れたら
         if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer)
         {
             Model.SetPlayerInRange(false);
-        }             
+        }
 
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
@@ -589,7 +593,7 @@ public class UnitPresenter: MonoBehaviour
 
     public bool IsValidTargetExist()
     {
-        if(Model?.Targets.Count == 0 && Model?.IsPlayerInRange == false) return false;
+        if (Model?.Targets.Count == 0 && Model?.IsPlayerInRange == false) return false;
         return true;
     }
     #endregion
@@ -604,7 +608,32 @@ public class UnitPresenter: MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        
+
     }
     #endregion
+
+    // 2026.01.18 ウー start
+    #region Buff Effect
+
+    /// <summary>
+    /// ユニットと同じタグですか
+    /// </summary>
+    /// <param name="tag">タグ</param>
+    /// <returns>true: はい、false: いいえ</returns>
+    public bool CompareWithTag(string tag)
+    {
+        return Model.PlayerSide == tag;
+    }
+
+    /// <summary>
+    /// バフのエフェクトを更新
+    /// </summary>
+    /// <param name="buffs">バフ</param>
+    public void UpdateBuffEffect(List<C_Buff> buffs)
+    {
+        View.UpdateBuffEffect(buffs);
+    }
+
+    #endregion
+    // 2026.01.18 ウー end
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum BuffType
@@ -35,9 +36,14 @@ public class BuffManager : MonoBehaviour
     //private List<BuffType> _currentBuff = new List<BuffType>();
     // 2026.01.17 ウー start
     /// <summary>
-    /// 効果中のバフ
+    /// プレイヤー1の効果中のバフ
     /// </summary>
-    private List<C_Buff> _buffs;
+    private List<C_Buff> _player1Buffs;
+
+    /// <summary>
+    /// プレイヤー2の効果中のバフ
+    /// </summary>
+    private List<C_Buff> _player2Buffs;
 
     /// <summary>
     /// バフを付与された時の動き
@@ -52,12 +58,29 @@ public class BuffManager : MonoBehaviour
 
     private void Start()
     {
-        _buffs = new List<C_Buff>();
+        _player1Buffs = new List<C_Buff>();
+        _player2Buffs = new List<C_Buff>();
         SlotSceneManager.OnSlotBuffResult += ReceiveSlotResult;
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            AddBuff(BuffType.AttackPower, "Player1").Forget();
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            AddBuff(BuffType.AttackRange, "Player1").Forget();
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            AddBuff(BuffType.AttackSpeed, "Player1").Forget();
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            AddBuff(BuffType.MoveSpeed, "Player1").Forget();
+        }
     }
 
     private void ReceiveSlotResult(BuffType buffType, string playertag, string enemytag)
@@ -110,14 +133,15 @@ public class BuffManager : MonoBehaviour
     {
         // データ準備
         BuffTypeData buffData = GetBuffData(buffType);
-        BuffDataBase target = GetTarget(playerTag);
+        BuffDataBase target = GetPlayerBuffDataByTag(playerTag);
+        List<C_Buff> playerBuffs = GetPlayerBuffsByTag(playerTag);
 
-        if (!buffData || !target)
+        if (!buffData || !target || playerBuffs == null)
             return;
 
         // バフを作る
         C_Buff buff = CreateBuff(buffType, buffData, playerTag);
-        _buffs.Add(buff);
+        playerBuffs.Add(buff);
         // 通知
         OnAddBuff?.Invoke(buff);
 
@@ -162,16 +186,30 @@ public class BuffManager : MonoBehaviour
     }
 
     /// <summary>
-    /// タグによって、目標のバフデータをゲット
+    /// タグによって目標のバフデータをゲット
     /// </summary>
     /// <param name="playerTag">プレイヤのタグ</param>
     /// <returns>バフデータ</returns>
-    public BuffDataBase GetTarget(string playerTag)
+    public BuffDataBase GetPlayerBuffDataByTag(string playerTag)
     {
         if (playerTag.Equals("Player1"))
             return _buffData1;
         else if (playerTag.Equals("Player2"))
             return _buffData2;
+        return null;
+    }
+
+    /// <summary>
+    /// タグによってプレイヤのすべてのバフをゲット
+    /// </summary>
+    /// <param name="tag">タグ</param>
+    /// <returns>バフ</returns>
+    public List<C_Buff> GetPlayerBuffsByTag(string tag)
+    {
+        if (tag.Equals("Player1"))
+            return _player1Buffs;
+        else if (tag.Equals("Player2"))
+            return _player2Buffs;
         return null;
     }
 
@@ -224,14 +262,15 @@ public class BuffManager : MonoBehaviour
     /// </summary>
     private void OnTimerFinished(C_Buff buff)
     {
-        if (!_buffs.Contains(buff))
+        List<C_Buff> playerBuffs = GetPlayerBuffsByTag(buff.TargetTag);
+        if (playerBuffs == null || !playerBuffs.Contains(buff))
             return;
 
         buff.StopCount();
-        OnRemoveBuff?.Invoke(buff);
-        BuffDataBase target = GetTarget(buff.TargetTag);
+        BuffDataBase target = GetPlayerBuffDataByTag(buff.TargetTag);
         ReducePlayerBuff(buff, target);
-        _buffs.Remove(buff);
+        playerBuffs.Remove(buff);
+        OnRemoveBuff?.Invoke(buff);
     }
 
     /// <summary>

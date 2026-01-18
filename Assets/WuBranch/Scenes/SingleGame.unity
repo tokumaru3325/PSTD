@@ -16589,6 +16589,7 @@ MonoBehaviour:
   ArcherData: {fileID: 11400000, guid: b1e5990a981d4044890ba6254595bd81, type: 2}
   MageData: {fileID: 11400000, guid: 2ec3eeb84594bfe4292479ad1277590a, type: 2}
   BuffData: {fileID: 11400000, guid: 31d82be36f7c1e14d83caa519d7fdece, type: 2}
+  _buffManager: {fileID: 2053071483}
 --- !u!4 &847823813
 Transform:
   m_ObjectHideFlags: 0
@@ -18361,6 +18362,7 @@ MonoBehaviour:
   ArcherData: {fileID: 0}
   MageData: {fileID: 0}
   BuffData: {fileID: 0}
+  _buffManager: {fileID: 0}
 --- !u!1 &1319896982
 GameObject:
   m_ObjectHideFlags: 0
