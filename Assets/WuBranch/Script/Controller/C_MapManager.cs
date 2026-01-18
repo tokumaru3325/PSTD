@@ -1,9 +1,9 @@
 ﻿using Cysharp.Threading.Tasks;
 using System.IO;
-using Unity.VisualScripting;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
+using Unity.Netcode;
 
 public class C_MapManager : MonoBehaviour
 {
@@ -20,18 +20,33 @@ public class C_MapManager : MonoBehaviour
     [SerializeField]
     private float MAP_INIT_POS_Y;
 
+    /// <summary>
+    /// マップにあるすべてのプレイヤ位置
+    /// キー: マップ座標, 値: 使用中かどうか
+    /// </summary>
+    private List<M_PlayerPosInfo> _playerPos;
+
+    /// <summary>
+    /// マップ読み込み完了フラグ
+    /// </summary>
+    /// <value></value>
+    public bool IsComplete { get; private set; }
+
     //デバッグ用
     public bool IsPathVisible { get; private set; }
 
     void Awake()
     {
-        Map = new M_Map();
-        // Application.streamingAssetsPath はAssets下のStreamingAssetsフォルダを指す
-        // 読み専用の安全なディレクトリです。(プラットフォーム共通)
-        // Path.Combine は、2番目の引数が / や \ で始まると、それを「絶対パス（またはルートからのパス）」とみなしてしまい、1番目の引数を無視します。
-        string path = Path.Combine(Application.streamingAssetsPath, "MapData/Stage1.csv");
-        // (注意: 実行前にこのパスにファイルを配置しておく必要があります)
-        _ = ReadMap(path);
+        // 唯一にする
+        C_MapManager[] list = FindObjectsByType<C_MapManager>(FindObjectsSortMode.None);
+        if (list.Length >= 2)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
+
+        Initialize();
     }
 
     void Start()
@@ -42,15 +57,26 @@ public class C_MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*        if(Input.GetKeyDown(KeyCode.G))
-                {
-                    DrawPath();
-                }*/
-
         if (IsPathVisible)
         {
             DrawPath();
         }
+    }
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    private void Initialize()
+    {
+        Map = new M_Map();
+        _playerPos = new List<M_PlayerPosInfo>();
+        IsComplete = false;
+        // Application.streamingAssetsPath はAssets下のStreamingAssetsフォルダを指す
+        // 読み専用の安全なディレクトリです。(プラットフォーム共通)
+        // Path.Combine は、2番目の引数が / や \ で始まると、それを「絶対パス（またはルートからのパス）」とみなしてしまい、1番目の引数を無視します。
+        string path = Path.Combine(Application.streamingAssetsPath, "MapData/Stage1.csv");
+        // (注意: 実行前にこのパスにファイルを配置しておく必要があります)
+        _ = ReadMap(path);
     }
 
     //[START] 2025/12/14 プリンス：デバッガーから使えるように、関数化した
@@ -99,6 +125,7 @@ public class C_MapManager : MonoBehaviour
                 Debug.Log($"データの読み込みが完了しました。{data.Length} 行");
                 ConvertData(data);
                 Debug.Log($"マップデータへの変換が完了しました。");
+                IsComplete = true;
             }
         }
         catch (FileNotFoundException ex)
@@ -117,18 +144,43 @@ public class C_MapManager : MonoBehaviour
     /// <param name="data">ソース</param>
     private void ConvertData(string[][] source)
     {
-        List<List<int>> tmpMap = new List<List<int>>();
+        List<List<int>> tmpRoute = new List<List<int>>();
+        int rowIndex = 0;
         foreach (var row in source)
         {
             Debug.Log("[ " + string.Join(" | ", row) + " ]");
             List<int> colData = new List<int>();
+            int colIndex = 0;
             foreach (var col in row)
             {
-                colData.Add(int.Parse(col));
+                int value = int.Parse(col);
+                RecordPlayerPos(value, colIndex, rowIndex);
+                // プレイヤ位置もたどり着けるので、プレイヤ位置を一般道に変換
+                int routePiece = value == (int)PathStructure.PlayerR || value == (int)PathStructure.PlayerL ? (int)PathStructure.Road : value;
+                colData.Add(routePiece);
+                // 次の列へ
+                colIndex++;
             }
-            tmpMap.Add(colData);
+            tmpRoute.Add(colData);
+            rowIndex++;
         }
-        Map.SetPath(tmpMap);
+        Map.SetPath(tmpRoute);
+    }
+
+    /// <summary>
+    /// プレイヤ位置を記録
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="colIndex"></param>
+    /// <param name="rowIndex"></param>
+    private void RecordPlayerPos(int value, int colIndex, int rowIndex)
+    {
+        if (value != (int)PathStructure.PlayerR && value != (int)PathStructure.PlayerL)
+            return;
+
+        bool isLeft = value == (int)PathStructure.PlayerL;
+        Debug.Log($"Record player pos at {colIndex}, {rowIndex}");
+        _playerPos.Add(new M_PlayerPosInfo(new M_MapPosition(colIndex, rowIndex), false, isLeft));
     }
 
     /// <summary>
@@ -209,5 +261,20 @@ public class C_MapManager : MonoBehaviour
     public int GetPathCost(M_MapPosition pos)
     {
         return Map.GetPathCost(pos.X, pos.Y);
+    }
+
+    /// <summary>
+    /// 未使用のプレイヤ位置を1つ使う
+    /// </summary>
+    /// <returns>プレイヤ位置</returns>
+    public M_PlayerPosInfo UseOnePlayerPos()
+    {
+        var unusedPlayerPos = _playerPos.Where(_ => !_.IsUsed);
+        Debug.Log($"unused player pos count: {unusedPlayerPos.Count()}");
+        int index = Random.Range(0, unusedPlayerPos.Count());
+        Debug.Log($"get index: {index}");
+        M_PlayerPosInfo pos = unusedPlayerPos.ElementAt(index);
+        pos.IsUsed = true;
+        return pos;
     }
 }
