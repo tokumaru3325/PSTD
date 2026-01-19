@@ -12,18 +12,14 @@ public class UnitPresenter: MonoBehaviour
     private UnitModel Model;
     public UnitView View { get; private set; }
 
-//    [SerializeField]
-//    public BuffData BuffData;
-
     private C_MapManager _mapManager;
+    public C_MapManager MapManager { get { return _mapManager; } }
 
     public CapsuleCollider2D Collider;
 
     private UnitStateMachine _stateMachine;
 
     public UnitObjectPool Pool { get; private set; } //25.1.7 滝本海大 ObjectPoolTestからUnitObjectPoolに変更
-
-    UnitData Data;
 
     private bool _IsGameEnding = false;
     private bool _IsStateUpdateStopped = false;
@@ -39,24 +35,6 @@ public class UnitPresenter: MonoBehaviour
     private void OnEnable()
     {
 
-    }
-
-    private void SubscribeToEvents()
-    {
-        Model.OnHealthChanged += OnHealthChanged;
-        Model.OnDirectionChanged += OnDirectionChanged;
-        Model.OnUnitSpawn += OnUnitSpawn;
-        UnitModel.OnUnitDeath += UpdateTargets;
-        GameManager.GameEnding += OnGameEndingNotify;
-    }
-
-    private void UnsubscribeToEvents()
-    {
-        Model.OnHealthChanged -= OnHealthChanged;
-        Model.OnDirectionChanged -= OnDirectionChanged;
-        Model.OnUnitSpawn -= OnUnitSpawn;
-        UnitModel.OnUnitDeath -= UpdateTargets;
-        GameManager.GameEnding -= OnGameEndingNotify;
     }
 
     public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, GameManager gm, DebugManager dm)
@@ -76,7 +54,7 @@ public class UnitPresenter: MonoBehaviour
         M_MapPosition mp = _mapManager.ConvertToMapPos(currentPos);
         Vector3 up = _mapManager.ConvertToUnityPos(mp);
         Log($"mp: {mp.X}/{mp.Y}, up: {up}", LogType.Log);
-    //    Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
+        //    Debug.Log($"mp: {mp.X}/{mp.Y}, up: {up}");
         gameObject.transform.position = up;
 
         // 位置をマップ座標に変換
@@ -105,7 +83,7 @@ public class UnitPresenter: MonoBehaviour
         Model.NotifySpawn();
     }
 
-    public C_MapManager MapManager { get { return _mapManager; } }
+
     private void BindEnemyPlayer()
     {
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player1");
@@ -121,24 +99,10 @@ public class UnitPresenter: MonoBehaviour
             Model?.BindEnemyPlayer(playerObject.GetComponent<C_PlayerTowerController>());
         }
     }
-
-    public void SetPool(UnitObjectPool pool)
+    public void BindPool(UnitObjectPool pool)
     {
         Pool = pool;
     }
-
-/*    private void InitializeModel()
-    {
-        Model.SetPlayerSide(Data.PlayerSide);
-        Model.SetMaxHealth(Data.MaxHealth);
-        Model.SetHealth(Data.MaxHealth);
-        Model.SetAttackPower(Data.AttackPower);
-        Model.SetAttackSpeed(Data.AttackSpeed);
-        Model.SetMoveSpeed(Data.MoveSpeed);
-        Model.SetUnitCost(Data.BaseUnitCost);
-        Model.SetUnitCoolDown(Data.BaseUnitCoolDown);
-        Model.SetMoveDirection(Data.MoveDirection);
-    }*/
 
     protected void CreateModelFromData(UnitData data)
     {
@@ -183,6 +147,25 @@ public class UnitPresenter: MonoBehaviour
         Model.BindOwner(this);
     }
 
+    //---------------- Events start ----------------//
+    private void SubscribeToEvents()
+    {
+        Model.OnHealthChanged += OnHealthChanged;
+        Model.OnDirectionChanged += OnDirectionChanged;
+        Model.OnUnitSpawn += OnUnitSpawn;
+        UnitModel.OnUnitDeath += UpdateTargets;
+        GameManager.GameEnding += OnGameEndingNotify;
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        Model.OnHealthChanged -= OnHealthChanged;
+        Model.OnDirectionChanged -= OnDirectionChanged;
+        Model.OnUnitSpawn -= OnUnitSpawn;
+        UnitModel.OnUnitDeath -= UpdateTargets;
+        GameManager.GameEnding -= OnGameEndingNotify;
+    }
+
     private void OnUnitSpawn(UnitPresenter owner)
     {
         DebugManager.Instance.OnUnitSpawn(owner);
@@ -191,7 +174,6 @@ public class UnitPresenter: MonoBehaviour
 
     //    Log($"Name set to {gameObject.name}", LogType.Error);
     }
-
     private void OnGameEndingNotify(bool ending, string tag)
     {
         Log($"{tag} died and notified this Unit", LogType.Warning);
@@ -210,15 +192,43 @@ public class UnitPresenter: MonoBehaviour
         _IsGameEnding = true;
     }
 
-    private IEnumerator DelayVictoryState(float delay)
+    private void OnHealthChanged(float health, float maxHealth)
     {
-        while (true)
+        View.UpdateHealth(health / maxHealth);
+        if (IsDead())
         {
-            yield return new WaitForSeconds(delay);
-
-            _stateMachine?.TrySetState(new VictoryState(this));
+            PrepareDeath();
+            _stateMachine.TrySetState(new DeadState(this));
         }
     }
+
+    private void OnDirectionChanged(Vector3 direction, Vector3 moveDirection)
+    {
+        if (direction == Vector3.up)
+        {
+            View.FaceUP(true);
+            View.FaceDOWN(false);
+        }
+        else if (direction == Vector3.down)
+        {
+            View.FaceDOWN(true);
+            View.FaceUP(false);
+        }
+        else if (direction == Vector3.left)
+        {
+            View.FaceDOWN(false);
+            View.FaceUP(false);
+            FaceLeft();
+        }
+        else if (direction == Vector3.right)
+        {
+            View.FaceDOWN(false);
+            View.FaceUP(false);
+            FaceRight();
+        }
+        else { Log("Unexpected direction", LogType.Error); }
+    }
+    //---------------- Events end ----------------//
 
     #endregion
     //=====================================================================================================
@@ -234,7 +244,6 @@ public class UnitPresenter: MonoBehaviour
         Pool?.Release(this);
     }
 
-
     private void OnDisable()
     {
         _stateMachine = null;
@@ -242,23 +251,7 @@ public class UnitPresenter: MonoBehaviour
     }
     #endregion
     //=====================================================================================================
-    public void OnEnterState(IUnitState EnteringState)
-    {
-        if (EnteringState == null) return;
 
-        if(_IsGameEnding)
-        {
-
-        }
-
-        if(EnteringState is DeadState)
-        {
-
-        }
-
-        SetMoveDirection(Model.MoveDirection);
-        View.UpdateAttackRangeSpriteColor();
-    }
     //=====================================================================================================
     #region 更新 - Update
 
@@ -299,42 +292,7 @@ public class UnitPresenter: MonoBehaviour
         Collider.enabled = false;
         View.EnableAttackRange(false);
     }
-    private void OnHealthChanged(float health, float maxHealth)
-    {
-        View.UpdateHealth(health / maxHealth);
-        if (IsDead())
-        {
-            PrepareDeath();
-            _stateMachine.TrySetState(new DeadState(this));
-        }
-    }
-
-    private void OnDirectionChanged(Vector3 direction, Vector3 moveDirection)
-    {
-        if (direction == Vector3.up)
-        {
-            View.FaceUP(true);
-            View.FaceDOWN(false);
-        }
-        else if (direction == Vector3.down)
-        {
-            View.FaceDOWN(true);
-            View.FaceUP(false);
-        }
-        else if (direction == Vector3.left)
-        {
-            View.FaceDOWN(false);
-            View.FaceUP(false);
-            FaceLeft();
-        }
-        else if (direction == Vector3.right)
-        {
-            View.FaceDOWN(false);
-            View.FaceUP(false);
-            FaceRight();
-        }
-        else { Log("Unexpected direction", LogType.Error); }
-    }
+    
     public void FaceRight()
     {
         transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
@@ -344,15 +302,37 @@ public class UnitPresenter: MonoBehaviour
     {
         transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
     }
-
-    public void SetMoveDirection(Vector3 direction)
+    public void OnEnterState(IUnitState EnteringState)
     {
-        Model.SetMoveDirection(direction);
+        if (EnteringState == null) return;
+
+        if (_IsGameEnding)
+        {
+
+        }
+
+        if (EnteringState is DeadState)
+        {
+
+        }
+
+        SetMoveDirection(Model.MoveDirection);
+        View.UpdateAttackRangeSpriteColor();
     }
 
     public void FreezeState(bool stop)
     {
         _IsStateUpdateStopped = stop;
+    }
+
+    private IEnumerator DelayVictoryState(float delay)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delay);
+
+            _stateMachine?.TrySetState(new VictoryState(this));
+        }
     }
     #endregion
     //=====================================================================================================
@@ -361,41 +341,43 @@ public class UnitPresenter: MonoBehaviour
     public void TakeDamage(float dmg)
     {
         if (_IsGameEnding) return;
-        //    if(IsDead()) return;
         Model?.SetHealth(Model.Health - dmg);
     //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
-    public void SpawnProjectile(GameObject prefab, float speed, float damage)
-    {
-        // Instantiate, configure velocity and damage here
-        View?.PlayAttack();
-    }
-    //プレヤーに対する攻撃
+
+    /// <summary>
+    /// プレヤーに対する攻撃
+    /// </summary>
+    /// <param name="dt"></param>
     public void PerformPlayerAttack(float dt)
     {
         if (_IsGameEnding) return;
         if (Model.EnemyPlayer.IsDead()) return;
         Model.PlayerAttack(dt);
     }
-    //ユニットに対する攻撃
+
+    /// <summary>
+    /// ユニットに対する攻撃
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="dt"></param>
     public void PerformBasicAttack(UnitPresenter target, float dt)
     {
         if (_IsGameEnding) return;
-        Model.BasicAttack(target, dt); //moving logic to model
+        Model.BasicAttack(target, dt);
     }
 
     public void PerformHealSpell(UnitPresenter target, float dt)
     {
         Model.Heal(target, dt);
     }
-    public void PerformMagicAttack(float dmg) { /* ... */ View?.PlayAttack(); }
+
     public void ReceiveHeal(float amount)
     {
         Model?.SetHealth(Model.Health + amount);
         if (View == null) return;
         View.ResetAllAnimations();
         View.PlayAttack();
-    //    View?.PlayHeal();
     }
     public void PerformDeath()
     {
@@ -422,6 +404,12 @@ public class UnitPresenter: MonoBehaviour
     //=====================================================================================================
     //=====================================================================================================
     #region Access Model
+
+    public void SetMoveDirection(Vector3 direction)
+    {
+        Model.SetMoveDirection(direction);
+    }
+
     public bool IsDead()
     {
         return Model.IsDead;
