@@ -37,7 +37,7 @@ public class UnitPresenter: MonoBehaviour
 
     }
 
-    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, GameManager gm, DebugManager dm)
+    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
     {
         View = GetComponent<UnitView>();
         Collider = GetComponent<CapsuleCollider2D>();
@@ -108,7 +108,7 @@ public class UnitPresenter: MonoBehaviour
     {
         if (data == null)
         {
-            Debug.LogError("UnitPresenter.Initialize called with null UnitData");
+            Log("UnitPresenter.Initialize called with null UnitData", LogType.Error);
             return;
         }
 
@@ -139,7 +139,7 @@ public class UnitPresenter: MonoBehaviour
         }
         else
         {
-            Debug.LogError("Unknown data type: " + data.GetType());
+            Log("Unknown data type: " + data.GetType(), LogType.Error);
             return;
         }
 
@@ -237,7 +237,7 @@ public class UnitPresenter: MonoBehaviour
     #region 解除 - Release
     public void Release()
     {
-        Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
+        Log($"Releasing 1 Unit from {Model.PlayerSide}", LogType.Log);
 
         UnsubscribeToEvents();
 
@@ -495,6 +495,7 @@ public class UnitPresenter: MonoBehaviour
     public void PlayAttack()
     {
         View?.PlayAttack();
+       
     }
 
     public void StopAttack()

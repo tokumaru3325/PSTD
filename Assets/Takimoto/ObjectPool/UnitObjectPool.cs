@@ -4,14 +4,6 @@ using UnityEngine.UIElements;
 
 public class UnitObjectPool : MonoBehaviour
 {
-    //[2026/01/13] START プリンス：Unitに継承を伝えるため
-    [SerializeField]
-    private GameManager _gameManager;
-
-    [SerializeField]
-    private DebugManager _debugManager;
-    //[2026/01/13] END プリンス
-
     [SerializeField]
     private GameObject _knightPrefab;
 
@@ -92,7 +84,7 @@ public class UnitObjectPool : MonoBehaviour
 
         if (Unit)
         {
-            Unit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            Unit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
             Unit.gameObject.SetActive(true);
             return Unit; //オブジェクトプールに使ってないのがあったらそれを返す
         }
@@ -118,7 +110,7 @@ public class UnitObjectPool : MonoBehaviour
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
             newUnit.BindPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
