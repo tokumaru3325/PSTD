@@ -166,4 +166,42 @@ public class UnitView : MonoBehaviour
         string newName = currentName + $"{serialNumber}";
         gameObject.name = newName;
     }
+
+    #region Sound Effects
+
+    public void PlaySwordAttackSE()
+    {
+        SoundManager.Instance.PlaySwordAttack();
+    }
+
+    public void PlaySwordBlockSE()
+    {
+        SoundManager.Instance.PlaySwordBlock();
+    }
+
+    public void PlaySwordImpactSE()
+    {
+        SoundManager.Instance.PlaySwordImpact();
+    }
+
+    public void PlaySwordParrySE()
+    {
+        SoundManager.Instance.PlaySwordParry();
+    }
+
+    public void PlayBowAttackSE()
+    {
+        SoundManager.Instance.PlayBowAttack();
+    }
+
+    public void PlayBowBlockSE()
+    {
+        SoundManager.Instance.PlayBowBlock();
+    }
+
+    public void PlayBowImpactSE()
+    {
+        SoundManager.Instance.PlayBowImpact();
+    }
+    #endregion
 }
