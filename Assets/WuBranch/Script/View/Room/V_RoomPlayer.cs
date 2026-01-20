@@ -79,5 +79,6 @@ public class V_RoomPlayer : MonoBehaviour
     public void SetState(GameReadyState state)
     {
         _playerState.SetState(state);
+        _castleViewer.ChangeBtnInteractivity(state);
     }
 }

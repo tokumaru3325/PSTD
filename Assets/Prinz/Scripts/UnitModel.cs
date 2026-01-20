@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -193,7 +194,7 @@ public abstract class UnitModel
         {
             if (t != null)
             {
-                if(t.Model?.IsDead == false) return t;
+                if(t.IsDead() == false) return t;
             }
         }
         return null;

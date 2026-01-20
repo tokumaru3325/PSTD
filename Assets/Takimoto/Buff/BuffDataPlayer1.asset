@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fe3e1afbc76e54680bdd7629758d15, type: 3}
   m_Name: BuffDataPlayer1
   m_EditorClassIdentifier: Assembly-CSharp::BuffData
+  AttackPower: 0
+  AttackSpeed: 0
+  AttackRange: 0
+  MoveSpeed: 0

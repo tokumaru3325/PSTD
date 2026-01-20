@@ -47,6 +47,8 @@ public class V_RoomSetting : MonoBehaviour
             _createBtn.onClick.AddListener(CreateRoom);
         if (_cancelBtn)
             _cancelBtn.onClick.AddListener(CancelCreatingRoom);
+        if (!_roomManager)
+            _roomManager = FindFirstObjectByType<C_RoomManager>();
         SetNameErrTxt("");
     }
 

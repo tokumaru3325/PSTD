@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Steamworks;
-using Unity.Mathematics;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -63,16 +61,16 @@ public class C_Room : MonoBehaviour
     private List<CSteamID> _needGetName;
 
     /// <summary>
-    /// 準備記録
+    /// プレイヤーのデータ
     /// </summary>
-    private Dictionary<CSteamID, bool> _readyRecords;
+    private Dictionary<CSteamID, M_RoomPlayerData> _playerDatas;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         _needGetName = new List<CSteamID>();
         RoleMap = new Dictionary<CSteamID, MultiRoleType>();
-        _readyRecords = new Dictionary<CSteamID, bool>();
+        _playerDatas = new Dictionary<CSteamID, M_RoomPlayerData>();
         // 初期化するためのデータが用意したか
         bool bInitResult = false;
         _globalVariable = FindFirstObjectByType<C_GlobalVariable>();
@@ -152,8 +150,7 @@ public class C_Room : MonoBehaviour
             // 自分以外のメンバーが退室
             NotifyMemberChange(changedPlayer, "");
             M_RoomPlayerData data = new() { CastleIndex = CastleType.Null, State = GameReadyState.Null };
-            UpdateMemberReady(changedPlayer, data.State);
-            NotifyMemberUpdate(changedPlayer, data);
+            UpdateMemberData(changedPlayer, data);
             // 役割マッから削除
             if (RoleMap.ContainsKey(changedPlayer))
                 RoleMap.Remove(changedPlayer);
@@ -168,7 +165,6 @@ public class C_Room : MonoBehaviour
         // ホスト
         CSteamID owner = SteamMatchmaking.GetLobbyOwner(_roomID);
         RoleMap.Add(owner, MultiRoleType.Host);
-        _readyRecords.Add(owner, false);
         // クライアント
         int memberNums = SteamMatchmaking.GetNumLobbyMembers(_roomID);
         for (int index = 0; index < memberNums; index++)
@@ -179,7 +175,6 @@ public class C_Room : MonoBehaviour
                 continue;
 
             RoleMap.Add(player, MultiRoleType.Client);
-            _readyRecords.Add(player, false);
         }
     }
 
@@ -191,26 +186,14 @@ public class C_Room : MonoBehaviour
         // 部屋の情報
         GetLobbyData(_roomID);
 
-        // 自身の情報
-        //CSteamID myID = SteamUser.GetSteamID();
-        //InitSelfInfo(myID);
-
-        // メンバの情報
+        // メンバの情報(自身も含む)
         int memberNum = SteamMatchmaking.GetNumLobbyMembers(_roomID);
-        // 自身以外の人が既にいる
-        //if (memberNum >= 1)
-        //{
         for (int memberIndex = 0; memberIndex < memberNum; memberIndex++)
         {
             CSteamID memberID = SteamMatchmaking.GetLobbyMemberByIndex(_roomID, memberIndex);
-            // 自身以外の人の情報を取得
-            //if (memberID != myID)
-            //{
             GetMemberName(_roomID, memberID);
             GetMemberData(_roomID, memberID);
-            //}
         }
-        //}
     }
 
     /// <summary>
@@ -251,10 +234,8 @@ public class C_Room : MonoBehaviour
         // 状態の更新
         string stateString = SteamMatchmaking.GetLobbyMemberData(lobbyID, memberID, RoomParams.MEMBER_STATE_KEY);
         data.State = (GameReadyState)int.Parse(stateString);
-        // 状態更新
-        UpdateMemberReady(memberID, data.State);
-        // 通知
-        NotifyMemberUpdate(memberID, data);
+        // データ更新
+        UpdateMemberData(memberID, data);
     }
 
     /// <summary>
@@ -307,34 +288,34 @@ public class C_Room : MonoBehaviour
     /// </summary>
     public void LeaveRoom()
     {
+        // steam上
         SteamMatchmaking.LeaveLobby(_roomID);
+        // 自身のネットワーク
+        NetworkManager.Singleton.Shutdown();
         SceneManager.LoadScene("RoomList", LoadSceneMode.Single);
     }
 
     /// <summary>
-    /// 状態更新
+    /// メンバデータを更新
     /// </summary>
-    /// <param name="memberID">メンバID</param>
-    /// <param name="state">状態</param>
-    private void UpdateMemberReady(CSteamID memberID, GameReadyState state)
+    /// <param name="memberID">メンバーID</param>
+    /// <param name="data">更新するデータ</param>
+    private void UpdateMemberData(CSteamID memberID, M_RoomPlayerData data)
     {
-        if (_readyRecords.ContainsKey(memberID))
+        if (_playerDatas.ContainsKey(memberID))
         {
-            if (state == GameReadyState.Null)
-                _readyRecords.Remove(memberID);
+            if (data.CastleIndex == CastleType.Null && data.State == GameReadyState.Null)
+                _playerDatas.Remove(memberID);
             else
-                _readyRecords[memberID] = state == GameReadyState.Ready;
-
-            // 人数は1人以上
-            if (_readyRecords.Count > 1)
-            {
-                NotifyStartState(CheckAllReady());
-            }
-            else
-                NotifyStartState(false);
+                _playerDatas[memberID] = data;
         }
         else
-            Debug.LogError("Got someone's state that who is not in record");
+            _playerDatas.Add(memberID, data);
+
+        // 人数は1人以上の時、スタートボタンの状態を更新
+        NotifyStartState(_playerDatas.Count >= 2 && CheckAllReady());
+        // 通知
+        NotifyMemberUpdate(memberID, data);
     }
 
     /// <summary>
@@ -343,7 +324,7 @@ public class C_Room : MonoBehaviour
     /// <returns>true: はい、false: いいえ</returns>
     private bool CheckAllReady()
     {
-        return _readyRecords.All(_ => _.Value);
+        return _playerDatas.All(_ => _.Value.State == GameReadyState.Ready);
     }
 
     /// <summary>
@@ -358,12 +339,37 @@ public class C_Room : MonoBehaviour
     /// <summary>
     /// ゲームスタート
     /// </summary>
+    [Rpc(SendTo.Server)]
     public void StartGame()
     {
         if (CheckAllReady())
         {
+            // ゲームシーンに表示するために、選択された城のタイプを共通変数のとろこに記録
+            foreach (var pair in _playerDatas)
+                _globalVariable.AddPlayerSelectedCastle(pair.Key, pair.Value.CastleIndex);
+
+
+
             // マルチのゲームシーンに行きます
             NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
         }
+    }
+
+    private void TestAllClientRTT()
+    {
+        NetworkTransport transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
+        Dictionary<ulong, ulong> Rtts = new Dictionary<ulong, ulong>();
+        foreach (var memberID in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            ulong rtt = transport.GetCurrentRtt(memberID);
+            Rtts.Add(memberID, rtt);
+        }
+
+        ComparerRtt(Rtts);
+    }
+
+    private void ComparerRtt(Dictionary<ulong, ulong> rtts)
+    {
+
     }
 }

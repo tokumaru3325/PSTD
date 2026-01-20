@@ -1,4 +1,5 @@
 using Steamworks;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
@@ -26,8 +27,22 @@ public class C_GlobalVariable : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            GameShutdown();
         }
+    }
+
+    /// <summary>
+    /// ゲームをシャットダウン
+    /// </summary>
+    private void GameShutdown()
+    {
+        // ネットワーク上の物も全部シャットダウン
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+        {
+            SteamMatchmaking.LeaveLobby(_datas.RoomID);
+            NetworkManager.Singleton.Shutdown();
+        }
+        Application.Quit();
     }
 
     /// <summary>
@@ -82,5 +97,29 @@ public class C_GlobalVariable : MonoBehaviour
     public CSteamID GetRoomID()
     {
         return _datas.RoomID;
+    }
+
+    /// <summary>
+    /// プレイヤーが選択した城のタイプを追加または更新
+    /// </summary>
+    /// <param name="playerID">プレイヤーID</param>
+    /// <param name="castleType">城のタイプ</param>
+    public void AddPlayerSelectedCastle(CSteamID playerID, CastleType castleType)
+    {
+        _datas.AddPlayerSelectedCastle(playerID, castleType);
+    }
+
+    /// <summary>
+    /// プレイヤーの選択した城のタイプを削除
+    /// </summary>
+    /// <param name="playerID">プレイヤーID</param>
+    /// <returns>城のタイプ</returns>
+    public CastleType GetPlayerCastle(CSteamID playerID)
+    {
+        if (!_datas.SelectedCastles.ContainsKey(playerID))
+        {
+            return CastleType.Null;
+        }
+        return _datas.SelectedCastles[playerID];
     }
 }

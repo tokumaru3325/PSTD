@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Netcode.Transports;
 using Steamworks;
@@ -32,6 +34,12 @@ public class C_RoomManager : MonoBehaviour
     /// 部屋の情報
     /// </summary>
     private M_RoomData _roomData;
+
+    /// <summary>
+    /// ゲームマネージャー
+    /// </summary>
+    [SerializeField]
+    private NetworkObject _gameManagerPrefab;
 
     void Awake()
     {
@@ -109,6 +117,8 @@ public class C_RoomManager : MonoBehaviour
 
         _globalVariable.SetRoomRole(MultiRoleType.Host);
         NetworkManager.Singleton.StartHost();
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnEnterSceneCompleted;
+        //NetworkManager.Singleton.SceneManager.ActiveSceneSynchronizationEnabled
         NetworkManager.Singleton.SceneManager.LoadScene("Room", LoadSceneMode.Single);
     }
 
@@ -148,6 +158,8 @@ public class C_RoomManager : MonoBehaviour
         // true から false に遷移すると、接続承認応答が処理されます。
         response.Pending = true;
 
+        response.CreatePlayerObject = false;
+
         // ホストの場合は自動承認
         if (request.ClientNetworkId == NetworkManager.Singleton.LocalClientId)
         {
@@ -156,6 +168,7 @@ public class C_RoomManager : MonoBehaviour
             return;
         }
 
+        // 先に通れない条件を確認、全部確認したら承認する
         // パスワードの確認
         string password = _roomData.Password;
         if (!string.IsNullOrEmpty(password))
@@ -179,8 +192,6 @@ public class C_RoomManager : MonoBehaviour
             response.Pending = false;
             return;
         }
-
-        response.CreatePlayerObject = false;
 
         // すべての承認手順を経て、通りました
         response.Approved = true;
@@ -276,9 +287,98 @@ public class C_RoomManager : MonoBehaviour
     {
         //クライアント切断コールバック
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= OnEnterSceneCompleted;
         //ネットワークマネージャーを破棄（これで新しくNetworkManagerを作る（使う）ことができる）
         NetworkManager.Singleton.Shutdown();
         //メインシーンに戻る
         SceneManager.LoadScene("RoomList");
+    }
+
+    /// <summary>
+    /// シーンに入ったときの処理
+    /// </summary>
+    /// <param name="sceneName">シーン名</param>
+    /// <param name="loadSceneMode">ロードモード</param>
+    /// <param name="clientsCompleted">完了したクライアント</param>
+    /// <param name="clientsTimedOut">タイムアウトしたクライアント</param>
+    private void OnEnterSceneCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        if (sceneName != "Game")
+            return;
+        Debug.LogError($"Enter Game Scene completed {clientsCompleted.Count}");
+        // ゲームシーンに入ったときの処理
+        if (clientsCompleted.Count == NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            // 全クライアントがシーンに入った, サーバでゲームマネージャーを生成
+            // ここでゲームシーンに必要な物(GameManager,GameStateManager,PlayerManager)を生成して初期化すべきですが、
+            // クラスの主旨とは全然違うので、GameManagerのみを生成して、続きはGameManagerの中でやる
+            C_GameManager gameManager;
+            C_GameStateManager gameStateManager;
+            C_PlayerManager playerManager;
+            SpawnManagers(out gameManager, out gameStateManager, out playerManager);
+
+            gameManager.Initialize(gameStateManager, playerManager);
+
+        }
+    }
+
+    /// <summary>
+    /// マネージャーたちを生成
+    /// </summary>
+    private void SpawnGameManager()
+    {
+        // リストからプレハブをゲット
+        NetworkPrefabsList prefabs = NetworkManager.Singleton.NetworkConfig.Prefabs.NetworkPrefabsLists.Find(list => list.name == "GameSceneNetworkPrefabsList");
+        Debug.LogError($"Spawn Game Manager {prefabs.PrefabList.Count}");
+        NetworkPrefab prefab = prefabs.PrefabList.First(p => p.Prefab.name == "GameManager");
+        Debug.LogError($"{prefab}");
+        if (prefab.Prefab.GetComponent<NetworkObject>())
+            Debug.LogError("have net");
+        GameObject targetObj = Instantiate(prefab.Prefab);
+        NetworkObject networkObj = targetObj.GetComponent<NetworkObject>();
+        networkObj.Spawn();
+
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            bool isObserver = networkObj.IsNetworkVisibleTo(client.ClientId);
+            Debug.LogError($"Client {client.ClientId} is observer? : {isObserver}");
+
+            if (!isObserver)
+            {
+                // 強制加入試試看，這能確認是否為 Visibility 問題
+                networkObj.NetworkShow(client.ClientId);
+            }
+        }
+    }
+
+    /// <summary>
+    /// マネージャーたちを生成
+    /// </summary>
+    private void SpawnManagers(out C_GameManager gameManager, out C_GameStateManager gameStateManager, out C_PlayerManager playerManager)
+    {
+        // リストからプレハブをゲット
+        NetworkPrefabsList prefabs = NetworkManager.Singleton.NetworkConfig.Prefabs.NetworkPrefabsLists.Find(list => list.name == "GameSceneNetworkPrefabsList");
+        Dictionary<string, GameObject> prefabMap = prefabs.PrefabList.ToDictionary(p => p.Prefab.name, p => p.Prefab);
+
+        // それぞれのプレハブを生成
+        gameManager = SpawnManager(prefabMap, "GameManager").GetComponent<C_GameManager>();
+        gameStateManager = SpawnManager(prefabMap, "GameStateManager").GetComponent<C_GameStateManager>();
+        playerManager = SpawnManager(prefabMap, "PlayerManager").GetComponent<C_PlayerManager>();
+    }
+
+    /// <summary>
+    /// 指定されたオブジェクトを生成
+    /// </summary>
+    /// <param name="map">プレハブマップ</param>
+    /// <param name="name">指定されたオブジェクトのID</param>
+    private GameObject SpawnManager(Dictionary<string, GameObject> map, string name)
+    {
+        if (map.TryGetValue(name, out GameObject target))
+        {
+            GameObject targetObj = Instantiate(target);
+            targetObj.GetComponent<NetworkObject>().Spawn();
+            return targetObj;
+        }
+        return null;
     }
 }

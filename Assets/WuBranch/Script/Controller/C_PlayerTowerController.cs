@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class C_PlayerTowerController : MonoBehaviour
@@ -24,7 +25,7 @@ public class C_PlayerTowerController : MonoBehaviour
         _playerModel = new M_Tower(Max_HP);
         _playerModel.OnHPChanged += OnUpdateHP;
         //[2025/12/23] プリンス START
-    //    _playerModel.OnDeath += OnDeathNotify;
+        //    _playerModel.OnDeath += OnDeathNotify;
         _playerModel.SetPlayerTag(tag);
         //[2025/12/23] プリンス END
     }
@@ -55,7 +56,7 @@ public class C_PlayerTowerController : MonoBehaviour
 
         _playerModel.SetHP(_playerModel.HP - damage);
 
-        if(_playerView)
+        if (_playerView)
             _playerView.HandleDamageEffect();
     }
 

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 800fc1a66b6c6df48b234653a1cd83a3, type: 3}
+  m_Name: BuffAttackRangeData
+  m_EditorClassIdentifier: Assembly-CSharp::BuffTypeData
+  BuffValue: 1
+  BuffTime: 60
+  EffectColor: {r: 0, g: 32, b: 32, a: 0}
+  BuffIcon: {fileID: -1016303037, guid: 11a74da6fbbb1af4e9ca749a56486526, type: 3}

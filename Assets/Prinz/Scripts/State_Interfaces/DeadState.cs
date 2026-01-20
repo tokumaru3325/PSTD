@@ -3,12 +3,10 @@ using UnityEngine;
 
 public class DeadState : IUnitState
 {
-    private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
 
-    public DeadState(UnitModel model, UnitPresenter presenter)
+    public DeadState(UnitPresenter presenter)
     {
-        _mymodel = model;
         _me = presenter;
     }
 
