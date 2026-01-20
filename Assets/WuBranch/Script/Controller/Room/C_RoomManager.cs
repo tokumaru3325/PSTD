@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Netcode.Transports;
 using Steamworks;
 using Unity.Netcode;
@@ -301,23 +303,21 @@ public class C_RoomManager : MonoBehaviour
     /// <param name="loadSceneMode">ロードモード</param>
     /// <param name="clientsCompleted">完了したクライアント</param>
     /// <param name="clientsTimedOut">タイムアウトしたクライアント</param>
-    private void OnEnterSceneCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    private async void OnEnterSceneCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        if (sceneName != "Game")
+        if (sceneName != "MultiGame")
             return;
         Debug.LogError($"Enter Game Scene completed {clientsCompleted.Count}");
         // ゲームシーンに入ったときの処理
         if (clientsCompleted.Count == NetworkManager.Singleton.ConnectedClients.Count)
         {
-            // 全クライアントがシーンに入った, サーバでゲームマネージャーを生成
-            // ここでゲームシーンに必要な物(GameManager,GameStateManager,PlayerManager)を生成して初期化すべきですが、
-            // クラスの主旨とは全然違うので、GameManagerのみを生成して、続きはGameManagerの中でやる
+            // 全クライアントがシーンに入った, サーバでマネージャーを生成
             C_GameManager gameManager;
             C_GameStateManager gameStateManager;
             C_PlayerManager playerManager;
             SpawnManagers(out gameManager, out gameStateManager, out playerManager);
 
-            gameManager.Initialize(gameStateManager, playerManager);
+            //gameManager.Initialize(gameStateManager, playerManager);
 
         }
     }

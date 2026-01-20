@@ -351,7 +351,7 @@ public class C_Room : MonoBehaviour
 
 
             // マルチのゲームシーンに行きます
-            NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene("MultiGame", LoadSceneMode.Single);
         }
     }
 
