@@ -196,96 +196,6 @@ public class UnitPresenter : MonoBehaviour
         _IsGameEnding = true;
     }
 
-    private IEnumerator DelayVictoryState(float delay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(delay);
-
-            _stateMachine?.TrySetState(new VictoryState(Model, this));
-        }
-    }
-
-    #endregion
-    //=====================================================================================================
-
-    //=====================================================================================================
-    #region 解除 - Release
-    public void Release()
-    {
-        Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
-
-        UnsubscribeToEvents();
-
-        Pool?.Release(this);
-    }
-
-
-    private void OnDisable()
-    {
-        _stateMachine = null;
-        Model = null;
-    }
-    #endregion
-    //=====================================================================================================
-    public void OnEnterState(IUnitState EnteringState)
-    {
-        if (EnteringState == null) return;
-
-        if (_IsGameEnding)
-        {
-
-        }
-
-        if (EnteringState is DeadState)
-        {
-
-        }
-
-        UpdateDirection(Model.MoveDirection);
-        View.UpdateAttackRangeSpriteColor();
-    }
-    //=====================================================================================================
-    #region 更新 - Update
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        Model?.Tick(this);
-        if (_IsStateUpdateStopped)
-            return;
-        _stateMachine?.Tick(Time.deltaTime);
-    }
-
-    void FixedUpdate()
-    {
-        if (_IsGameEnding) return;
-        if (_IsStateUpdateStopped)
-            return;
-        _stateMachine?.FixedTick(Time.fixedDeltaTime);
-    }
-
-    /// <summary>
-    /// この関数を使って、DebugLogの表示をDebugManagerのInspector上で設定することが出来る
-    /// 使い方：Log("「○○メッセージ」", 「LogType.Log、LogType.Warning、LogType.Errorのいずれを選ぶ」);
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="type"></param>
-    public void Log(string message, LogType type)
-    {
-        _debugManager.Log(message, type);
-    }
-
-    private void PrepareDeath()
-    {
-        //   View.UpdateHealth(Model.Health / Model.MaxHealth);
-        Model.NotifyUnitDeath();
-        Model.ClearTargets();
-        Collider.enabled = false;
-        View.EnableAttackRange(false);
-    }
-
     private void OnHealthChanged(float health, float maxHealth)
     {
         View.UpdateHealth(health / maxHealth);
@@ -326,7 +236,6 @@ public class UnitPresenter : MonoBehaviour
 
     #endregion
     //=====================================================================================================
-
     //=====================================================================================================
     #region 解除 - Release
     public void Release()
