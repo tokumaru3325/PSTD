@@ -31,6 +31,20 @@ public class UnitObjectPool : MonoBehaviour
 
     List<UnitPresenter> MagePool;
 
+    public static UnitObjectPool Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     //最初にいくつプールに貯めておくか
     public void CreatePool(int maxCount)
     {
@@ -43,21 +57,18 @@ public class UnitObjectPool : MonoBehaviour
             //ナイトのオブジェクトプールを貯める
             GameObject gameObject = Instantiate(_knightPrefab);
             UnitPresenter obj = gameObject.GetComponent<UnitPresenter>();
-            obj.SetPool(this);
             obj.gameObject.SetActive(false);
             KnightPool.Add(obj);
 
             //アーチャーのオブジェクトプールを貯める
             gameObject = Instantiate(_archerPrefab);
             obj = gameObject.GetComponent<UnitPresenter>();
-            obj.SetPool(this);
             obj.gameObject.SetActive(false);
             ArcherPool.Add(obj);
 
             //メイジのオブジェクトプールを貯める
             gameObject = Instantiate(_magePrefab);
             obj = gameObject.GetComponent<UnitPresenter>();
-            obj.SetPool(this);
             obj.gameObject.SetActive(false);
             MagePool.Add(obj);
         }
@@ -105,13 +116,12 @@ public class UnitObjectPool : MonoBehaviour
                 newObj = Instantiate(_magePrefab, position, Quaternion.identity);
                 break;
         }
-        
+
         if (newObj)
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
             //[2025/11/18]　プリンス　Start
             newUnit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加
-            newUnit.SetPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
             //   newMonster.ElapsedTime = 0;
