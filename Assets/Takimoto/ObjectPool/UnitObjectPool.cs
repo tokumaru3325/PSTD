@@ -5,14 +5,6 @@ using UnityEngine.UIElements;
 
 public class UnitObjectPool : MonoBehaviour
 {
-    //[2026/01/13] START プリンス：Unitに継承を伝えるため
-    [SerializeField]
-    private GameManager _gameManager;
-
-    [SerializeField]
-    private DebugManager _debugManager;
-    //[2026/01/13] END プリンス
-
     [SerializeField]
     private GameObject _knightPrefab;
 
@@ -75,21 +67,21 @@ public class UnitObjectPool : MonoBehaviour
             //ナイトのオブジェクトプールを貯める
             GameObject gameObject = Instantiate(_knightPrefab);
             UnitPresenter obj = gameObject.GetComponent<UnitPresenter>();
-            obj.SetPool(this);
+            obj.BindPool(this);
             obj.gameObject.SetActive(false);
             KnightPool.Add(obj);
 
             //アーチャーのオブジェクトプールを貯める
             gameObject = Instantiate(_archerPrefab);
             obj = gameObject.GetComponent<UnitPresenter>();
-            obj.SetPool(this);
+            obj.BindPool(this);
             obj.gameObject.SetActive(false);
             ArcherPool.Add(obj);
 
             //メイジのオブジェクトプールを貯める
             gameObject = Instantiate(_magePrefab);
             obj = gameObject.GetComponent<UnitPresenter>();
-            obj.SetPool(this);
+            obj.BindPool(this);
             obj.gameObject.SetActive(false);
             MagePool.Add(obj);
         }
@@ -119,9 +111,9 @@ public class UnitObjectPool : MonoBehaviour
             // 2026.01.18 ウー start バフの追加
             List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(playerTag);
             List<C_Buff> needShowBuffs = GetShowBuff(buffs);
-            //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            //[2025/12/02] プリンス : "playerTag"追加
             //Unit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager);
-            Unit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager, needShowBuffs);
+            Unit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs);
             // 2026.01.18 ウー end
             Unit.gameObject.SetActive(true);
             return Unit; //オブジェクトプールに使ってないのがあったらそれを返す
@@ -151,9 +143,9 @@ public class UnitObjectPool : MonoBehaviour
             List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(playerTag);
             List<C_Buff> needShowBuffs = GetShowBuff(buffs);
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager, needShowBuffs); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
             // 2026.01.18 ウー end
-            newUnit.SetPool(this);
+            newUnit.BindPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
             //   newMonster.ElapsedTime = 0;

@@ -29,7 +29,6 @@ public class UnitView : MonoBehaviour
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void StopAttack() => Animator.SetTrigger("StopAttack");
-    //    public void PlayHeal() => Animator.SetTrigger("Heal");
     public void PlayMove(bool move) => Animator.SetBool("Move", move);
     public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
     public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
@@ -104,7 +103,7 @@ public class UnitView : MonoBehaviour
         _unitSpriteRenderer = _unitSprite.GetComponent<SpriteRenderer>();
 
         AttackRangeTransform = transform.Find("AttackRange");
-        var DataType = presenter.Model?.GetDataType();
+        var DataType = presenter.GetDataType();
         if (DataType is KnightData)
         {
             AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
@@ -179,6 +178,44 @@ public class UnitView : MonoBehaviour
         gameObject.name = newName;
     }
 
+    #region Sound Effects
+
+    public void PlaySwordAttackSE()
+    {
+        SoundManager.Instance.PlaySwordAttack();
+    }
+
+    public void PlaySwordBlockSE()
+    {
+        SoundManager.Instance.PlaySwordBlock();
+    }
+
+    public void PlaySwordImpactSE()
+    {
+        SoundManager.Instance.PlaySwordImpact();
+    }
+
+    public void PlaySwordParrySE()
+    {
+        SoundManager.Instance.PlaySwordParry();
+    }
+
+    public void PlayBowAttackSE()
+    {
+        SoundManager.Instance.PlayBowAttack();
+    }
+
+    public void PlayBowBlockSE()
+    {
+        SoundManager.Instance.PlayBowBlock();
+    }
+
+    public void PlayBowImpactSE()
+    {
+        SoundManager.Instance.PlayBowImpact();
+    }
+    #endregion
+
     // 2026.01.16 ウー start バフのエフェクト追加
     /// <summary>
     /// バフのエフェクトを更新
@@ -206,4 +243,5 @@ public class UnitView : MonoBehaviour
         }
     }
     // 2026.01.16 ウー end バフエフェクト追加
+
 }

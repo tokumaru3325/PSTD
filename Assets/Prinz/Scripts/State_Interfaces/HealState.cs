@@ -2,27 +2,25 @@ using UnityEngine;
 
 public class HealState : IUnitState
 {
-    private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
     private UnitPresenter _target;
 
-    public HealState(UnitModel model, UnitPresenter presenter, UnitPresenter target)
+    public HealState(UnitPresenter presenter, UnitPresenter target)
     {
-        _mymodel = model;
         _me = presenter;
         _target = target;
     }
 
     public void OnEnter()
     {
-        _me.Log($"Enter HealState {_mymodel.PlayerSide}", LogType.Warning);
+        _me.Log($"Enter HealState {_me.GetPlayerSide()}", LogType.Warning);
 
         _me.OnEnterState(this);
     //    _target = _mymodel?.GetPrimaryTarget();
     }
     public void OnExit()
     {
-       _me.View?.StopAttack();
+       _me.StopAttack();
     }
 
     public IUnitState OnUpdate(float dt)
@@ -31,14 +29,14 @@ public class HealState : IUnitState
         if (_me.IsValidTargetExist() == false)
         {
             //    Debug.Log("Target is too far");
-            return new IdleState(_mymodel, _me);
+            return new IdleState(_me);
         }
         ////
         //    _target = _mymodel?.GetPrimaryTarget();
         if (_target == null)
         {
             //    Debug.LogError("Target is null or dead");
-            return new IdleState(_mymodel, _me);
+            return new IdleState(_me);
         }
 
         _me.PerformHealSpell(_target, dt);

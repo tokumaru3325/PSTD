@@ -17,15 +17,15 @@ public class ArcherModel : UnitModel
         float timergoal = 1f / TotalAttackSpeed;
 
         if(attackTimer < timergoal * 0.9f) 
-            Owner.View?.PlayAttack();
+            Owner.PlayAttack();
         else
-            Owner.View?.StopAttack();
+            Owner.StopAttack();
 
         attackTimer += dt;
 
         if (attackTimer >= timergoal)
         {
-            Owner.View?.StopAttack();
+            Owner.StopAttack();
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
@@ -37,15 +37,15 @@ public class ArcherModel : UnitModel
         float timergoal = 1f / TotalAttackSpeed;
 
         if (attackTimer < timergoal * 0.9f)
-            Owner.View?.PlayAttack();
+            Owner.PlayAttack();
         else
-            Owner.View?.StopAttack();
+            Owner.StopAttack();
 
         attackTimer += dt;
 
         if (attackTimer >= timergoal)
         {
-            Owner.View?.StopAttack();
+            Owner.StopAttack();
             attackTimer = 0f;
             float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);

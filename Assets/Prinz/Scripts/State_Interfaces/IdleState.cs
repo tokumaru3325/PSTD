@@ -2,20 +2,18 @@ using UnityEngine;
 
 public class IdleState : IUnitState
 {
-    private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
     private float _idleTime;
     private float _idleWaitTime = 0;
 
-    public IdleState(UnitModel model, UnitPresenter presenter)
+    public IdleState(UnitPresenter presenter)
     {
-        _mymodel = model;
         _me = presenter;
     }
 
     public void OnEnter()
     {
-        _me.Log($"Enter IdleState {_mymodel.PlayerSide}", LogType.Warning);
+        _me.Log($"Enter IdleState {_me.GetPlayerSide()}", LogType.Warning);
         _me.OnEnterState(this);
         _idleTime = 0f;
     }
@@ -27,21 +25,21 @@ public class IdleState : IUnitState
         {
             if (_me.IsValidTargetExist())
             {
-                var target = _mymodel.GetPrimaryTarget();
+                var target = _me.GetPrimaryTarget();
                 if (target != null)
                 {
                     if (_me.IsSameTeamAs(target))
                     {
-                        return new HealState(_mymodel, _me, target); //味方だったら回復する
+                        return new HealState(_me, target); //味方だったら回復する
                     }
                     if (false == _me.IsSameTeamAs(target)) //敵だったら攻撃する
                     {
-                        return new AttackState(_mymodel, _me, target);
+                        return new AttackState(_me, target);
                     }
                 }
-                if (_mymodel.IsPlayerInRange)
+                if (_me.IsPlayerInRange())
                 {
-                    return new AttackPlayerState(_mymodel, _me);
+                    return new AttackPlayerState(_me);
                 }
             }
             _idleTime += dt;
@@ -52,7 +50,7 @@ public class IdleState : IUnitState
         if(_me.IsValidTargetExist() == false)
         {
         //    _me.Model.ClearTargets();
-            return new MoveState(_mymodel, _me);
+            return new MoveState(_me);
         }
 
         return null;

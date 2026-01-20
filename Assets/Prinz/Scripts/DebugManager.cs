@@ -11,18 +11,19 @@ using Unity.Properties;
 
 public class DebugManager : MonoBehaviour 
 {
-/*    #region Singleton Implementation
-
-    private static readonly Lazy<DebugManager> instance =
-        new Lazy<DebugManager>(() => new DebugManager());
-
-    public static DebugManager Instance => instance.Value;
-
-    private DebugManager()
+    #region Singleton Implementation
+    public static DebugManager Instance { get; private set; }
+    void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        // DontDestroyOnLoad(gameObject); //optional
     }
-
-    #endregion*/
+    #endregion
 
     [Serializable]
     public class DebugLogSettings
