@@ -40,6 +40,7 @@ public class C_RoomSeeker : MonoBehaviour
     /// </summary>
     public void FindRoom(string condition = "")
     {
+        Debug.Log($"Find Room Start");
         _onLobbyMatched = CallResult<LobbyMatchList_t>.Create(OnMatchLobby);
         SteamMatchmaking.AddRequestLobbyListResultCountFilter(RoomParams.MAX_LOBBY_COUNT);
         SteamMatchmaking.AddRequestLobbyListStringFilter(RoomParams.GAME_ID_KEY, RoomParams.GAME_ID_VALUE, ELobbyComparison.k_ELobbyComparisonEqual);
@@ -58,6 +59,7 @@ public class C_RoomSeeker : MonoBehaviour
     private void OnMatchLobby(LobbyMatchList_t param, bool bIOFailure)
     {
         uint lobbyCount = param.m_nLobbiesMatching;
+        Debug.Log($"Find Room Count {lobbyCount}");
         List<M_RoomFrontData> roomDatas = new();
         for (int index = 0; index < lobbyCount; index++)
         {
@@ -65,6 +67,7 @@ public class C_RoomSeeker : MonoBehaviour
             roomDatas.Add(data);
         }
         OnFoundRoomData?.Invoke(roomDatas);
+        Debug.Log($"Create Room Complete");
     }
 
     /// <summary>

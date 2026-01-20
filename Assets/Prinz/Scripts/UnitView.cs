@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,9 +19,16 @@ public class UnitView : MonoBehaviour
 
     public Animator Animator;
 
+    // 2026.01.16 ウー start バフのエフェクト追加
+    /// <summary>
+    /// 
+    /// </summary>
+    private const float OUTLINE_WIDTH = 0.005f;
+
+    // 2026.01.16 ウー end バフのエフェクト追加
+
     public void PlayAttack() => Animator.SetTrigger("Attack");
     public void StopAttack() => Animator.SetTrigger("StopAttack");
-//    public void PlayHeal() => Animator.SetTrigger("Heal");
     public void PlayMove(bool move) => Animator.SetBool("Move", move);
     public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
     public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
@@ -30,12 +39,12 @@ public class UnitView : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Debug.Log($"{_unitSpriteRenderer.material.name}");
     }
 
     private void Awake()
     {
-    //    InitializeView();
+        //    InitializeView();
     }
 
     public void ResetAllAnimations()
@@ -50,7 +59,7 @@ public class UnitView : MonoBehaviour
     public void UpdateHealth(float hp)
     {
         _healthGauge.SetGauge(hp);
-    //    Debug.LogWarning("SetGauge called in View");
+        //    Debug.LogWarning("SetGauge called in View");
     }
 
     public void EnableAttackRange(bool enable)
@@ -60,22 +69,41 @@ public class UnitView : MonoBehaviour
 
     public void OnDeathAnimationEnd()
     {
-    //    Debug.LogWarning("Death animation ended");
-    //    PlayDeath(false);
-        _healthGauge.HideGauge();
-        presenter.Release();
+        //    Debug.LogWarning("Death animation ended");
+        //    PlayDeath(false);
+        _healthGauge?.HideGauge();
+        presenter?.Release();
+    }
+
+    public void OnDefeatAnimationStart()
+    {
+        _healthGauge?.HideGauge();
+    }
+    public void OnDefeatAnimationEnd()
+    {
+        presenter?.FreezeState(true);
+    }
+
+    public void FaceRight()
+    {
+        presenter?.FaceRight();
+    }
+
+    public void FaceLeft()
+    {
+        presenter?.FaceLeft();
     }
 
     public void InitializeView()
     {
         presenter = GetComponent<UnitPresenter>();
-    //    Animator = GetComponent<Animator>();
+        //    Animator = GetComponent<Animator>();
 
         RandomizeSpriteOffset();
         _unitSpriteRenderer = _unitSprite.GetComponent<SpriteRenderer>();
 
         AttackRangeTransform = transform.Find("AttackRange");
-        var DataType = presenter.Model?.GetDataType();
+        var DataType = presenter.GetDataType();
         if (DataType is KnightData)
         {
             AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
@@ -91,6 +119,7 @@ public class UnitView : MonoBehaviour
         AttackRangeSprite.color = Color.lightGreen;
 
         _healthGauge.ShowGauge();
+
     }
 
     // Update is called once per frame
@@ -103,14 +132,14 @@ public class UnitView : MonoBehaviour
     {
         if (!presenter.AllowDetection) return;
 
-    //    Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
+        //    Debug.LogWarning($"VIEW : EnterRange trigger with {other.gameObject.name}");
         UpdateAttackRangeSpriteColor();
         presenter.OnEnterRange(other);
     }
 
     public void OnExitRange(Collider2D other)
     {
-    //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
+        //    Debug.LogWarning($"VIEW : ExitRange trigger with {other.gameObject.name}");
         UpdateAttackRangeSpriteColor();
         presenter.OnExitRange(other);
     }
@@ -141,4 +170,78 @@ public class UnitView : MonoBehaviour
         c.a = 0.3f;
         AttackRangeSprite.color = c;
     }
+
+    public void RenamePrefab(int serialNumber)
+    {
+        string currentName = gameObject.name;
+        string newName = currentName + $"{serialNumber}";
+        gameObject.name = newName;
+    }
+
+    #region Sound Effects
+
+    public void PlaySwordAttackSE()
+    {
+        SoundManager.Instance.PlaySwordAttack();
+    }
+
+    public void PlaySwordBlockSE()
+    {
+        SoundManager.Instance.PlaySwordBlock();
+    }
+
+    public void PlaySwordImpactSE()
+    {
+        SoundManager.Instance.PlaySwordImpact();
+    }
+
+    public void PlaySwordParrySE()
+    {
+        SoundManager.Instance.PlaySwordParry();
+    }
+
+    public void PlayBowAttackSE()
+    {
+        SoundManager.Instance.PlayBowAttack();
+    }
+
+    public void PlayBowBlockSE()
+    {
+        SoundManager.Instance.PlayBowBlock();
+    }
+
+    public void PlayBowImpactSE()
+    {
+        SoundManager.Instance.PlayBowImpact();
+    }
+    #endregion
+
+    // 2026.01.16 ウー start バフのエフェクト追加
+    /// <summary>
+    /// バフのエフェクトを更新
+    /// </summary>
+    /// <param name="buffs"></param>
+    public void UpdateBuffEffect(List<C_Buff> buffs)
+    {
+        Material material = _unitSpriteRenderer.material;
+        if (!material)
+            return;
+        Debug.Log($"Update buff effect. Clear");
+        // クリア
+        for (int index = 1; index <= 4; index++)
+        {
+            material.SetFloat($"_OutlineWidth{index}", 0.0f);
+            material.SetColor($"_OutlineColor{index}", Color.black);
+        }
+        Debug.Log($"Update buff effect. set");
+        // 新しいエフェクトの色を設定
+        int buffCount = buffs.Count;
+        for (int index = 1; index <= buffCount; index++)
+        {
+            material.SetFloat($"_OutlineWidth{index}", OUTLINE_WIDTH * index);
+            material.SetColor($"_OutlineColor{index}", buffs[index - 1].GetEffectColor());
+        }
+    }
+    // 2026.01.16 ウー end バフエフェクト追加
+
 }

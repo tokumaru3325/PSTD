@@ -18,4 +18,55 @@ public class UnitSpriteScript : MonoBehaviour
     {
         _view.OnDeathAnimationEnd();
     }
+    public void OnDefeatAnimationStart()
+    {
+        _view.OnDefeatAnimationStart();
+    }
+    public void OnDefeatAnimationEnd()
+    {
+        _view.OnDefeatAnimationEnd();
+    }
+    public void FaceLeft()
+    {
+        _view.FaceLeft();
+    }
+    public void FaceRight()
+    {
+        _view.FaceRight();
+    }
+
+    public void PlaySwordAttackSE()
+    {
+        _view.PlaySwordAttackSE();
+    }
+
+    public void PlaySwordBlockSE()
+    {
+        _view.PlaySwordBlockSE();
+    }
+
+    public void PlaySwordImpactSE()
+    {
+        _view.PlaySwordImpactSE();
+    }
+
+    public void PlaySwordParrySE()
+    {
+        _view.PlaySwordParrySE();
+    }
+
+    public void PlayBowAttackSE()
+    {
+        _view.PlayBowAttackSE();
+    }
+
+    public void PlayBowBlockSE()
+    {
+        _view.PlayBowBlockSE();
+    }
+
+    public void PlayBowImpactSE()
+    {
+        _view.PlayBowImpactSE();
+    }
 }

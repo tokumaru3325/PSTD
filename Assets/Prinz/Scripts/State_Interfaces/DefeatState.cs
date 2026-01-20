@@ -2,12 +2,10 @@ using UnityEngine;
 
 public class DefeatState : IUnitState
 {
-    private readonly UnitModel _mymodel;
     private readonly UnitPresenter _me;
 
-    public DefeatState(UnitModel model, UnitPresenter presenter)
+    public DefeatState(UnitPresenter presenter)
     {
-        _mymodel = model;
         _me = presenter;
     }
 

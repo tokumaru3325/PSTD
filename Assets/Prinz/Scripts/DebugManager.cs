@@ -7,21 +7,23 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using Unity.Properties;
 
 public class DebugManager : MonoBehaviour 
 {
-/*    #region Singleton Implementation
-
-    private static readonly Lazy<DebugManager> instance =
-        new Lazy<DebugManager>(() => new DebugManager());
-
-    public static DebugManager Instance => instance.Value;
-
-    private DebugManager()
+    #region Singleton Implementation
+    public static DebugManager Instance { get; private set; }
+    void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        // DontDestroyOnLoad(gameObject); //optional
     }
-
-    #endregion*/
+    #endregion
 
     [Serializable]
     public class DebugLogSettings
@@ -36,15 +38,19 @@ public class DebugManager : MonoBehaviour
     public DebugLogSettings _debugLogVisibility;
 
     public TextMeshProUGUI debugText;
-    private string logBuffer = "";
-    private int maxLogLines = 20; // Adjust as needed
+//    private string logBuffer = "";
+//    private int maxLogLines = 20; // Adjust as needed
     private InputAction _debugAttackRangeDisplay;
     private InputAction _debugPathDisplay;
+    private InputAction _debugKillPlayer2;
     private bool _isAttackRangeVisible = false;
     private bool _isPathVisible = false;
 
     [SerializeField]
     private C_MapManager _mapManager;
+
+    [SerializeField]
+    private C_PlayerTowerController _PlayerTowerController;
 
     public List<GameObject> allAttackRanges = new List<GameObject>();
 
@@ -53,7 +59,7 @@ public class DebugManager : MonoBehaviour
     {
         _debugAttackRangeDisplay = InputSystem.actions.FindAction("ToggleAttackRangeVisibility");
         _debugPathDisplay = InputSystem.actions.FindAction("ToggleDisplayPath");
-    //    _debugLogVisibility = new  DebugLogSettings();
+        _debugKillPlayer2 = InputSystem.actions.FindAction("Spacebar");
 
         GetAllAttackRanges();
     }
@@ -70,6 +76,11 @@ public class DebugManager : MonoBehaviour
         {
             ToggleDisplayPath();
         }
+
+        if(_debugKillPlayer2.WasPressedThisFrame())
+        {
+            KillPlayer2();
+        }
     }
 
     private void OnEnable()
@@ -81,6 +92,14 @@ public class DebugManager : MonoBehaviour
     {
         allAttackRanges.Clear();
      //   Application.logMessageReceived -= HandleLog;
+    }
+
+    private void KillPlayer2()
+    {
+        GameObject playerobject = GameObject.FindGameObjectWithTag("Player2");
+        C_PlayerTowerController player2 = playerobject.GetComponent<C_PlayerTowerController>();
+
+        player2.DecreaseHP(9999);
     }
 
     public void OnUnitSpawn(UnitPresenter owner)
@@ -142,18 +161,24 @@ public class DebugManager : MonoBehaviour
         _mapManager.SetPathVisibility(_isPathVisible);
     }
 
-/*    void HandleRuntimeLog(string logString, LogType type)
-    {
-        if (false == _debugLogVisibility.RuntimeLogEnabled) return;
+    /*    void HandleRuntimeLog(string logString, LogType type)
+        {
+            if (false == _debugLogVisibility.RuntimeLogEnabled) return;
 
-        LogMessage(logString);
-    }*/
+            LogMessage(logString);
+        }*/
 
+    /// <summary>
+    /// この関数を使って、DebugLogの表示をDebugManagerのInspector上で設定することが出来る
+    /// 使い方：Log("「○○メッセージ」", 「LogType.Log、LogType.Warning、LogType.Errorのいずれを選ぶ」);
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="type"></param>
     public void Log(string logString, LogType type)
     {
         if (_debugLogVisibility.RuntimeLogEnabled)
         {
-          //  HandleRuntimeLog(logString, type);
+          //  HandleRuntimeLog(logString, type); //未実装
         }
 
         HandleEditorLog(logString, type);
