@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using System.Runtime.CompilerServices;
-using UnityEngine.InputSystem;
 
 public class V_HealthGauge : MonoBehaviour
 {

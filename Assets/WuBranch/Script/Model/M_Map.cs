@@ -24,6 +24,24 @@ public class M_Map
     }
 
     /// <summary>
+    /// マップをゲット
+    /// </summary>
+    /// <param name="map">地図</param>
+    public void SetMap(List<List<int>> map)
+    {
+        _map = map;
+    }
+
+    /// <summary>
+    /// マップをゲット
+    /// </summary>
+    /// <returns>マップ</returns>
+    public List<List<int>> GetMap()
+    {
+        return _map;
+    }
+
+    /// <summary>
     /// ルートをゲット
     /// </summary>
     /// <returns>ルート</returns>

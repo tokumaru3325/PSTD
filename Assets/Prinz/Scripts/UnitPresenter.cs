@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
-public class UnitPresenter: MonoBehaviour
+public class UnitPresenter : MonoBehaviour
 {
 
     private UnitModel Model;
@@ -37,7 +37,7 @@ public class UnitPresenter: MonoBehaviour
 
     }
 
-    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag)
+    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, List<C_Buff> buffs)
     {
         View = GetComponent<UnitView>();
         Collider = GetComponent<CapsuleCollider2D>();
@@ -81,6 +81,10 @@ public class UnitPresenter: MonoBehaviour
         Model.BindBuffData(buffdata);
         View.UpdateHealth(Model.Health / Model.MaxHealth);
         Model.NotifySpawn();
+
+        // 2026.01.18 ウー start
+        UpdateBuffEffect(buffs);
+        // 2026.01.18 ウー end
     }
 
 
@@ -172,7 +176,7 @@ public class UnitPresenter: MonoBehaviour
         Model.SetSerialNumber(GameManager.Instance.OnUnitSpawn());
         View.RenamePrefab(Model.serialNumber);
 
-    //    Log($"Name set to {gameObject.name}", LogType.Error);
+        //    Log($"Name set to {gameObject.name}", LogType.Error);
     }
     private void OnGameEndingNotify(bool ending, string tag)
     {
@@ -190,6 +194,96 @@ public class UnitPresenter: MonoBehaviour
             _stateMachine?.TrySetState(new DefeatState(this));
         }
         _IsGameEnding = true;
+    }
+
+    private IEnumerator DelayVictoryState(float delay)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delay);
+
+            _stateMachine?.TrySetState(new VictoryState(Model, this));
+        }
+    }
+
+    #endregion
+    //=====================================================================================================
+
+    //=====================================================================================================
+    #region 解除 - Release
+    public void Release()
+    {
+        Debug.Log($"Releasing 1 Unit from {Model.PlayerSide}");
+
+        UnsubscribeToEvents();
+
+        Pool?.Release(this);
+    }
+
+
+    private void OnDisable()
+    {
+        _stateMachine = null;
+        Model = null;
+    }
+    #endregion
+    //=====================================================================================================
+    public void OnEnterState(IUnitState EnteringState)
+    {
+        if (EnteringState == null) return;
+
+        if (_IsGameEnding)
+        {
+
+        }
+
+        if (EnteringState is DeadState)
+        {
+
+        }
+
+        UpdateDirection(Model.MoveDirection);
+        View.UpdateAttackRangeSpriteColor();
+    }
+    //=====================================================================================================
+    #region 更新 - Update
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        Model?.Tick(this);
+        if (_IsStateUpdateStopped)
+            return;
+        _stateMachine?.Tick(Time.deltaTime);
+    }
+
+    void FixedUpdate()
+    {
+        if (_IsGameEnding) return;
+        if (_IsStateUpdateStopped)
+            return;
+        _stateMachine?.FixedTick(Time.fixedDeltaTime);
+    }
+
+    /// <summary>
+    /// この関数を使って、DebugLogの表示をDebugManagerのInspector上で設定することが出来る
+    /// 使い方：Log("「○○メッセージ」", 「LogType.Log、LogType.Warning、LogType.Errorのいずれを選ぶ」);
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="type"></param>
+    public void Log(string message, LogType type)
+    {
+        _debugManager.Log(message, type);
+    }
+
+    private void PrepareDeath()
+    {
+        //   View.UpdateHealth(Model.Health / Model.MaxHealth);
+        Model.NotifyUnitDeath();
+        Model.ClearTargets();
+        Collider.enabled = false;
+        View.EnableAttackRange(false);
     }
 
     private void OnHealthChanged(float health, float maxHealth)
@@ -342,7 +436,7 @@ public class UnitPresenter: MonoBehaviour
     {
         if (_IsGameEnding) return;
         Model?.SetHealth(Model.Health - dmg);
-    //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
+        //    Debug.LogWarning($"Taking {dmg} damage, {Model?.Health} HP remaining.");
     }
 
     /// <summary>
@@ -364,7 +458,15 @@ public class UnitPresenter: MonoBehaviour
     public void PerformBasicAttack(UnitPresenter target, float dt)
     {
         if (_IsGameEnding) return;
-        Model.BasicAttack(target, dt);
+
+        //   if (target.Model.IsDead) return;
+        Model.BasicAttack(target, dt); //moving logic to model
+
+        /*        View?.StopAttack();
+                float damage = Model.AttackPower;
+                target.TakeDamage(damage);
+                View?.PlayAttack();*/
+
     }
 
     public void PerformHealSpell(UnitPresenter target, float dt)
@@ -536,7 +638,7 @@ public class UnitPresenter: MonoBehaviour
     #region 範囲 - range
     public bool AllowDetection =>
         false == _stateMachine.Current is DeadState || _IsGameEnding;
-        
+
     //   _stateMachine.Current is MoveState ||
     //  _stateMachine.Current is IdleState;
 
@@ -598,8 +700,8 @@ public class UnitPresenter: MonoBehaviour
     }
     private bool HandlePlayerTarget(Collider2D other)
     {
-        if(!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
-        if (player.IsDead()) {  return false; }
+        if (!other.TryGetComponent<C_PlayerTowerController>(out var player)) { return false; }
+        if (player.IsDead()) { return false; }
         Model.SetPlayerInRange(true);
         return true;
     }
@@ -608,7 +710,7 @@ public class UnitPresenter: MonoBehaviour
     {
         if (_IsGameEnding) return;
         Log($"Unit from {Model.PlayerSide} tries to update targets", LogType.Warning);
-        if(Model?.FindTarget(target) != null)
+        if (Model?.FindTarget(target) != null)
         {
             Log($"Unit from {Model.PlayerSide} updates targets and removes a Unit from {target.Model.PlayerSide}", LogType.Warning);
             Model.RemoveTarget(target);
@@ -617,14 +719,14 @@ public class UnitPresenter: MonoBehaviour
 
     public void OnExitRange(Collider2D other)
     {
-        if(_IsGameEnding) return;
-    //    if (IsDead()) return;
+        if (_IsGameEnding) return;
+
         //    Debug.LogError($"PRESENTER : ExitRange trigger with {other.gameObject.name}");
         //敵のプレヤーが範囲内から離れたら
         if (other.GetComponent<C_PlayerTowerController>() == Model.EnemyPlayer)
         {
             Model.SetPlayerInRange(false);
-        }             
+        }
 
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
@@ -646,7 +748,7 @@ public class UnitPresenter: MonoBehaviour
 
     public bool IsValidTargetExist()
     {
-        if(Model?.Targets.Count == 0 && Model?.IsPlayerInRange == false) return false;
+        if (Model?.Targets.Count == 0 && Model?.IsPlayerInRange == false) return false;
         return true;
     }
     #endregion
@@ -661,7 +763,32 @@ public class UnitPresenter: MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        
+
     }
     #endregion
+
+    // 2026.01.18 ウー start
+    #region Buff Effect
+
+    /// <summary>
+    /// ユニットと同じタグですか
+    /// </summary>
+    /// <param name="tag">タグ</param>
+    /// <returns>true: はい、false: いいえ</returns>
+    public bool CompareWithTag(string tag)
+    {
+        return Model.PlayerSide == tag;
+    }
+
+    /// <summary>
+    /// バフのエフェクトを更新
+    /// </summary>
+    /// <param name="buffs">バフ</param>
+    public void UpdateBuffEffect(List<C_Buff> buffs)
+    {
+        View.UpdateBuffEffect(buffs);
+    }
+
+    #endregion
+    // 2026.01.18 ウー end
 }

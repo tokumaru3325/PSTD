@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "BuffDataBase", menuName = "Scriptable Objects/BuffDataBase")]
 public abstract class BuffDataBase : ScriptableObject

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -30,6 +31,29 @@ public class UnitObjectPool : MonoBehaviour
     List<UnitPresenter> ArcherPool;
 
     List<UnitPresenter> MagePool;
+
+    // 2026.01.18 ウー start
+    /// <summary>
+    /// バフマネージャー
+    /// </summary>
+    [SerializeField]
+    private BuffManager _buffManager;
+
+    void Awake()
+    {
+        if (!_buffManager)
+            _buffManager = FindFirstObjectByType<BuffManager>();
+    }
+
+    void Start()
+    {
+        if (_buffManager)
+        {
+            _buffManager.OnAddBuff += HandleUpdateBuff;
+            _buffManager.OnRemoveBuff += HandleUpdateBuff;
+        }
+    }
+    // 2026.01.18 ウー end
 
     //最初にいくつプールに貯めておくか
     public void CreatePool(int maxCount)
@@ -84,7 +108,13 @@ public class UnitObjectPool : MonoBehaviour
 
         if (Unit)
         {
-            Unit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            // 2026.01.18 ウー start バフの追加
+            List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(playerTag);
+            List<C_Buff> needShowBuffs = GetShowBuff(buffs);
+            //[2025/12/02] プリンス : "playerTag"追加
+            //Unit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager);
+            Unit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs);
+            // 2026.01.18 ウー end
             Unit.gameObject.SetActive(true);
             return Unit; //オブジェクトプールに使ってないのがあったらそれを返す
         }
@@ -105,12 +135,16 @@ public class UnitObjectPool : MonoBehaviour
                 newObj = Instantiate(_magePrefab, position, Quaternion.identity);
                 break;
         }
-        
+
         if (newObj)
         {
             UnitPresenter newUnit = newObj.GetComponent<UnitPresenter>();
+            // 2026.01.18 ウー start バフの追加
+            List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(playerTag);
+            List<C_Buff> needShowBuffs = GetShowBuff(buffs);
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            // 2026.01.18 ウー end
             newUnit.BindPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
@@ -158,4 +192,75 @@ public class UnitObjectPool : MonoBehaviour
 
         return null;
     }
+
+    // 2026.01.18 ウー start
+    /// <summary>
+    /// バフの更新処理
+    /// </summary>
+    /// <param name="buff">バフ</param>
+    private void HandleUpdateBuff(C_Buff buff)
+    {
+        if (!_buffManager)
+            return;
+
+        List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(buff.TargetTag);
+        List<C_Buff> needShowBuffs = GetShowBuff(buffs);
+        Debug.Log($"need show Buff: {needShowBuffs.Count}, player : {buff.TargetTag}");
+        UpdateActivedUnitBuffEffect(needShowBuffs, buff.TargetTag);
+    }
+
+    /// <summary>
+    /// 表示するバフのタイプを探す
+    /// </summary>
+    /// <param name="buffs">バフリスト</param>
+    /// <returns>表示するバフのタイプ</returns>
+    private List<C_Buff> GetShowBuff(List<C_Buff> buffs)
+    {
+        List<C_Buff> needShow = new List<C_Buff>();
+        int maxCount = 4;
+        int buffCount = buffs.Count;
+        // バフリストから表示するバフを探す
+        for (int index = 0; index < buffCount; index++)
+        {
+            // 表示できるバフのエフェクトは最大４つ
+            if (needShow.Count >= maxCount)
+                break;
+
+            // 表示するバフの中に既に同じタイプのバフがある場合、表示しない
+            if (!needShow.Any(buff => buff.Type == buffs[index].Type))
+            {
+                needShow.Add(buffs[index]);
+            }
+        }
+        return needShow;
+    }
+
+    /// <summary>
+    /// 自陣の既に出したユニットのバフエフェクトを更新
+    /// </summary>
+    /// <param name="needShowBuffs">バフ</param>
+    /// <param name="playerTag">タグ</param>
+    private void UpdateActivedUnitBuffEffect(List<C_Buff> needShowBuffs, string playerTag)
+    {
+        // 更新するユニットをゲット
+        List<UnitPresenter> knights = FindMyActivedUnit(KnightPool, playerTag);
+        List<UnitPresenter> archers = FindMyActivedUnit(ArcherPool, playerTag);
+        List<UnitPresenter> mages = FindMyActivedUnit(MagePool, playerTag);
+        Debug.Log($"knights: {knights.Count}, archers: {archers.Count}, mages: {mages.Count}");
+        // 更新
+        knights.ForEach(knight => knight.UpdateBuffEffect(needShowBuffs));
+        archers.ForEach(archer => archer.UpdateBuffEffect(needShowBuffs));
+        mages.ForEach(mage => mage.UpdateBuffEffect(needShowBuffs));
+    }
+
+    /// <summary>
+    /// プールから自陣のアクティブユニットを探す
+    /// </summary>
+    /// <param name="pool">プール</param>
+    /// <returns>自陣のアクティブユニット</returns>
+    private List<UnitPresenter> FindMyActivedUnit(List<UnitPresenter> pool, string playerTag)
+    {
+        return pool.Where(obj => obj.gameObject.activeSelf && obj.CompareWithTag(playerTag)).ToList();
+    }
+    // 2026.01.18 ウー end
 }
