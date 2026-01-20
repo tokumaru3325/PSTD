@@ -22,10 +22,10 @@ public class KnightModel : UnitModel
         if (attackTimer >= 1f / TotalAttackSpeed)
         {
             attackTimer = 0f;
-            Owner.View?.StopAttack();
+            Owner.StopAttack();
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
-            Owner.View?.PlayAttack();
+            Owner.PlayAttack();
         }
     }
 
@@ -36,10 +36,10 @@ public class KnightModel : UnitModel
         if (attackTimer >= 1f / TotalAttackSpeed)
         {
             attackTimer = 0f;
-            Owner.View?.StopAttack();
+            Owner.StopAttack();
             float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);
-            Owner.View?.PlayAttack();
+            Owner.PlayAttack();
         }
     }
 }

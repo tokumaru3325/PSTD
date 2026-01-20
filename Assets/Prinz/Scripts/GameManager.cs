@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region Singleton Implementation
+    public static GameManager Instance { get; private set; }
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        // DontDestroyOnLoad(gameObject); //optional
+    }
+    #endregion
+
     public static bool IsGameFinished {  get; private set; }
     public int unitCount {  get; private set; } //serialNumber
 
