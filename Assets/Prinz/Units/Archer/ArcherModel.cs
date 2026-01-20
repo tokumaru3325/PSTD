@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class ArcherModel : UnitModel
@@ -16,10 +16,15 @@ public class ArcherModel : UnitModel
     {
         float timergoal = 1f / TotalAttackSpeed;
 
-        if(attackTimer < timergoal * 0.9f) 
+        //2026/01/20 滝本海大 start
+        if (attackTimer < timergoal * 0.9f)
+        {
             Owner.PlayAttack();
+        }
         else
+        {
             Owner.StopAttack();
+        }
 
         attackTimer += dt;
 
@@ -29,6 +34,8 @@ public class ArcherModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
+
+            ArrowPool.Instance.GetObj(Owner.transform.position, target.transform.position);
         }
     }
 
