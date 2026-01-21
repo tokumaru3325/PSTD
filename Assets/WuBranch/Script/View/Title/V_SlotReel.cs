@@ -38,6 +38,11 @@ public class V_SlotReel : MonoBehaviour
     private float _minSpeedToStop = 50f;
 
     /// <summary>
+    /// 完全停止した後の処理
+    /// </summary>
+    public Action OnStoped;
+
+    /// <summary>
     /// 一ロールにあるの全部の図
     /// </summary>
     private List<RectTransform> _reelItems = new List<RectTransform>();
@@ -247,6 +252,8 @@ public class V_SlotReel : MonoBehaviour
             MoveReel(diff);
             _isStopping = false;
             _currentSpinSpeed = 0;
+            // 通知
+            OnStoped?.Invoke();
         }
         else
         {

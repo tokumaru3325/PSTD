@@ -45,6 +45,17 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     private bool _isRunning = false;
 
+    /// <summary>
+    /// 完全停止したか
+    /// </summary>
+    /// <value></value>
+    public Action OnFinished;
+
+    /// <summary>
+    /// 停止したロールの数
+    /// </summary>
+    private int _reelFinishedNum;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -57,6 +68,7 @@ public class V_TitleSlot : MonoBehaviour
 
             for (int index = 0; index < _reels.Length; index++)
             {
+                _reels[index].Reel.OnStoped += OnReelStop;
                 _reels[index].Reel.Initialize(_reels[index].Sprites, _stopHeightOffset);
             }
         }
@@ -68,6 +80,7 @@ public class V_TitleSlot : MonoBehaviour
             return;
 
         SpinRoutine();
+        _reelFinishedNum = 0x00;
     }
 
     public void OnClickStop()
@@ -137,5 +150,16 @@ public class V_TitleSlot : MonoBehaviour
             yield return new WaitForSeconds(_stopDelay);
         }
         _isRunning = false;
+    }
+
+    /// <summary>
+    /// ロールが停止した
+    /// </summary>
+    private void OnReelStop()
+    {
+        _reelFinishedNum++;
+
+        if (_reelFinishedNum == _reels.Length)
+            OnFinished?.Invoke();
     }
 }
