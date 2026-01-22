@@ -3,6 +3,21 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+// 2026.01.21 ウー start
+[Serializable]
+public class BtnImg
+{
+    [Tooltip("押した状態の画像")]
+    [SerializeField]
+    public Sprite pressed;
+
+    [Tooltip("普通の状態の画像")]
+    [SerializeField]
+    public Sprite unPress;
+}
+// 2026.01.21 ウー end
 
 public class TitleButton : MonoBehaviour
 {
@@ -29,6 +44,22 @@ public class TitleButton : MonoBehaviour
     /// キャンセル
     /// </summary>
     private CancellationTokenSource _cancellationTokenSource;
+
+    [Tooltip("スタートボタン")]
+    [SerializeField]
+    private Image _startBtn;
+
+    [Tooltip("スタートボタンの画像")]
+    [SerializeField]
+    private BtnImg _startImg;
+
+    [Tooltip("各ロールの止まるボタン")]
+    [SerializeField]
+    private Image[] _reelController;
+
+    [Tooltip("各ロールの画像")]
+    [SerializeField]
+    private BtnImg[] _reelsImg;
     // 2026.01.21 ウー end
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -38,23 +69,32 @@ public class TitleButton : MonoBehaviour
         if (_slot)
         {
             _slot.OnFinished += OnSlotFinished;
-            StartSlot(_startDelay).Forget();
+            if (!_slot.CustomControll)
+                StartSlot(_startDelay).Forget();
         }
         // 2026.01.21 ウー end
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void OnButtonDown_Start()
     {
         // 2026.01.21 ウー start
-        CancelAction();
+        if (_slot.CustomControll)
+        {
+            _slot.OnClickStart();
+            _startBtn.sprite = _startImg.pressed;
+            for (int index = 0; index < _reelController.Length; index++)
+            {
+                _reelController[index].sprite = _reelsImg[index].unPress;
+            }
+        }
+        else
+        {
+            // 2026.01.21 ウー start
+            CancelAction();
+            // 2026.01.21 ウー end
+            SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
+        }
         // 2026.01.21 ウー end
-        SceneManager.LoadScene("ModeSelect", LoadSceneMode.Single);
     }
 
     public void OnButtonDown_Quit()
@@ -64,8 +104,17 @@ public class TitleButton : MonoBehaviour
         // 2026.01.21 ウー end
         Application.Quit();
     }
-
     // 2026.01.21 ウー start
+    /// <summary>
+    /// ロールを停止させる
+    /// </summary>
+    /// <param name="index">ロールのインデックス</param>
+    public void StopReel(int index)
+    {
+        _slot.StopReel(index);
+        _reelController[index].sprite = _reelsImg[index].pressed;
+    }
+
     /// <summary>
     /// スロットを回せる
     /// </summary>
@@ -80,7 +129,7 @@ public class TitleButton : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token);
             _slot.OnClickStart();
             await UniTask.Delay(TimeSpan.FromSeconds(_stopDelay), cancellationToken: token);
-            _slot.OnClickStop();
+            _slot.OnStopAllReel();
         }
         catch (OperationCanceledException exp)
         {
@@ -96,10 +145,19 @@ public class TitleButton : MonoBehaviour
     /// <summary>
     /// スロットが停止した
     /// </summary>
-    private void OnSlotFinished()
+    private void OnSlotFinished(ResultType result)
     {
         // 次回
-        StartSlot(_nextDelay).Forget();
+        if (!_slot.CustomControll)
+            StartSlot(_nextDelay).Forget();
+        else
+        {
+            _startBtn.sprite = _startImg.unPress;
+            if (result == ResultType.Start)
+                SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
+            else if (result == ResultType.Miss)
+                Application.Quit();
+        }
     }
 
     /// <summary>

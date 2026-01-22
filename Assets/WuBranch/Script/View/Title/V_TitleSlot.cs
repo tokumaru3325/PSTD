@@ -1,5 +1,8 @@
 using System;
 using System.Collections;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [Serializable]
@@ -18,6 +21,24 @@ public class ReelInfo
     public Sprite[] Sprites;
 }
 
+[Serializable]
+public class WantResult
+{
+    [Tooltip("指定された画像を結果にする(それぞれロールの画像のインデックス,0 ~ 画像の数-1)")]
+    [SerializeField]
+    public int[] Indices;
+}
+
+/// <summary>
+/// スロットの結果
+/// </summary>
+public enum ResultType
+{
+    Miss,
+    Start,
+    Close
+}
+
 public class V_TitleSlot : MonoBehaviour
 {
     [Tooltip("ロールデータ")]
@@ -32,13 +53,27 @@ public class V_TitleSlot : MonoBehaviour
     [SerializeField]
     private float _stopHeightOffset = 0f;
 
+    [Tooltip("プレイヤーがコントロールするか")]
+    public bool CustomControll = false;
+
     [Tooltip("結果はランダムにするか")]
     [SerializeField]
     private bool _randomizeResult = true;
 
+    /// <summary>
+    /// PSTDを組んだらゲーム開始、ｘｘｘｘを組んだらゲーム終了
+    /// </summary>
+    [Tooltip("ゲーム開始の組み合わせ")]
+    [SerializeField]
+    private WantResult[] _startResults;
+
+    [Tooltip("ゲーム終了の組み合わせ")]
+    [SerializeField]
+    private WantResult[] _closeResults;
+
     [Tooltip("指定された画像を結果にする(それぞれロールの画像のインデックス,0 ~ 画像の数-1)")]
     [SerializeField]
-    public int[] _stopIndices;
+    private int[] _stopIndices;
 
     /// <summary>
     /// 回る中ですか
@@ -49,18 +84,29 @@ public class V_TitleSlot : MonoBehaviour
     /// 完全停止したか
     /// </summary>
     /// <value></value>
-    public Action OnFinished;
+    public Action<ResultType> OnFinished;
 
     /// <summary>
     /// 停止したロールの数
     /// </summary>
     private int _reelFinishedNum;
 
+    /// <summary>
+    /// 各ロールの結果
+    /// </summary>
+    private int[] _reelResult;
+
+    /// <summary>
+    /// 強制的に成功させるフラグ
+    /// </summary>
+    private bool _forceCorrect;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (_reels != null)
         {
+            _reelResult = new int[_reels.Length];
             if (_stopIndices == null || _stopIndices.Length != _reels.Length)
             {
                 _stopIndices = new int[_reels.Length];
@@ -74,6 +120,18 @@ public class V_TitleSlot : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log("必ず当たる");
+            _forceCorrect = true;
+        }
+    }
+
+    /// <summary>
+    /// ロールを回られる
+    /// </summary>
     public void OnClickStart()
     {
         if (_isRunning)
@@ -81,9 +139,13 @@ public class V_TitleSlot : MonoBehaviour
 
         SpinRoutine();
         _reelFinishedNum = 0x00;
+        _forceCorrect = false;
     }
 
-    public void OnClickStop()
+    /// <summary>
+    /// 全部のロールを一気に停止
+    /// </summary>
+    public void OnStopAllReel()
     {
         if (!_isRunning)
             return;
@@ -92,6 +154,21 @@ public class V_TitleSlot : MonoBehaviour
         int[] result = _randomizeResult ? GenerateRandomResult() : _stopIndices;
 
         StartCoroutine(StopRoutine(result));
+    }
+
+    public void StopReel(int index)
+    {
+        if (!CustomControll)
+            return;
+
+        if (!_isRunning)
+            return;
+
+        if (index < 0 || index >= _reels.Length)
+            return;
+
+        int targetIndex = _forceCorrect ? _stopIndices[index] : -1;
+        _reels[index].Reel.StopSpin(targetIndex);
     }
 
     /// <summary>
@@ -149,17 +226,50 @@ public class V_TitleSlot : MonoBehaviour
 
             yield return new WaitForSeconds(_stopDelay);
         }
-        _isRunning = false;
     }
 
     /// <summary>
     /// ロールが停止した
     /// </summary>
-    private void OnReelStop()
+    private void OnReelStop(int reelID, int resultIndex)
     {
+        if (reelID < 0 || reelID >= _reelResult.Length)
+            return;
+
+        Debug.Log($"ID: {reelID}, result: {resultIndex}");
+        _reelResult[reelID] = resultIndex;
         _reelFinishedNum++;
 
         if (_reelFinishedNum == _reels.Length)
-            OnFinished?.Invoke();
+        {
+            ResultType result = CheckResult(_reelResult);
+            OnFinished?.Invoke(result);
+            _isRunning = false;
+        }
+    }
+
+    /// <summary>
+    /// 各ロールの結果を確認
+    /// </summary>
+    /// <param name="reelResult">各ロールの結果</param>
+    /// <returns>true: あたり、false: 当たってない</returns>
+    private ResultType CheckResult(int[] reelResult)
+    {
+        if (CheckIsContain(_closeResults, reelResult))
+            return ResultType.Close;
+        else if (CheckIsContain(_startResults, reelResult))
+            return ResultType.Start;
+        else
+            return ResultType.Miss;
+    }
+
+    private bool CheckIsContain(WantResult[] wants, int[] reelResult)
+    {
+        for (int index = 0; index < reelResult.Length; index++)
+        {
+            if (!wants[index].Indices.Contains(reelResult[index]))
+                return false;
+        }
+        return true;
     }
 }

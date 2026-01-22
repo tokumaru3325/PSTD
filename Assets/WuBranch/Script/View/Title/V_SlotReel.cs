@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class V_SlotReel : MonoBehaviour
 {
+    [Tooltip("スクロールのID")]
+    [SerializeField]
+    private int _reelID;
+
     [Tooltip("生成する図の大きさ")]
     [SerializeField]
     private Vector2 _imageSize = new Vector2(270, 190);
@@ -40,7 +45,7 @@ public class V_SlotReel : MonoBehaviour
     /// <summary>
     /// 完全停止した後の処理
     /// </summary>
-    public Action OnStoped;
+    public Action<int, int> OnStoped;
 
     /// <summary>
     /// 一ロールにあるの全部の図
@@ -150,7 +155,12 @@ public class V_SlotReel : MonoBehaviour
         }
         else if (_isStopping)
         {
-            SnapToTarget();
+            // 選ばれた結果に誘導
+            if (_targetIndex != -1)
+                SnapToTarget();
+            // プレイヤがコントロール
+            else
+                SnapToGrid();
         }
     }
 
@@ -193,14 +203,23 @@ public class V_SlotReel : MonoBehaviour
     {
         if (!_isSpinning) return;
 
-        // targetIndexの有効性を確認
-        if (targetIndex < 0 || targetIndex >= _reelItems.Count)
+        // targetIndexの有効性を確認、-1：プレイヤがコントロールする
+        if (targetIndex == -1)
+        {
+            // スクロール停止
+            _isSpinning = false;
+            _isSeeking = false;
+            _isStopping = true;
+            _targetIndex = targetIndex;
+            return;
+        }
+        else if (targetIndex < 0 || targetIndex >= _reelItems.Count)
         {
             Debug.LogWarning($"無効なTarget Index: {targetIndex}");
             targetIndex = 0;
         }
-
-        _targetIndex = targetIndex;
+        else
+            _targetIndex = targetIndex;
 
         // すぐに止まらない
         _isSeeking = true;
@@ -246,19 +265,64 @@ public class V_SlotReel : MonoBehaviour
         float speed = Mathf.Max(Mathf.Min(_currentSpinSpeed, stopSpeed), _minSpeedToStop);
 
         // 目標に近つくと
-        if (Mathf.Abs(diff) < _distToStop)
+        if (diff < _distToStop)
         {
             // 強制的に移動させる
             MoveReel(diff);
             _isStopping = false;
             _currentSpinSpeed = 0;
             // 通知
-            OnStoped?.Invoke();
+            OnStoped?.Invoke(_reelID, _targetIndex);
         }
         else
         {
             // 引き継ぎ移動
             MoveReel(speed * Time.deltaTime);
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void SnapToGrid()
+    {
+        float currentY = _reelItems[0].anchoredPosition.y;
+
+        // まずオフセットを差し引き、0 を中心とした座標系に戻します
+        // 一番近いグリッドを見つけます
+        // オフセットを加え戻します
+        float targetY = Mathf.Round((currentY - _stopOffset) / _imageSize.y) * _imageSize.y + _stopOffset;
+
+        float diff = targetY - currentY;
+        float moveStep = diff * 10f * Time.deltaTime;
+
+        if (Mathf.Abs(diff) < _distToStop)
+        {
+            // 差を補填
+            MoveReel(-diff);
+            _isStopping = false;
+            _currentSpinSpeed = 0;
+            // 通知
+            OnStoped?.Invoke(_reelID, FindTarget());
+        }
+        else
+        {
+            MoveReel(-moveStep);
+        }
+    }
+
+    /// <summary>
+    /// 結果となった画像を見つける
+    /// </summary>
+    /// <returns>画像のインデックス</returns>
+    private int FindTarget()
+    {
+        int max = _reelItems.Count;
+        for (int index = 0; index < max; index++)
+        {
+            if ((int)_reelItems[index].anchoredPosition.y == _stopOffset)
+                return index;
+        }
+        return -1;
     }
 }
