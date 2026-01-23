@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour
     {
         IsGameFinished = false;
         M_Tower.OnPlayerDeath += OnPlayerDeathNotify;
+
+        //2026/01/23　滝本海大　start
+        UnitObjectPool.Instance.CreatePool(50);
+        ArrowPool.Instance.CreatePool(0);
+        //2026/01/23 滝本海大　end
     }
 
     // Update is called once per frame
