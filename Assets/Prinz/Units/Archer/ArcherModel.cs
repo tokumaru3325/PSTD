@@ -34,8 +34,8 @@ public class ArcherModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
-
-            ArrowPool.Instance.GetObj(Owner.transform.position, target.transform.position);
+            Owner.ShootArrow(target.transform.position);
+           /* ArrowPool.Instance.GetObj(Owner.transform.position, target.transform.position);*/
         }
     }
 
@@ -56,6 +56,7 @@ public class ArcherModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);
+            Owner.ShootArrow(EnemyPlayer.transform.position);
         }
     }
 }
