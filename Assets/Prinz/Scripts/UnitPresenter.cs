@@ -384,6 +384,16 @@ public class UnitPresenter : MonoBehaviour
         ArrowPool.Instance.GetObj(transform.position, targetPos);
     }
 
+    public void AttackSpell(Vector3 targetPos)
+    {
+        LightningSpellPool.Instance.GetObj(transform.position, targetPos);
+    }
+
+    public void HealSpell(Vector3 targetPos)
+    {
+        HealSpellPool.Instance.GetObj(transform.position, targetPos);
+    }
+
     public void PerformHealSpell(UnitPresenter target, float dt)
     {
         Model.Heal(target, dt);
