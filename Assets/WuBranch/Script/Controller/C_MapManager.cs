@@ -82,7 +82,8 @@ public class C_MapManager : MonoBehaviour
     //[START] 2025/12/14 プリンス：デバッガーから使えるように、関数化した
     public void DrawPath()
     {
-        List<M_MapPosition> route = C_PathSearch.GetPath(GetAllRoute(), new M_MapPosition(4, 5), new M_MapPosition(31, 16));
+        Dictionary<UnitPresenter, M_MapPosition> fakeEnemy = new Dictionary<UnitPresenter, M_MapPosition>();
+        List<M_MapPosition> route = C_PathSearch.GetPath(GetAllRoute(), new M_MapPosition(4, 5), new M_MapPosition(31, 16), MoveType.Walk, fakeEnemy, PathStrategy.Shortest);
         for (int index = 0; index < route.Count; index++)
         {
             Color txtColor = Color.blue;

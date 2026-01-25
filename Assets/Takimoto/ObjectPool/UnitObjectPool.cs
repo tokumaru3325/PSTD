@@ -100,7 +100,7 @@ public class UnitObjectPool : MonoBehaviour
     }
 
     //使う時に場所を指定して表示する
-    public UnitPresenter GetObj(UnitID unitType, Vector3 position, UnitData data, Vector3 enemyPos, string playerTag) //[2025/12/02] プリンス : "playerTag"追加
+    public UnitPresenter GetObj(UnitID unitType, Vector3 position, UnitData data, Vector3 enemyPos, string playerTag, string enemyTag, PathStrategy strategy) //[2025/12/02] プリンス : "playerTag"追加 // 2026.01.23 ウー: enemyTag追加 // 2026.01.25 ウー: strategyを追加
     {
         UnitPresenter Unit = null;
         switch (unitType)
@@ -123,10 +123,17 @@ public class UnitObjectPool : MonoBehaviour
             // 2026.01.18 ウー start バフの追加
             List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(playerTag);
             List<C_Buff> needShowBuffs = GetShowBuff(buffs);
+            // 2026.01.23 ウー start 敵ユニットを追加
+            List<UnitPresenter> enemies = GetEnemysUnit(enemyTag);
             //[2025/12/02] プリンス : "playerTag"追加
             //Unit.Initialize(data, BuffData, position, enemyPos, playerTag, _gameManager, _debugManager);
-            Unit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs);
+            //Unit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs);
+            // 2026.01.25 ウー start
+            //Unit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs, enemies);
+            Unit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs, enemies, strategy);
+            // 2026.01.25 ウー end
             // 2026.01.18 ウー end
+            // 2026.01.23 ウー end
             Unit.gameObject.SetActive(true);
             return Unit; //オブジェクトプールに使ってないのがあったらそれを返す
         }
@@ -155,8 +162,15 @@ public class UnitObjectPool : MonoBehaviour
             List<C_Buff> buffs = _buffManager.GetPlayerBuffsByTag(playerTag);
             List<C_Buff> needShowBuffs = GetShowBuff(buffs);
             //[2025/11/18]　プリンス　Start
-            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            // 2026.01.23 ウー start 敵ユニットを追加
+            List<UnitPresenter> enemies = GetEnemysUnit(enemyTag);
+            //newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs);
+            // 2026.01.25 ウー start
+            //newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs, enemies);
+            newUnit.Initialize(data, BuffData, position, enemyPos, playerTag, needShowBuffs, enemies, strategy); //[2025/12/02] プリンス : "playerTag"追加 | [2026/01/13]: ", _gameManager, _debugManager" 追加
+            // 2026.01.25 ウー end
             // 2026.01.18 ウー end
+            // 2026.01.23 ウー end
             newUnit.BindPool(this);
             //[2025/11/18]　プリンス　End
             newUnit.gameObject.SetActive(true);
@@ -275,4 +289,26 @@ public class UnitObjectPool : MonoBehaviour
         return pool.Where(obj => obj.gameObject.activeSelf && obj.CompareWithTag(playerTag)).ToList();
     }
     // 2026.01.18 ウー end
+
+    // 2026.01.23 ウー start
+    /// <summary>
+    /// 敵陣のユニットをゲット
+    /// </summary>
+    /// <param name="enemyTag">敵陣のタグ</param>
+    /// <returns>ユニット</returns>
+    private List<UnitPresenter> GetEnemysUnit(string enemyTag)
+    {
+        // 敵のユニットをゲット
+        List<UnitPresenter> knights = FindMyActivedUnit(KnightPool, enemyTag);
+        List<UnitPresenter> archers = FindMyActivedUnit(ArcherPool, enemyTag);
+        List<UnitPresenter> mages = FindMyActivedUnit(MagePool, enemyTag);
+
+        List<UnitPresenter> enemys = new List<UnitPresenter>();
+        enemys.AddRange(knights);
+        enemys.AddRange(archers);
+        enemys.AddRange(mages);
+
+        return enemys;
+    }
+    // 2026.01.23 ウー end
 }

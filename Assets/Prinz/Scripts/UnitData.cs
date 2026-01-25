@@ -20,9 +20,10 @@ public abstract class UnitData : ScriptableObject
     public Vector3 MoveDirection;
 
     // 2026.01.18 ウー start
-    /// <summary>
-    /// 危険度
-    /// </summary>
+    [Tooltip("移動方法")]
+    public MoveType MovementStyle;
+
+    [Tooltip("危険度")]
     public int DangerLevel;
     // 2026.01.18 ウー end
 }
