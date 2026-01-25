@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class MageModel : UnitModel
@@ -76,6 +76,7 @@ public class MageModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
+            Owner.AttackSpell(target.transform.position);
         }
     }
 
@@ -96,6 +97,7 @@ public class MageModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             EnemyPlayer?.DecreaseHP(damage);
+            Owner.AttackSpell(EnemyPlayer.transform.position);
         }
     }
 
@@ -118,6 +120,7 @@ public class MageModel : UnitModel
             HealSpeed = 0f;
             float heal = HealPower;
             target?.ReceiveHeal(heal);
+            Owner.HealSpell(target.transform.position);
         }
     }
 }
