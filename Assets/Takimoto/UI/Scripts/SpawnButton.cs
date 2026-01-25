@@ -19,7 +19,9 @@ public class SpawnButton : MonoBehaviour
     private Player _player;
     private bool _bPushed = false;
 
-    [SerializeField] UnitObjectPool unitObjectPool;
+    //2026/01/23 滝本海大 start UnitObjectPoolをシングルトンにしたからいらない
+    //[SerializeField] UnitObjectPool unitObjectPool;
+    //2026/01/23 滝本海大 end
 
     [SerializeField] Vector3 spawnPosition;
 
@@ -58,20 +60,22 @@ public class SpawnButton : MonoBehaviour
         //ボタンの画像をモンスターのアイコンに変える
         //    Button.image.sprite = Monster.MonsterIcon;
 
-        unitObjectPool.CreatePool(5);
+        //2026/01/23 滝本海大　start GameManagerのStart()に移すよ
+        //unitObjectPool.CreatePool(5);
+        //2026/01/23 滝本海大　end
 
         switch (_unitType)
         {
             case UnitID.Knight:
-                _unit = unitObjectPool.KnightData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+                _unit = UnitObjectPool.Instance.KnightData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
                 break;
 
             case UnitID.Archer:
-                _unit = unitObjectPool.ArcherData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+                _unit = UnitObjectPool.Instance.ArcherData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
                 break;
 
             case UnitID.Mage:
-                _unit = unitObjectPool.MageData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+                _unit = UnitObjectPool.Instance.MageData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
                 break;
         }
         
@@ -170,7 +174,7 @@ public class SpawnButton : MonoBehaviour
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
 
-        unitObjectPool.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         _buttonComp.interactable = false;
         _timer = 0.0f;

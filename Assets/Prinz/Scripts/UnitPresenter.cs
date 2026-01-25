@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class UnitPresenter : MonoBehaviour
@@ -376,6 +377,21 @@ public class UnitPresenter : MonoBehaviour
                 target.TakeDamage(damage);
                 View?.PlayAttack();*/
 
+    }
+
+    public void ShootArrow(Vector3 targetPos)
+    {
+        ArrowPool.Instance.GetObj(transform.position, targetPos);
+    }
+
+    public void AttackSpell(Vector3 targetPos)
+    {
+        LightningSpellPool.Instance.GetObj(transform.position, targetPos);
+    }
+
+    public void HealSpell(Vector3 targetPos)
+    {
+        HealSpellPool.Instance.GetObj(transform.position, targetPos);
     }
 
     public void PerformHealSpell(UnitPresenter target, float dt)

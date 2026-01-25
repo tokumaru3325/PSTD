@@ -1,26 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowPool : MonoBehaviour
+public class LightningSpellPool : MonoBehaviour
 {
-    [SerializeField] GameObject arrowPrefab;
+    [SerializeField] GameObject lightningSpellPrefab;
 
-    public static ArrowPool Instance { get; private set; }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {        
-        //////
-        /// to do : maybe make an empty object to hold the pool so that units can use it. Also make it so
-        /// this can hold multiple pools (fireballs, arrows, etc... -> projectiles pool)
-        //////
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public static LightningSpellPool Instance { get; private set; }
 
     private void Awake()
     {
@@ -34,30 +19,30 @@ public class ArrowPool : MonoBehaviour
         }
     }
 
-    List<Arrow> pool;
+    List<LightningSpell> pool;
 
     public void CreatePool(int maxCount)
     {
-        pool = new List<Arrow>();
+        pool = new List<LightningSpell>();
 
         for (int i = 0; i < maxCount; i++)
         {
-            GameObject gameObject = Instantiate(arrowPrefab);
-            Arrow obj = gameObject.GetComponent<Arrow>();
+            GameObject gameObject = Instantiate(lightningSpellPrefab);
+            LightningSpell obj = gameObject.GetComponent<LightningSpell>();
             obj.gameObject.SetActive(false);
             pool.Add(obj);
         }
     }
 
     //使う時に場所を指定して表示する
-    public Arrow GetObj(Vector3 position, Vector3 enemyPos) 
+    public LightningSpell GetObj(Vector3 position, Vector3 enemyPos)
     {
         //使ってないものを探す
         for (int i = 0; i < pool.Count; i++)
         {
             if (pool[i].gameObject.activeSelf == false)
             {
-                Arrow arrow = pool[i];
+                LightningSpell arrow = pool[i];
                 arrow.Initialize(position, enemyPos);
                 arrow.gameObject.SetActive(true);
 
@@ -66,10 +51,10 @@ public class ArrowPool : MonoBehaviour
         }
 
         //全部使っていたら
-        GameObject newObj = Instantiate(arrowPrefab, position, Quaternion.identity);
+        GameObject newObj = Instantiate(lightningSpellPrefab, position, Quaternion.identity);
         if (newObj)
         {
-            Arrow newArrow = newObj.GetComponent<Arrow>();
+            LightningSpell newArrow = newObj.GetComponent<LightningSpell>();
             newArrow.Initialize(position, enemyPos);
             newArrow.gameObject.SetActive(true);
             pool.Add(newArrow);
@@ -80,7 +65,7 @@ public class ArrowPool : MonoBehaviour
         return null;
     }
 
-    public void Release(Arrow arrow)
+    public void Release(LightningSpell arrow)
     {
         for (int i = 0; i < pool.Count; i++)
         {
