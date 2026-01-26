@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Unity.Netcode;
+using System;
 
 public class C_MapManager : MonoBehaviour
 {
@@ -27,6 +27,11 @@ public class C_MapManager : MonoBehaviour
     private List<M_PlayerPosInfo> _playerPos;
 
     /// <summary>
+    /// 障害物の位置
+    /// </summary>
+    private List<M_MapPosition> _obstacles;
+
+    /// <summary>
     /// マップ読み込み完了フラグ
     /// </summary>
     /// <value></value>
@@ -34,6 +39,11 @@ public class C_MapManager : MonoBehaviour
 
     //デバッグ用
     public bool IsPathVisible { get; private set; }
+
+    /// <summary>
+    /// マップのロードが終わった後の処理
+    /// </summary>
+    public Action OnMapLoadCompleted;
 
     void Awake()
     {
@@ -70,13 +80,14 @@ public class C_MapManager : MonoBehaviour
     {
         Map = new M_Map();
         _playerPos = new List<M_PlayerPosInfo>();
+        _obstacles = new List<M_MapPosition>();
         IsComplete = false;
         // Application.streamingAssetsPath はAssets下のStreamingAssetsフォルダを指す
         // 読み専用の安全なディレクトリです。(プラットフォーム共通)
         // Path.Combine は、2番目の引数が / や \ で始まると、それを「絶対パス（またはルートからのパス）」とみなしてしまい、1番目の引数を無視します。
         string path = Path.Combine(Application.streamingAssetsPath, "MapData/Stage1.csv");
         // (注意: 実行前にこのパスにファイルを配置しておく必要があります)
-        _ = ReadMap(path);
+        ReadMap(path).Forget();
     }
 
     //[START] 2025/12/14 プリンス：デバッガーから使えるように、関数化した
@@ -105,7 +116,7 @@ public class C_MapManager : MonoBehaviour
     /// </summary>
     /// <param name="path">マップのパス</param>
     /// <returns></returns>
-    private async UniTaskVoid ReadMap(string path)
+    private async UniTask ReadMap(string path)
     {
         try
         {
@@ -127,6 +138,8 @@ public class C_MapManager : MonoBehaviour
                 ConvertData(data);
                 Debug.Log($"マップデータへの変換が完了しました。");
                 IsComplete = true;
+                // 通知
+                OnMapLoadCompleted?.Invoke();
             }
         }
         catch (FileNotFoundException ex)
@@ -156,6 +169,7 @@ public class C_MapManager : MonoBehaviour
             {
                 int value = int.Parse(col);
                 RecordPlayerPos(value, colIndex, rowIndex);
+                RecordObstacle(value, colIndex, rowIndex);
                 // プレイヤ位置もたどり着けるので、プレイヤ位置を一般道に変換
                 int routePiece = value == (int)PathStructure.PlayerR || value == (int)PathStructure.PlayerL ? (int)PathStructure.Road : value;
                 colData.Add(routePiece);
@@ -172,8 +186,8 @@ public class C_MapManager : MonoBehaviour
     /// プレイヤ位置を記録
     /// </summary>
     /// <param name="value"></param>
-    /// <param name="colIndex"></param>
-    /// <param name="rowIndex"></param>
+    /// <param name="colIndex">列のインデックス</param>
+    /// <param name="rowIndex">行のインデックス</param>
     private void RecordPlayerPos(int value, int colIndex, int rowIndex)
     {
         if (value != (int)PathStructure.PlayerR && value != (int)PathStructure.PlayerL)
@@ -182,6 +196,20 @@ public class C_MapManager : MonoBehaviour
         bool isLeft = value == (int)PathStructure.PlayerL;
         Debug.Log($"Record player pos at {colIndex}, {rowIndex}");
         _playerPos.Add(new M_PlayerPosInfo(new M_MapPosition(colIndex, rowIndex), false, isLeft));
+    }
+
+    /// <summary>
+    /// 障害物の位置を記録
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="colIndex">列のインデックス</param>
+    /// <param name="rowIndex">行のインデックス</param>
+    private void RecordObstacle(int value, int colIndex, int rowIndex)
+    {
+        if (value != (int)PathStructure.Obstacle)
+            return;
+
+        _obstacles.Add(new M_MapPosition(colIndex, rowIndex));
     }
 
     /// <summary>
@@ -272,10 +300,49 @@ public class C_MapManager : MonoBehaviour
     {
         var unusedPlayerPos = _playerPos.Where(_ => !_.IsUsed);
         Debug.Log($"unused player pos count: {unusedPlayerPos.Count()}");
-        int index = Random.Range(0, unusedPlayerPos.Count());
+        int index = UnityEngine.Random.Range(0, unusedPlayerPos.Count());
         Debug.Log($"get index: {index}");
         M_PlayerPosInfo pos = unusedPlayerPos.ElementAt(index);
         pos.IsUsed = true;
         return pos;
+    }
+
+    /// <summary>
+    /// すべての障害物の位置をゲット
+    /// </summary>
+    /// <returns>障害物の位置</returns>
+    public List<M_MapPosition> GetObstacles()
+    {
+        return _obstacles;
+    }
+
+    /// <summary>
+    /// 障害物を削除
+    /// </summary>
+    /// <param name="pos">位置</param>
+    public void DestroyObstacle(Vector3 pos)
+    {
+        // マップ座標
+        M_MapPosition mapPos = ConvertToMapPos(pos);
+        // 確認
+        if (Map.GetPathCost(mapPos.X, mapPos.Y) != (int)PathStructure.Obstacle)
+        {
+            Debug.Log($"it's not an obstacle at {mapPos}");
+            return;
+        }
+
+        // 該当位置は障害物ではあるので、一般通路に変更
+        Map.SetPathCost(mapPos, (int)PathStructure.Road);
+        // 経路探索の方も更新
+        C_PathSearch.ResetSearchMap();
+        // リストから削除
+        for (int index = 0; index < _obstacles.Count; index++)
+        {
+            if (_obstacles[index].X == mapPos.X && _obstacles[index].Y == mapPos.Y)
+            {
+                _obstacles.RemoveAt(index);
+                break;
+            }
+        }
     }
 }

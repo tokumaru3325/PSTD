@@ -13,6 +13,7 @@ TagManager:
   - Peon
   - DebugManager
   - GameManager
+  - Obstacle
   layers:
   - Default
   - TransparentFX

@@ -164,7 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1340633583}
-  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
@@ -187,7 +186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &18230237
 Transform:
   m_ObjectHideFlags: 0
@@ -398,7 +397,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 347814045}
-  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
@@ -1090,7 +1088,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1746258612}
-  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
@@ -15832,7 +15829,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3708421179
+      value: 2858319785
       objectReference: {fileID: 0}
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -19993,6 +19990,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 432052315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1791571547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1791571548}
+  - component: {fileID: 1791571549}
+  m_Layer: 0
+  m_Name: Obstacles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1791571548
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791571547}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1791571549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791571547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266f665c9a9a964ca3c1050dbfa19da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::V_ObstacleManager
+  _mapManager: {fileID: 1084309508}
+  _stonePrefab: {fileID: 4039210347079816520, guid: 0fb5ba3ebcf38d049a3e4ca743538f9e, type: 3}
 --- !u!1001 &1800933222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20043,7 +20086,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 367408599
+      value: 1449638358
       objectReference: {fileID: 0}
     - target: {fileID: 3511772721993242896, guid: c3a3c398c80d05e43901696efa02d46e, type: 3}
       propertyPath: SceneMigrationSynchronization
@@ -20679,7 +20722,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 563820934}
-  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
@@ -22735,7 +22777,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 1921021095}
-  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
   _enemyTag: Player2
@@ -24737,7 +24778,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnButton
   SpawnButtonPrefab: {fileID: 944368926}
-  unitObjectPool: {fileID: 847823812}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
@@ -26158,3 +26198,4 @@ SceneRoots:
   - {fileID: 236772668}
   - {fileID: 2053071484}
   - {fileID: 258524387}
+  - {fileID: 1791571548}

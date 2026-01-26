@@ -53,7 +53,8 @@ public class V_UIShake : MonoBehaviour
     {
         if (_coolDownTimer <= 0.0f)
         {
-            _target.DOShakePosition(_duration * 0.5f, _strength, _vibrate);
+            if (_target)
+                _target.DOShakePosition(_duration * 0.5f, _strength, _vibrate);
             _coolDownTimer = _coolDown;
         }
     }
