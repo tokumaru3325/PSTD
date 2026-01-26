@@ -1,24 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
-[Serializable]
-public struct TowerStage
-{
-    /// <summary>
-    /// タワーのスプライト
-    /// </summary>
-    [SerializeField]
-    public Sprite towerSprite;
-
-    /// <summary>
-    /// 体力の閾値(パーセント)
-    /// </summary>
-    [SerializeField]
-    public float healthThresholdPecent;
-}
 
 public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
@@ -26,7 +9,7 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     /// 各段階のタワーモデル
     /// </summary>
     [SerializeField]
-    private List<TowerStage> _towerStages;
+    private List<HealthBasedSprite> _towerStages;
 
     /// <summary>
     /// プレイヤーのタワーコントローラー
@@ -82,14 +65,14 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
         int index = 0;
         for (int i = 0; i < _towerStages.Count; i++)
         {
-            if (_towerStages[i].healthThresholdPecent > maxThreshold)
+            if (_towerStages[i].ThresholdPecent > maxThreshold)
             {
-                maxThreshold = _towerStages[i].healthThresholdPecent;
+                maxThreshold = _towerStages[i].ThresholdPecent;
                 index = i;
             }
         }
         if (_tower)
-            _tower.sprite = _towerStages[index].towerSprite;
+            _tower.sprite = _towerStages[index].Sprite;
     }
 
     /// <summary>
@@ -113,11 +96,11 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
         // タワーの段階を更新する
         for (int i = 0; i < _towerStages.Count; i++)
         {
-            if (healthRate <= _towerStages[i].healthThresholdPecent)
+            if (healthRate <= _towerStages[i].ThresholdPecent)
             {
                 if (_tower)
                 {
-                    _tower.sprite = _towerStages[i].towerSprite;
+                    _tower.sprite = _towerStages[i].Sprite;
                 }
             }
         }

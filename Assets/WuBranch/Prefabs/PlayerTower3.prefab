@@ -101,12 +101,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_PlayerTower
   _towerStages:
-  - towerSprite: {fileID: 21300000, guid: d64cf6b316ea5264bb253fbbcd296b98, type: 3}
-    healthThresholdPecent: 1
-  - towerSprite: {fileID: 21300000, guid: 95f02082824f9e14dbc6341c1f49978e, type: 3}
-    healthThresholdPecent: 0.5
-  - towerSprite: {fileID: 21300000, guid: 055bc68ac809ab744a28260ceb5a3ecb, type: 3}
-    healthThresholdPecent: 0
+  - Sprite: {fileID: 21300000, guid: d64cf6b316ea5264bb253fbbcd296b98, type: 3}
+    ThresholdPecent: 1
+  - Sprite: {fileID: 21300000, guid: 95f02082824f9e14dbc6341c1f49978e, type: 3}
+    ThresholdPecent: 0.5
+  - Sprite: {fileID: 21300000, guid: 055bc68ac809ab744a28260ceb5a3ecb, type: 3}
+    ThresholdPecent: 0
   _playerController: {fileID: 1860676233158408536}
   _tower: {fileID: 1951261320476271373}
   _healthGauge: {fileID: 7325418786087702757}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4156458101
+  GlobalObjectIdHash: 3755269323
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
