@@ -48,7 +48,6 @@ public class MonsterSponerBySlot : MonoBehaviour
         unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
         _player.Money -= _unit[(int)type].BaseUnitCost;
 
-        Debug.Log("これなんで3回呼ばれてるの？");
     }
 
     private Vector3 GetSpawnPos(GameObject player)
