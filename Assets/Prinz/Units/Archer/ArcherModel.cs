@@ -4,6 +4,9 @@ using static UnityEngine.GraphicsBuffer;
 public class ArcherModel : UnitModel
 {
     private float attackTimer;
+    private float timerGoal;
+    private bool isPlayAttack = false;
+    private bool isStopAttack = false;
     private ArcherData ArcherData => (ArcherData)Data;
     public ArcherModel(ArcherData data) : base(data) { }
 
@@ -14,18 +17,30 @@ public class ArcherModel : UnitModel
 
     public override void BasicAttack(UnitPresenter target, float dt)
     {
-        float timergoal = 1f / TotalAttackSpeed;
+        timerGoal = 1f / TotalAttackSpeed;
 
-        if(attackTimer < timergoal * 0.9f) 
-            Owner.PlayAttack();
-        else
+        if (attackTimer < timerGoal * 0.9f)
+        {
+            if (!isPlayAttack)
+            {
+                Owner.PlayAttack();
+                isPlayAttack = true;
+            }
+        }
+        else if (!isStopAttack)
+        {
             Owner.StopAttack();
+            Owner.Log($"{Owner.name} basic attack", LogType.Error);
+            isStopAttack = true;
+        }
 
         attackTimer += dt;
 
-        if (attackTimer >= timergoal)
+        if (attackTimer >= timerGoal)
         {
-            Owner.StopAttack();
+            Owner.TriggerIdle();
+            isPlayAttack = false;
+            isStopAttack= false;
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
@@ -34,18 +49,29 @@ public class ArcherModel : UnitModel
 
     public override void PlayerAttack(float dt)
     {
-        float timergoal = 1f / TotalAttackSpeed;
+        timerGoal = 1f / TotalAttackSpeed;
 
-        if (attackTimer < timergoal * 0.9f)
-            Owner.PlayAttack();
-        else
+        if (attackTimer < timerGoal * 0.9f)
+        {
+            if (!isPlayAttack)
+            {
+                Owner.PlayAttack();
+                isPlayAttack = true;
+            }
+        }
+        else if (!isStopAttack)
+        {
             Owner.StopAttack();
+            isStopAttack = true;
+        }
 
         attackTimer += dt;
 
-        if (attackTimer >= timergoal)
+        if (attackTimer >= timerGoal)
         {
-            Owner.StopAttack();
+            Owner.TriggerIdle();
+            isPlayAttack = false;
+            isStopAttack= false;
             attackTimer = 0f;
             float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);
