@@ -51,6 +51,9 @@ public class ReelController : MonoBehaviour
 
     bool hazureChange = false;
     int hazureNumKeeper = 0;
+    [SerializeField] private int moneyOnePlayValue = 30;
+    [SerializeField] private int MonsterOnePlayValue = 50;
+    [SerializeField] private int BuffOnePlayValue = 70;
 
     float initialazeYkakeru = 0.0f;
 
@@ -62,9 +65,12 @@ public class ReelController : MonoBehaviour
 
     [SerializeField] EffectManager eManager;
 
+    Player _player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _player = GameObject.FindGameObjectWithTag("Player1").GetComponent<Player>();
+
         firstPositionL = reelL.transform.position.y;
         firstPositionC = reelC.transform.position.y;
         firstPositionR = reelR.transform.position.y;
@@ -153,12 +159,53 @@ public class ReelController : MonoBehaviour
             case ReelMover.State.nextBet:
                 if (reelLStoped && reelCStoped && reelRStoped)
                 {
-                    reelMover.StateChange();
-                    reelLStoped = false;
-                    reelCStoped = false;
-                    reelRStoped = false;
-                    audioSource.Stop();
-                    audioSource.PlayOneShot(betSE);
+                    switch (SlotSceneManager.slotType)
+                    {
+                        case 0:
+                            if (_player.Money   < moneyOnePlayValue)
+                            {
+                                resultTextManager.SetText("お金が足りないよ！！");
+                                break;
+                            }
+                            _player.UseMoney(moneyOnePlayValue);
+                            reelMover.StateChange();
+                            reelLStoped = false;
+                            reelCStoped = false;
+                            reelRStoped = false;
+                            audioSource.Stop();
+                            audioSource.PlayOneShot(betSE);
+                            break;
+                        case 1:
+                            if (_player.Money < MonsterOnePlayValue)
+                            {
+                                resultTextManager.SetText("お金が足りないよ！！");
+                                break;
+                            }
+                            _player.UseMoney(MonsterOnePlayValue);
+                            reelMover.StateChange();
+                            reelLStoped = false;
+                            reelCStoped = false;
+                            reelRStoped = false;
+                            audioSource.Stop();
+                            audioSource.PlayOneShot(betSE);
+                            break;
+                        case 2:
+                            if (_player.Money < BuffOnePlayValue)
+                            {
+                                resultTextManager.SetText("お金が足りないよ！！");
+                                break;
+                            }
+                            _player.UseMoney(BuffOnePlayValue);
+                            reelMover.StateChange();
+                            reelLStoped = false;
+                            reelCStoped = false;
+                            reelRStoped = false;
+                            audioSource.Stop();
+                            audioSource.PlayOneShot(betSE);
+                            break;
+
+                    }
+                    break;
                 }
 
                 break;
