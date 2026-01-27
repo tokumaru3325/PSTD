@@ -67,19 +67,19 @@ public class BuffManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            AddBuff(BuffType.AttackPower, "Player1").Forget();
+            AddBuff(BuffType.AttackPower, "Player1");
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            AddBuff(BuffType.AttackRange, "Player1").Forget();
+            AddBuff(BuffType.AttackRange, "Player1");
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            AddBuff(BuffType.AttackSpeed, "Player1").Forget();
+            AddBuff(BuffType.AttackSpeed, "Player1");
         }
         if (Input.GetKeyDown(KeyCode.U))
         {
-            AddBuff(BuffType.MoveSpeed, "Player1").Forget();
+            AddBuff(BuffType.MoveSpeed, "Player1");
         }
     }
 
@@ -87,7 +87,7 @@ public class BuffManager : MonoBehaviour
     {
         // 2026.01.16 ウー start
         // AddBuff(buffType, playertag, enemytag);
-        AddBuff(buffType, playertag).Forget();
+        AddBuff(buffType, playertag);
         // 2026.01.16 ウー end
     }
 
@@ -129,7 +129,7 @@ public class BuffManager : MonoBehaviour
         }
     }
 
-    public async UniTaskVoid AddBuff(BuffType buffType, string playerTag)
+    public void AddBuff(BuffType buffType, string playerTag)
     {
         // データ準備
         BuffTypeData buffData = GetBuffData(buffType);
@@ -153,7 +153,7 @@ public class BuffManager : MonoBehaviour
     {
         // 2026.01.16 ウー start
         // AddBuff(BuffType.AttackPower, "Player1", "Player2");
-        AddBuff(BuffType.AttackPower, "Player1").Forget();
+        AddBuff(BuffType.AttackPower, "Player1");
         // 2026.01.16 ウー end
     }
 
