@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEngine.GraphicsBuffer;
@@ -38,7 +39,7 @@ public class UnitPresenter : MonoBehaviour
 
     }
 
-    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, List<C_Buff> buffs)
+    public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, List<C_Buff> buffs, List<UnitPresenter> enemies, PathStrategy strategy)
     {
         View = GetComponent<UnitView>();
         Collider = GetComponent<CapsuleCollider2D>();
@@ -63,8 +64,12 @@ public class UnitPresenter : MonoBehaviour
         {
             M_MapPosition start = _mapManager.ConvertToMapPos(transform.position);
             M_MapPosition end = _mapManager.ConvertToMapPos(enemyPos);
+            // 2026.01.23 ウー start
+            Dictionary<UnitPresenter, M_MapPosition> enemiesPos = GetEnemiesPos(enemies);
             Model.SetEnemyPlayerPos(end);
-            Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end));
+            //Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end, Model.MovementStyle));
+            Model.SetRoute(C_PathSearch.GetPath(_mapManager.GetAllRoute(), start, end, Model.MovementStyle, enemiesPos, strategy));
+            // 2026.01.23 ウー end
         }
 
         _stateMachine.Initialize(new IdleState(this), _IsGameEnding);
@@ -88,11 +93,26 @@ public class UnitPresenter : MonoBehaviour
         // 2026.01.18 ウー end
     }
 
+    // 2026.01.23 ウー start
+    /// <summary>
+    /// すべての敵の座標をゲット
+    /// </summary>
+    /// <param name="enemies">敵の座標</param>
+    private Dictionary<UnitPresenter, M_MapPosition> GetEnemiesPos(List<UnitPresenter> enemies)
+    {
+        Dictionary<UnitPresenter, M_MapPosition> enemiesPos = new Dictionary<UnitPresenter, M_MapPosition>();
+        foreach (UnitPresenter enemy in enemies)
+        {
+            enemiesPos.Add(enemy, _mapManager.ConvertToMapPos(enemy.transform.position));
+        }
+        return enemiesPos;
+    }
+    // 2026.01.23 ウー end
 
     private void BindEnemyPlayer()
     {
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player1");
-    //    if(playerObject == null) { Debug.LogError("No player found when binding"); }
+        //    if(playerObject == null) { Debug.LogError("No player found when binding"); }
         if (playerObject.CompareTag(Model.PlayerSide))
         {
             //    playerObject = GameObject.FindWithTag("Player2");
@@ -126,21 +146,21 @@ public class UnitPresenter : MonoBehaviour
             Model = new KnightModel(kd);
             Model.SetUnitID(UnitID.Knight);
             _stateMachine = new UnitStateMachine();
-        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
+            //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
         }
         else if (data is ArcherData ad)
         {
             Model = new ArcherModel(ad);
             Model.SetUnitID(UnitID.Archer);
             _stateMachine = new UnitStateMachine();
-        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
+            //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
         }
         else if (data is MageData md)
         {
             Model = new MageModel(md);
             Model.SetUnitID(UnitID.Mage);
             _stateMachine = new UnitStateMachine();
-        //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
+            //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
         }
         else
         {
@@ -148,7 +168,7 @@ public class UnitPresenter : MonoBehaviour
             return;
         }
 
-        
+
         Model.BindOwner(this);
     }
 
@@ -296,7 +316,7 @@ public class UnitPresenter : MonoBehaviour
         Collider.enabled = false;
         View.EnableAttackRange(false);
     }
-    
+
     public void FaceRight()
     {
         transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
@@ -464,7 +484,7 @@ public class UnitPresenter : MonoBehaviour
         return Model.MoveDirection;
     }
 
-//    public void SetMoveDirection
+    //    public void SetMoveDirection
 
     public int GetCurrentRouteIndex()
     {
@@ -514,7 +534,7 @@ public class UnitPresenter : MonoBehaviour
     public void PlayAttack()
     {
         View?.PlayAttack();
-       
+
     }
 
     public void StopAttack()
@@ -713,4 +733,15 @@ public class UnitPresenter : MonoBehaviour
 
     #endregion
     // 2026.01.18 ウー end
+
+    // 2026.01.23 ウー start
+    /// <summary>
+    /// ユニットの危険度をゲット
+    /// </summary>
+    /// <returns>危険度</returns>
+    public int GetDangerLevel()
+    {
+        return Model.DangerLevel;
+    }
+    // 2026.01.23 ウー end
 }

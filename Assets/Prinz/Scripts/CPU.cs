@@ -76,7 +76,7 @@ public class CPU : MonoBehaviour
         if (_IsGameFinished) return;
         _spawnTimer += Time.deltaTime;
 
-        if( _spawnTimer > _spawnCoolDown )
+        if (_spawnTimer > _spawnCoolDown)
         {
             SpawnEachOnce(_spawnDelay);
             _spawnTimer = 0;
@@ -131,14 +131,32 @@ public class CPU : MonoBehaviour
 
     private void CPUSpawnKnight()
     {
-        UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag);
+        // 2026.01.23 ウー start
+        //UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag);
+        //UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag);
+        // 2026.01.25 ウー start
+        UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.25 ウー end
+        // 2026.01.23 ウー end
     }
     private void CPUSpawnArcher()
     {
-        UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag);
+        // 2026.01.23 ウー start
+        //UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag);
+        // 2026.01.25 ウー start
+        //UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag);
+        UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.25 ウー end
+        // 2026.01.23 ウー end
     }
     private void CPUSpawnMage()
     {
-        UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag);
+        // 2026.01.23 ウー start
+        //UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag);
+        // 2026.01.25 ウー start
+        //UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag);
+        UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.25 ウー end
+        // 2026.01.23 ウー end
     }
 }

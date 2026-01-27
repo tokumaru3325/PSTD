@@ -1,27 +1,21 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
+public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
-    /// <summary>
-    /// 各段階のタワーモデル
-    /// </summary>
-    [SerializeField]
-    private List<HealthBasedSprite> _towerStages;
 
     /// <summary>
-    /// プレイヤーのタワーコントローラー
+    /// 各段階の画像
     /// </summary>
     [SerializeField]
-    private C_PlayerTowerController _playerController;
+    private List<HealthBasedSprite> _phaseSprites;
 
     /// <summary>
-    /// タワーのスプライトレンダラー
+    /// スプライトレンダラー
     /// </summary>
     [SerializeField]
-    private SpriteRenderer _tower;
+    private SpriteRenderer _mySprite;
 
     /// <summary>
     /// 体力ゲージ
@@ -39,40 +33,55 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     /// </summary>
     private V_UIShake _uiShake;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    /// <summary>
+    /// コントローラー
+    /// </summary>
+    [SerializeField]
+    private C_ObstacleStone _myController;
+
+    void Awake()
     {
-        if (_playerController)
+        if (_myController)
         {
-            _playerController.SetView(this);
+            _myController.SetView(this);
         }
         _damageFlash = GetComponentInChildren<DamageFlash>();
         _uiShake = GetComponentInChildren<V_UIShake>();
-        SetInitTowerImg();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
+        InitSprite();
     }
 
     /// <summary>
     /// タワーの見た目を初期化
     /// </summary>
-    private void SetInitTowerImg()
+
+    private void InitSprite()
     {
         float maxThreshold = 0f;
         int index = 0;
-        for (int i = 0; i < _towerStages.Count; i++)
+        for (int i = 0; i < _phaseSprites.Count; i++)
         {
-            if (_towerStages[i].ThresholdPecent > maxThreshold)
+            if (_phaseSprites[i].ThresholdPecent > maxThreshold)
             {
-                maxThreshold = _towerStages[i].ThresholdPecent;
+                maxThreshold = _phaseSprites[i].ThresholdPecent;
                 index = i;
             }
         }
-        if (_tower)
-            _tower.sprite = _towerStages[index].Sprite;
+        if (_mySprite)
+            _mySprite.sprite = _phaseSprites[index].Sprite;
+    }
+
+    /// <summary>
+    /// 表示順番を設定
+    /// </summary>
+    /// <param name="order">表示順番</param>
+    public void SetOrder(int order)
+    {
+        _mySprite.sortingOrder = order;
     }
 
     /// <summary>
@@ -81,26 +90,27 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     /// <param name="Damage"></param>
     public void HandleDamageEffect()
     {
+        Debug.Log($"stone effect");
         // エフェクト
         _damageFlash.TriggerFlash();
         _uiShake.Shake();
     }
 
     /// <summary>
-    /// タワーの体力を更新する
+    /// 体力を更新する
     /// </summary>
     /// <param name="hp">新しい体力</param>
     public void UpdateHP(float hp, float maxHp)
     {
         float healthRate = hp / maxHp;
-        // タワーの段階を更新する
-        for (int i = 0; i < _towerStages.Count; i++)
+        // 段階を更新する
+        for (int i = 0; i < _phaseSprites.Count; i++)
         {
-            if (healthRate <= _towerStages[i].ThresholdPecent)
+            if (healthRate <= _phaseSprites[i].ThresholdPecent)
             {
-                if (_tower)
+                if (_mySprite)
                 {
-                    _tower.sprite = _towerStages[i].Sprite;
+                    _mySprite.sprite = _phaseSprites[i].Sprite;
                 }
             }
         }

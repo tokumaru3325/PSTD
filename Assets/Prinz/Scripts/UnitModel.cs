@@ -21,7 +21,7 @@ public abstract class UnitModel
         BuffData = data;
     }
 
-    public UnitID UnitID {  get; protected set; }
+    public UnitID UnitID { get; protected set; }
 
     public void SetUnitID(UnitID unitID)
     {
@@ -40,6 +40,8 @@ public abstract class UnitModel
         UnitCost = data.BaseUnitCost;
         UnitCoolDown = data.BaseUnitCoolDown;
         MoveDirection = data.MoveDirection;
+        MovementStyle = data.MovementStyle;
+        DangerLevel = data.DangerLevel;
     }
 
     // プレイヤー1のユニットだったら1、プレイヤー2のユニットだったら2
@@ -55,6 +57,20 @@ public abstract class UnitModel
     public int UnitCost { get; private set; }
     public float UnitCoolDown { get; private set; }
     public Vector3 MoveDirection { get; private set; }
+
+    // 2026.01.20 ウー start
+    /// <summary>
+    /// 移動方法
+    /// </summary>
+    public MoveType MovementStyle { get; private set; }
+
+    /// <summary>
+    /// 危険度
+    /// </summary>
+    /// <value></value>
+    public int DangerLevel { get; private set; }
+    // 2026.01.20 ウー end
+
     public M_MapPosition EnemyPlayerPos { get; private set; }
     public List<M_MapPosition> Route { get; private set; }
     public int CurrentRouteIndex { get; private set; }
@@ -92,7 +108,7 @@ public abstract class UnitModel
         Owner.Log("This Unit is not supposed to Heal", LogType.Error);
     }
     public abstract void PlayerAttack(float dt);
-    public bool CanAttack {  get; private set; }
+    public bool CanAttack { get; private set; }
 
     public void AllowAttack(bool canattack)
     {
@@ -134,14 +150,14 @@ public abstract class UnitModel
     #region Range 
     public float AttackRange { get; private set; }
     public float TotalAttackRange => AttackRange + BuffData.AttackRange;
-/*    public float BaseAttackRange { get; private set; }
-    public float RangeMultiplier { get; private set; } = 1.0f;
-    public float CurrentRange => BaseAttackRange * RangeMultiplier;
-*/
-/*    public void SetRangeBuff(float factor)
-    {
-        RangeMultiplier = factor;
-    }*/
+    /*    public float BaseAttackRange { get; private set; }
+        public float RangeMultiplier { get; private set; } = 1.0f;
+        public float CurrentRange => BaseAttackRange * RangeMultiplier;
+    */
+    /*    public void SetRangeBuff(float factor)
+        {
+            RangeMultiplier = factor;
+        }*/
     #endregion
     //=====================================================================================================
     //=====================================================================================================
@@ -194,7 +210,7 @@ public abstract class UnitModel
         {
             if (t != null)
             {
-                if(t.IsDead() == false) return t;
+                if (t.IsDead() == false) return t;
             }
         }
         return null;
