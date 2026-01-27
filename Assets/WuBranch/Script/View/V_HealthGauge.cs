@@ -36,10 +36,14 @@ public class V_HealthGauge : MonoBehaviour
     public void SetGauge(float targetRate)
     {
         _currentHealthRate = targetRate;
-        _healthImage.DOFillAmount(targetRate, _duration).SetEase(Ease.OutQuad).OnComplete(() =>
+        if (_healthImage)
         {
-            _burnImage.DOFillAmount(targetRate, _duration * 0.5f).SetDelay(0.25f);
-        });
+            _healthImage.DOFillAmount(targetRate, _duration).SetEase(Ease.OutQuad).OnComplete(() =>
+            {
+                if (_burnImage)
+                    _burnImage.DOFillAmount(targetRate, _duration * 0.5f).SetDelay(0.25f);
+            });
+        }
     }
 
     /// <summary>
