@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cd9dcd9159310489f9869abde07026, type: 3}
+  m_Name: BigBuffSE
+  m_EditorClassIdentifier: Assembly-CSharp::SoundEffectGroup
+  id: 10
+  volume: 0.75
+  pitchMin: 0.83
+  pitchMax: 1.29
+  clips:
+  - {fileID: 8300000, guid: 7613f64b0b992924dae76b912da04f35, type: 3}
+  - {fileID: 8300000, guid: 3fc8110cd8da65e4b88b8854fbf68a65, type: 3}
+  - {fileID: 8300000, guid: 1d0c9573eb77d6840b04ce7f9ca218c0, type: 3}
+  cooldown: 0.3

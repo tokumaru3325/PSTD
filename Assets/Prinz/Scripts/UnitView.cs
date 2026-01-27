@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -28,7 +29,14 @@ public class UnitView : MonoBehaviour
     // 2026.01.16 ウー end バフのエフェクト追加
 
     public void PlayAttack() => Animator.SetTrigger("Attack");
+
+    /// <summary>
+    /// ArcherとMage用。攻撃が実際解放されたら呼ぶ関数。PlayAttack() -> 待つ -> StopAttack() -> ダメージ
+    /// </summary>
     public void StopAttack() => Animator.SetTrigger("StopAttack");
+
+    public void TriggerIdle() => Animator.SetTrigger("Idle");
+    
     public void PlayMove(bool move) => Animator.SetBool("Move", move);
     public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
     public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
@@ -49,7 +57,6 @@ public class UnitView : MonoBehaviour
 
     public void ResetAllAnimations()
     {
-        StopAttack();
         PlayDeath(false);
         PlayMove(false);
         PlayVictoryDance(false);
@@ -182,38 +189,60 @@ public class UnitView : MonoBehaviour
 
     public void PlaySwordAttackSE()
     {
-        SoundManager.Instance.PlaySwordAttack();
+        SoundManager.Instance.PlaySE(SoundId.SwordAttack);
     }
 
     public void PlaySwordBlockSE()
     {
-        SoundManager.Instance.PlaySwordBlock();
+        SoundManager.Instance.PlaySE(SoundId.SwordBlock);
     }
 
     public void PlaySwordImpactSE()
     {
-        SoundManager.Instance.PlaySwordImpact();
+        SoundManager.Instance.PlaySE(SoundId.SwordImpact);
     }
 
     public void PlaySwordParrySE()
     {
-        SoundManager.Instance.PlaySwordParry();
+        SoundManager.Instance.PlaySE(SoundId.SwordParry);
     }
 
     public void PlayBowAttackSE()
     {
-        SoundManager.Instance.PlayBowAttack();
+        SoundManager.Instance.PlaySE(SoundId.BowAttack);
     }
 
     public void PlayBowBlockSE()
     {
-        SoundManager.Instance.PlayBowBlock();
+        SoundManager.Instance.PlaySE(SoundId.BowBlock);
     }
 
     public void PlayBowImpactSE()
     {
-        SoundManager.Instance.PlayBowImpact();
+        SoundManager.Instance.PlaySE(SoundId.BowImpact);
     }
+
+    public void PlayBuffSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.Buff);
+    }
+
+    public void PlayBigBuffSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.BigBuff);
+    }
+
+    public void PlayFireBallSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.FireBall);
+    }
+
+    public void PlaySpellImpactSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.SpellImpact);
+    }
+
+
     #endregion
 
     // 2026.01.16 ウー start バフのエフェクト追加

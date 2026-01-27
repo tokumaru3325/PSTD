@@ -15,6 +15,7 @@ public class IdleState : IUnitState
     {
         _me.Log($"Enter IdleState {_me.GetPlayerSide()}", LogType.Warning);
         _me.OnEnterState(this);
+        _me.TriggerIdle();
         _idleTime = 0f;
     }
     public void OnExit() { }

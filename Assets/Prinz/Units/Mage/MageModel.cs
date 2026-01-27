@@ -4,6 +4,10 @@ using static UnityEngine.GraphicsBuffer;
 public class MageModel : UnitModel
 {
     private float attackTimer;
+    private float timerGoal;
+
+    private bool isPlayAttack = false;
+    private bool isStopAttack = false;
     public float HealPower {  get; private set; }
     public float HealSpeed { get; private set; }
     private MageData MageData => (MageData)Data;
@@ -61,18 +65,30 @@ public class MageModel : UnitModel
 
     public override void BasicAttack(UnitPresenter target, float dt)
     {
-        float timergoal = 1f / TotalAttackSpeed;
+        timerGoal = 1f / TotalAttackSpeed;
 
-        if (attackTimer < timergoal * 0.9f)
-            Owner.PlayAttack();
-        else
+        if (attackTimer < timerGoal * 0.9f)
+        {
+            if (!isPlayAttack)
+            {
+                Owner.PlayAttack();
+                isPlayAttack = true;
+            }
+        }
+        else if (!isStopAttack)
+        {
             Owner.StopAttack();
+            Owner.Log($"{Owner.name} basic attack", LogType.Error);
+            isStopAttack = true;
+        }
 
         attackTimer += dt;
 
-        if (attackTimer >= timergoal)
+        if (attackTimer >= timerGoal)
         {
-            Owner.StopAttack();
+            Owner.TriggerIdle();
+            isPlayAttack = false;
+            isStopAttack = false;
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
@@ -82,18 +98,30 @@ public class MageModel : UnitModel
 
     public override void PlayerAttack(float dt)
     {
-        float timergoal = 1f / TotalAttackSpeed;
+        timerGoal = 1f / TotalAttackSpeed;
 
-        if (attackTimer < timergoal * 0.9f)
-            Owner.PlayAttack();
-        else
+        if (attackTimer < timerGoal * 0.9f)
+        {
+            if (!isPlayAttack)
+            {
+                Owner.PlayAttack();
+                isPlayAttack = true;
+            }
+        }
+        else if (!isStopAttack)
+        {
             Owner.StopAttack();
+            Owner.Log($"{Owner.name} basic attack", LogType.Error);
+            isStopAttack = true;
+        }
 
         attackTimer += dt;
 
-        if (attackTimer >= timergoal)
+        if (attackTimer >= timerGoal)
         {
-            Owner.StopAttack();
+            Owner.TriggerIdle();
+            isPlayAttack = false;
+            isStopAttack = false;
             attackTimer = 0f;
             float damage = TotalAttackPower;
             EnemyPlayer?.DecreaseHP(damage);
@@ -103,20 +131,32 @@ public class MageModel : UnitModel
 
     public override void Heal(UnitPresenter target, float dt)
     {
-    //    Owner.Log("Heal performed in MageModel", LogType.Warning);
+        //    Owner.Log("Heal performed in MageModel", LogType.Warning);
 
-        float timergoal = 1f / HealSpeed;
+        timerGoal = 1f / HealSpeed;
 
-        if (HealSpeed < timergoal * 0.9f)
-            Owner.PlayAttack(); //回復アニメーションがまだない
-        else
-            Owner.StopAttack(); //回復アニメーションがまだない
+        if (HealSpeed < timerGoal * 0.9f)
+        {
+            if (!isPlayAttack)
+            {
+                Owner.PlayAttack(); //回復アニメーションがまだない
+                isPlayAttack = true;
+            }
+        }
+        else if (!isStopAttack)
+        {
+            Owner.StopAttack();
+            Owner.Log($"{Owner.name} basic attack", LogType.Error);
+            isStopAttack = true;
+        }
 
         HealSpeed += dt;
 
-        if (HealSpeed >= timergoal)
+        if (HealSpeed >= timerGoal)
         {
-            Owner.StopAttack();
+            Owner.TriggerIdle();
+            isPlayAttack = false;
+            isStopAttack = false;
             HealSpeed = 0f;
             float heal = HealPower;
             target?.ReceiveHeal(heal);

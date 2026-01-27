@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cd9dcd9159310489f9869abde07026, type: 3}
+  m_Name: BowImpactSE
+  m_EditorClassIdentifier: Assembly-CSharp::SoundEffectGroup
+  id: 6
+  volume: 0.75
+  pitchMin: 0.83
+  pitchMax: 1.29
+  clips:
+  - {fileID: 8300000, guid: 7982d03bdc680934c83178b3119adeed, type: 3}
+  - {fileID: 8300000, guid: 21be8c9ba8c94414eab3cdb670532335, type: 3}
+  - {fileID: 8300000, guid: 285e1b261f93e834e97096f984c28aeb, type: 3}
+  cooldown: 0.3

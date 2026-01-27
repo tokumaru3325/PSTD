@@ -315,11 +315,11 @@ public class UnitPresenter : MonoBehaviour
 
         }
 
-        if (EnteringState is DeadState)
+        if (EnteringState is IdleState)
         {
-
+         //   View.ResetAllAnimations();
         }
-
+        View.ResetAllAnimations();
         SetMoveDirection(Model.MoveDirection);
         View.UpdateAttackRangeSpriteColor();
     }
@@ -368,15 +368,7 @@ public class UnitPresenter : MonoBehaviour
     public void PerformBasicAttack(UnitPresenter target, float dt)
     {
         if (_IsGameEnding) return;
-
-        //   if (target.Model.IsDead) return;
-        Model.BasicAttack(target, dt); //moving logic to model
-
-        /*        View?.StopAttack();
-                float damage = Model.AttackPower;
-                target.TakeDamage(damage);
-                View?.PlayAttack();*/
-
+        Model.BasicAttack(target, dt);
     }
 
     public void ShootArrow(Vector3 targetPos)
@@ -528,6 +520,11 @@ public class UnitPresenter : MonoBehaviour
     public void StopAttack()
     {
         View?.StopAttack();
+    }
+
+    public void TriggerIdle()
+    {
+        View?.TriggerIdle();
     }
 
     public void PlayMove(bool ismoving)
