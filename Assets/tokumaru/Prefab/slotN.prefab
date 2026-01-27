@@ -454,6 +454,7 @@ MonoBehaviour:
   betSE: {fileID: 8300000, guid: 5802bb59fb0ec6e4fb948cfef0cb9abf, type: 3}
   leberOnSE: {fileID: 8300000, guid: afde963fb4363a64abbc3d73c5f37d02, type: 3}
   stopSE: {fileID: 8300000, guid: e345ccd0755623c4da28a9a17f070e8b, type: 3}
+  resultSe: []
   oya: {fileID: 3459793081694859314}
   reelL: {fileID: 1934229703539825355}
   reelC: {fileID: 7808593430855767527}

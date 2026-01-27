@@ -58,6 +58,7 @@ public class UnitSpriteScript : MonoBehaviour
     public void PlayBowAttackSE()
     {
         _view.PlayBowAttackSE();
+    //    DebugManager.Instance.Log("Bow atk SE", LogType.Error);
     }
 
     public void PlayBowBlockSE()
@@ -68,5 +69,25 @@ public class UnitSpriteScript : MonoBehaviour
     public void PlayBowImpactSE()
     {
         _view.PlayBowImpactSE();
+    }
+
+    public void PlayBuffSE()
+    {
+        _view.PlayBuffSE();
+    }
+
+    public void PlayBigBuffSE()
+    {
+        _view.PlayBigBuffSE();
+    }
+
+    public void PlayFireBallSE()
+    {
+        _view.PlayFireBallSE();
+    }
+
+    public void PlaySpellImpactSE()
+    {
+        _view.PlaySpellImpactSE();
     }
 }

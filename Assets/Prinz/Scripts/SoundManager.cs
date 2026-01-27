@@ -1,11 +1,44 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum SoundId
+{
+    SwordAttack,
+    SwordBlock,
+    SwordImpact,
+    SwordParry,
+    BowAttack,
+    BowBlock,
+    BowImpact,
+    FireBall,
+    SpellImpact,
+    Buff,
+    BigBuff
+}
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
-    #region Singleton Implementation
     public static SoundManager Instance { get; private set; }
+
+    [SerializeField] private List<SoundEffectGroup> soundGroups;
+    [SerializeField] private int initialPoolSize = 3;
+    public int maxPoolSize { get; private set; }
+
+    [SerializeField] private AudioSource bgmSource;
+    [SerializeField] private AudioClip bgmMainClip;
+    [SerializeField] private AudioClip bgmTitleClip;
+
+
+    private Dictionary<SoundId, SoundEffectGroup> soundMap;
+    //Prevent same-frame spam
+    private Dictionary<SoundId, int> lastPlayedFrame = new();
+    //Prevent rapid repetition
+    private Dictionary<SoundId, float> lastPlayedTime = new();
+
+    private AudioSourcePool pool;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -13,164 +46,90 @@ public class SoundManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
-    }
-    #endregion
-
-    public AudioSource SEaudioSource;
-    public AudioSource BGMaudioSource;
-
-    public AudioClip Bgm;
-
-    private List<AudioClip> swordAttack;
-    public AudioClip swordAttack1;
-    public AudioClip swordAttack2;
-    public AudioClip swordAttack3;
-
-    private List<AudioClip> swordBlock;
-    public AudioClip swordBlock1;
-    public AudioClip swordBlock2;
-    public AudioClip swordBlock3;
-
-    private List<AudioClip> swordImpact;
-    public AudioClip swordImpact1;
-    public AudioClip swordImpact2;
-    public AudioClip swordImpact3;
-
-    private List<AudioClip> swordParry;
-    public AudioClip swordParry1;
-    public AudioClip swordParry2;
-    public AudioClip swordParry3;
-
-    private List<AudioClip> bowAttack;
-    public AudioClip bowAttack1;
-    public AudioClip bowAttack2;
-
-    private List<AudioClip> bowBlock;
-    public AudioClip bowBlock1;
-    public AudioClip bowBlock2;
-    public AudioClip bowBlock3;
-
-    private List<AudioClip> bowImpact;
-    public AudioClip bowImpact1;
-    public AudioClip bowImpact2;
-    public AudioClip bowImpact3;
-
-
-
-    private void Start()
-    {
-        Initialize();
     }
 
-    public void Initialize()
+    void Start()
     {
-        SEaudioSource = GetComponent<AudioSource>();
-        if (SEaudioSource == null)
-            DebugManager.Instance.Log("AudioSource not found", LogType.Error);
+        maxPoolSize = initialPoolSize;
 
-        InitSEList();
+        pool = new AudioSourcePool(initialPoolSize, transform, maxPoolSize);
 
-        PlayBGM();
+        soundMap = new Dictionary<SoundId, SoundEffectGroup>();
+        foreach (var group in soundGroups)
+            soundMap[group.id] = group;
+
+        PlayMainBGM();
     }
 
-    private void InitSEList()
+    public void PlayMainBGM()
     {
-        swordAttack = new List<AudioClip>
+        if (bgmSource == null || bgmMainClip == null) return;
+
+        bgmSource.clip = bgmMainClip;
+        bgmSource.loop = true;
+        bgmSource.Play();
+    }
+
+    public void StopCurrentBGM()
+    {
+        if (bgmSource == null || bgmMainClip == null) return;
+
+        bgmSource.Stop();
+        bgmSource.clip = null;
+    }
+
+    public void PlayTitleBGM()
+    {
+        if (bgmSource == null || bgmTitleClip == null) return;
+
+        bgmSource.clip = bgmTitleClip;
+        bgmSource.loop = true;
+        bgmSource.Play();
+    }
+
+    public void PlaySE(SoundId id)
+    {
+        if (!soundMap.TryGetValue(id, out var group))
+            return;
+
+        if (group.clips == null || group.clips.Count == 0)
+            return;
+        // ---------- FRAME GUARD ----------
+        int currentFrame = Time.frameCount;
+        if (lastPlayedFrame.TryGetValue(id, out int lastFrame) &&
+            lastFrame == currentFrame)
         {
-            swordAttack1,
-            swordAttack2,
-            swordAttack3
-        };
+            return;
+        }
 
-        swordBlock = new List<AudioClip>
+        lastPlayedFrame[id] = currentFrame;
+
+        // ---------- COOLDOWN GUARD ----------
+        float currentTime = Time.time;
+        if (lastPlayedTime.TryGetValue(id, out float lastTime) &&
+            currentTime - lastTime < group.cooldown)
         {
-            swordBlock1,
-            swordBlock2,
-            swordBlock3
-        };
-        
-        swordImpact = new List<AudioClip>
-        {
-            swordImpact1,
-            swordImpact2,
-            swordImpact3
-        };
+            return;
+        }
 
-        swordParry = new List<AudioClip>
-        {
-            swordParry1,
-            swordParry2,
-            swordParry3
-        };
+        lastPlayedTime[id] = currentTime;
 
-        bowAttack = new List<AudioClip>
-        {
-            bowAttack1,
-            bowAttack2
-        };
+        // ---------- PLAY ----------
+        var src = pool.Get();
 
-        bowBlock = new List<AudioClip>
-        {
-            bowBlock1,
-            bowBlock2,
-            bowBlock3
-        };
+        src.volume = group.volume;
+        src.pitch = Random.Range(group.pitchMin, group.pitchMax);
+        src.clip = group.clips[Random.Range(0, group.clips.Count)];
+        src.Play();
 
-        bowImpact = new List<AudioClip>
-        {
-            bowImpact1,
-            bowImpact2,
-            bowImpact3
-        };
+        StartCoroutine(ReturnWhenFinished(src));
     }
 
-    public void PlayBGM()
+    private IEnumerator ReturnWhenFinished(AudioSource src)
     {
-        BGMaudioSource.Play();
-    }
-
-    public void PlaySwordAttack()
-    {
-        int index = Random.Range(0, swordAttack.Count);
-        SEaudioSource.PlayOneShot(swordAttack[index]);
-    //    DebugManager.Instance.Log($"SE swordAttack {index} played", LogType.Error);
-    }
-
-    public void PlaySwordBlock()
-    {
-        int index = Random.Range(0, swordBlock.Count);
-        SEaudioSource.PlayOneShot(swordBlock[index]);
-    }
-
-    public void PlaySwordImpact()
-    {
-        int index = Random.Range(0, swordImpact.Count);
-        SEaudioSource.PlayOneShot(swordImpact[index]);
-    }
-
-    public void PlaySwordParry()
-    {
-        int index = Random.Range(0, swordParry.Count);
-        SEaudioSource.PlayOneShot(swordParry[index]);
-    }
-
-    public void PlayBowAttack()
-    {
-        int index = Random.Range(0, bowAttack.Count);
-        SEaudioSource.PlayOneShot(bowAttack[index]);
-    }
-
-    public void PlayBowBlock()
-    {
-        int index = Random.Range(0, bowBlock.Count);
-        SEaudioSource.PlayOneShot(bowBlock[index]);
-    }
-
-    public void PlayBowImpact()
-    {
-        int index = Random.Range(0, bowImpact.Count);
-        SEaudioSource.PlayOneShot(bowImpact[index]);
+        yield return new WaitWhile(() => src.isPlaying);
+        pool.Release(src);
     }
 }

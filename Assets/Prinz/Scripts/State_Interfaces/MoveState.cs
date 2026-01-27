@@ -8,7 +8,6 @@ public class MoveState : IUnitState
     private readonly UnitPresenter _me;
 
     private C_MapManager _mapManager;
-//    private int _currentRouteIndex = 0; //絶対ダメ
     private Vector3 target;
 
     public MoveState(UnitPresenter presenter)
@@ -36,8 +35,6 @@ public class MoveState : IUnitState
 
     public IUnitState OnFixedUpdate(float fdt)
     {
-    //    DebugShowRoute();
-
         Move(_me.GetTotalMoveSpeed(), _me.GetMoveDirection(), fdt);
 
         if(_me.IsValidTargetExist())
@@ -48,9 +45,9 @@ public class MoveState : IUnitState
         return null;
     }
 
+    //移動
     public void Move(float movespeed, Vector3 direction, float dt)
     {
-        //移動
         float step = movespeed * dt;
 
         GetDistanceToTarget();
