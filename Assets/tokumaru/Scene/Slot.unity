@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b21745bd4f4654ab7eef731a790d9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlotSceneManager
+  _playerTag: Player1
 --- !u!4 &241382832
 Transform:
   m_ObjectHideFlags: 0
@@ -476,6 +477,7 @@ MonoBehaviour:
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player2
   _enemyTag: Player1
+  _policyMaker: {fileID: 0}
 --- !u!4 &1881661053
 Transform:
   m_ObjectHideFlags: 0
@@ -722,13 +724,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 491297032}
     - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: BuffOnePlayValue
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
       propertyPath: slotSceneManager
       value: 
       objectReference: {fileID: 241382831}
     - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: moneyOnePlayValue
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
       propertyPath: resultTextManager
       value: 
       objectReference: {fileID: 845154252}
+    - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: MonsterOnePlayValue
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
       propertyPath: resultSe.Array.size
       value: 5

@@ -23,6 +23,9 @@ public class MonsterSponerBySlot : MonoBehaviour
     private Player _enemy;
 
     const string SPAWN_TAG = "SpawnPos";
+
+    [SerializeField]
+    private V_StrategySelector _policyMaker;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,7 +50,8 @@ public class MonsterSponerBySlot : MonoBehaviour
 
         // 2026.01.27 ウー start
         //unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag,); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
-        unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag, _enemyTag, PathStrategy.Shortest); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
+        unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
         // 2026.01.27 ウー end
         _player.Money -= _unit[(int)type].BaseUnitCost;
 
