@@ -35,7 +35,7 @@ public class MonsterSponerBySlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void CallBack_Spawn(UnitID type, string playertag)
@@ -45,7 +45,10 @@ public class MonsterSponerBySlot : MonoBehaviour
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
 
-        unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        // 2026.01.27 ウー start
+        //unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag,); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag, _enemyTag, PathStrategy.Shortest); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        // 2026.01.27 ウー end
         _player.Money -= _unit[(int)type].BaseUnitCost;
 
     }
