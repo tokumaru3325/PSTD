@@ -242,6 +242,20 @@ public class UnitView : MonoBehaviour
         SoundManager.Instance.PlaySE(SoundId.SpellImpact);
     }
 
+    public void PlayMiningSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.Mining);
+    }
+
+    public void PlayRockBreakSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.RockBreak);
+    }
+
+    public void PlayWoodChopSE()
+    {
+        SoundManager.Instance.PlaySE(SoundId.Chop);
+    }
 
     #endregion
 

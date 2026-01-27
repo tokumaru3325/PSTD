@@ -30,7 +30,7 @@ public class ArcherModel : UnitModel
         else if (!isStopAttack)
         {
             Owner.StopAttack();
-            Owner.Log($"{Owner.name} basic attack", LogType.Error);
+        //    Owner.Log($"{Owner.name} basic attack", LogType.Error);
             isStopAttack = true;
         }
 

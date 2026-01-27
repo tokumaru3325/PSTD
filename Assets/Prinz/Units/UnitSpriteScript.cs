@@ -90,4 +90,19 @@ public class UnitSpriteScript : MonoBehaviour
     {
         _view.PlaySpellImpactSE();
     }
+
+    public void PlayMiningSE()
+    {
+        _view.PlayMiningSE();
+    }
+
+    public void PlayRockBreakSE()
+    {
+        _view.PlayRockBreakSE();
+    }
+
+    public void PlayWoodChopSE()
+    {
+        _view.PlayWoodChopSE();
+    }
 }

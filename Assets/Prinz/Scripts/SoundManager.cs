@@ -14,7 +14,10 @@ public enum SoundId
     FireBall,
     SpellImpact,
     Buff,
-    BigBuff
+    BigBuff,
+    Mining,
+    RockBreak,
+    Chop
 }
 
 [RequireComponent(typeof(AudioSource))]
