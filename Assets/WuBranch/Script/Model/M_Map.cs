@@ -74,4 +74,18 @@ public class M_Map
         _pathCost = path;
         OnUpdatePath?.Invoke(path);
     }
+
+    /// <summary>
+    /// 特定の位置のコストを変更
+    /// </summary>
+    /// <param name="pos">マップ座標</param>
+    /// <param name="val">新しい値</param>
+    public void SetPathCost(M_MapPosition pos, int val)
+    {
+        // 確認
+        if (0 <= pos.Y && pos.Y < _pathCost.Count && 0 <= pos.X && pos.X < _pathCost[pos.Y].Count)
+        {
+            _pathCost[pos.Y][pos.X] = val;
+        }
+    }
 }
