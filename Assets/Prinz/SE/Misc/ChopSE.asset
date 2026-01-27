@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cd9dcd9159310489f9869abde07026, type: 3}
+  m_Name: ChopSE
+  m_EditorClassIdentifier: Assembly-CSharp::SoundEffectGroup
+  id: 0
+  volume: 1
+  pitchMin: 1
+  pitchMax: 1
+  clips:
+  - {fileID: 8300000, guid: b4ffa3018682abd4a8bb516a96d5f2ef, type: 3}
+  - {fileID: 8300000, guid: 241f6074ceeb36f45b2a664370457ae6, type: 3}
+  - {fileID: 8300000, guid: ece16f3c91942b848aa51478052c21de, type: 3}
+  - {fileID: 8300000, guid: d8fcd0341f974fd48a90e6ec8a77803b, type: 3}
+  cooldown: 0.3
