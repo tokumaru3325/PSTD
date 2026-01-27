@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public delegate void MoneySlotResult(int i);
 public delegate void MonsterSlotResult(UnitID _unitType,string playertag);
@@ -27,6 +28,9 @@ public class SlotSceneManager : MonoBehaviour
     //2025/12/23 滝本海大 start
     public static Action<BuffType, string, string> OnSlotBuffResult;
     //2025/12/23 滝本海大 end
+
+    [SerializeField]
+    private string _playerTag;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
