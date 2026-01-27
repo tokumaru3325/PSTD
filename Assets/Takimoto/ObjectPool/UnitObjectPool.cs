@@ -32,6 +32,8 @@ public class UnitObjectPool : MonoBehaviour
 
     List<UnitPresenter> MagePool;
 
+    public static UnitObjectPool Instance { get; private set; }
+
     // 2026.01.18 ウー start
     /// <summary>
     /// バフマネージャー
@@ -43,6 +45,16 @@ public class UnitObjectPool : MonoBehaviour
     {
         if (!_buffManager)
             _buffManager = FindFirstObjectByType<BuffManager>();
+
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }    
     }
 
     void Start()

@@ -67,7 +67,7 @@ public class C_RoomSeeker : MonoBehaviour
             roomDatas.Add(data);
         }
         OnFoundRoomData?.Invoke(roomDatas);
-        Debug.Log($"Create Room Complete");
+        Debug.Log($"Match Room Complete");
     }
 
     /// <summary>
