@@ -17,7 +17,9 @@ public enum SoundId
     BigBuff,
     Mining,
     RockBreak,
-    Chop
+    Chop,
+    SlotSpin,
+    SlotJackpot
 }
 
 [RequireComponent(typeof(AudioSource))]
@@ -125,6 +127,29 @@ public class SoundManager : MonoBehaviour
         src.volume = group.volume;
         src.pitch = Random.Range(group.pitchMin, group.pitchMax);
         src.clip = group.clips[Random.Range(0, group.clips.Count)];
+        src.Play();
+
+        StartCoroutine(ReturnWhenFinished(src));
+    }
+
+    public void PlaySelectedSE(SoundId id, int select)
+    {
+        if (!soundMap.TryGetValue(id, out var group))
+            return;
+
+        if (group.clips == null || group.clips.Count == 0)
+            return;
+
+        int selected = select;
+        if (selected < 0)
+            selected = 0;
+        if(selected > group.clips.Count)
+            selected = group.clips.Count - 1;
+
+        // ---------- PLAY ----------
+        var src = pool.Get();
+        src.volume = group.volume;
+        src.clip = group.clips[selected];
         src.Play();
 
         StartCoroutine(ReturnWhenFinished(src));
