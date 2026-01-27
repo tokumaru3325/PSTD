@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,9 +34,9 @@ public class GameManager : MonoBehaviour
 
         //2026/01/23　滝本海大　start
         UnitObjectPool.Instance.CreatePool(50);
-        ArrowPool.Instance.CreatePool(0);
-        LightningSpellPool.Instance.CreatePool(0);
-        HealSpellPool.Instance.CreatePool(0);
+        ArrowPool.Instance.CreatePool(10);
+        LightningSpellPool.Instance.CreatePool(10);
+        HealSpellPool.Instance.CreatePool(10);
         //2026/01/23 滝本海大　end
     }
 
@@ -57,6 +58,15 @@ public class GameManager : MonoBehaviour
      //   Time.timeScale = 0;
         GameEnding?.Invoke(IsGameFinished, deadplayertag);
         Ending = StartCoroutine(EndingScene());
+
+        if (deadplayertag == "Player1")
+        {
+            EndingManager.LoadEnding(false);
+        }
+        else
+        {
+            EndingManager.LoadEnding(true);
+        }
     }
 
     public int OnUnitSpawn()
@@ -68,7 +78,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator EndingScene()
     {
         //do something like wait before loading ending scene and stuff
-
+        SceneManager.LoadScene("EndingScene", LoadSceneMode.Additive);
         yield break;
     }
 }
