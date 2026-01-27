@@ -25,6 +25,5 @@ public class Money : MonoBehaviour
         _money = (int)_player.Money;
         //_textMoney.SetText(_money.ToString());
         _textMoney.SetText(((int)_player.Money).ToString());
-        Debug.Log($"今{(int)_player.Money}");
     }
 }
