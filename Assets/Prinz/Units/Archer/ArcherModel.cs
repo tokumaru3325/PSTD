@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class ArcherModel : UnitModel
@@ -44,6 +44,8 @@ public class ArcherModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             target.TakeDamage(damage);
+
+            Owner.ShootArrow(target.transform.position);
         }
     }
 
@@ -75,6 +77,8 @@ public class ArcherModel : UnitModel
             attackTimer = 0f;
             float damage = TotalAttackPower;
             EnemyPlayer.DecreaseHP(damage);
+
+            Owner.ShootArrow(EnemyPlayer.transform.position);
         }
     }
 }
