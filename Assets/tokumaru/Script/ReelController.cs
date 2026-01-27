@@ -13,6 +13,8 @@ public class ReelController : MonoBehaviour
     public AudioClip leberOnSE;
     public AudioClip stopSE;
 
+    [SerializeField] AudioClip[] resultSe;
+
     [SerializeField] private GameObject oya;
     [SerializeField] private GameObject reelL;
     [SerializeField] private GameObject reelC;
@@ -57,6 +59,8 @@ public class ReelController : MonoBehaviour
     int slotResultR = 0;
 
     [SerializeField] RectTransform rt;
+
+    [SerializeField] EffectManager eManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -153,6 +157,7 @@ public class ReelController : MonoBehaviour
                     reelLStoped = false;
                     reelCStoped = false;
                     reelRStoped = false;
+                    audioSource.Stop();
                     audioSource.PlayOneShot(betSE);
                 }
 
@@ -314,18 +319,22 @@ public class ReelController : MonoBehaviour
                         {
                             case 0:
                                 SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
+                                eManager.CoinEffectPlay(koyakuNum * 3);
                                 break;
                             case 1:
-                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL, slotResultC, slotResultR);
+                                if (koyakuNum >= 3) koyakuNum = 2;
+                                SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum); //(UnitID)koyakuNum
+                                eManager.FireEffectPlay(koyakuNum * 3);
                                 break;
                             case 2:
                                 SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
+                                eManager.SwirlEffectPlay(koyakuNum * 3);
                                 break;
 
                         }
-                        SlotSceneManager.BroadcastMoneySlotResult(koyakuNum);
+                        audioSource.PlayOneShot(resultSe[koyakuNum]);
                         SlotSceneManager.reelMoving = false;
-                        // Debug.Log("reelRstop");
+                        Debug.Log("音ならしました");
                     }
                     else
                     {
@@ -358,7 +367,7 @@ public class ReelController : MonoBehaviour
                         switch (slotType)
                         {
                             case 1:
-                                SlotSceneManager.BroadcastMonsterSlotResult(slotResultL,slotResultC,slotResultR);
+                                SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum);
                                 break;
                             case 2:
                                 SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
@@ -366,7 +375,7 @@ public class ReelController : MonoBehaviour
 
                         }
                         SlotSceneManager.reelMoving = false;
-                        //Debug.Log("reelRstop");
+                        Debug.Log("そんなことはないですね");
                     }
                     else
                     {

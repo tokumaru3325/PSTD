@@ -13,6 +13,14 @@ public class ReelMover : MonoBehaviour
         nextreelC,
         nextreelR
     };
+    public class enter<T> : MonoBehaviour
+    {
+        T num;
+        public void input(T a)
+        {
+            num = a;
+        }
+    }
 
     public enum SomeSlot
     {
