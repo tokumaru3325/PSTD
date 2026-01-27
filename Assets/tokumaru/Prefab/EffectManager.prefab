@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7222068908429727306}
   - component: {fileID: 963733662243856549}
   - component: {fileID: 4725209766042494387}
+  - component: {fileID: 5652454811859028793}
   m_Layer: 0
   m_Name: EffectManager
   m_TagString: Untagged
@@ -50,6 +51,7 @@ MonoBehaviour:
   coinEf: {fileID: 7222068908429727306}
   fireEf: {fileID: 963733662243856549}
   swirlEf: {fileID: 4725209766042494387}
+  pfEf: {fileID: 0}
 --- !u!114 &7222068908429727306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,3 +94,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SwirlEffect
   obj: {fileID: 7798698034534257977, guid: df9bfdfef3931e542909cd9a38d84a9e, type: 3}
   canvas: {fileID: 0}
+--- !u!114 &5652454811859028793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6534446794452151004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bfdbcbd92941464bb2468cfadf9ae80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaperFubukiEffect
+  obj: {fileID: 944159013991648076, guid: d8913640f78fd3a48bd10825cec91ce6, type: 3}
+  canvas: {fileID: 0}
+  LeftPosition: {x: 0, y: 0, z: 0}
+  RightPosition: {x: 0, y: 0, z: 0}
