@@ -1,27 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class UnitObjectPool : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _knightPrefab;
+    // [SerializeField]
+    // private GameObject _knightPrefab;
 
-    [SerializeField]
-    private GameObject _archerPrefab;
+    // [SerializeField]
+    // private GameObject _archerPrefab;
 
-    [SerializeField]
-    private GameObject _magePrefab;
+    // [SerializeField]
+    // private GameObject _magePrefab;
 
-    [SerializeField]
-    public UnitData KnightData; //ScriptableObjectをインスペクターに設定する //[2025/12/21] プリンス：SpawnButtonから移した
+    // [SerializeField]
+    // public UnitData KnightData; //ScriptableObjectをインスペクターに設定する //[2025/12/21] プリンス：SpawnButtonから移した
 
-    [SerializeField]
-    public UnitData ArcherData;
+    // [SerializeField]
+    // public UnitData ArcherData;
 
+    // [SerializeField]
+    // public UnitData MageData;
+
+    // 2026.01.27 ウー start
+    [Tooltip("ユニットの関連資料")]
     [SerializeField]
-    public UnitData MageData;
+    private List<UnitInfo> _units;
+    // 2026.01.27 ウー end
 
     [SerializeField]
     public BuffDataBase BuffData;
@@ -31,6 +36,11 @@ public class UnitObjectPool : MonoBehaviour
     List<UnitPresenter> ArcherPool;
 
     List<UnitPresenter> MagePool;
+
+    /// <summary>
+    /// 採掘者のオブジェクトプール
+    /// </summary>
+    List<UnitPresenter> MinerPool;
 
     public static UnitObjectPool Instance { get; private set; }
 
@@ -54,7 +64,7 @@ public class UnitObjectPool : MonoBehaviour
         else
         {
             Instance = this;
-        }    
+        }
     }
 
     void Start()
@@ -73,34 +83,66 @@ public class UnitObjectPool : MonoBehaviour
         KnightPool = new List<UnitPresenter>();
         ArcherPool = new List<UnitPresenter>();
         MagePool = new List<UnitPresenter>();
+        MinerPool = new List<UnitPresenter>();
 
-        for (int i = 0; i < maxCount; i++)
+        FillObjectPool(UnitID.Knight, KnightPool, maxCount);
+        FillObjectPool(UnitID.Archer, ArcherPool, maxCount);
+        FillObjectPool(UnitID.Mage, MagePool, maxCount);
+        FillObjectPool(UnitID.Miner, MinerPool, maxCount);
+
+        // for (int i = 0; i < maxCount; i++)
+        // {
+        //     //ナイトのオブジェクトプールを貯める
+        //     GameObject gameObject = Instantiate(_knightPrefab);
+        //     UnitPresenter obj = gameObject.GetComponent<UnitPresenter>();
+        //     obj.BindPool(this);
+        //     obj.gameObject.SetActive(false);
+        //     KnightPool.Add(obj);
+
+        //     //アーチャーのオブジェクトプールを貯める
+        //     gameObject = Instantiate(_archerPrefab);
+        //     obj = gameObject.GetComponent<UnitPresenter>();
+        //     obj.BindPool(this);
+        //     obj.gameObject.SetActive(false);
+        //     ArcherPool.Add(obj);
+
+        //     //メイジのオブジェクトプールを貯める
+        //     gameObject = Instantiate(_magePrefab);
+        //     obj = gameObject.GetComponent<UnitPresenter>();
+        //     obj.BindPool(this);
+        //     obj.gameObject.SetActive(false);
+        //     MagePool.Add(obj);
+        // }
+    }
+
+    /// <summary>
+    /// オブジェクトプールを貯める
+    /// </summary>
+    /// <param name="type">ユニットのタイプ</param>
+    /// <param name="pool">オブジェクトプール</param>
+    /// <param name="maxCount">数</param>
+    private void FillObjectPool(UnitID type, List<UnitPresenter> pool, int maxCount)
+    {
+        UnitInfo info = GetUnitInfo(type);
+        if (info == null)
         {
-            //ナイトのオブジェクトプールを貯める
-            GameObject gameObject = Instantiate(_knightPrefab);
+            Debug.LogError($"{type}'s data is not attached.");
+            return;
+        }
+
+        for (int index = 0; index < maxCount; index++)
+        {
+            GameObject gameObject = Instantiate(info.Prefab);
             UnitPresenter obj = gameObject.GetComponent<UnitPresenter>();
             obj.BindPool(this);
             obj.gameObject.SetActive(false);
-            KnightPool.Add(obj);
-
-            //アーチャーのオブジェクトプールを貯める
-            gameObject = Instantiate(_archerPrefab);
-            obj = gameObject.GetComponent<UnitPresenter>();
-            obj.BindPool(this);
-            obj.gameObject.SetActive(false);
-            ArcherPool.Add(obj);
-
-            //メイジのオブジェクトプールを貯める
-            gameObject = Instantiate(_magePrefab);
-            obj = gameObject.GetComponent<UnitPresenter>();
-            obj.BindPool(this);
-            obj.gameObject.SetActive(false);
-            MagePool.Add(obj);
+            pool.Add(obj);
         }
     }
 
     //使う時に場所を指定して表示する
-    public UnitPresenter GetObj(UnitID unitType, Vector3 position, UnitData data, Vector3 enemyPos, string playerTag, string enemyTag, PathStrategy strategy) //[2025/12/02] プリンス : "playerTag"追加 // 2026.01.23 ウー: enemyTag追加 // 2026.01.25 ウー: strategyを追加
+    //[2025/12/02] プリンス : "playerTag"追加 // 2026.01.23 ウー: enemyTag追加 // 2026.01.25 ウー: strategyを追加 // 2026.01.27 ウー: dataを最後にする
+    public UnitPresenter GetObj(UnitID unitType, Vector3 position, Vector3 enemyPos, string playerTag, string enemyTag, PathStrategy strategy, UnitData specialData = null)
     {
         UnitPresenter Unit = null;
         switch (unitType)
@@ -116,7 +158,21 @@ public class UnitObjectPool : MonoBehaviour
             case UnitID.Mage:
                 Unit = GetObjectPool(MagePool.Count, MagePool);
                 break;
+
+            case UnitID.Miner:
+                Unit = GetObjectPool(MinerPool.Count, MinerPool);
+                break;
         }
+
+        // 2026.01.27 ウー start
+        UnitInfo info = GetUnitInfo(unitType);
+        if (info == null)
+        {
+            Debug.LogError($"{unitType}'s data is not attached.");
+            return null;
+        }
+        UnitData data = specialData ? specialData : info.Data;
+        // 2026.01.27 ウー end
 
         if (Unit)
         {
@@ -140,20 +196,23 @@ public class UnitObjectPool : MonoBehaviour
 
         //全部使っていたら
         GameObject newObj = null;
-        switch (unitType)
-        {
-            case UnitID.Knight:
-                newObj = Instantiate(_knightPrefab, position, Quaternion.identity);
-                break;
+        // 2026.01.27 ウー start
+        // switch (unitType)
+        // {
+        //     case UnitID.Knight:
+        //         newObj = Instantiate(_knightPrefab, position, Quaternion.identity);
+        //         break;
 
-            case UnitID.Archer:
-                newObj = Instantiate(_archerPrefab, position, Quaternion.identity);
-                break;
+        //     case UnitID.Archer:
+        //         newObj = Instantiate(_archerPrefab, position, Quaternion.identity);
+        //         break;
 
-            case UnitID.Mage:
-                newObj = Instantiate(_magePrefab, position, Quaternion.identity);
-                break;
-        }
+        //     case UnitID.Mage:
+        //         newObj = Instantiate(_magePrefab, position, Quaternion.identity);
+        //         break;
+        // }
+        newObj = Instantiate(info.Prefab, position, Quaternion.identity);
+        // 2026.01.27 ウー end
 
         if (newObj)
         {
@@ -188,6 +247,10 @@ public class UnitObjectPool : MonoBehaviour
 
                 case UnitID.Mage:
                     MagePool.Add(newUnit);
+                    break;
+
+                case UnitID.Miner:
+                    MinerPool.Add(newUnit);
                     break;
             }
 
@@ -311,4 +374,16 @@ public class UnitObjectPool : MonoBehaviour
         return enemys;
     }
     // 2026.01.23 ウー end
+
+    // 2026.01.27　ウー start
+    /// <summary>
+    /// ユニットのタイプによって関連資料をゲット
+    /// </summary>
+    /// <param name="unitType">タイプ</param>
+    /// <returns>関連資料</returns>
+    public UnitInfo GetUnitInfo(UnitID unitType)
+    {
+        return _units.FirstOrDefault(unit => unit.ID == unitType);
+    }
+    // 2026.01.27　ウー start
 }

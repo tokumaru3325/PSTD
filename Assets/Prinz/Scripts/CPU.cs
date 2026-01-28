@@ -11,9 +11,11 @@ public class CPU : MonoBehaviour
     [SerializeField]
     public GameObject MageSpawner;
 
-    private UnitData _knightUnit;
-    private UnitData _archerUnit;
-    private UnitData _mageUnit;
+    // 2026.01.27 ウー start
+    // private UnitData _knightUnit;
+    // private UnitData _archerUnit;
+    // private UnitData _mageUnit;
+    // 2026.01.27 ウー end
 
     //26.1.7 滝本海大　start
 
@@ -97,9 +99,11 @@ public class CPU : MonoBehaviour
     }
     private void InitializeUnitData()
     {
-        _knightUnit = UnitObjectPool.KnightData;
-        _archerUnit = UnitObjectPool.ArcherData;
-        _mageUnit = UnitObjectPool.MageData;
+        // 2026.01.27 ウー start
+        // _knightUnit = UnitObjectPool.KnightData;
+        // _archerUnit = UnitObjectPool.ArcherData;
+        // _mageUnit = UnitObjectPool.MageData;
+        // 2026.01.27 ウー end
     }
 
     private Vector3 GetSpawnPos(GameObject player)
@@ -135,7 +139,10 @@ public class CPU : MonoBehaviour
         //UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag);
         //UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag);
         // 2026.01.25 ウー start
-        UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.27 ウー start
+        //UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _knightUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.27 ウー end
         // 2026.01.25 ウー end
         // 2026.01.23 ウー end
     }
@@ -145,7 +152,10 @@ public class CPU : MonoBehaviour
         //UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag);
         // 2026.01.25 ウー start
         //UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag);
-        UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.27 ウー start
+        //UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _archerUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.27 ウー end
         // 2026.01.25 ウー end
         // 2026.01.23 ウー end
     }
@@ -155,7 +165,10 @@ public class CPU : MonoBehaviour
         //UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag);
         // 2026.01.25 ウー start
         //UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag);
-        UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.27 ウー start
+        //UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _mageUnit, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, PathStrategy.Shortest);
+        // 2026.01.27 ウー end
         // 2026.01.25 ウー end
         // 2026.01.23 ウー end
     }

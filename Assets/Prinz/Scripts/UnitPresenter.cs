@@ -162,6 +162,12 @@ public class UnitPresenter : MonoBehaviour
             _stateMachine = new UnitStateMachine();
             //    _stateMachine.Initialize(new MoveState(Model, this)); //change to IdleState(this) if needed
         }
+        else if (data is M_MinerData minerData)
+        {
+            Model = new M_MinerModel(minerData);
+            Model.SetUnitID(UnitID.Miner);
+            _stateMachine = new UnitStateMachine();
+        }
         else
         {
             Log("Unknown data type: " + data.GetType(), LogType.Error);
@@ -337,7 +343,7 @@ public class UnitPresenter : MonoBehaviour
 
         if (EnteringState is IdleState)
         {
-         //   View.ResetAllAnimations();
+            //   View.ResetAllAnimations();
         }
         View.ResetAllAnimations();
         SetMoveDirection(Model.MoveDirection);

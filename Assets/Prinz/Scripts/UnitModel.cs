@@ -10,7 +10,10 @@ public enum UnitID
 {
     Knight,
     Archer,
-    Mage
+    Mage,
+    // 2026.01.27 ウー start
+    Miner,
+    // 2026.01.27 ウー end
 }
 public abstract class UnitModel
 {

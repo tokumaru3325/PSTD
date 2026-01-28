@@ -47,7 +47,10 @@ public class SpawnButton : MonoBehaviour
     const string SPAWN_TAG = "SpawnPos";
 
     //[2026/01/13] START プリンス
-    private bool _isGameEnding = false;
+    // 2026.01.28 ウー start 子ども(MinerSpawnButton)にも使わせたい
+    //private bool _isGameEnding = false;
+    protected bool _isGameEnding = false;
+    // 2026.01.28 ウー end
     private void OnGameEndingNotify(bool gameending, string deadplayertag)
     {
         _isGameEnding = gameending;
@@ -71,20 +74,29 @@ public class SpawnButton : MonoBehaviour
         //unitObjectPool.CreatePool(5);
         //2026/01/23 滝本海大　end
 
-        switch (_unitType)
+        // 2026.01.27 ウー start
+        // switch (_unitType)
+        // {
+        //     case UnitID.Knight:
+        //         _unit = UnitObjectPool.Instance.KnightData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+        //         break;
+
+        //     case UnitID.Archer:
+        //         _unit = UnitObjectPool.Instance.ArcherData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+        //         break;
+
+        //     case UnitID.Mage:
+        //         _unit = UnitObjectPool.Instance.MageData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
+        //         break;
+        // }
+        UnitInfo info = UnitObjectPool.Instance.GetUnitInfo(_unitType);
+        if (info == null)
         {
-            case UnitID.Knight:
-                _unit = UnitObjectPool.Instance.KnightData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
-                break;
-
-            case UnitID.Archer:
-                _unit = UnitObjectPool.Instance.ArcherData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
-                break;
-
-            case UnitID.Mage:
-                _unit = UnitObjectPool.Instance.MageData; //[2025/12/21] プリンス：ObjectPoolTestから参照を取得する
-                break;
+            Debug.LogError($"{_unitType}'s data is not attached");
+            return;
         }
+        _unit = info.Data;
+        // 2026.01.27 ウー end
 
 
         Image[] Images = SpawnButtonPrefab.GetComponentsInChildren<Image>();
@@ -124,7 +136,10 @@ public class SpawnButton : MonoBehaviour
 
         //_player = FindAnyObjectByType<Player>();
         _player = GameObject.FindGameObjectWithTag(_playerTag).GetComponent<Player>();
-        _enemy = GameObject.FindGameObjectWithTag(_enemyTag).GetComponent<Player>();
+        // 2026.01.28 ウー start 敵には必ずPlayerを持っているに限らない
+        //_enemy = GameObject.FindGameObjectWithTag(_enemyTag).GetComponent<Player>();
+        _enemy = GameObject.FindGameObjectWithTag(_enemyTag)?.GetComponent<Player>();
+        // 2026.01.28 ウー end
     }
 
     // Update is called once per frame
@@ -171,23 +186,32 @@ public class SpawnButton : MonoBehaviour
         }
     }
 
-    public void OnButtonDown_Spawn()
+    // 2026.01.27 ウー start
+    //public void OnButtonDown_Spawn()
+    public virtual void OnButtonDown_Spawn()
+    // 2026.01.27 ウー end
     {
         if (_isGameEnding) //[2026/01/13] プリンス 追加
             return;
 
         //Monsterをスポーンさせる
 
-        Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
-        Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
+        // 2026.01.28 ウー start
+        //Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
+        //Vector3 enemyPos = GetSpawnPos(_enemy.gameObject);
         // 2026.01.23 ウー start
         //unitObjectPool.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
         // 2026.01.25 ウー start
         //unitObjectPool.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag, _enemyTag);
-        PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
-        UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        //PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
+        // 2026.01.27 ウー start
+        //UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, _unit, enemyPos, _playerTag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        //UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, enemyPos, _playerTag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        SpawnUnit();
+        // 2026.01.27 ウー end
         // 2026.01.25 ウー end
         // 2026.01.23 ウー end
+        // 2026.01.28 ウー end
         _buttonComp.interactable = false;
         _timer = 0.0f;
         _player.Money -= _unit.BaseUnitCost;
@@ -211,4 +235,18 @@ public class SpawnButton : MonoBehaviour
 
         return new(-999, -999, -999);
     }
+
+    // 2026.01.28 ウー start
+    /// <summary>
+    /// ユニットを生成
+    /// </summary>
+    /// <param name="target">目標</param>
+    protected void SpawnUnit(GameObject target = null)
+    {
+        Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
+        Vector3 enemyPos = target ? target.transform.position : GetSpawnPos(_enemy.gameObject);
+        PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
+        UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, enemyPos, _playerTag, _enemyTag, strategy);//[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+    }
+    // 2026.01.28 ウー end
 }
