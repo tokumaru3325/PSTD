@@ -11,7 +11,8 @@ public class Money : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _player = FindAnyObjectByType<Player>();
+        //_player = FindAnyObjectByType<Player>();
+        _player = GameObject.FindGameObjectWithTag("Player1").GetComponent<Player>();
     }
 
     // Update is called once per frame
@@ -22,6 +23,7 @@ public class Money : MonoBehaviour
             return;
         // 2026.01.13 ウー end
         _money = (int)_player.Money;
-        _textMoney.SetText(_money.ToString());
+        //_textMoney.SetText(_money.ToString());
+        _textMoney.SetText(((int)_player.Money).ToString());
     }
 }

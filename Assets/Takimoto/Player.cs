@@ -17,25 +17,30 @@ public class Player : MonoBehaviour
     {
         Money += Time.deltaTime * 3;
     }
+    
+    public void UseMoney(int some)
+    {
+        Money -= some;
+    }
 
     void AddMoneyBySlot(int num)
     {
         switch (num)
         {
             case 0:
-                Money += 100;
+                Money += 0;
                 break;
             case 1:
-                Money += 200;
+                Money += 15;
                 break;
             case 2:
-                Money += 300;
+                Money += 30;
                 break;
             case 3:
-                Money += 400;
+                Money += 150;
                 break;
             case 4:
-                Money += 500;
+                Money += 300;
                 break;
 
         }

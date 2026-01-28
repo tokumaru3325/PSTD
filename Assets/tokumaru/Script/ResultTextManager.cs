@@ -36,19 +36,19 @@ public class ResultTextManager : MonoBehaviour
                 switch (resultNum)
                 {
                     case 0:
-                        m_TextMeshProUGUI.SetText("リプレイ");
+                        m_TextMeshProUGUI.SetText("はずれ！");
                         break;
                     case 1:
-                        m_TextMeshProUGUI.SetText("ベル");
+                        m_TextMeshProUGUI.SetText("15円！");
                         break;
                     case 2:
-                        m_TextMeshProUGUI.SetText("すいか");
+                        m_TextMeshProUGUI.SetText("30円！");
                         break;
                     case 3:
-                        m_TextMeshProUGUI.SetText("チェリー");
+                        m_TextMeshProUGUI.SetText("150円！");
                         break;
                     case 4:
-                        m_TextMeshProUGUI.SetText("7");
+                        m_TextMeshProUGUI.SetText("300円！");
                         break;
                     default:
                         m_TextMeshProUGUI.SetText("はずれ");
@@ -62,7 +62,6 @@ public class ResultTextManager : MonoBehaviour
             }
             else
             {
-                m_TextMeshProUGUI.SetText("何かの効果を誰かに向かってどれだけ");
                 switch (resultNum)
                 {
                     case 0:
@@ -87,6 +86,12 @@ public class ResultTextManager : MonoBehaviour
                 }
             }
         }
+        textChange = true;
+    }
+
+    public void SetText(string text)
+    {
+        m_TextMeshProUGUI.SetText(text);
         textChange = true;
     }
 
