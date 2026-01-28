@@ -51,7 +51,7 @@ MonoBehaviour:
   coinEf: {fileID: 7222068908429727306}
   fireEf: {fileID: 963733662243856549}
   swirlEf: {fileID: 4725209766042494387}
-  pfEf: {fileID: 0}
+  pfEf: {fileID: 5652454811859028793}
 --- !u!114 &7222068908429727306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,3 +110,10 @@ MonoBehaviour:
   canvas: {fileID: 0}
   LeftPosition: {x: 0, y: 0, z: 0}
   RightPosition: {x: 0, y: 0, z: 0}
+  images:
+  - {fileID: 3340264105241281245, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+  - {fileID: -235659635695305713, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+  - {fileID: 4668227757938605877, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+  - {fileID: -5718113822744807171, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+  - {fileID: -2656389608257047954, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+  - {fileID: -7146335661825267960, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
