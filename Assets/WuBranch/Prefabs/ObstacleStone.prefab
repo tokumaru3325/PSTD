@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3445733971969337160}
   - component: {fileID: 6940914223455980693}
   - component: {fileID: 8267573361128576222}
-  m_Layer: 0
-  m_Name: Image
+  m_Layer: 9
+  m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,9 +78,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 30
+  m_SortingLayerID: 1441488245
+  m_SortingLayer: 3
+  m_SortingOrder: 40
   m_Sprite: {fileID: 677820102, guid: cf32fe0f189862a479d7cc8cc8bfec94, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 8322222108646959223}
   - component: {fileID: 2901452746699161308}
   - component: {fileID: 805087070390513966}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: HealthGauge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 8092761121091286175}
   - component: {fileID: 112034404324817344}
   - component: {fileID: 8266568444930280183}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,9 +372,9 @@ GameObject:
   - component: {fileID: 6500451347403537892}
   - component: {fileID: 6235867483976070222}
   - component: {fileID: 3656679149067221787}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ObstacleStone
-  m_TagString: Obstacle
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -513,7 +513,7 @@ GameObject:
   - component: {fileID: 1108198849078814648}
   - component: {fileID: 2102447640388247986}
   - component: {fileID: 6571429203801915378}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Burn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 4900175757286837950}
   - component: {fileID: 6260619236729885397}
   - component: {fileID: 5503309881138752998}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}

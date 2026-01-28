@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
+public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
 {
-
     /// <summary>
     /// 各段階の画像
     /// </summary>
@@ -34,6 +33,11 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
     private V_UIShake _uiShake;
 
     /// <summary>
+    /// 採掘者の生成ボタン
+    /// </summary>
+    private V_MinerSpawnButton _minerSpawner;
+
+    /// <summary>
     /// コントローラー
     /// </summary>
     [SerializeField]
@@ -47,6 +51,7 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
         }
         _damageFlash = GetComponentInChildren<DamageFlash>();
         _uiShake = GetComponentInChildren<V_UIShake>();
+        _minerSpawner = FindFirstObjectByType<V_MinerSpawnButton>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -90,7 +95,6 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
     /// <param name="Damage"></param>
     public void HandleDamageEffect()
     {
-        Debug.Log($"stone effect");
         // エフェクト
         _damageFlash.TriggerFlash();
         _uiShake.Shake();
@@ -118,6 +122,24 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
         _healthGauge.SetGauge(healthRate);
     }
 
+    /// <summary>
+    /// 注目される
+    /// </summary>
+    public void Highlight()
+    {
+        _mySprite.sortingOrder = 40;
+        _mySprite.sortingLayerName = "Obstacle";
+    }
+
+    /// <summary>
+    /// 注目されない
+    /// </summary>
+    public void Unhighlight()
+    {
+        _mySprite.sortingOrder = 30;
+        _mySprite.sortingLayerName = "Default";
+    }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         _healthGauge.HideGauge();
@@ -126,5 +148,15 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
     public void OnPointerEnter(PointerEventData eventData)
     {
         _healthGauge.ShowGauge();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!_myController.CanBeSelected)
+            return;
+
+        Debug.Log($"stone clicked");
+        if (_minerSpawner)
+            _minerSpawner.SpawnMiner(this.gameObject);
     }
 }
