@@ -15759,7 +15759,7 @@ MonoBehaviour:
   SpawnButtonPrefab: {fileID: 1931876103}
   spawnPosition: {x: 0, y: 0, z: 0}
   _playerTag: Player1
-  _enemyTag: 
+  _enemyTag: Obstacle
   _unitType: 3
   _policyMaker: {fileID: 1282031745}
   _mask: {fileID: 2142480933}
@@ -26888,6 +26888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_DarkMask
   _backgroundClickSwitch: 0
+  _ObstacleManager: {fileID: 1791571549}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
