@@ -65,15 +65,8 @@ public class LightningSpellPool : MonoBehaviour
         return null;
     }
 
-    public void Release(LightningSpell arrow)
+    public void Release(LightningSpell spell)
     {
-        for (int i = 0; i < pool.Count; i++)
-        {
-            if (pool[i] == arrow)
-            {
-                pool[i].gameObject.SetActive(false);
-                return;
-            }
-        }
+        spell.gameObject.SetActive(false);
     }
 }

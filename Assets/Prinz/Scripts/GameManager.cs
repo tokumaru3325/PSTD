@@ -54,18 +54,21 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerDeathNotify(string deadplayertag)
     {
-        IsGameFinished = true;
-     //   Time.timeScale = 0;
-        GameEnding?.Invoke(IsGameFinished, deadplayertag);
-        Ending = StartCoroutine(EndingScene());
+        if (!IsGameFinished)
+        {
+            IsGameFinished = true;
+            //   Time.timeScale = 0;
+            GameEnding?.Invoke(IsGameFinished, deadplayertag);
+            //Ending = StartCoroutine(EndingScene());
 
-        if (deadplayertag == "Player1")
-        {
-            EndingManager.LoadEnding(false);
-        }
-        else
-        {
-            EndingManager.LoadEnding(true);
+            if (deadplayertag == "Player1")
+            {
+                EndingManager.LoadEnding(false);
+            }
+            else
+            {
+                EndingManager.LoadEnding(true);
+            }
         }
     }
 
@@ -78,7 +81,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator EndingScene()
     {
         //do something like wait before loading ending scene and stuff
-        SceneManager.LoadScene("EndingScene", LoadSceneMode.Additive);
+        
         yield break;
     }
 }
