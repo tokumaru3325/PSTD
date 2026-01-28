@@ -4,8 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class EndingManager : MonoBehaviour
 {
-    static GameObject _battleResultUI;
     static TextMeshProUGUI _battleResult;
+
+    static EffectManager _effectManager;
 
     private static bool _isWin; // 勝敗結果を保持
 
@@ -32,15 +33,24 @@ public class EndingManager : MonoBehaviour
         GameObject[] rootObjects = scene.GetRootGameObjects();
         foreach (GameObject obj in rootObjects)
         {
-            // "Winner" という名前のオブジェクトを探す            
-            TextMeshProUGUI tmp = obj.GetComponentInChildren<TextMeshProUGUI>(true);
-
-            if (tmp != null && tmp.name == "Winner")
+            _effectManager = obj.GetComponentInChildren<EffectManager>();
+            if (_effectManager != null && _effectManager.name == "EffectManager")
             {
-                ApplyResult(tmp, _isWin);
+                _effectManager.Initialize();
+                break;
+            }           
+        }
+
+        foreach(GameObject obj in rootObjects)
+        {
+            // "Winner" という名前のオブジェクトを探す            
+            _battleResult = obj.GetComponentInChildren<TextMeshProUGUI>(true);
+            if(_battleResult != null && _battleResult.name == "Winner")
+            {
+                ApplyResult(_battleResult, _isWin);
                 break;
             }
-        }
+        }        
 
         // 4. 二重実行を防ぐためにイベントを解除
         SceneManager.sceneLoaded -= OnEndingSceneLoaded;
@@ -52,6 +62,8 @@ public class EndingManager : MonoBehaviour
         {
             textUI.text = "Player Win!";
             textUI.color = Color.red;
+
+            _effectManager.PaperFubukiEffectPlay(100);
         }
         else
         {

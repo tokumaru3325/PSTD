@@ -65,15 +65,8 @@ public class HealSpellPool : MonoBehaviour
         return null;
     }
 
-    public void Release(HealSpell arrow)
+    public void Release(HealSpell spell)
     {
-        for (int i = 0; i < pool.Count; i++)
-        {
-            if (pool[i] == arrow)
-            {
-                pool[i].gameObject.SetActive(false);
-                return;
-            }
-        }
+        spell.gameObject.SetActive(false);
     }
 }

@@ -26,6 +26,14 @@ public  class EffectManager : MonoBehaviour
         pfEf.CreatePool();
     }
 
+    public void Initialize()
+    {
+        coinEf.CreatePool();
+        fireEf.CreatePool();
+        swirlEf.CreatePool();
+        pfEf.CreatePool();
+    }
+
     // Update is called once per frame
     void Update()
     {

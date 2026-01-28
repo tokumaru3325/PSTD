@@ -82,13 +82,6 @@ public class ArrowPool : MonoBehaviour
 
     public void Release(Arrow arrow)
     {
-        for (int i = 0; i < pool.Count; i++)
-        {
-            if (pool[i] == arrow)
-            {
-                pool[i].gameObject.SetActive(false);
-                return;
-            }
-        }
+        arrow.gameObject.SetActive (false);
     }
 }
