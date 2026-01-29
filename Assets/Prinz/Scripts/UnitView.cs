@@ -36,7 +36,7 @@ public class UnitView : MonoBehaviour
     public void StopAttack() => Animator.SetTrigger("StopAttack");
 
     public void TriggerIdle() => Animator.SetTrigger("Idle");
-    
+
     public void PlayMove(bool move) => Animator.SetBool("Move", move);
     public void FaceUP(bool up) => Animator.SetBool("FacingUP", up);
     public void FaceDOWN(bool down) => Animator.SetBool("FacingDOWN", down);
@@ -111,7 +111,10 @@ public class UnitView : MonoBehaviour
 
         AttackRangeTransform = transform.Find("AttackRange");
         var DataType = presenter.GetDataType();
-        if (DataType is KnightData)
+        // 2026.01.27 ウー start
+        //if (DataType is KnightData)
+        if (DataType is KnightData || DataType is M_MinerData)
+        // 2026.01.27 ウー end
         {
             AttackRangeCollider = AttackRangeTransform.GetComponent<BoxCollider2D>();
         }

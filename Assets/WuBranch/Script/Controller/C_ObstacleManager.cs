@@ -79,4 +79,29 @@ public class C_ObstacleManager : MonoBehaviour
     {
         _mapManager.DestroyObstacle(pos);
     }
+
+    /// <summary>
+    /// 全部の障害物を選ばれる
+    /// </summary>
+    public void EnableObstacleSelection()
+    {
+        C_ObstacleStone[] obstacles = GetComponentsInChildren<C_ObstacleStone>();
+        foreach (C_ObstacleStone stone in obstacles)
+        {
+            stone.EnableBeSelected();
+        }
+    }
+
+    /// <summary>
+    /// 全部の障害物を選ばれない
+    /// </summary>
+    public void DisableObstacleSelection()
+    {
+        C_ObstacleStone[] obstacles = GetComponentsInChildren<C_ObstacleStone>();
+        foreach (C_ObstacleStone stone in obstacles)
+        {
+            stone.DisableBeSelected();
+        }
+    }
+
 }

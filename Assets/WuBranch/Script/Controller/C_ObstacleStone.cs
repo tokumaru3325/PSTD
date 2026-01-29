@@ -23,6 +23,11 @@ public class C_ObstacleStone : MonoBehaviour
     /// </summary>
     public Action<Vector3> OnDead;
 
+    /// <summary>
+    /// 選ばれるか
+    /// </summary>
+    public bool CanBeSelected { get; private set; }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,6 +37,7 @@ public class C_ObstacleStone : MonoBehaviour
             _model = new M_ObstacleStone();
 
         _model.OnHPChanged += OnUpdateHP;
+        CanBeSelected = false;
     }
 
     /// <summary>
@@ -57,10 +63,12 @@ public class C_ObstacleStone : MonoBehaviour
         // 死亡
         if (_model.HP <= 0)
         {
+            SoundManager.Instance.PlaySE(SoundId.RockBreak);
             Dead().Forget();
             return;
         }
 
+        SoundManager.Instance.PlaySE(SoundId.Mining);
         if (_myView)
             _myView.HandleDamageEffect();
     }
@@ -87,5 +95,32 @@ public class C_ObstacleStone : MonoBehaviour
         // アニメーション終了待ちのための1秒
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         Destroy(this.gameObject);
+    }
+
+    /// <summary>
+    /// 死亡したか
+    /// </summary>
+    /// <returns>true: はい, false: いいえ</returns>
+    public bool IsDead()
+    {
+        return _model.HP <= 0;
+    }
+
+    /// <summary>
+    /// 選ばれる状態になる
+    /// </summary>
+    public void EnableBeSelected()
+    {
+        CanBeSelected = true;
+        _myView.Highlight();
+    }
+
+    /// <summary>
+    /// 選ばれない状態になる
+    /// </summary>
+    public void DisableBeSelected()
+    {
+        CanBeSelected = false;
+        _myView.Unhighlight();
     }
 }
