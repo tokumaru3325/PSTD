@@ -155,7 +155,6 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
         if (!_myController.CanBeSelected)
             return;
 
-        Debug.Log($"stone clicked");
         if (_minerSpawner)
             _minerSpawner.SpawnMiner(this.gameObject);
     }
