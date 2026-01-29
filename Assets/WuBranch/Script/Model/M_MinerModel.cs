@@ -33,7 +33,8 @@ public class M_MinerModel : UnitModel
             _attackTimer = 0f;
             Owner.StopAttack();
             float damage = TotalAttackPower;
-            EnemyPlayer.DecreaseHP(damage);
+            if (Obstacle)
+                Obstacle.DecreaseHP(damage);
             Owner.PlayAttack();
         }
     }

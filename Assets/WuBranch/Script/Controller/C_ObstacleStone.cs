@@ -98,6 +98,15 @@ public class C_ObstacleStone : MonoBehaviour
     }
 
     /// <summary>
+    /// 死亡したか
+    /// </summary>
+    /// <returns>true: はい, false: いいえ</returns>
+    public bool IsDead()
+    {
+        return _model.HP <= 0;
+    }
+
+    /// <summary>
     /// 選ばれる状態になる
     /// </summary>
     public void EnableBeSelected()

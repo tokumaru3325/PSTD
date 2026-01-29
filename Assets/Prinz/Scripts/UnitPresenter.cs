@@ -11,13 +11,19 @@ using static UnityEngine.GraphicsBuffer;
 public class UnitPresenter : MonoBehaviour
 {
 
-    private UnitModel Model;
+    // 2026.01.28 ウー start
+    //private UnitModel Model;
+    protected UnitModel Model;
+    // 2026.01.28 ウー end
     public UnitView View { get; private set; }
 
     private C_MapManager _mapManager;
     public C_MapManager MapManager { get { return _mapManager; } }
 
-    public CapsuleCollider2D Collider;
+    // 2026.01.28 ウー start 他の形のコライダーも使える
+    //public CapsuleCollider2D Collider;
+    public Collider2D Collider;
+    // 2026.01.28 ウー end
 
     private UnitStateMachine _stateMachine;
 
@@ -42,7 +48,7 @@ public class UnitPresenter : MonoBehaviour
     public void Initialize(UnitData data, BuffDataBase buffdata, Vector3 currentPos, Vector3 enemyPos, string PlayerTag, List<C_Buff> buffs, List<UnitPresenter> enemies, PathStrategy strategy)
     {
         View = GetComponent<UnitView>();
-        Collider = GetComponent<CapsuleCollider2D>();
+        Collider = GetComponent<Collider2D>();
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
         View.InitializeView();
@@ -602,24 +608,16 @@ public class UnitPresenter : MonoBehaviour
         if (IsDead()) return;
 
         //敵の城でもUnitでもないモノを無視する
-        if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return;
+        // 2026.01.28 ウー start
+        //if (other.gameObject.CompareTag(Model.PlayerSide) && other.gameObject.CompareTag("Unit") == false) return;
+        if (IsUntargetable(other.gameObject)) return;
+        // 2026.01.28 ウー end
         Log($"PRESENTER : EnterRange trigger with {other.gameObject.name}", LogType.Warning);
 
-        if (other.gameObject.CompareTag("Unit"))
+        bool flowControl = HandleTarget(other);
+        if (!flowControl)
         {
-            bool flowcontrol = HandleUnitTarget(other);
-            if (!flowcontrol)
-            {
-                return;
-            }
-        }
-        else
-        {
-            bool flowcontrol = HandlePlayerTarget(other);
-            if (!flowcontrol)
-            {
-                return;
-            }
+            return;
         }
 
         if (Model.GetPrimaryTarget() != null)
@@ -628,6 +626,47 @@ public class UnitPresenter : MonoBehaviour
         }
     }
 
+    // 2026.01.28 ウー start
+    /// <summary>
+    /// 非攻撃対象ですか
+    /// </summary>
+    /// <param name="obj">対象</param>
+    /// <returns>true: 非攻撃対象です, false: 攻撃対象です</returns>
+    protected virtual bool IsUntargetable(GameObject obj)
+    {
+        //敵の城でもUnitでもないモノを無視する
+        return obj.CompareTag(Model.PlayerSide) && obj.CompareTag("Unit") == false;
+    }
+
+    /// <summary>
+    /// 対象を処理
+    /// </summary>
+    /// <param name="other">対象</param>
+    /// <returns>true: 完了, false: 中断した</returns>
+    protected virtual bool HandleTarget(Collider2D other)
+    {
+        // 対象がユニットの場合
+        if (other.gameObject.CompareTag("Unit"))
+        {
+            bool flowcontrol = HandleUnitTarget(other);
+            if (!flowcontrol)
+            {
+                return false;
+            }
+        }
+        // 対象が城の場合
+        else
+        {
+            bool flowcontrol = HandlePlayerTarget(other);
+            if (!flowcontrol)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    // 2026.01.28 ウー end
 
     private bool HandleUnitTarget(Collider2D other)
     {
@@ -675,6 +714,14 @@ public class UnitPresenter : MonoBehaviour
         {
             Model.SetPlayerInRange(false);
         }
+
+        // 2026.01.29 ウー start
+        if (other.GetComponent<C_ObstacleStone>() == Model.Obstacle)
+        {
+            Model.SetPlayerInRange(false);
+            Model.BindTargetObstacle(null);
+        }
+        // 2026.01.29 ウー end
 
         if (!other.TryGetComponent<UnitPresenter>(out var target)) { /*Debug.LogError("No target found");*/ return; }
         if (Model.UnitID == UnitID.Archer || Model.UnitID == UnitID.Knight)
