@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::M_MinerData
   MaxHealth: 50
   BaseAttackPower: 10
-  BaseAttackSpeed: 0.5
+  BaseAttackSpeed: 1
   BaseAttackRange: 1
   BaseMoveSpeed: 2
   BaseUnitCost: 10

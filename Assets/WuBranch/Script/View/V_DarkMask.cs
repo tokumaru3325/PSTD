@@ -12,10 +12,9 @@ public class V_DarkMask : MonoBehaviour, IPointerDownHandler
     private bool _backgroundClickSwitch;
 
     /// <summary>
-    /// 障害物のマネージャー
+    /// 閉じた後の処理
     /// </summary>
-    [SerializeField]
-    private C_ObstacleManager _ObstacleManager;
+    public Action OnClosed;
 
     /// <summary>
     /// クリックできるようにする
@@ -39,12 +38,6 @@ public class V_DarkMask : MonoBehaviour, IPointerDownHandler
     public void OpenMask()
     {
         gameObject.SetActive(true);
-
-        // raycasterのeventMaskの値を変更
-        // 障害物だけが反応できるように
-        Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
-        //LayerMask.LayerToName(-1);
-        raycaster.eventMask = LayerMask.GetMask("Obstacle");
     }
 
     /// <summary>
@@ -52,11 +45,8 @@ public class V_DarkMask : MonoBehaviour, IPointerDownHandler
     /// </summary>
     public void CloseMask()
     {
-        // raycasterのeventMaskの値を変更
-        // 障害物だけが反応できるように
-        Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
-        raycaster.eventMask = ~0;
         gameObject.SetActive(false);
+        OnClosed?.Invoke();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -66,6 +56,5 @@ public class V_DarkMask : MonoBehaviour, IPointerDownHandler
 
         DisableClickEvent();
         CloseMask();
-        _ObstacleManager.DisableObstacleSelection();
     }
 }

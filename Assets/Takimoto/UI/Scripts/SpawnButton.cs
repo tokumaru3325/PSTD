@@ -63,7 +63,7 @@ public class SpawnButton : MonoBehaviour
     //[2026/01/13] END プリンス
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Start()
     {
         GameManager.GameEnding += OnGameEndingNotify;  //[2026/01/13] プリンス 追加
 

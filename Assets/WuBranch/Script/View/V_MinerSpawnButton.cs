@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class V_MinerSpawnButton : SpawnButton
 {
@@ -6,17 +7,32 @@ public class V_MinerSpawnButton : SpawnButton
     [SerializeField]
     private V_DarkMask _mask;
 
+    [Tooltip("マーク管理者")]
+    [SerializeField]
+    private V_ObstacleMarkManager _markManger;
+
     [SerializeField]
     private C_ObstacleManager _obstacleManager;
+
+    protected override void Start()
+    {
+        base.Start();
+        _mask.OnClosed += HandleMaskClosed;
+    }
 
     public override void OnButtonDown_Spawn()
     {
         if (_isGameEnding) //[2026/01/13] プリンス 追加
             return;
 
+        // raycasterのeventMaskの値を変更
+        // 障害物だけが反応できるように
+        Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
+        raycaster.eventMask = LayerMask.GetMask("Obstacle");
         _obstacleManager.EnableObstacleSelection();
         _mask.EnableClickEvent();
         _mask.OpenMask();
+        _markManger.ShowMarks();
     }
 
     /// <summary>
@@ -27,13 +43,21 @@ public class V_MinerSpawnButton : SpawnButton
     {
         SpawnUnit(target);
 
-        _obstacleManager.DisableObstacleSelection();
-        CloseMask();
-    }
-
-    private void CloseMask()
-    {
         _mask.DisableClickEvent();
         _mask.CloseMask();
+    }
+
+    /// <summary>
+    /// マスクが閉じた後の処理
+    /// </summary>
+    private void HandleMaskClosed()
+    {
+        // raycasterのeventMaskの値を変更
+        // 障害物だけが反応できるように
+        Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
+        raycaster.eventMask = ~0;
+
+        _obstacleManager.DisableObstacleSelection();
+        _markManger.CloseMarks();
     }
 }
