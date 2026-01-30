@@ -884,6 +884,10 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 2009350636}
+    - target: {fileID: 3880067419494599919, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: pfEf
+      value: 
+      objectReference: {fileID: 2652924031869248923}
     - target: {fileID: 4601842336038690925, guid: c74349055693ce44aa10114a1cc33375, type: 3}
       propertyPath: m_LocalPosition.x
       value: 820.34985
@@ -928,6 +932,54 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 2009350636}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 2009350636}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: LeftPosition.x
+      value: -920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: LeftPosition.y
+      value: -560
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: RightPosition.x
+      value: 920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: RightPosition.y
+      value: -560
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: images.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: 'images.Array.data[0]'
+      value: 
+      objectReference: {fileID: 3340264105241281245, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: 'images.Array.data[1]'
+      value: 
+      objectReference: {fileID: -235659635695305713, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: 'images.Array.data[2]'
+      value: 
+      objectReference: {fileID: 4668227757938605877, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: 'images.Array.data[3]'
+      value: 
+      objectReference: {fileID: -5718113822744807171, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: 'images.Array.data[4]'
+      value: 
+      objectReference: {fileID: -2656389608257047954, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
+    - target: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+      propertyPath: 'images.Array.data[5]'
+      value: 
+      objectReference: {fileID: -7146335661825267960, guid: c036d10d612aca44dbdf99ac831f16ef, type: 3}
     - target: {fileID: 6534446794452151004, guid: c74349055693ce44aa10114a1cc33375, type: 3}
       propertyPath: m_Name
       value: EffectManager
@@ -945,6 +997,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+--- !u!114 &2652924031869248923 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5652454811859028793, guid: c74349055693ce44aa10114a1cc33375, type: 3}
+  m_PrefabInstance: {fileID: 2652924031869248922}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bfdbcbd92941464bb2468cfadf9ae80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaperFubukiEffect
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

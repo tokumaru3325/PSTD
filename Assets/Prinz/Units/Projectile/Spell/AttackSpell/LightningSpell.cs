@@ -9,7 +9,7 @@ public class LightningSpell : Projectile
         //矢が目標に着いたら消す
         if (Vector3.Distance(transform.position, _target) < 0.1f)
         {
-            LightningSpellPool.Instance.Release(this);
+            ProjectileObjectPool.Instance.Release(this);
         }
     }
 }

@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 222b4975bec09644e906e80d97fb41a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealSpell
-  _speed: 5
+  _speed: 20
 --- !u!95 &-1283393214688354019
 Animator:
   serializedVersion: 7

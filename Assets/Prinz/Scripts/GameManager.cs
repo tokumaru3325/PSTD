@@ -34,9 +34,7 @@ public class GameManager : MonoBehaviour
 
         //2026/01/23　滝本海大　start
         UnitObjectPool.Instance.CreatePool(50);
-        ArrowPool.Instance.CreatePool(10);
-        LightningSpellPool.Instance.CreatePool(10);
-        HealSpellPool.Instance.CreatePool(10);
+        ProjectileObjectPool.Instance.CreatePool(5);
         //2026/01/23 滝本海大　end
 
         SoundManager.Instance.PlayMainBGM();
@@ -56,18 +54,21 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerDeathNotify(string deadplayertag)
     {
-        IsGameFinished = true;
-     //   Time.timeScale = 0;
-        GameEnding?.Invoke(IsGameFinished, deadplayertag);
-        Ending = StartCoroutine(EndingScene());
+        if (!IsGameFinished)
+        {
+            IsGameFinished = true;
+            //   Time.timeScale = 0;
+            GameEnding?.Invoke(IsGameFinished, deadplayertag);
+            //Ending = StartCoroutine(EndingScene());
 
-        if (deadplayertag == "Player1")
-        {
-            EndingManager.LoadEnding(false);
-        }
-        else
-        {
-            EndingManager.LoadEnding(true);
+            if (deadplayertag == "Player1")
+            {
+                EndingManager.LoadEnding(false);
+            }
+            else
+            {
+                EndingManager.LoadEnding(true);
+            }
         }
     }
 
@@ -80,7 +81,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator EndingScene()
     {
         //do something like wait before loading ending scene and stuff
-        SceneManager.LoadScene("EndingScene", LoadSceneMode.Additive);
+        
         yield break;
     }
 }

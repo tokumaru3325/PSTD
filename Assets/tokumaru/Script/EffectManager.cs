@@ -6,6 +6,7 @@ public  class EffectManager : MonoBehaviour
     [SerializeField] private CoinEffect coinEf;
     [SerializeField] private FireEffect fireEf;
     [SerializeField] private SwirlEffect swirlEf;
+    [SerializeField] private PaperFubukiEffect pfEf;
 
     //public static CoinEffect coinEffect;
     //public static GameObject coinPrefab;
@@ -22,6 +23,15 @@ public  class EffectManager : MonoBehaviour
         coinEf.CreatePool();
         fireEf.CreatePool();
         swirlEf.CreatePool();
+        pfEf.CreatePool();
+    }
+
+    public void Initialize()
+    {
+        coinEf.CreatePool();
+        fireEf.CreatePool();
+        swirlEf.CreatePool();
+        pfEf.CreatePool();
     }
 
     // Update is called once per frame
@@ -43,5 +53,10 @@ public  class EffectManager : MonoBehaviour
     public void SwirlEffectPlay(int counter)
     {
         swirlEf.CreateEffect(counter);
+    }
+
+    public void PaperFubukiEffectPlay(int counter)
+    {
+        pfEf.CreateEffect(counter);
     }
 }

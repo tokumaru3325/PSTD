@@ -10,7 +10,10 @@ public enum UnitID
 {
     Knight,
     Archer,
-    Mage
+    Mage,
+    // 2026.01.27 ウー start
+    Miner,
+    // 2026.01.27 ウー end
 }
 public abstract class UnitModel
 {
@@ -134,6 +137,19 @@ public abstract class UnitModel
     {
         EnemyPlayer = enemyPlayer;
     }
+
+    // 2026.01.29 ウー start
+    public C_ObstacleStone Obstacle { get; private set; }
+
+    /// <summary>
+    /// 目標となる障害物をバインド
+    /// </summary>
+    /// <param name="obstacle">障害物</param>
+    public void BindTargetObstacle(C_ObstacleStone obstacle)
+    {
+        Obstacle = obstacle;
+    }
+    // 2026.01.29 ウー end
 
     public void NotifySpawn()
     {
