@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cd9dcd9159310489f9869abde07026, type: 3}
+  m_Name: SlotSpin
+  m_EditorClassIdentifier: Assembly-CSharp::SoundEffectGroup
+  id: 14
+  volume: 0.777
+  pitchMin: 1.2
+  pitchMax: 0.8
+  clips:
+  - {fileID: 8300000, guid: 3b2114ac8e7644340a744ba4dad4bb31, type: 3}
+  - {fileID: 8300000, guid: 8bdd737da1c96af4aa75de4cdd40432f, type: 3}
+  - {fileID: 8300000, guid: bbd99e3cda9b02d459f8b4a09beab241, type: 3}
+  - {fileID: 8300000, guid: d9174b98c38686245b5d11c23af33e9d, type: 3}
+  - {fileID: 8300000, guid: fc4ec96d9c375e541bc8cd0d22855a9c, type: 3}
+  - {fileID: 8300000, guid: 0be9425c2df22fb40b2320e1b7a49f73, type: 3}
+  cooldown: 0

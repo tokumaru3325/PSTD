@@ -192,72 +192,72 @@ public class UnitView : MonoBehaviour
 
     public void PlaySwordAttackSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.SwordAttack);
+        SoundManager.Instance.PlaySE(SoundId.SwordAttack, SEPlayParams.Default);
     }
 
     public void PlaySwordBlockSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.SwordBlock);
+        SoundManager.Instance.PlaySE(SoundId.SwordBlock, SEPlayParams.Default);
     }
 
     public void PlaySwordImpactSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.SwordImpact);
+        SoundManager.Instance.PlaySE(SoundId.SwordImpact, SEPlayParams.Default);
     }
 
     public void PlaySwordParrySE()
     {
-        SoundManager.Instance.PlaySE(SoundId.SwordParry);
+        SoundManager.Instance.PlaySE(SoundId.SwordParry, SEPlayParams.Default);
     }
 
     public void PlayBowAttackSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.BowAttack);
+        SoundManager.Instance.PlaySE(SoundId.BowAttack, SEPlayParams.Default);
     }
 
     public void PlayBowBlockSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.BowBlock);
+        SoundManager.Instance.PlaySE(SoundId.BowBlock, SEPlayParams.Default);
     }
 
     public void PlayBowImpactSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.BowImpact);
+        SoundManager.Instance.PlaySE(SoundId.BowImpact, SEPlayParams.Default);
     }
 
     public void PlayBuffSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.Buff);
+        SoundManager.Instance.PlaySE(SoundId.Buff, SEPlayParams.Default);
     }
 
     public void PlayBigBuffSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.BigBuff);
+        SoundManager.Instance.PlaySE(SoundId.BigBuff, SEPlayParams.Default);
     }
 
     public void PlayFireBallSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.FireBall);
+        SoundManager.Instance.PlaySE(SoundId.FireBall, SEPlayParams.Default);
     }
 
     public void PlaySpellImpactSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.SpellImpact);
+        SoundManager.Instance.PlaySE(SoundId.SpellImpact, SEPlayParams.Default);
     }
 
     public void PlayMiningSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.Mining);
+        SoundManager.Instance.PlaySE(SoundId.Mining, SEPlayParams.Default);
     }
 
     public void PlayRockBreakSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.RockBreak);
+        SoundManager.Instance.PlaySE(SoundId.RockBreak, SEPlayParams.Default);
     }
 
     public void PlayWoodChopSE()
     {
-        SoundManager.Instance.PlaySE(SoundId.Chop);
+        SoundManager.Instance.PlaySE(SoundId.Chop, SEPlayParams.Default);
     }
 
     #endregion

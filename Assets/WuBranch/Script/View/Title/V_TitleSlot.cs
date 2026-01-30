@@ -118,6 +118,9 @@ public class V_TitleSlot : MonoBehaviour
                 _reels[index].Reel.Initialize(_reels[index].Sprites, _stopHeightOffset);
             }
         }
+        //[2026/01/27] プリンス start
+        SoundManager.Instance.PlayTitleBGM();
+        //[2026/01/27] プリンス end
     }
 
     void Update()
@@ -152,7 +155,7 @@ public class V_TitleSlot : MonoBehaviour
 
         // もしランダムの結果が欲しいなら、ここで決める
         int[] result = _randomizeResult ? GenerateRandomResult() : _stopIndices;
-
+        
         StartCoroutine(StopRoutine(result));
     }
 
@@ -205,6 +208,10 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     void SpinRoutine()
     {
+        //[2026/01/27] プリンス start
+        //SoundManager.Instance.StartSlotSpinSE();
+        //Debug.LogWarning("play spin SE");
+        //[2026/01/27] プリンス end
         _isRunning = true;
         for (int i = 0; i < _reels.Length; i++)
         {
@@ -219,6 +226,10 @@ public class V_TitleSlot : MonoBehaviour
     /// <returns></returns>
     IEnumerator StopRoutine(int[] result)
     {
+        //[2026/01/27] プリンス start
+        //SoundManager.Instance.StopSlotSpinSE();
+        //Debug.LogWarning("STOP spin SE");
+        //[2026/01/27] プリンス end
         for (int i = 0; i < _reels.Length; i++)
         {
             int targetIndex = result[i];
@@ -257,8 +268,8 @@ public class V_TitleSlot : MonoBehaviour
     {
         if (CheckIsContain(_closeResults, reelResult))
             return ResultType.Close;
-        else if (CheckIsContain(_startResults, reelResult))
-            return ResultType.Start;
+        else if (CheckIsContain(_startResults, reelResult))       
+            return ResultType.Start; 
         else
             return ResultType.Miss;
     }

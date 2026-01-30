@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
         UnitObjectPool.Instance.CreatePool(50);
         ProjectileObjectPool.Instance.CreatePool(5);
         //2026/01/23 滝本海大　end
+
+        SoundManager.Instance.PlayMainBGM();
     }
 
     // Update is called once per frame
