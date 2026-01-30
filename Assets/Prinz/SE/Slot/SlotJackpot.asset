@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28cd9dcd9159310489f9869abde07026, type: 3}
   m_Name: SlotJackpot
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffectGroup
-  id: 0
+  id: 15
   volume: 1
   pitchMin: 1
   pitchMax: 1
   clips:
-  - {fileID: 8300000, guid: 4c1a9e362e85c6e4c98414d5ea535a54, type: 3}
+  - {fileID: 8300000, guid: 81351f3af74720f4ca9393e275205882, type: 3}
   cooldown: 0.3

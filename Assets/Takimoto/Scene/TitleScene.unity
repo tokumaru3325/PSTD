@@ -793,13 +793,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 2
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
+  _maxSpinSpeed: 5000
   _minSpinSpeed: 300
-  _startSpinAcceleration: 5
-  _deceleration: 1
-  _distToStop: 5
-  _timeToStop: 3
-  _minSpeedToStop: 50
+  _startSpinAcceleration: 50
+  _deceleration: 50
+  _distToStop: 20
+  _timeToStop: 1
+  _minSpeedToStop: 300
 --- !u!114 &524948661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,13 +1037,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 3
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
+  _maxSpinSpeed: 5000
   _minSpinSpeed: 300
-  _startSpinAcceleration: 5
-  _deceleration: 1
-  _distToStop: 5
-  _timeToStop: 3
-  _minSpeedToStop: 50
+  _startSpinAcceleration: 50
+  _deceleration: 50
+  _distToStop: 20
+  _timeToStop: 1
+  _minSpeedToStop: 300
 --- !u!114 &639521680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,13 +1618,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 1
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
+  _maxSpinSpeed: 5000
   _minSpinSpeed: 300
-  _startSpinAcceleration: 5
-  _deceleration: 1
-  _distToStop: 5
-  _timeToStop: 3
-  _minSpeedToStop: 50
+  _startSpinAcceleration: 50
+  _deceleration: 50
+  _distToStop: 20
+  _timeToStop: 1
+  _minSpeedToStop: 300
 --- !u!114 &813530613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1834,6 +1834,286 @@ MonoBehaviour:
   - Indices: 0400000009000000
   - Indices: 0300000008000000
   _stopIndices: 01000000010000000100000001000000
+--- !u!1 &1127366167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1127366171}
+  - component: {fileID: 1127366170}
+  - component: {fileID: 1127366169}
+  - component: {fileID: 1127366168}
+  - component: {fileID: 1127366172}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1127366168
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127366167}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1127366169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127366167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0f67de95fa1a74ca690031352b7cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  soundSlotSpinController: {fileID: 1127366172}
+  soundGroups:
+  - {fileID: 11400000, guid: c687c214a69fbb24ca289de6a83a3059, type: 2}
+  - {fileID: 11400000, guid: 8b5b845b83b8338409b69fa862b8b7db, type: 2}
+  - {fileID: 11400000, guid: e52ae5fcc9034eb4886f2aa2f72531dd, type: 2}
+  - {fileID: 11400000, guid: 3384cfa35efcaa544bfa74979f2dbc8c, type: 2}
+  - {fileID: 11400000, guid: c2571a171bd021948bc20fc338854d92, type: 2}
+  - {fileID: 11400000, guid: 53a6399bf1fa81c4ba3951a861d48d1e, type: 2}
+  - {fileID: 11400000, guid: fd8f9d45a5c6f74498375e1596c8bf20, type: 2}
+  - {fileID: 11400000, guid: a5374f98a37fb594a87221ba3c774b99, type: 2}
+  - {fileID: 11400000, guid: 814992f2ca21fe94381a82e17bc189ca, type: 2}
+  - {fileID: 11400000, guid: a5c78386fdde6904b90b97ab07c7c2c7, type: 2}
+  - {fileID: 11400000, guid: f69dba26ece803c4e9fb92c1c62d34c6, type: 2}
+  - {fileID: 11400000, guid: 203a842d3181a2147938083b0c23d4fb, type: 2}
+  - {fileID: 11400000, guid: 198730b3ff9efc74b9c79f8f80269420, type: 2}
+  - {fileID: 11400000, guid: 7d30b4adfe58e29429325c3e5a3db126, type: 2}
+  - {fileID: 11400000, guid: fab9e36d9b53b8548aa82deec543b288, type: 2}
+  - {fileID: 11400000, guid: 1bd9596dcc8d8d04086de4141e14529b, type: 2}
+  - {fileID: 11400000, guid: 3a5b0bb9835217a4fac4d06c916496a5, type: 2}
+  - {fileID: 11400000, guid: 3cc3cc22ece49e24a8a5b6015f5deeb6, type: 2}
+  initialPoolSize: 100
+  bgmSource: {fileID: 1127366168}
+  bgmMainClip: {fileID: 8300000, guid: a911c226d31220e41b62bb14a98b791a, type: 3}
+  bgmTitleClip: {fileID: 8300000, guid: f212eaaf6a0348b48b99058f1a145003, type: 3}
+  _titleBgmVolume: 0
+  _mainBgmVolume: 0
+--- !u!82 &1127366170
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127366167}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1127366171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127366167}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.02403, y: -1.20339, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1127366172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127366167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dfacc33591f4a94cbd039846b3503e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundSlotSpinController
+  slotSpinId: 14
 --- !u!1 &1145305500
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,13 +2218,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 0
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
+  _maxSpinSpeed: 5000
   _minSpinSpeed: 300
-  _startSpinAcceleration: 5
-  _deceleration: 1
-  _distToStop: 5
-  _timeToStop: 3
-  _minSpeedToStop: 50
+  _startSpinAcceleration: 50
+  _deceleration: 50
+  _distToStop: 20
+  _timeToStop: 1
+  _minSpeedToStop: 300
 --- !u!1 &1270453786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2522,3 +2802,4 @@ SceneRoots:
   - {fileID: 411367708}
   - {fileID: 725631803}
   - {fileID: 2071991053}
+  - {fileID: 1127366171}

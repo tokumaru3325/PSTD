@@ -16158,6 +16158,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 203a842d3181a2147938083b0c23d4fb, type: 2}
   - {fileID: 11400000, guid: 198730b3ff9efc74b9c79f8f80269420, type: 2}
   - {fileID: 11400000, guid: 7d30b4adfe58e29429325c3e5a3db126, type: 2}
+  - {fileID: 11400000, guid: fab9e36d9b53b8548aa82deec543b288, type: 2}
+  - {fileID: 11400000, guid: 1bd9596dcc8d8d04086de4141e14529b, type: 2}
   initialPoolSize: 3
   bgmSource: {fileID: 817462278}
   bgmMainClip: {fileID: 8300000, guid: a911c226d31220e41b62bb14a98b791a, type: 3}

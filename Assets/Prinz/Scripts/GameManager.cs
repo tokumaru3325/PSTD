@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
         LightningSpellPool.Instance.CreatePool(10);
         HealSpellPool.Instance.CreatePool(10);
         //2026/01/23 滝本海大　end
+
+        SoundManager.Instance.PlayMainBGM();
     }
 
     // Update is called once per frame

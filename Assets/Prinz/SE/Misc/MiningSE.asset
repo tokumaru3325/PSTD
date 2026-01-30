@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28cd9dcd9159310489f9869abde07026, type: 3}
   m_Name: MiningSE
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffectGroup
-  id: 0
+  id: 11
   volume: 1
   pitchMin: 1
   pitchMax: 1

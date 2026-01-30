@@ -19,13 +19,16 @@ public enum SoundId
     RockBreak,
     Chop,
     SlotSpin,
-    SlotJackpot
+    SlotJackpot,
+    SlotClick,
+    Impact
 }
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
+    [SerializeField] private SoundSlotSpinController soundSlotSpinController;
 
     [SerializeField] private List<SoundEffectGroup> soundGroups;
     [SerializeField] private int initialPoolSize = 3;
@@ -34,6 +37,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioClip bgmMainClip;
     [SerializeField] private AudioClip bgmTitleClip;
+    [SerializeField][Range(0f, 1f)] private float _titleBgmVolume = 1f;
+    [SerializeField][Range(0f, 1f)] private float _mainBgmVolume = 1f;
 
 
     private Dictionary<SoundId, SoundEffectGroup> soundMap;
@@ -53,10 +58,7 @@ public class SoundManager : MonoBehaviour
         }
 
         Instance = this;
-    }
 
-    void Start()
-    {
         maxPoolSize = initialPoolSize;
 
         pool = new AudioSourcePool(initialPoolSize, transform, maxPoolSize);
@@ -64,8 +66,17 @@ public class SoundManager : MonoBehaviour
         soundMap = new Dictionary<SoundId, SoundEffectGroup>();
         foreach (var group in soundGroups)
             soundMap[group.id] = group;
+    }
 
-        PlayMainBGM();
+    void Start()
+    {
+
+    }
+
+    public SoundEffectGroup GetGroup(SoundId id)
+    {
+        soundMap.TryGetValue(id, out var group);
+        return group;
     }
 
     public void PlayMainBGM()
@@ -74,6 +85,17 @@ public class SoundManager : MonoBehaviour
 
         bgmSource.clip = bgmMainClip;
         bgmSource.loop = true;
+        bgmSource.volume = _mainBgmVolume;
+        bgmSource.Play();
+    }
+
+    public void PlayTitleBGM()
+    {
+        if (bgmSource == null || bgmTitleClip == null) return;
+
+        bgmSource.clip = bgmTitleClip;
+        bgmSource.loop = true;
+        bgmSource.volume = _titleBgmVolume;
         bgmSource.Play();
     }
 
@@ -85,39 +107,34 @@ public class SoundManager : MonoBehaviour
         bgmSource.clip = null;
     }
 
-    public void PlayTitleBGM()
-    {
-        if (bgmSource == null || bgmTitleClip == null) return;
-
-        bgmSource.clip = bgmTitleClip;
-        bgmSource.loop = true;
-        bgmSource.Play();
-    }
-
-    public void PlaySE(SoundId id)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="p"></param>
+    public void PlaySE(SoundId id, SEPlayParams p)
     {
         if (!soundMap.TryGetValue(id, out var group))
             return;
 
         if (group.clips == null || group.clips.Count == 0)
             return;
+
         // ---------- FRAME GUARD ----------
         int currentFrame = Time.frameCount;
-        if (lastPlayedFrame.TryGetValue(id, out int lastFrame) &&
+        if (!p.ignoreFrameGuard && 
+            lastPlayedFrame.TryGetValue(id, out int lastFrame) &&
             lastFrame == currentFrame)
-        {
             return;
-        }
 
         lastPlayedFrame[id] = currentFrame;
 
         // ---------- COOLDOWN GUARD ----------
         float currentTime = Time.time;
-        if (lastPlayedTime.TryGetValue(id, out float lastTime) &&
+        if (!p.ignoreCooldown && 
+            lastPlayedTime.TryGetValue(id, out float lastTime) &&
             currentTime - lastTime < group.cooldown)
-        {
             return;
-        }
 
         lastPlayedTime[id] = currentTime;
 
@@ -126,30 +143,13 @@ public class SoundManager : MonoBehaviour
 
         src.volume = group.volume;
         src.pitch = Random.Range(group.pitchMin, group.pitchMax);
-        src.clip = group.clips[Random.Range(0, group.clips.Count)];
-        src.Play();
+        src.loop = p.loop;
 
-        StartCoroutine(ReturnWhenFinished(src));
-    }
+        
+        src.clip = p.clipIndex.HasValue
+            ? group.clips[p.clipIndex.Value]
+            : group.clips[Random.Range(0, group.clips.Count)];
 
-    public void PlaySelectedSE(SoundId id, int select)
-    {
-        if (!soundMap.TryGetValue(id, out var group))
-            return;
-
-        if (group.clips == null || group.clips.Count == 0)
-            return;
-
-        int selected = select;
-        if (selected < 0)
-            selected = 0;
-        if(selected > group.clips.Count)
-            selected = group.clips.Count - 1;
-
-        // ---------- PLAY ----------
-        var src = pool.Get();
-        src.volume = group.volume;
-        src.clip = group.clips[selected];
         src.Play();
 
         StartCoroutine(ReturnWhenFinished(src));
@@ -159,5 +159,20 @@ public class SoundManager : MonoBehaviour
     {
         yield return new WaitWhile(() => src.isPlaying);
         pool.Release(src);
+    }
+
+    public void StartSlotSpinSE()
+    {
+        soundSlotSpinController.StartSpin();
+    }
+
+    public void StopSlotSpinSE()
+    {
+        soundSlotSpinController.StopSpinAndResolve();
+    }
+
+    public void StopAllSlotSpinSE()
+    {
+        soundSlotSpinController.StopAll();
     }
 }
