@@ -34,9 +34,7 @@ public class GameManager : MonoBehaviour
 
         //2026/01/23　滝本海大　start
         UnitObjectPool.Instance.CreatePool(50);
-        ArrowPool.Instance.CreatePool(10);
-        LightningSpellPool.Instance.CreatePool(10);
-        HealSpellPool.Instance.CreatePool(10);
+        ProjectileObjectPool.Instance.CreatePool(5);
         //2026/01/23 滝本海大　end
     }
 

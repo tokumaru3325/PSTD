@@ -405,17 +405,17 @@ public class UnitPresenter : MonoBehaviour
 
     public void ShootArrow(Vector3 targetPos)
     {
-        ArrowPool.Instance.GetObj(transform.position, targetPos);
+        ProjectileObjectPool.Instance.GetObj(ProjectileType.Arrow, transform.position, targetPos);
     }
 
     public void AttackSpell(Vector3 targetPos)
     {
-        LightningSpellPool.Instance.GetObj(transform.position, targetPos);
+        ProjectileObjectPool.Instance.GetObj(ProjectileType.AttackSpell, transform.position, targetPos);
     }
 
     public void HealSpell(Vector3 targetPos)
     {
-        HealSpellPool.Instance.GetObj(transform.position, targetPos);
+        ProjectileObjectPool.Instance.GetObj(ProjectileType.HealSpell, transform.position, targetPos);
     }
 
     public void PerformHealSpell(UnitPresenter target, float dt)
