@@ -1,6 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+﻿using UnityEngine;
 
 public class MonsterSponerBySlot : MonoBehaviour
 {
