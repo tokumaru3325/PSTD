@@ -10,7 +10,7 @@ public class HealSpell : Projectile
         //矢が目標に着いたら消す
         if (Vector3.Distance(transform.position, _target) < 0.1f)
         {
-            HealSpellPool.Instance.Release(this);
+            ProjectileObjectPool.Instance.Release(this);
         }
     }
 }
