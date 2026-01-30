@@ -80,6 +80,9 @@ public class TitleButton : MonoBehaviour
         // 2026.01.21 ウー start
         if (_slot.CustomControll)
         {
+            if (_slot.IsRunning)
+                return;
+
             _slot.OnClickStart();
             _startBtn.sprite = _startImg.pressed;
             for (int index = 0; index < _reelController.Length; index++)
@@ -155,7 +158,7 @@ public class TitleButton : MonoBehaviour
             _startBtn.sprite = _startImg.unPress;
             if (result == ResultType.Start)
                 SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
-            else if (result == ResultType.Miss)
+            else if (result == ResultType.Close)
                 Application.Quit();
         }
     }

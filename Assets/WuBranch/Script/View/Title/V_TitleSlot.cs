@@ -77,7 +77,7 @@ public class V_TitleSlot : MonoBehaviour
     /// <summary>
     /// 回る中ですか
     /// </summary>
-    private bool _isRunning = false;
+    public bool IsRunning { get; private set; }
 
     /// <summary>
     /// 完全停止したか
@@ -133,7 +133,7 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     public void OnClickStart()
     {
-        if (_isRunning)
+        if (IsRunning)
             return;
 
         SpinRoutine();
@@ -146,7 +146,7 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     public void OnStopAllReel()
     {
-        if (!_isRunning)
+        if (!IsRunning)
             return;
 
         // もしランダムの結果が欲しいなら、ここで決める
@@ -160,7 +160,7 @@ public class V_TitleSlot : MonoBehaviour
         if (!CustomControll)
             return;
 
-        if (!_isRunning)
+        if (!IsRunning)
             return;
 
         if (index < 0 || index >= _reels.Length)
@@ -204,7 +204,7 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     void SpinRoutine()
     {
-        _isRunning = true;
+        IsRunning = true;
         for (int i = 0; i < _reels.Length; i++)
         {
             _reels[i].Reel.StartSpin();
@@ -243,7 +243,7 @@ public class V_TitleSlot : MonoBehaviour
         {
             ResultType result = CheckResult(_reelResult);
             OnFinished?.Invoke(result);
-            _isRunning = false;
+            IsRunning = false;
         }
     }
 
@@ -262,6 +262,12 @@ public class V_TitleSlot : MonoBehaviour
             return ResultType.Miss;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="wants"></param>
+    /// <param name="reelResult"></param>
+    /// <returns></returns>
     private bool CheckIsContain(WantResult[] wants, int[] reelResult)
     {
         for (int index = 0; index < reelResult.Length; index++)
