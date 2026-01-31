@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -157,10 +158,28 @@ public class TitleButton : MonoBehaviour
         {
             _startBtn.sprite = _startImg.unPress;
             if (result == ResultType.Start)
-                SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
+                ChangeToGameScene().Forget();
             else if (result == ResultType.Close)
-                Application.Quit();
+                CloseGame().Forget();
         }
+    }
+
+    /// <summary>
+    /// ゲームシーンに行く
+    /// </summary>
+    private async UniTaskVoid ChangeToGameScene()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
+    }
+
+    /// <summary>
+    /// ゲーム終了
+    /// </summary>
+    private async UniTaskVoid CloseGame()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        Application.Quit();
     }
 
     /// <summary>

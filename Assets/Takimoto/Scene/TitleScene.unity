@@ -297,7 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.92156863}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -372,7 +372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.92156863}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -793,7 +793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 2
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 5000
+  _maxSpinSpeed: 1000
   _minSpinSpeed: 300
   _startSpinAcceleration: 50
   _deceleration: 50
@@ -1037,7 +1037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 3
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 5000
+  _maxSpinSpeed: 1000
   _minSpinSpeed: 300
   _startSpinAcceleration: 50
   _deceleration: 50
@@ -1618,7 +1618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 1
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 5000
+  _maxSpinSpeed: 1000
   _minSpinSpeed: 300
   _startSpinAcceleration: 50
   _deceleration: 50
@@ -1713,6 +1713,7 @@ RectTransform:
   - {fileID: 639521678}
   - {fileID: 89388391}
   - {fileID: 271050843}
+  - {fileID: 1404721124}
   m_Father: {fileID: 1270453790}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1834,6 +1835,7 @@ MonoBehaviour:
   - Indices: 0400000009000000
   - Indices: 0300000008000000
   _stopIndices: 01000000010000000100000001000000
+  _maxPlay: 3
 --- !u!1 &1127366167
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,7 +2220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
   _reelID: 0
   _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 5000
+  _maxSpinSpeed: 1000
   _minSpinSpeed: 300
   _startSpinAcceleration: 50
   _deceleration: 50
@@ -2347,6 +2349,96 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
   m_ShowMaskGraphic: 1
+--- !u!1 &1404721123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1404721124}
+  - component: {fileID: 1404721127}
+  - component: {fileID: 1404721126}
+  - component: {fileID: 1404721125}
+  m_Layer: 5
+  m_Name: WinEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1404721124
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404721123}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1052288831}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -7.5, y: 40}
+  m_SizeDelta: {x: -635, y: -890}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1404721125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404721123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0440bb48ff7941949b84aee0fc612c06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::V_BlinkEffect
+  _fadeDuration: 0.1
+  _maxAlpha: 1
+--- !u!114 &1404721126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404721123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 0, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 0
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 0.5
+--- !u!222 &1404721127
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404721123}
+  m_CullTransparentMesh: 1
 --- !u!1 &1568212774
 GameObject:
   m_ObjectHideFlags: 0

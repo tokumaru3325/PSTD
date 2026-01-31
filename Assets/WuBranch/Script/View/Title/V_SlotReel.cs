@@ -205,33 +205,23 @@ public class V_SlotReel : MonoBehaviour
         if (activeReelSpinning == 1)
         {
             StartCoroutine(SpinClicks(GetClickInterval));
-         //   SoundManager.Instance.StartSlotSpinSE();
+            //   SoundManager.Instance.StartSlotSpinSE();
         }
         //[2026/01/30] プリンス end
     }
 
     /// <summary>
-    /// スクロール停止
+    /// スクロールを停止させる
     /// </summary>
     /// <param name="targetIndex">表示したい目標</param>
     public void StopSpin(int targetIndex)
     {
         if (!_isSpinning) return;
 
-        //[2026/01/30] プリンス start
-        activeReelSpinning--;
-        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 0 });
-        if (activeReelSpinning <= 0)
-        {
-            activeReelSpinning = 0;
-         //   SoundManager.Instance.StopSlotSpinSE();
-        }
-        //[2026/01/30] プリンス end
-
         // targetIndexの有効性を確認、-1：プレイヤがコントロールする
         if (targetIndex == -1)
         {
-            // スクロール停止
+            // スクロールをすぐに停止させる
             _isSpinning = false;
             _isSeeking = false;
             _isStopping = true;
@@ -292,10 +282,22 @@ public class V_SlotReel : MonoBehaviour
         // 目標に近つくと
         if (diff < _distToStop)
         {
+            Debug.Log($"{gameObject.name} stop");
             // 強制的に移動させる
             MoveReel(diff);
             _isStopping = false;
             _currentSpinSpeed = 0;
+            // 2026.01.30 ウー start 止まる時音がずれるので修正
+            //[2026/01/30] プリンス start
+            activeReelSpinning--;
+            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
+            if (activeReelSpinning <= 0)
+            {
+                activeReelSpinning = 0;
+                //   SoundManager.Instance.StopSlotSpinSE();
+            }
+            //[2026/01/30] プリンス end
+            // 2026.01.30 ウー end
             // 通知
             OnStoped?.Invoke(_reelID, _targetIndex);
         }
@@ -304,7 +306,6 @@ public class V_SlotReel : MonoBehaviour
             // 引き継ぎ移動
             MoveReel(speed * Time.deltaTime);
         }
-
     }
 
     /// <summary>
@@ -328,6 +329,17 @@ public class V_SlotReel : MonoBehaviour
             MoveReel(-diff);
             _isStopping = false;
             _currentSpinSpeed = 0;
+            // 2026.01.30 ウー start 止まる時音がずれるので修正
+            //[2026/01/30] プリンス start
+            activeReelSpinning--;
+            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
+            if (activeReelSpinning <= 0)
+            {
+                activeReelSpinning = 0;
+                //   SoundManager.Instance.StopSlotSpinSE();
+            }
+            //[2026/01/30] プリンス end
+            // 2026.01.30 ウー end
             // 通知
             OnStoped?.Invoke(_reelID, FindTarget());
         }
@@ -362,13 +374,15 @@ public class V_SlotReel : MonoBehaviour
 
     IEnumerator SpinClicks(Func<float> getInterval)
     {
-        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2 , ignoreCooldown = true, ignoreFrameGuard = true});
+        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2, ignoreCooldown = true, ignoreFrameGuard = true });
         while (_isSpinning)
         {
-            SoundManager.Instance.PlaySE(SoundId.SlotClick, new SEPlayParams { clipIndex = 0});
+            SoundManager.Instance.PlaySE(SoundId.SlotClick, new SEPlayParams { clipIndex = 0 });
             yield return new WaitForSeconds(getInterval());
         }
-        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1, ignoreCooldown = true, ignoreFrameGuard = true });
+        // 2026.01.30 ウー start 止まる時音がずれるので修正
+        //SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1, ignoreCooldown = true, ignoreFrameGuard = true });
+        // 2026.01.30 ウー end
     }
     //[2026/01/30] プリンス end
 }
