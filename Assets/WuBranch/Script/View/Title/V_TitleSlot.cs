@@ -100,6 +100,21 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     private bool _forceCorrect;
 
+    [Tooltip("何回遊んだら強制的に当たる")]
+    [SerializeField]
+    private int _maxPlay = 3;
+
+    /// <summary>
+    /// 今遊んだ回数
+    /// </summary>
+    private int _currentPlay = 0;
+
+    /// <summary>
+    /// あたりのエフェクト
+    /// </summary>
+    private V_BlinkEffect _winEffect;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -120,6 +135,8 @@ public class V_TitleSlot : MonoBehaviour
         //[2026/01/27] プリンス start
         SoundManager.Instance.PlayTitleBGM();
         //[2026/01/27] プリンス end
+        _currentPlay = 0;
+        _winEffect = GetComponentInChildren<V_BlinkEffect>();
     }
 
     void Update()
@@ -142,6 +159,12 @@ public class V_TitleSlot : MonoBehaviour
         SpinRoutine();
         _reelFinishedNum = 0x00;
         _forceCorrect = false;
+        _currentPlay++;
+        if (_currentPlay >= _maxPlay)
+        {
+            _forceCorrect = true;
+            _currentPlay = 0;
+        }
     }
 
     /// <summary>
@@ -254,6 +277,8 @@ public class V_TitleSlot : MonoBehaviour
         if (_reelFinishedNum == _reels.Length)
         {
             ResultType result = CheckResult(_reelResult);
+            if (result == ResultType.Start)
+                _winEffect.StartBlinking();
             OnFinished?.Invoke(result);
             IsRunning = false;
         }
