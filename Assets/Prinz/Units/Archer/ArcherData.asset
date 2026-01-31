@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da7304e2826cfb14f8119f3510d6a76f, type: 3}
   m_Name: ArcherData
   m_EditorClassIdentifier: Assembly-CSharp::ArcherData
-  MaxHealth: 25
+  MaxHealth: 40
   BaseAttackPower: 1
-  BaseAttackSpeed: 2
-  BaseAttackRange: 1
+  BaseAttackSpeed: 3
+  BaseAttackRange: 7
   BaseMoveSpeed: 5
-  BaseUnitCost: 0
-  BaseUnitCoolDown: 0
+  BaseUnitCost: 15
+  BaseUnitCoolDown: 1
   MoveDirection: {x: -1, y: 0, z: 0}
+  MovementStyle: 0
   DangerLevel: 1

@@ -117,6 +117,9 @@ public class V_TitleSlot : MonoBehaviour
                 _reels[index].Reel.Initialize(_reels[index].Sprites, _stopHeightOffset);
             }
         }
+        //[2026/01/27] プリンス start
+        SoundManager.Instance.PlayTitleBGM();
+        //[2026/01/27] プリンス end
     }
 
     void Update()
@@ -204,7 +207,12 @@ public class V_TitleSlot : MonoBehaviour
     /// </summary>
     void SpinRoutine()
     {
+        //[2026/01/27] プリンス start
+        //SoundManager.Instance.StartSlotSpinSE();
+        //Debug.LogWarning("play spin SE");
+        //[2026/01/27] プリンス end
         IsRunning = true;
+
         for (int i = 0; i < _reels.Length; i++)
         {
             _reels[i].Reel.StartSpin();
@@ -218,6 +226,10 @@ public class V_TitleSlot : MonoBehaviour
     /// <returns></returns>
     IEnumerator StopRoutine(int[] result)
     {
+        //[2026/01/27] プリンス start
+        //SoundManager.Instance.StopSlotSpinSE();
+        //Debug.LogWarning("STOP spin SE");
+        //[2026/01/27] プリンス end
         for (int i = 0; i < _reels.Length; i++)
         {
             int targetIndex = result[i];

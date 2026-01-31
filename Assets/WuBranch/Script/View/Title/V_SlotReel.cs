@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -90,6 +91,13 @@ public class V_SlotReel : MonoBehaviour
     /// 今の回転速度
     /// </summary>
     private float _currentSpinSpeed = 0f;
+
+    //[2026/01/30] プリンス start
+    /// <summary>
+    /// 今いくつリールが回転している(SE用)
+    /// </summary>
+    private int activeReelSpinning = 0;
+    //[2026/01/30] プリンス end
 
     /// <summary>
     /// 初期化、もらったテクスチャを使ってロールを生成
@@ -192,6 +200,14 @@ public class V_SlotReel : MonoBehaviour
         _isSpinning = true;
         _isSeeking = false;
         _isStopping = false;
+        //[2026/01/30] プリンス start
+        activeReelSpinning++;
+        if (activeReelSpinning == 1)
+        {
+            StartCoroutine(SpinClicks(GetClickInterval));
+         //   SoundManager.Instance.StartSlotSpinSE();
+        }
+        //[2026/01/30] プリンス end
     }
 
     /// <summary>
@@ -201,6 +217,16 @@ public class V_SlotReel : MonoBehaviour
     public void StopSpin(int targetIndex)
     {
         if (!_isSpinning) return;
+
+        //[2026/01/30] プリンス start
+        activeReelSpinning--;
+        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 0 });
+        if (activeReelSpinning <= 0)
+        {
+            activeReelSpinning = 0;
+         //   SoundManager.Instance.StopSlotSpinSE();
+        }
+        //[2026/01/30] プリンス end
 
         // targetIndexの有効性を確認、-1：プレイヤがコントロールする
         if (targetIndex == -1)
@@ -278,6 +304,7 @@ public class V_SlotReel : MonoBehaviour
             // 引き継ぎ移動
             MoveReel(speed * Time.deltaTime);
         }
+
     }
 
     /// <summary>
@@ -324,4 +351,24 @@ public class V_SlotReel : MonoBehaviour
         }
         return -1;
     }
+
+
+    //[2026/01/30] プリンス start
+    public float GetClickInterval()
+    {
+        float t = Mathf.InverseLerp(_minSpinSpeed, _maxSpinSpeed, _currentSpinSpeed);
+        return Mathf.Lerp(0.25f, 0.0f, t);
+    }
+
+    IEnumerator SpinClicks(Func<float> getInterval)
+    {
+        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2 , ignoreCooldown = true, ignoreFrameGuard = true});
+        while (_isSpinning)
+        {
+            SoundManager.Instance.PlaySE(SoundId.SlotClick, new SEPlayParams { clipIndex = 0});
+            yield return new WaitForSeconds(getInterval());
+        }
+        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1, ignoreCooldown = true, ignoreFrameGuard = true });
+    }
+    //[2026/01/30] プリンス end
 }

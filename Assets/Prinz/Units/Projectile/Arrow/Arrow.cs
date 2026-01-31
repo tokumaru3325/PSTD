@@ -11,7 +11,7 @@ public class Arrow : Projectile
         //矢が目標に着いたら消す
         if (Vector3.Distance(transform.position, _target) < 0.1f)
         {
-            ArrowPool.Instance.Release(this);
+            ProjectileObjectPool.Instance.Release(this);
         }
     }
 }
