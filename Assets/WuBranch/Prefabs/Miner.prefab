@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3978083621647426525}
   - component: {fileID: 7658566134051232218}
   - component: {fileID: 7506480117882992471}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Miner
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -142,9 +142,9 @@ GameObject:
   - component: {fileID: 5929707295911423756}
   - component: {fileID: 2729103455347906475}
   - component: {fileID: 8558456456981687424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AttackRange
-  m_TagString: Untagged
+  m_TagString: AttackRange
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,7 +235,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 5534097914617258729}
   - component: {fileID: 7029371843505586901}
   - component: {fileID: 6125750199090975218}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Appearance
   m_TagString: Untagged
   m_Icon: {fileID: 0}

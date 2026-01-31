@@ -1,6 +1,4 @@
 ﻿using System;
-using Unity.PlasticSCM.Editor.WebApi;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
@@ -9,13 +7,13 @@ public class Coin : MonoBehaviour
 
     float currentY = 0.0f;
     float currentX = 0.0f;
-    
+
     float life = 0.0f;
 
     public event Action<Coin> release;
 
     bool active = true;
-    public void Create(float powerX,float powerY,float Life)
+    public void Create(float powerX, float powerY, float Life)
     {
         currentX = powerX;
         currentY = powerY;
@@ -38,7 +36,7 @@ public class Coin : MonoBehaviour
     {
         if (!active) return;
         currentY -= 1000.0f * Time.deltaTime;
-        
+
 
 
 

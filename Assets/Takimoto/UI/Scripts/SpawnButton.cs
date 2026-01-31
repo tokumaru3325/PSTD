@@ -212,14 +212,6 @@ public class SpawnButton : MonoBehaviour
         // 2026.01.25 ウー end
         // 2026.01.23 ウー end
         // 2026.01.28 ウー end
-        _buttonComp.interactable = false;
-        _timer = 0.0f;
-        _player.Money -= _unit.BaseUnitCost;
-
-        _textComp.gameObject.SetActive(true);
-        _textComp.rectTransform.anchoredPosition = _textCompStartPosition;
-
-        _bPushed = true;
     }
 
     private Vector3 GetSpawnPos(GameObject player)
@@ -247,6 +239,15 @@ public class SpawnButton : MonoBehaviour
         Vector3 enemyPos = target ? target.transform.position : GetSpawnPos(_enemy.gameObject);
         PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
         UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, enemyPos, _playerTag, _enemyTag, strategy);//[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+
+        _buttonComp.interactable = false;
+        _timer = 0.0f;
+        _player.Money -= _unit.BaseUnitCost;
+
+        _textComp.gameObject.SetActive(true);
+        _textComp.rectTransform.anchoredPosition = _textCompStartPosition;
+
+        _bPushed = true;
     }
     // 2026.01.28 ウー end
 }

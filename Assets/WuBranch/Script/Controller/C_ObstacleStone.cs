@@ -63,12 +63,12 @@ public class C_ObstacleStone : MonoBehaviour
         // 死亡
         if (_model.HP <= 0)
         {
-            SoundManager.Instance.PlaySE(SoundId.RockBreak);
+            SoundManager.Instance.PlaySE(SoundId.RockBreak, SEPlayParams.Default);
             Dead().Forget();
             return;
         }
 
-        SoundManager.Instance.PlaySE(SoundId.Mining);
+        SoundManager.Instance.PlaySE(SoundId.Mining, SEPlayParams.Default);
         if (_myView)
             _myView.HandleDamageEffect();
     }

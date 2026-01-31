@@ -16,7 +16,7 @@ public class MoveState : IUnitState
         _mapManager = presenter.MapManager;
     }
 
-    public void OnEnter() 
+    public void OnEnter()
     {
         _me.Log($"Enter MoveState {_me.GetPlayerSide()}", LogType.Warning);
         _me.OnEnterState(this);
@@ -24,7 +24,7 @@ public class MoveState : IUnitState
     }
     public void OnExit()
     {
-     //   Debug.LogWarning("Exit MoveState");
+        //   Debug.LogWarning("Exit MoveState");
         _me.PlayMove(false);
     }
 
@@ -37,7 +37,7 @@ public class MoveState : IUnitState
     {
         Move(_me.GetTotalMoveSpeed(), _me.GetMoveDirection(), fdt);
 
-        if(_me.IsValidTargetExist())
+        if (_me.IsValidTargetExist())
         {
             return new IdleState(_me);
         }
@@ -52,7 +52,7 @@ public class MoveState : IUnitState
 
         GetDistanceToTarget();
 
-        _me.transform.position = Vector3.MoveTowards(_me.transform.position, target, step);    
+        _me.transform.position = Vector3.MoveTowards(_me.transform.position, target, step);
 
         _me.PlayMove(true);
     }
@@ -64,12 +64,12 @@ public class MoveState : IUnitState
         {
             //M_MapPosition currentMP = _mapManager.ConvertToMapPos(_presenter.transform.position);
             Vector3 NextTargetPos = _mapManager.ConvertToUnityPos(_me.GetRoutePosition(cri + 1));
-                float Distance = Vector3.Distance(_me.transform.position, NextTargetPos);
+            float Distance = Vector3.Distance(_me.transform.position, NextTargetPos);
             //Debug.Log($"current route: {_presenter.transform.position}, target: {NextTargetPos}, distance: {Distance}");
 
             if (Distance <= 0.001f)
             {
-            //    Debug.Log("next route");
+                //    Debug.Log("next route");
                 _me.SetCurrentRouteIndex(cri + 1);
             }
 
