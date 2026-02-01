@@ -60,4 +60,9 @@ public class V_MinerSpawnButton : SpawnButton
         _obstacleManager.DisableObstacleSelection();
         _markManger.CloseMarks();
     }
+
+    void OnDestroy()
+    {
+        _mask.OnClosed -= HandleMaskClosed;
+    }
 }
