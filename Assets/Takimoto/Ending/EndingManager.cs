@@ -29,6 +29,10 @@ public class EndingManager : MonoBehaviour
         // 目的のシーン以外なら無視
         if (scene.name != "EndingScene") return;
 
+        // 2026.02.01 ウー start
+        V_DarkMask.Instance.OpenMask();
+        // 2026.02.01 ウー end
+
         //ロードが終わったので中身を探す
         GameObject[] rootObjects = scene.GetRootGameObjects();
         foreach (GameObject obj in rootObjects)
@@ -38,19 +42,19 @@ public class EndingManager : MonoBehaviour
             {
                 _effectManager.Initialize();
                 break;
-            }           
+            }
         }
 
-        foreach(GameObject obj in rootObjects)
+        foreach (GameObject obj in rootObjects)
         {
             // "Winner" という名前のオブジェクトを探す            
             _battleResult = obj.GetComponentInChildren<TextMeshProUGUI>(true);
-            if(_battleResult != null && _battleResult.name == "Winner")
+            if (_battleResult != null && _battleResult.name == "Winner")
             {
                 ApplyResult(_battleResult, _isWin);
                 break;
             }
-        }        
+        }
 
         // 4. 二重実行を防ぐためにイベントを解除
         SceneManager.sceneLoaded -= OnEndingSceneLoaded;
