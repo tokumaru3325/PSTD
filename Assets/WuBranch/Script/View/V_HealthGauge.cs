@@ -38,7 +38,7 @@ public class V_HealthGauge : MonoBehaviour
         _currentHealthRate = targetRate;
         if (_healthImage)
         {
-            _healthImage.DOFillAmount(targetRate, _duration).SetEase(Ease.OutQuad).OnComplete(() =>
+            _healthImage.DOFillAmount(targetRate, _duration).SetEase(Ease.OutQuad).SetLink(gameObject).OnComplete(() =>
             {
                 if (_burnImage)
                     _burnImage.DOFillAmount(targetRate, _duration * 0.5f).SetDelay(0.25f);
@@ -52,7 +52,7 @@ public class V_HealthGauge : MonoBehaviour
     public void HideGauge()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
-        rectTransform.DOSizeDelta(new Vector2(-160, -20), 0.5f).SetEase(Ease.OutBack);
+        rectTransform.DOSizeDelta(new Vector2(-160, -20), 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
     }
 
     /// <summary>
@@ -61,6 +61,6 @@ public class V_HealthGauge : MonoBehaviour
     public void ShowGauge()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
-        rectTransform.DOSizeDelta(new Vector2(0, 0), 0.5f).SetEase(Ease.OutBack);
+        rectTransform.DOSizeDelta(new Vector2(0, 0), 0.5f).SetEase(Ease.OutBack).SetLink(gameObject);
     }
 }
