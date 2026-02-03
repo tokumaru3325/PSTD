@@ -172,8 +172,11 @@ public class ReelController : MonoBehaviour
                             reelLStoped = false;
                             reelCStoped = false;
                             reelRStoped = false;
-                            audioSource.Stop();
-                            audioSource.PlayOneShot(betSE);
+                            //[2026/01/31] プリンス Start
+                            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2 });
+                            //audioSource.Stop();
+                            //audioSource.PlayOneShot(betSE);
+                            //[2026/01/31] プリンス End
                             break;
                         case 1:
                             if (_player.Money < MonsterOnePlayValue)
@@ -186,8 +189,11 @@ public class ReelController : MonoBehaviour
                             reelLStoped = false;
                             reelCStoped = false;
                             reelRStoped = false;
-                            audioSource.Stop();
-                            audioSource.PlayOneShot(betSE);
+                            //[2026/01/31] プリンス Start
+                            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2 });
+                            //audioSource.Stop();
+                            //audioSource.PlayOneShot(betSE);
+                            //[2026/01/31] プリンス End
                             break;
                         case 2:
                             if (_player.Money < BuffOnePlayValue)
@@ -200,8 +206,11 @@ public class ReelController : MonoBehaviour
                             reelLStoped = false;
                             reelCStoped = false;
                             reelRStoped = false;
-                            audioSource.Stop();
-                            audioSource.PlayOneShot(betSE);
+                            //[2026/01/31] プリンス Start
+                            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2 });
+                            //audioSource.Stop();
+                            //audioSource.PlayOneShot(betSE);
+                            //[2026/01/31] プリンス End
                             break;
 
                     }
@@ -213,26 +222,38 @@ public class ReelController : MonoBehaviour
                 resultTextManager.ResetText();
                 reelMover.StateChange();
                 SetZugara();
-                audioSource.PlayOneShot(leberOnSE);
+                //[2026/01/31] プリンス Start
+                SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 2 });
+                //audioSource.PlayOneShot(leberOnSE);
+                //[2026/01/31] プリンス End
                 canMoveL = true;
                 canMoveC = true;
                 canMoveR = true;
                 SlotSceneManager.reelMoving = true;
                 break;
             case ReelMover.State.nextreelL:
-                audioSource.PlayOneShot(stopSE);
+                //[2026/01/31] プリンス Start
+                SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
+                //audioSource.PlayOneShot(stopSE);
+                //[2026/01/31] プリンス End
                 reelMover.StateChange();
                 canMoveL = false;
                 break;
             case ReelMover.State.nextreelC:
                 if (!reelLStoped) break;
-                audioSource.PlayOneShot(stopSE);
+                //[2026/01/31] プリンス Start
+                SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
+                //audioSource.PlayOneShot(stopSE);
+                //[2026/01/31] プリンス End
                 reelMover.StateChange();
                 canMoveC = false;
                 break;
             case ReelMover.State.nextreelR:
                 if (!reelCStoped) break;
-                audioSource.PlayOneShot(stopSE);
+                //[2026/01/31] プリンス Start
+                SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
+                //audioSource.PlayOneShot(stopSE);
+                //[2026/01/31] プリンス End
                 reelMover.StateChange();
                 canMoveR = false;
                 resultTextManager.TextChange((int)reelMover.someSlot, koyakuNum, koyaku);
