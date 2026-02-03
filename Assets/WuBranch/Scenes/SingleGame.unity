@@ -1598,51 +1598,6 @@ MonoBehaviour:
   _mapManager: {fileID: 1084309508}
   _PlayerTowerController: {fileID: 0}
   allAttackRanges: []
---- !u!1 &371677836
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 371677837}
-  - component: {fileID: 371677838}
-  m_Layer: 0
-  m_Name: ArrowObjectPoolTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &371677837
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371677836}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.5269794, y: -0.33594, z: -10.22842}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 432052315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &371677838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371677836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95071803dac39ed48adb1026891f9a8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArrowPool
-  arrowPrefab: {fileID: 6781292948723307380, guid: 1d30240a23a3b564e876d4c82d8f9318, type: 3}
 --- !u!1 &407917816
 GameObject:
   m_ObjectHideFlags: 0
@@ -1850,10 +1805,8 @@ Transform:
   - {fileID: 1407226765}
   - {fileID: 407917818}
   - {fileID: 1770270221}
-  - {fileID: 771301419}
-  - {fileID: 371677837}
-  - {fileID: 883998156}
   - {fileID: 847823813}
+  - {fileID: 1725195566}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &435596418
@@ -15770,51 +15723,6 @@ MonoBehaviour:
   _mask: {fileID: 2142480933}
   _markManger: {fileID: 1427018634}
   _obstacleManager: {fileID: 1791571549}
---- !u!1 &771301418
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 771301419}
-  - component: {fileID: 771301420}
-  m_Layer: 0
-  m_Name: HealSpellPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &771301419
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771301418}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0275202, y: 0.14317998, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 432052315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &771301420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771301418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fc1678da16963642a040b346ed82e52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealSpellPool
-  lightningSpellPrefab: {fileID: 6781292948723307380, guid: 8f6618fbb4a1f6a4abe316aba1690538, type: 3}
 --- !u!1 &773190229
 GameObject:
   m_ObjectHideFlags: 0
@@ -16757,51 +16665,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877924851}
   m_CullTransparentMesh: 1
---- !u!1 &883998155
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 883998156}
-  - component: {fileID: 883998157}
-  m_Layer: 0
-  m_Name: LightningSpellPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &883998156
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 883998155}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2280397, y: -2.04466, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 432052315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &883998157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 883998155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fd7c5def74aa6b43b51aababf5eaa63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LightningSpellPool
-  lightningSpellPrefab: {fileID: 6781292948723307380, guid: b2db9ea1e37287741b6f4e5c188b3f63, type: 3}
 --- !u!1001 &944368924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19715,6 +19578,57 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1244788957341495178, guid: e42557626efeaec4eb989953e6491502, type: 3}
   m_PrefabInstance: {fileID: 563820933}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1725195565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1725195566}
+  - component: {fileID: 1725195567}
+  m_Layer: 0
+  m_Name: ProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1725195566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725195565}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.23355997, y: -2.4763498, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 432052315}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1725195567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725195565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c8101c0a6d199c4693acfb25976c24d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileObjectPool
+  _projectileObjects:
+  - type: 0
+    prefab: {fileID: 6781292948723307380, guid: 1d30240a23a3b564e876d4c82d8f9318, type: 3}
+  - type: 1
+    prefab: {fileID: 6781292948723307380, guid: b2db9ea1e37287741b6f4e5c188b3f63, type: 3}
+  - type: 2
+    prefab: {fileID: 6781292948723307380, guid: 8f6618fbb4a1f6a4abe316aba1690538, type: 3}
 --- !u!1 &1740339427
 GameObject:
   m_ObjectHideFlags: 0
