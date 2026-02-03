@@ -275,9 +275,21 @@ public class UnitView : MonoBehaviour
         for (int index = 1; index <= 4; index++)
         {
             material.SetFloat($"_OutlineWidth{index}", OUTLINE_WIDTH / basesize * index);
-            material.SetColor($"_OutlineColor{index}", Color.red);
+            material.SetColor($"_OutlineColor{index}", Color.orange);
         }
 
+    }
+
+    public void ResetBuffEffect()
+    {
+        Material material = _unitSpriteRenderer.material;
+        if (!material)
+            return;
+        for (int index = 1; index <= 4; index++)
+        {
+            material.SetFloat($"_OutlineWidth{index}", 0.0f);
+            material.SetColor($"_OutlineColor{index}", Color.black);
+        }
     }
 
     // 2026.01.16 ウー start バフのエフェクト追加
