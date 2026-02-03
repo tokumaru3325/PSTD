@@ -354,6 +354,7 @@ public class UnitPresenter : MonoBehaviour
     private void PrepareDeath()
     {
         //   View.UpdateHealth(Model.Health / Model.MaxHealth);
+        View.ResetBuffEffect();
         Model.NotifyUnitDeath();
         ResetSize();
         Model.ClearTargets();
