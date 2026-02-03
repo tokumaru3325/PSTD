@@ -262,6 +262,24 @@ public class UnitView : MonoBehaviour
 
     #endregion
 
+    public void CreateBuffEffect(float basesize)
+    {
+        Material material = _unitSpriteRenderer.material;
+        if (!material)
+            return;
+        for (int index = 1; index <= 4; index++)
+        {
+            material.SetFloat($"_OutlineWidth{index}", 0.0f);
+            material.SetColor($"_OutlineColor{index}", Color.black);
+        }
+        for (int index = 1; index <= 4; index++)
+        {
+            material.SetFloat($"_OutlineWidth{index}", OUTLINE_WIDTH / basesize * index);
+            material.SetColor($"_OutlineColor{index}", Color.red);
+        }
+
+    }
+
     // 2026.01.16 ウー start バフのエフェクト追加
     /// <summary>
     /// バフのエフェクトを更新
@@ -289,5 +307,6 @@ public class UnitView : MonoBehaviour
         }
     }
     // 2026.01.16 ウー end バフエフェクト追加
+
 
 }
