@@ -95,7 +95,7 @@ public class FireEffect : MonoBehaviour
                 float powerX = UnityEngine.Random.Range(-100.0f, 100.0f);
                 float powerY = UnityEngine.Random.Range(700.0f, 1001.0f);
                 sc.Create(powerX, powerY, 3.0f);
-                Debug.Log("とりあえずここまで来ましたけど");
+                //Debug.Log("とりあえずここまで来ましたけど");
             }
         }
     }

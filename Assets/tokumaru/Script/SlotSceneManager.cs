@@ -252,11 +252,11 @@ public class SlotSceneManager : MonoBehaviour
         monsterSlotResult(_unitType, playerTag);
     }
 
-    public static void BroadcastBuffSlotResult(BuffType type)
+    public static void BroadcastBuffSlotResult(BuffType type,string playertag,string enemytag)
     {
         buffSlotResult(type);
         //2025/12/23 滝本海大 start
-        OnSlotBuffResult?.Invoke(type, playerTag, enemyTag);
+        OnSlotBuffResult?.Invoke(type, playertag, enemytag);
         //2025/12/23 滝本海大 end
     }
 }

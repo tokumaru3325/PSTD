@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: KnightData
   m_EditorClassIdentifier: Assembly-CSharp::KnightData
   MaxHealth: 60
-  BaseAttackPower: 3
-  BaseAttackSpeed: 1
+  BaseAttackPower: 0.7
+  BaseAttackSpeed: 0.06
   BaseAttackRange: 1
-  BaseMoveSpeed: 3
+  BaseMoveSpeed: 0.7
   BaseUnitCost: 10
   BaseUnitCoolDown: 1
   MoveDirection: {x: -1, y: 0, z: 0}

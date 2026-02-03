@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Bson;
+using System;
 using System.Threading;
 using TMPro;
 using Unity.VisualScripting;
@@ -7,6 +8,11 @@ using UnityEngine.UI;
 
 public class SpawnButton : MonoBehaviour
 {
+    //2026.02.02 得丸陽生 start
+    public Action spawn;
+    public Action ripiter;
+    //2026.02.02 得丸陽生 end
+
     private UnitData _unit; //ScriptableObjectをインスペクターに設定する //[2025/12/21] プリンス：ObjectPoolTestに移した
     public Image SpawnButtonPrefab;
 
@@ -212,6 +218,10 @@ public class SpawnButton : MonoBehaviour
         // 2026.01.25 ウー end
         // 2026.01.23 ウー end
         // 2026.01.28 ウー end
+
+        //2026.02.02 得丸陽生 start
+        spawn?.Invoke();
+        //2026.02.02 得丸陽生 end
     }
 
     private Vector3 GetSpawnPos(GameObject player)
@@ -238,7 +248,12 @@ public class SpawnButton : MonoBehaviour
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
         Vector3 enemyPos = target ? target.transform.position : GetSpawnPos(_enemy.gameObject);
         PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
-        UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, enemyPos, _playerTag, _enemyTag, strategy);//[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+
+        UnitPresenter ps = UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, enemyPos, _playerTag, _enemyTag, strategy);//[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+
+        //20260202得丸陽生　start
+        ps.dead += Chukei;
+        //20260202得丸陽生　end
 
         _buttonComp.interactable = false;
         _timer = 0.0f;
@@ -250,4 +265,16 @@ public class SpawnButton : MonoBehaviour
         _bPushed = true;
     }
     // 2026.01.28 ウー end
+
+    //2026.02.02 得丸陽生 start
+    public void GetSpawn()
+    {
+        spawn?.Invoke();
+    }
+
+    public void Chukei()
+    {
+        ripiter?.Invoke();
+    }
+    //2026.02.02 得丸陽生 end
 }

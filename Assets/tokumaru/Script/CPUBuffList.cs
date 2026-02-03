@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class V_BuffList : MonoBehaviour
+public class CPUBuffList : MonoBehaviour
 {
     /// <summary>
     /// 対象のタグ
@@ -14,27 +14,17 @@ public class V_BuffList : MonoBehaviour
     /// </summary>
     private BuffManager manager;
 
-    /// <summary>
-    /// バフのプレハブ
-    /// </summary>
-    [SerializeField]
-    private GameObject _buffPrefab;
 
-    /// <summary>
-    /// 表示する場所
-    /// </summary>
-    [SerializeField]
-    private GameObject _container;
 
     /// <summary>
     /// バフリスト
     /// </summary>
-    private Dictionary<C_Buff, V_Buff> _myChilds;
+    private List<C_Buff> _myChilds;
 
     void Awake()
     {
         manager = FindFirstObjectByType<BuffManager>();
-        _myChilds = new Dictionary<C_Buff, V_Buff>();
+        _myChilds = new List<C_Buff>();
         if (!manager)
             Debug.LogError("buff Manager didnot find");
     }
@@ -47,8 +37,7 @@ public class V_BuffList : MonoBehaviour
             manager.OnAddBuff += HandleBuffAdded;
             manager.OnRemoveBuff += HandleBuffRemoved;
         }
-        if (!_buffPrefab)
-            Debug.LogError("didnot attach buff prefab");
+
     }
 
     /// <summary>
@@ -59,11 +48,7 @@ public class V_BuffList : MonoBehaviour
     {
         if (buff.TargetTag.Equals(_targetTag))
         {
-            V_Buff buffV = CreateBuff();
-            buff.BindTimeUpdate(buffV.UpdateTime);
-            buffV.SetIcon(buff.GetIcon());
-            _myChilds.Add(buff, buffV);
-            buffV.SlideIn();
+            _myChilds.Add(buff);
         }
     }
 
@@ -75,26 +60,11 @@ public class V_BuffList : MonoBehaviour
     {
         if (buff.TargetTag.Equals(_targetTag))
         {
-            if (_myChilds.ContainsKey(buff))
+            if (_myChilds.Contains(buff))
             {
-                if (_myChilds.TryGetValue(buff, out V_Buff buffV))
-                {
-                    buffV.SlideOut();
-                    _myChilds.Remove(buff);
-                }
+                _myChilds.Remove(buff);
             }
         }
-    }
-
-    private V_Buff CreateBuff()
-    {
-        if (!_buffPrefab)
-            return null;
-
-        GameObject obj = Instantiate(_buffPrefab);
-        V_Buff buff = obj.GetComponent<V_Buff>();
-        obj.transform.SetParent(_container.transform);
-        return buff;
     }
 
     //得丸陽生　20260202 start
@@ -102,6 +72,5 @@ public class V_BuffList : MonoBehaviour
     {
         return _myChilds.Count;
     }
-
     //得丸陽生　20260202 end
 }

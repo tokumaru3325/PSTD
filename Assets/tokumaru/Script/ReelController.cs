@@ -152,8 +152,91 @@ public class ReelController : MonoBehaviour
 
     public void InputSlot()
     {
-        //if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        //switch (reelMover.state)
         //{
+        //    case ReelMover.State.nextBet:
+        //        if (reelLStoped && reelCStoped && reelRStoped)
+        //        {
+        //            switch (SlotSceneManager.slotType)
+        //            {
+        //                case 0:
+        //                    if (_player.Money   < moneyOnePlayValue)
+        //                    {
+        //                        resultTextManager.SetText("お金が足りないよ！！");
+        //                        break;
+        //                    }
+        //                    _player.UseMoney(moneyOnePlayValue);
+        //                    reelMover.StateChange();
+        //                    reelLStoped = false;
+        //                    reelCStoped = false;
+        //                    reelRStoped = false;
+        //                    audioSource.Stop();
+        //                    audioSource.PlayOneShot(betSE);
+        //                    break;
+        //                case 1:
+        //                    if (_player.Money < MonsterOnePlayValue)
+        //                    {
+        //                        resultTextManager.SetText("お金が足りないよ！！");
+        //                        break;
+        //                    }
+        //                    _player.UseMoney(MonsterOnePlayValue);
+        //                    reelMover.StateChange();
+        //                    reelLStoped = false;
+        //                    reelCStoped = false;
+        //                    reelRStoped = false;
+        //                    audioSource.Stop();
+        //                    audioSource.PlayOneShot(betSE);
+        //                    break;
+        //                case 2:
+        //                    if (_player.Money < BuffOnePlayValue)
+        //                    {
+        //                        resultTextManager.SetText("お金が足りないよ！！");
+        //                        break;
+        //                    }
+        //                    _player.UseMoney(BuffOnePlayValue);
+        //                    reelMover.StateChange();
+        //                    reelLStoped = false;
+        //                    reelCStoped = false;
+        //                    reelRStoped = false;
+        //                    audioSource.Stop();
+        //                    audioSource.PlayOneShot(betSE);
+        //                    break;
+
+        //            }
+        //            break;
+        //        }
+
+        //        break;
+        //    case ReelMover.State.nextLeber:
+        //        resultTextManager.ResetText();
+        //        reelMover.StateChange();
+        //        SetZugara();
+        //        audioSource.PlayOneShot(leberOnSE);
+        //        canMoveL = true;
+        //        canMoveC = true;
+        //        canMoveR = true;
+        //        SlotSceneManager.reelMoving = true;
+        //        break;
+        //    case ReelMover.State.nextreelL:
+        //        audioSource.PlayOneShot(stopSE);
+        //        reelMover.StateChange();
+        //        canMoveL = false;
+        //        break;
+        //    case ReelMover.State.nextreelC:
+        //        if (!reelLStoped) break;
+        //        audioSource.PlayOneShot(stopSE);
+        //        reelMover.StateChange();
+        //        canMoveC = false;
+        //        break;
+        //    case ReelMover.State.nextreelR:
+        //        if (!reelCStoped) break;
+        //        audioSource.PlayOneShot(stopSE);
+        //        reelMover.StateChange();
+        //        canMoveR = false;
+        //        resultTextManager.TextChange((int)reelMover.someSlot, koyakuNum, koyaku);
+        //        break;
+        //}
+
         switch (reelMover.state)
         {
             case ReelMover.State.nextBet:
@@ -162,7 +245,7 @@ public class ReelController : MonoBehaviour
                     switch (SlotSceneManager.slotType)
                     {
                         case 0:
-                            if (_player.Money   < moneyOnePlayValue)
+                            if (_player.Money < moneyOnePlayValue)
                             {
                                 resultTextManager.SetText("お金が足りないよ！！");
                                 break;
@@ -173,7 +256,16 @@ public class ReelController : MonoBehaviour
                             reelCStoped = false;
                             reelRStoped = false;
                             audioSource.Stop();
-                            audioSource.PlayOneShot(betSE);
+
+                            resultTextManager.ResetText();
+                            SetZugara();
+                            audioSource.PlayOneShot(leberOnSE);
+                            canMoveL = true;
+                            canMoveC = true;
+                            canMoveR = true;
+                            SlotSceneManager.reelMoving = true;
+
+                            //audioSource.PlayOneShot(betSE);
                             break;
                         case 1:
                             if (_player.Money < MonsterOnePlayValue)
@@ -187,7 +279,16 @@ public class ReelController : MonoBehaviour
                             reelCStoped = false;
                             reelRStoped = false;
                             audioSource.Stop();
-                            audioSource.PlayOneShot(betSE);
+
+                            resultTextManager.ResetText();
+                            SetZugara();
+                            audioSource.PlayOneShot(leberOnSE);
+                            canMoveL = true;
+                            canMoveC = true;
+                            canMoveR = true;
+                            SlotSceneManager.reelMoving = true;
+
+                            //audioSource.PlayOneShot(betSE);
                             break;
                         case 2:
                             if (_player.Money < BuffOnePlayValue)
@@ -201,23 +302,21 @@ public class ReelController : MonoBehaviour
                             reelCStoped = false;
                             reelRStoped = false;
                             audioSource.Stop();
-                            audioSource.PlayOneShot(betSE);
+
+                            resultTextManager.ResetText();
+                            SetZugara();
+                            audioSource.PlayOneShot(leberOnSE);
+                            canMoveL = true;
+                            canMoveC = true;
+                            canMoveR = true;
+                            SlotSceneManager.reelMoving = true;
+
+                            //audioSource.PlayOneShot(betSE);
                             break;
 
                     }
                     break;
                 }
-
-                break;
-            case ReelMover.State.nextLeber:
-                resultTextManager.ResetText();
-                reelMover.StateChange();
-                SetZugara();
-                audioSource.PlayOneShot(leberOnSE);
-                canMoveL = true;
-                canMoveC = true;
-                canMoveR = true;
-                SlotSceneManager.reelMoving = true;
                 break;
             case ReelMover.State.nextreelL:
                 audioSource.PlayOneShot(stopSE);
@@ -238,7 +337,7 @@ public class ReelController : MonoBehaviour
                 resultTextManager.TextChange((int)reelMover.someSlot, koyakuNum, koyaku);
                 break;
         }
-        //}
+
     }
 
     bool ReelStopper(int num, int slotType)
@@ -374,7 +473,7 @@ public class ReelController : MonoBehaviour
                                 eManager.FireEffectPlay(koyakuNum * 3);
                                 break;
                             case 2:
-                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
+                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum,"Player1","Player2");
                                 eManager.SwirlEffectPlay(koyakuNum * 3);
                                 break;
 
@@ -417,7 +516,7 @@ public class ReelController : MonoBehaviour
                                 SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum);
                                 break;
                             case 2:
-                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum);
+                                SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum, "Player1", "Player2");
                                 break;
 
                         }
@@ -475,7 +574,7 @@ public class ReelController : MonoBehaviour
 
     void ReelZugaraPositionInit()
     {
-        
+
         reelLeftZugaraNum.Add(0, 25.0f);
         reelLeftZugaraNum.Add(1, 45.0f);
         reelLeftZugaraNum.Add(2, 80.0f);

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: MageData
   m_EditorClassIdentifier: Assembly-CSharp::MageData
   MaxHealth: 25
-  BaseAttackPower: 5
-  BaseAttackSpeed: 1
-  BaseAttackRange: 5
-  BaseMoveSpeed: 2
-  BaseUnitCost: 0
+  BaseAttackPower: 2
+  BaseAttackSpeed: 0.1
+  BaseAttackRange: 6
+  BaseMoveSpeed: 0.5
+  BaseUnitCost: 20
   BaseUnitCoolDown: 0
   MoveDirection: {x: -1, y: 0, z: 0}
   MovementStyle: 0
