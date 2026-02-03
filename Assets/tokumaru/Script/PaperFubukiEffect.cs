@@ -112,7 +112,6 @@ public class PaperFubukiEffect : MonoBehaviour
                 float powerY = UnityEngine.Random.Range(300.0f, 1501.0f);
                 coin.Initialize(canvas.position + LeftPosition);
                 coin.Create(powerX, powerY, 3.0f);
-                Debug.Log("とりあえずここまで来ましたけど");
             }
         }
 
@@ -140,7 +139,6 @@ public class PaperFubukiEffect : MonoBehaviour
                 float powerY = UnityEngine.Random.Range(300.0f, 1500.0f);
                 coin.Initialize(canvas.position + RightPosition);
                 coin.Create(powerX, powerY, 3.0f);
-                Debug.Log("とりあえずここまで来ましたけど");
             }
         }
     }

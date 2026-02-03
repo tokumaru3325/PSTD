@@ -8,7 +8,7 @@ public class ReelMover : MonoBehaviour
     public enum State
     {
         nextBet,
-        nextLeber,
+        //nextLeber,
         nextreelL,
         nextreelC,
         nextreelR
@@ -43,13 +43,12 @@ public class ReelMover : MonoBehaviour
     {
         state = State.nextBet;
         nowStateNum = (int)state;
-        numMax = 5;
+        numMax = 4;
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
     public void StateChange()
     {

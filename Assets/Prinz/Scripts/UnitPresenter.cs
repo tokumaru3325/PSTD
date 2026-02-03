@@ -226,6 +226,22 @@ public class UnitPresenter : MonoBehaviour
         View.CreateBuffEffect(boost);
     }
 
+    private void ResetSize()
+    {
+        SetUnitSize(1);
+/*        Log($"Model.AttackPower : {Model.AttackPower}", LogType.Error);
+        Log($"Model.Health : {Model.Health}", LogType.Error);
+        Log($"Model.MoveSpeed : {Model.MoveSpeed}", LogType.Error);
+        Log($"Model.AttackRange : {Model.AttackRange}", LogType.Error);*/
+
+        //    Model.SetAttackPower(Model.AttackPower + boost);
+        //    Model.SetHealth(Model.Health * boost);
+        //    Model.SetMoveSpeed(Model.MoveSpeed / 2);
+        //    Model.SetAttackRange((Model.AttackRange / boost) + (0.25f * boost));
+        ApplyAttackRange();
+    //    View.CreateBuffEffect(boost);
+    }
+
     private void OnGameEndingNotify(bool ending, string tag)
     {
         Log($"{tag} died and notified this Unit", LogType.Warning);
@@ -339,6 +355,7 @@ public class UnitPresenter : MonoBehaviour
     {
         //   View.UpdateHealth(Model.Health / Model.MaxHealth);
         Model.NotifyUnitDeath();
+        ResetSize();
         Model.ClearTargets();
         Collider.enabled = false;
         View.EnableAttackRange(false);
