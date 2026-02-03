@@ -224,7 +224,7 @@ public class CPUBrain : MonoBehaviour
     {
         if (currentKnightCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
-        if(RondomGetter() == 4)
+        if(RondomGetter() == 4 || RondomGetter() == 3)
         {
             ps.MakeItBoss(3);
         }
@@ -237,7 +237,7 @@ public class CPUBrain : MonoBehaviour
     {
         if (currentArcherCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
-        if (RondomGetter() == 4)
+        if (RondomGetter() == 4 || RondomGetter() == 3)
         {
             ps.MakeItBoss(3);
         }
@@ -250,7 +250,7 @@ public class CPUBrain : MonoBehaviour
     {
         if (currentMageCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
-        if (RondomGetter() == 4)
+        if (RondomGetter() == 4 || RondomGetter() == 3)
         {
             ps.MakeItBoss(3);
         }
@@ -485,7 +485,7 @@ public class CPUBrain : MonoBehaviour
         {
             //w[CPUAction.UseBuffSlot] += 1f;
             w[CPUAction.UseBuffSlot] += 1f;
-            w[CPUAction.wantToMoneySlot] += 2.0f;
+            w[CPUAction.wantToMoneySlot] += 1.0f;
         }
 
         // 20. CPU ユニットが少ない × CPU バフあり
