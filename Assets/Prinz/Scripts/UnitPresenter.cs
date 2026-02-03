@@ -97,6 +97,9 @@ public class UnitPresenter : MonoBehaviour
         // 2026.01.18 ウー start
         UpdateBuffEffect(buffs);
         // 2026.01.18 ウー end
+
+        //test size
+        MakeItBoss(5);
     }
 
     // 2026.01.23 ウー start
@@ -211,6 +214,18 @@ public class UnitPresenter : MonoBehaviour
 
         //    Log($"Name set to {gameObject.name}", LogType.Error);
     }
+
+    public void MakeItBoss(float boost)
+    {
+        SetUnitSize(boost);
+        Model.SetAttackPower(Model.AttackPower + boost);
+        Model.SetHealth(Model.Health * boost);
+        Model.SetMoveSpeed(Model.MoveSpeed / 2);
+        Model.SetAttackRange((Model.AttackRange / boost) + (0.25f * boost));
+        ApplyAttackRange();
+        View.CreateBuffEffect(boost);
+    }
+
     private void OnGameEndingNotify(bool ending, string tag)
     {
         Log($"{tag} died and notified this Unit", LogType.Warning);
@@ -331,12 +346,12 @@ public class UnitPresenter : MonoBehaviour
 
     public void FaceRight()
     {
-        transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+        transform.localScale = new Vector3(-1 * Model.Size, transform.localScale.y, transform.localScale.z);
     }
 
     public void FaceLeft()
     {
-        transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+        transform.localScale = new Vector3(1 * Model.Size, transform.localScale.y, transform.localScale.z);
     }
     public void OnEnterState(IUnitState EnteringState)
     {
@@ -455,6 +470,12 @@ public class UnitPresenter : MonoBehaviour
     //=====================================================================================================
     //=====================================================================================================
     #region Access Model
+
+    public void SetUnitSize(float amount)
+    {
+        Model?.SetSize(amount);
+        transform.localScale = new Vector3(amount, amount, amount);
+    }
 
     public void SetMoveDirection(Vector3 direction)
     {

@@ -5,10 +5,17 @@ public class Player : MonoBehaviour
 {
     public float Money;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    //[2026/01/31] プリンス Start
+    [SerializeField] private float startingMoney;
+    //[2026/01/31] プリンス End
+
+// Start is called once before the first execution of Update after the MonoBehaviour is created
+void Start()
     {
-        Money = 0.0f;
+        //[2026/01/31] プリンス Start
+        Money = startingMoney;
+        //Money = 0.0f;
+        //[2026/01/31] プリンス End
         SlotSceneManager.AddFuncToMoneySlot(AddMoneyBySlot);
     }
 

@@ -14,6 +14,7 @@ public abstract class UnitData : ScriptableObject
     public float BaseAttackSpeed;
     public float BaseAttackRange;
     public float BaseMoveSpeed;
+    public float BaseSize;
 
     public int BaseUnitCost;
     public float BaseUnitCoolDown;
