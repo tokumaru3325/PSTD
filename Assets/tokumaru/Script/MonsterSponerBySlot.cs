@@ -39,7 +39,7 @@ public class MonsterSponerBySlot : MonoBehaviour
 
     }
 
-    public void CallBack_Spawn(UnitID type, string playertag)
+    public void CallBack_Spawn(string playertag, int n)
     {
         //Monsterをスポーンさせる
         if (playertag != _playerTag) return;
@@ -48,9 +48,38 @@ public class MonsterSponerBySlot : MonoBehaviour
 
         // 2026.01.27 ウー start
         //unitObjectPool.GetObj(type, mySpawnPos, _unit[(int)type], enemyPos, playertag,); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
-
+        UnitID type = UnitID.Knight;
         PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
-        unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+        UnitPresenter ps;
+        switch (n)
+        {
+            case 0:
+                type = UnitID.Knight;
+                ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+                ps.MakeItBoss(2);
+                break;
+            case 1:
+                type = UnitID.Archer;
+                ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+                ps.MakeItBoss(2);
+                break;
+            case 2:
+                type = UnitID.Archer;
+                ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+                ps.MakeItBoss(3);
+                break;
+            case 3:
+                type = UnitID.Knight;
+                ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+                ps.MakeItBoss(3);
+                break;
+            case 4:
+                type = UnitID.Mage;
+                ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
+                ps.MakeItBoss(3);
+                break;
+        }
+
 
         // 2026.01.27 ウー end
         _player.Money -= _unit[(int)type].BaseUnitCost;

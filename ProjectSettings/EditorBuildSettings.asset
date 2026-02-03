@@ -30,6 +30,9 @@ EditorBuildSettings:
     path: Assets/WuBranch/Scenes/MultiGame.unity
     guid: 2af4bca664b206844a17d6ca0c9125a3
   - enabled: 1
+    path: Assets/tokumaru/Scene/GameCopyT.unity
+    guid: f50196e3c525ea54eaa5a63f3998ad07
+  - enabled: 1
     path: Assets/tokumaru/Scene/Slot.unity
     guid: 7d85126068fe6744899cc67f90ed1895
   - enabled: 1

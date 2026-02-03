@@ -468,8 +468,7 @@ public class ReelController : MonoBehaviour
                                 eManager.CoinEffectPlay(koyakuNum * 3);
                                 break;
                             case 1:
-                                if (koyakuNum >= 3) koyakuNum = 2;
-                                SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum); //(UnitID)koyakuNum
+                                SlotSceneManager.BroadcastMonsterSlotResult(koyakuNum); //(UnitID)koyakuNum
                                 eManager.FireEffectPlay(koyakuNum * 3);
                                 break;
                             case 2:
@@ -513,7 +512,7 @@ public class ReelController : MonoBehaviour
                         switch (slotType)
                         {
                             case 1:
-                                SlotSceneManager.BroadcastMonsterSlotResult((UnitID)koyakuNum);
+                                SlotSceneManager.BroadcastMonsterSlotResult(koyakuNum);
                                 break;
                             case 2:
                                 SlotSceneManager.BroadcastBuffSlotResult((BuffType)koyakuNum, "Player1", "Player2");
