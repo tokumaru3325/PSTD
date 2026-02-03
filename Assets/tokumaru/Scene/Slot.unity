@@ -253,7 +253,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 60}
+  m_SizeDelta: {x: 800, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &241382830
 GameObject:
@@ -719,6 +719,18 @@ PrefabInstance:
       propertyPath: 'buffSprite.Array.data[2]'
       value: 
       objectReference: {fileID: 8362059311784080691, guid: f24afcb301428164284f238945c71883, type: 3}
+    - target: {fileID: 1194358888919311864, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: 'monsterSprite.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2926658095936138768, guid: 918e493cb59fab34287d762d0db288f6, type: 3}
+    - target: {fileID: 1194358888919311864, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: 'monsterSprite.Array.data[1]'
+      value: 
+      objectReference: {fileID: -5767519482288059350, guid: 2628a01834dfa4d4baf24c504c3a84c3, type: 3}
+    - target: {fileID: 1194358888919311864, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
+      propertyPath: 'monsterSprite.Array.data[2]'
+      value: 
+      objectReference: {fileID: -2391447147739565673, guid: d4295aa7f306ab74890c42294efd8af5, type: 3}
     - target: {fileID: 1511903859530921725, guid: 67c0d8b5716af8745bde948987b517f4, type: 3}
       propertyPath: eManager
       value: 
