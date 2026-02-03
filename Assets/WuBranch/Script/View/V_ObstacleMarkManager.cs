@@ -15,9 +15,9 @@ public class V_ObstacleMarkManager : MonoBehaviour
     private C_MapManager _mapManager;
 
     /// <summary>
-    /// 
+    /// マーク
     /// </summary>
-    private V_ObstacleMark[] _marks;
+    private V_ObstacleMark[] _marks = new V_ObstacleMark[0];
 
     /// <summary>
     /// 障害物
