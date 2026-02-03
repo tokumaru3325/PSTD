@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: b62500cea37683d4f910e309b7511bc2
+guid: 0445306d5d5f02d4b9b3bfee6172d802
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9132482472714745893
-    second: Haitouhyou_0
+      213: 5246262361569023659
+    second: S__101605381_0 (1)_0
+  - first:
+      213: -9171154459251400175
+    second: S__101605381_0 (1)_1
+  - first:
+      213: 1049099206534690818
+    second: S__101605381_0 (1)_2
+  - first:
+      213: 4004060966765280492
+    second: S__101605381_0 (1)_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Haitouhyou_0
+      name: S__101605381_0 (1)_0
       rect:
         serializedVersion: 2
-        x: 63
-        y: 39
-        width: 898
-        height: 306
+        x: 119
+        y: 276
+        width: 350
+        height: 409
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +124,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bd74b58b397e24180800000000000000
-      internalID: -9132482472714745893
+      spriteID: ba6d2db62d77ec840800000000000000
+      internalID: 5246262361569023659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: S__101605381_0 (1)_1
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 285
+        width: 333
+        height: 393
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 112a4143c9389b080800000000000000
+      internalID: -9171154459251400175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: S__101605381_0 (1)_2
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 287
+        width: 355
+        height: 386
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 208f4a38b262f8e00800000000000000
+      internalID: 1049099206534690818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: S__101605381_0 (1)_3
+      rect:
+        serializedVersion: 2
+        x: 1291
+        y: 293
+        width: 346
+        height: 377
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cec3d0f1c38419730800000000000000
+      internalID: 4004060966765280492
       vertices: []
       indices: 
       edges: []
@@ -135,7 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Haitouhyou_0: -9132482472714745893
+      S__101605381_0 (1)_0: 5246262361569023659
+      S__101605381_0 (1)_1: -9171154459251400175
+      S__101605381_0 (1)_2: 1049099206534690818
+      S__101605381_0 (1)_3: 4004060966765280492
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

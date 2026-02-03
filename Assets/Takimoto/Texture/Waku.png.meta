@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b62500cea37683d4f910e309b7511bc2
+guid: 93b275f57c1e69a4bbaaf68b03d63bd4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9132482472714745893
-    second: Haitouhyou_0
+      213: -8932849220893406879
+    second: 24961739_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Haitouhyou_0
+      name: 24961739_0
       rect:
         serializedVersion: 2
-        x: 63
-        y: 39
-        width: 898
-        height: 306
+        x: 6
+        y: 6
+        width: 3828
+        height: 1067
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bd74b58b397e24180800000000000000
-      internalID: -9132482472714745893
+      spriteID: 169068c36f4280480800000000000000
+      internalID: -8932849220893406879
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Haitouhyou_0: -9132482472714745893
+      24961739_0: -8932849220893406879
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
