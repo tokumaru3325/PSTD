@@ -22,6 +22,7 @@ public class EndingManager : MonoBehaviour
     public void OnButton_ReturnTitle()
     {
         SceneManager.LoadScene("TitleScene");
+        SlotSceneManager.yey();
     }
 
     public static void OnEndingSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -211,6 +211,13 @@ public class SlotSceneManager : MonoBehaviour
         //}
     }
 
+    public static void yey()
+    {
+        openMoney = false;
+        openBuff = false;
+        openMonster = false;
+    }
+
     /// <summary>
     /// 引数int型1つ
     /// </summary>
