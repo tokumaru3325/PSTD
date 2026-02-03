@@ -99,7 +99,7 @@ public class UnitPresenter : MonoBehaviour
         // 2026.01.18 ウー end
 
         //test size
-        MakeItBoss(5);
+        // MakeItBoss(5);
     }
 
     // 2026.01.23 ウー start

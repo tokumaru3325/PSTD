@@ -17,6 +17,7 @@ MonoBehaviour:
   BaseAttackSpeed: 1
   BaseAttackRange: 5
   BaseMoveSpeed: 2
+  BaseSize: 1
   BaseUnitCost: 0
   BaseUnitCoolDown: 0
   MoveDirection: {x: -1, y: 0, z: 0}
