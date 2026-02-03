@@ -12,7 +12,8 @@ public class SpawnButton : MonoBehaviour
 
     private Image _imageComp;
     private Button _buttonComp;
-    private TextMeshProUGUI _textComp;
+    private TextMeshProUGUI _textDecreaseMoney;
+    private TextMeshProUGUI _textCost;
     private Vector2 _textCompStartPosition;
 
     private float _timer = 10.0f;
@@ -123,13 +124,17 @@ public class SpawnButton : MonoBehaviour
         TextMeshProUGUI[] Texts = SpawnButtonPrefab.GetComponentsInChildren<TextMeshProUGUI>();
         for (int i = 0; i < Texts.Length; i++)
         {
-            if (Texts[i].gameObject.name == "Text_Cost")
+            if (Texts[i].gameObject.name == "Text_DecreaseMoney")
             {
-                _textComp = Texts[i];
-                _textComp.gameObject.SetActive(false);
-                _textCompStartPosition = _textComp.rectTransform.anchoredPosition;
-                _textComp.SetText("-" + _unit.BaseUnitCost);
-                break;
+                _textDecreaseMoney = Texts[i];
+                _textDecreaseMoney.gameObject.SetActive(false);
+                _textCompStartPosition = _textDecreaseMoney.rectTransform.anchoredPosition;
+                _textDecreaseMoney.SetText("-" + _unit.BaseUnitCost);
+            }
+            else if (Texts[i].gameObject.name == "Text_Cost")
+            {
+                _textCost = Texts[i];
+                _textCost.SetText("" + _unit.BaseUnitCost);
             }
         }
 
@@ -152,12 +157,12 @@ public class SpawnButton : MonoBehaviour
 
             if (_timer >= 0.5f)
             {
-                _textComp.gameObject.SetActive(false);
+                _textDecreaseMoney.gameObject.SetActive(false);
             }
             else
             {
-                Debug.Log("Text_Cost is moving");
-                _textComp.rectTransform.anchoredPosition += new Vector2(0.0f, 50.0f) * Time.fixedDeltaTime;
+                Debug.Log("Text_DecreaseMoney is moving");
+                _textDecreaseMoney.rectTransform.anchoredPosition += new Vector2(0.0f, 50.0f) * Time.fixedDeltaTime;
             }
 
             _imageComp.fillAmount += Time.fixedDeltaTime / _unit.BaseUnitCoolDown;
@@ -244,8 +249,8 @@ public class SpawnButton : MonoBehaviour
         _timer = 0.0f;
         _player.Money -= _unit.BaseUnitCost;
 
-        _textComp.gameObject.SetActive(true);
-        _textComp.rectTransform.anchoredPosition = _textCompStartPosition;
+        _textDecreaseMoney.gameObject.SetActive(true);
+        _textDecreaseMoney.rectTransform.anchoredPosition = _textCompStartPosition;
 
         _bPushed = true;
     }
