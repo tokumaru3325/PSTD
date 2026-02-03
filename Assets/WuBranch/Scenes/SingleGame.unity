@@ -25299,6 +25299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0f67de95fa1a74ca690031352b7cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  soundSlotSpinController: {fileID: 0}
   soundGroups:
   - {fileID: 11400000, guid: c687c214a69fbb24ca289de6a83a3059, type: 2}
   - {fileID: 11400000, guid: 8b5b845b83b8338409b69fa862b8b7db, type: 2}
@@ -25315,6 +25316,8 @@ MonoBehaviour:
   bgmSource: {fileID: 2105267425}
   bgmMainClip: {fileID: 8300000, guid: a911c226d31220e41b62bb14a98b791a, type: 3}
   bgmTitleClip: {fileID: 8300000, guid: f212eaaf6a0348b48b99058f1a145003, type: 3}
+  _titleBgmVolume: 1
+  _mainBgmVolume: 1
 --- !u!82 &2105267427
 AudioSource:
   m_ObjectHideFlags: 0
@@ -26841,7 +26844,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2142480930
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26874,7 +26877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.8352941}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.84313726}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

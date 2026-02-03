@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 public class V_DarkMask : MonoBehaviour, IPointerDownHandler
 {
 
+    public static V_DarkMask Instance;
+
     /// <summary>
     /// クリックできるかどうかのフラグ
     /// </summary>
@@ -15,6 +17,24 @@ public class V_DarkMask : MonoBehaviour, IPointerDownHandler
     /// 閉じた後の処理
     /// </summary>
     public Action OnClosed;
+
+    void Awake()
+    {
+        // 初期化 Instance
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        CloseMask();
+    }
 
     /// <summary>
     /// クリックできるようにする
