@@ -21,6 +21,7 @@ public class EndingManager : MonoBehaviour
 
     public void OnButton_ReturnTitle()
     {
+        _isWin = false;
         SceneManager.LoadScene("TitleScene");
     }
 
