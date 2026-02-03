@@ -37,11 +37,11 @@ public class C_GlobalVariable : MonoBehaviour
     private void GameShutdown()
     {
         // ネットワーク上の物も全部シャットダウン
-        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+       /* if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
         {
             SteamMatchmaking.LeaveLobby(_datas.RoomID);
             NetworkManager.Singleton.Shutdown();
-        }
+        }*/
         Application.Quit();
     }
 
