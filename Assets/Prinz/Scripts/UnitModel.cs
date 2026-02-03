@@ -40,6 +40,7 @@ public abstract class UnitModel
         AttackSpeed = data.BaseAttackSpeed;
         AttackRange = data.BaseAttackRange;
         MoveSpeed = data.BaseMoveSpeed;
+        Size = data.BaseSize;
         UnitCost = data.BaseUnitCost;
         UnitCoolDown = data.BaseUnitCoolDown;
         MoveDirection = data.MoveDirection;
@@ -57,6 +58,7 @@ public abstract class UnitModel
     public float TotalAttackSpeed => AttackSpeed + BuffData.AttackSpeed;
     public float MoveSpeed { get; private set; }
     public float TotalMoveSpeed => MoveSpeed + BuffData.MoveSpeed;
+    public float Size { get; private set; }
     public int UnitCost { get; private set; }
     public float UnitCoolDown { get; private set; }
     public Vector3 MoveDirection { get; private set; }
@@ -92,7 +94,7 @@ public abstract class UnitModel
 
     public event Action<Vector3, Vector3> OnDirectionChanged;
 
-    public event Action<UnitPresenter> OnUnitSpawn; //change to static ?
+    public event Action<UnitPresenter> OnUnitSpawn;
 
     public static event Action<UnitPresenter> OnUnitDeath;
 
@@ -111,12 +113,6 @@ public abstract class UnitModel
         Owner.Log("This Unit is not supposed to Heal", LogType.Error);
     }
     public abstract void PlayerAttack(float dt);
-    public bool CanAttack { get; private set; }
-
-    public void AllowAttack(bool canattack)
-    {
-        CanAttack = canattack;
-    }
 
     public UnitData GetDataType()
     {
@@ -158,7 +154,7 @@ public abstract class UnitModel
 
     public void NotifyUnitDeath()
     {
-        Owner.Log($"Unit from {PlayerSide} notified death", LogType.Warning);
+     //   Owner.Log($"Unit from {PlayerSide} notified death", LogType.Warning);
         OnUnitDeath?.Invoke(Owner);
     }
 
@@ -266,6 +262,15 @@ public abstract class UnitModel
         MoveSpeed = Mathf.Max(amount, 0.0f);
     }
 
+    public void SetAttackRange(float amount)
+    {
+        AttackRange = Mathf.Max(amount, 1.0f);
+    }
+    public void SetSize(float amount)
+    {
+        Size = amount;
+    }
+
     public void SetUnitCost(int amount)
     {
         UnitCost = (int)MathF.Max(amount, 0);
@@ -282,7 +287,7 @@ public abstract class UnitModel
         {
             MoveDirection = direction;
             OnDirectionChanged?.Invoke(direction, MoveDirection);
-            Debug.Log($"MoveDirection: {MoveDirection}");
+        //    Debug.Log($"MoveDirection: {MoveDirection}");
         }
     }
 
