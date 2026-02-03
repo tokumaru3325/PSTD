@@ -252,7 +252,7 @@ public class SpawnButton : MonoBehaviour
         UnitPresenter ps = UnitObjectPool.Instance.GetObj(_unitType, mySpawnPos, enemyPos, _playerTag, _enemyTag, strategy);//[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
 
         //20260202得丸陽生　start
-        ps.dead += Chukei;
+        //ps.dead += Chukei;
         //20260202得丸陽生　end
 
         _buttonComp.interactable = false;

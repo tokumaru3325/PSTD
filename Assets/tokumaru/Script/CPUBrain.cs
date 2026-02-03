@@ -135,16 +135,18 @@ public class CPUBrain : MonoBehaviour
         archerB.spawn += AddPlayerUnitCount;
         meigeB.spawn += AddPlayerUnitCount;
 
-        solverB.ripiter += SubPlayerUnitCount;
-        archerB.ripiter += SubPlayerUnitCount;
-        meigeB.ripiter += SubPlayerUnitCount;
+
+        UnitModel.OnUnitDeath += SubUnitCount;
+        //solverB.ripiter += SubPlayerUnitCount;
+        //archerB.ripiter += SubPlayerUnitCount;
+        //meigeB.ripiter += SubPlayerUnitCount;
 
         _CPUSpawnPos = GetSpawnPos(_CPU.gameObject);
         _soloPlayerSpawnPos = GetSpawnPos(_soloPlayer.gameObject);
+        cts = new CancellationTokenSource();
 
         if (!useBrain)
         {
-            cts = new CancellationTokenSource();
             executor = new CPUFileLoader(
                 Path.Combine(Application.streamingAssetsPath, "CPU/data.csv"),
                 intervalSeconds: 10f
@@ -211,8 +213,12 @@ public class CPUBrain : MonoBehaviour
     {
         if (currentKnightCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
+        if(RondomGetter() == 4)
+        {
+            ps.MakeItBoss(3);
+        }
+        ps.MakeItBoss(3);
         state.cpuUnitCount++;
-        ps.dead += SubCPUUnitCount;
         currentKnightCooldown = knightCooldown;
         _CPU.Money -= _Knight.BaseUnitCost;
     }
@@ -220,8 +226,12 @@ public class CPUBrain : MonoBehaviour
     {
         if (currentArcherCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
+        if (RondomGetter() == 4)
+        {
+            ps.MakeItBoss(3);
+        }
+        ps.MakeItBoss(3);
         state.cpuUnitCount++;
-        ps.dead += SubCPUUnitCount;
         currentArcherCooldown = archerCooldown;
         _CPU.Money -= _Archer.BaseUnitCost;
     }
@@ -229,8 +239,12 @@ public class CPUBrain : MonoBehaviour
     {
         if (currentMageCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
+        if (RondomGetter() == 4)
+        {
+            ps.MakeItBoss(3);
+        }
+        ps.MakeItBoss(3);
         state.cpuUnitCount++;
-        ps.dead += SubCPUUnitCount;
         currentMageCooldown = mageCooldown;
         _CPU.Money -= _Mage.BaseUnitCost;
     }
@@ -286,9 +300,12 @@ public class CPUBrain : MonoBehaviour
         state.playerUnitCount--;
     }
 
-    void SubCPUUnitCount()
+    void SubUnitCount(UnitPresenter ps)
     {
-        state.cpuUnitCount--;
+        if (ps.GetPlayerSide() == "Player1")
+            state.playerUnitCount--;
+        else
+            state.cpuUnitCount++;
     }
 
     private CPUAction ApplyCombinedConditions(GameState state)
@@ -620,8 +637,8 @@ public class CPUBrain : MonoBehaviour
 
     private void Update()
     {
-        //playerUnit = state.playerUnitCount;
-        //CPUUnit = state.cpuUnitCount;
+        playerUnit = state.playerUnitCount;
+        CPUUnit = state.cpuUnitCount;
         //Debug.Log($"今のぷれいや所持金{_soloPlayer.Money}今の自分の所持金{_CPU.Money}");
         //Debug.Log($"今のプレイヤーのバフ{playerBuffList.GetListLength()}");
         //Debug.Log($"今のcpuのバフ{cpuBuffList.GetListLength()}");
