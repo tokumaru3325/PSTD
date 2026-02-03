@@ -95,7 +95,7 @@ public class UnitPresenter : MonoBehaviour
         Model.NotifySpawn();
 
         // 2026.01.18 ウー start
-        UpdateBuffEffect(buffs);
+        //UpdateBuffEffect(buffs);
         // 2026.01.18 ウー end
 
         //test size
@@ -735,7 +735,7 @@ public class UnitPresenter : MonoBehaviour
     private void UpdateTargets(UnitPresenter target)
     {
         if (_IsGameEnding) return;
-        Log($"Unit from {Model.PlayerSide} tries to update targets", LogType.Warning);
+    //    Log($"Unit from {Model?.PlayerSide} tries to update targets", LogType.Warning);
         if (Model?.FindTarget(target) != null)
         {
             Log($"Unit from {Model.PlayerSide} updates targets and removes a Unit from {target.Model.PlayerSide}", LogType.Warning);

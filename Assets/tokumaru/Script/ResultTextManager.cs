@@ -36,13 +36,13 @@ public class ResultTextManager : MonoBehaviour
                 switch (resultNum)
                 {
                     case 0:
-                        m_TextMeshProUGUI.SetText("はずれ！");
-                        break;
-                    case 1:
                         m_TextMeshProUGUI.SetText("15円！");
                         break;
-                    case 2:
+                    case 1:
                         m_TextMeshProUGUI.SetText("30円！");
+                        break;
+                    case 2:
+                        m_TextMeshProUGUI.SetText("100円！");
                         break;
                     case 3:
                         m_TextMeshProUGUI.SetText("150円！");
@@ -58,7 +58,28 @@ public class ResultTextManager : MonoBehaviour
             }
             else if(slotNum == 1)
             {
-                m_TextMeshProUGUI.SetText("何かをどのくらいの強さでどれだけ");
+                switch (resultNum)
+                {
+                    case 0:
+                        m_TextMeshProUGUI.SetText("Knight（2倍出現）！");
+                        break;
+                    case 1:
+                        m_TextMeshProUGUI.SetText("Archer（2倍出現）！");
+                        break;
+                    case 2:
+                        m_TextMeshProUGUI.SetText("Archer（3倍出現）！");
+                        break;
+                    case 3:
+                        m_TextMeshProUGUI.SetText("Knight（3倍出現）！");
+                        break;
+                    case 4:
+                        m_TextMeshProUGUI.SetText("Mage（3倍出現）！");
+                        break;
+                    default:
+                        m_TextMeshProUGUI.SetText("Mage（2倍出現）！");
+                        break;
+
+                }
             }
             else
             {

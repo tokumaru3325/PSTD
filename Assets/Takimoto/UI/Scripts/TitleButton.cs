@@ -96,7 +96,7 @@ public class TitleButton : MonoBehaviour
             // 2026.01.21 ウー start
             CancelAction();
             // 2026.01.21 ウー end
-            SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
+            SceneManager.LoadScene("GameCopyT", LoadSceneMode.Single);
         }
         // 2026.01.21 ウー end
     }
@@ -170,7 +170,7 @@ public class TitleButton : MonoBehaviour
     private async UniTaskVoid ChangeToGameScene()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(1));
-        SceneManager.LoadScene("GameCopy", LoadSceneMode.Single);
+        SceneManager.LoadScene("GameCopyT", LoadSceneMode.Single);
     }
 
     /// <summary>

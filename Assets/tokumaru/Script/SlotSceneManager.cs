@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public delegate void MoneySlotResult(int i);
-public delegate void MonsterSlotResult(UnitID _unitType, string playertag);
+public delegate void MonsterSlotResult(string playertag,int num);
 public delegate void BuffSlotResult(BuffType type);
 
 
@@ -12,7 +12,7 @@ public delegate void BuffSlotResult(BuffType type);
 public class SlotSceneManager : MonoBehaviour
 {
     private static MoneySlotResult moneySlotResult = (int i) => { };
-    private static MonsterSlotResult monsterSlotResult = (UnitID _unitTyp, string playertag) => { };
+    private static MonsterSlotResult monsterSlotResult = (string playertag, int n) => { };
     private static BuffSlotResult buffSlotResult = (BuffType type) => { };
     private static bool openMoney = false;
     private static bool openMonster = false;
@@ -247,9 +247,9 @@ public class SlotSceneManager : MonoBehaviour
         moneySlotResult(i);
     }
 
-    public static void BroadcastMonsterSlotResult(UnitID _unitType)
+    public static void BroadcastMonsterSlotResult(int num)
     {
-        monsterSlotResult(_unitType, playerTag);
+        monsterSlotResult(playerTag,num);
     }
 
     public static void BroadcastBuffSlotResult(BuffType type,string playertag,string enemytag)

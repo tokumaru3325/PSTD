@@ -91,9 +91,10 @@ public class V_BuffList : MonoBehaviour
         if (!_buffPrefab)
             return null;
 
-        GameObject obj = Instantiate(_buffPrefab);
+        GameObject obj = Instantiate(_buffPrefab, _container.transform);
+        //obj.transform.localScale = Vector3.one;
         V_Buff buff = obj.GetComponent<V_Buff>();
-        obj.transform.SetParent(_container.transform);
+        //obj.transform.SetParent(_container.transform);
         return buff;
     }
 
