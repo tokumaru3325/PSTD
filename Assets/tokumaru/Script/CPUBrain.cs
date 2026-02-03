@@ -129,11 +129,21 @@ public class CPUBrain : MonoBehaviour
     float waitCount = 0.0f;
 
     bool wantToSlot = false;
+
+    private bool _IsGameFinished = false;
+    private void OnGameFinished(string deadplayer)
+    {
+        _IsGameFinished = true;
+    }
+
+
     private void Start()
     {
         solverB.spawn += AddPlayerUnitCount;
         archerB.spawn += AddPlayerUnitCount;
         meigeB.spawn += AddPlayerUnitCount;
+
+        M_Tower.OnPlayerDeath += OnGameFinished;
 
 
         UnitModel.OnUnitDeath += SubUnitCount;
@@ -171,6 +181,7 @@ public class CPUBrain : MonoBehaviour
 
     void OnTick(float time)
     {
+        if (_IsGameFinished) return;
         if (time >= _nextTime)
         {
             string command = loadedFile[readLineNumber % fileLineCount][0];
@@ -217,7 +228,7 @@ public class CPUBrain : MonoBehaviour
         {
             ps.MakeItBoss(3);
         }
-        ps.MakeItBoss(3);
+        //ps.MakeItBoss(3);
         state.cpuUnitCount++;
         currentKnightCooldown = knightCooldown;
         _CPU.Money -= _Knight.BaseUnitCost;
@@ -230,7 +241,7 @@ public class CPUBrain : MonoBehaviour
         {
             ps.MakeItBoss(3);
         }
-        ps.MakeItBoss(3);
+        //ps.MakeItBoss(3);
         state.cpuUnitCount++;
         currentArcherCooldown = archerCooldown;
         _CPU.Money -= _Archer.BaseUnitCost;
@@ -243,7 +254,7 @@ public class CPUBrain : MonoBehaviour
         {
             ps.MakeItBoss(3);
         }
-        ps.MakeItBoss(3);
+        //ps.MakeItBoss(3);
         state.cpuUnitCount++;
         currentMageCooldown = mageCooldown;
         _CPU.Money -= _Mage.BaseUnitCost;
@@ -637,6 +648,7 @@ public class CPUBrain : MonoBehaviour
 
     private void Update()
     {
+        if (_IsGameFinished) return;
         playerUnit = state.playerUnitCount;
         CPUUnit = state.cpuUnitCount;
         //Debug.Log($"今のぷれいや所持金{_soloPlayer.Money}今の自分の所持金{_CPU.Money}");
