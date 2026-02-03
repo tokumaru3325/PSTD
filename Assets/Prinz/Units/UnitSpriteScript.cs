@@ -4,6 +4,13 @@ public class UnitSpriteScript : MonoBehaviour
 {
     [SerializeField] private UnitView _view;
 
+    //public Material material { get; private set; }
+
+    private void Awake()
+    {
+     //   material = GetComponent<Material>();
+    }
+
     private void Start()
     {
         

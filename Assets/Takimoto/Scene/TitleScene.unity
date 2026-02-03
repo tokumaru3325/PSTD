@@ -1989,8 +1989,8 @@ MonoBehaviour:
   bgmSource: {fileID: 1127366168}
   bgmMainClip: {fileID: 8300000, guid: a911c226d31220e41b62bb14a98b791a, type: 3}
   bgmTitleClip: {fileID: 8300000, guid: f212eaaf6a0348b48b99058f1a145003, type: 3}
-  _titleBgmVolume: 0
-  _mainBgmVolume: 0
+  _titleBgmVolume: 0.8
+  _mainBgmVolume: 0.8
 --- !u!82 &1127366170
 AudioSource:
   m_ObjectHideFlags: 0
