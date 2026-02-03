@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: ArcherData
   m_EditorClassIdentifier: Assembly-CSharp::ArcherData
   MaxHealth: 40
-  BaseAttackPower: 0.05
-  BaseAttackSpeed: 0.14
-  BaseAttackRange: 5
-  BaseMoveSpeed: 0.75
+  BaseAttackPower: 1
+  BaseAttackSpeed: 3
+  BaseAttackRange: 7
+  BaseMoveSpeed: 5
+  BaseSize: 1
   BaseUnitCost: 15
   BaseUnitCoolDown: 1
   MoveDirection: {x: -1, y: 0, z: 0}
