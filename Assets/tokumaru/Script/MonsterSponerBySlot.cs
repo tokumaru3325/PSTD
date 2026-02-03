@@ -41,6 +41,7 @@ public class MonsterSponerBySlot : MonoBehaviour
 
     public void CallBack_Spawn(string playertag, int n)
     {
+        if (_player == null) return;
         //Monsterをスポーンさせる
         if (playertag != _playerTag) return;
         Vector3 mySpawnPos = GetSpawnPos(_player.gameObject);
@@ -51,38 +52,43 @@ public class MonsterSponerBySlot : MonoBehaviour
         UnitID type = UnitID.Knight;
         PathStrategy strategy = _policyMaker ? _policyMaker.CurrentStrategy : PathStrategy.Shortest;
         UnitPresenter ps;
+        int count = 0;
         switch (n)
         {
             case 0:
                 type = UnitID.Knight;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(2);
+                count = 0;
                 break;
             case 1:
                 type = UnitID.Archer;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(2);
+                count = 1;
                 break;
             case 2:
                 type = UnitID.Archer;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(3);
+                count = 1;
                 break;
             case 3:
                 type = UnitID.Knight;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(3);
+                count = 0;
                 break;
             case 4:
                 type = UnitID.Mage;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(3);
+                count = 2;
                 break;
         }
 
 
         // 2026.01.27 ウー end
-        _player.Money -= _unit[(int)type].BaseUnitCost;
 
     }
 

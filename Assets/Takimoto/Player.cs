@@ -35,13 +35,13 @@ void Start()
         switch (num)
         {
             case 0:
-                Money += 0;
-                break;
-            case 1:
                 Money += 15;
                 break;
-            case 2:
+            case 1:
                 Money += 30;
+                break;
+            case 2:
+                Money += 100;
                 break;
             case 3:
                 Money += 150;

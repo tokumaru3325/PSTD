@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArcherData
   m_EditorClassIdentifier: Assembly-CSharp::ArcherData
   MaxHealth: 40
-  BaseAttackPower: 1
+  BaseAttackPower: 2
   BaseAttackSpeed: 3
   BaseAttackRange: 7
   BaseMoveSpeed: 5
