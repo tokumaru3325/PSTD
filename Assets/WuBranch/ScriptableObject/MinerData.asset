@@ -19,7 +19,7 @@ MonoBehaviour:
   BaseMoveSpeed: 2
   BaseSize: 1
   BaseUnitCost: 10
-  BaseUnitCoolDown: 5
+  BaseUnitCoolDown: 1
   MoveDirection: {x: -1, y: 0, z: 0}
   MovementStyle: 0
   DangerLevel: 0
