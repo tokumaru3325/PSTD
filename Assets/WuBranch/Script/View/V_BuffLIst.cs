@@ -51,6 +51,16 @@ public class V_BuffList : MonoBehaviour
             Debug.LogError("didnot attach buff prefab");
     }
 
+    void OnDestroy()
+    {
+        if (manager)
+        {
+            Debug.Log("Release buff function");
+            manager.OnAddBuff -= HandleBuffAdded;
+            manager.OnRemoveBuff -= HandleBuffRemoved;
+        }
+    }
+
     /// <summary>
     /// バフを付与された処理
     /// </summary>
@@ -90,6 +100,12 @@ public class V_BuffList : MonoBehaviour
     {
         if (!_buffPrefab)
             return null;
+
+        if (!_container)
+        {
+            Debug.LogError($"container is null!");
+            return null;
+        }
 
         GameObject obj = Instantiate(_buffPrefab, _container.transform);
         //obj.transform.localScale = Vector3.one;

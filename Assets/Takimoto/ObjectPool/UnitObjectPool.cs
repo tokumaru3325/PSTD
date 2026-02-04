@@ -75,6 +75,15 @@ public class UnitObjectPool : MonoBehaviour
             _buffManager.OnRemoveBuff += HandleUpdateBuff;
         }
     }
+
+    void OnDestroy()
+    {
+        if (_buffManager)
+        {
+            _buffManager.OnAddBuff -= HandleUpdateBuff;
+            _buffManager.OnRemoveBuff -= HandleUpdateBuff;
+        }
+    }
     // 2026.01.18 ウー end
 
     //最初にいくつプールに貯めておくか
