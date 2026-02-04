@@ -40,6 +40,15 @@ public class CPUBuffList : MonoBehaviour
 
     }
 
+    void OnDestroy()
+    {
+        if (manager)
+        {
+            manager.OnAddBuff -= HandleBuffAdded;
+            manager.OnRemoveBuff -= HandleBuffRemoved;
+        }
+    }
+
     /// <summary>
     /// バフを付与された処理
     /// </summary>

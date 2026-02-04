@@ -95,7 +95,7 @@ public class UnitPresenter : MonoBehaviour
         Model.NotifySpawn();
 
         // 2026.01.18 ウー start
-        //UpdateBuffEffect(buffs);
+        UpdateBuffEffect(buffs);
         // 2026.01.18 ウー end
 
         //test size

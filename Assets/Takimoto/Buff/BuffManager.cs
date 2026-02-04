@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -54,12 +55,18 @@ public class BuffManager : MonoBehaviour
     /// バフを外された時の動き
     /// </summary>
     public Action<C_Buff> OnRemoveBuff;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private CancellationToken _destroyToken;
     // 2026.01.17 ウー end
 
     private void Start()
     {
         _player1Buffs = new List<C_Buff>();
         _player2Buffs = new List<C_Buff>();
+        _destroyToken = this.GetCancellationTokenOnDestroy();
         SlotSceneManager.OnSlotBuffResult += ReceiveSlotResult;
     }
 
@@ -141,12 +148,17 @@ public class BuffManager : MonoBehaviour
 
         // バフを作る
         C_Buff buff = CreateBuff(buffType, buffData, playerTag);
+        if (buff == null)
+        {
+            Debug.LogError("buff is null!");
+            return;
+        }
         playerBuffs.Add(buff);
         // 通知
         OnAddBuff?.Invoke(buff);
 
         AddBuufToPlayer(buff, target);
-        buff.StartCount(this.GetCancellationTokenOnDestroy());
+        buff.StartCount(_destroyToken);
     }
 
     public void TestButtonDown()
