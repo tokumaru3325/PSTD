@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0170592d116a44bb8a1f6f946f345b, type: 3}
+  m_Name: SlotReelData
+  m_EditorClassIdentifier: Assembly-CSharp::M_SlotReelData
+  ImageSize: {x: 270, y: 190}
+  MaxSpinSpeed: 1000
+  MinSpinSpeed: 300
+  StartSpinAcceleration: 50
+  Deceleration: 50
+  DistToStop: 20
+  TimeToStop: 1
+  MinSpeedToStop: 300

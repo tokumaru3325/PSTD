@@ -889,6 +889,7 @@ GameObject:
   - component: {fileID: 524948662}
   - component: {fileID: 524948661}
   - component: {fileID: 524948660}
+  - component: {fileID: 524948664}
   m_Layer: 5
   m_Name: Reel3
   m_TagString: Untagged
@@ -927,15 +928,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf07a76fb636df040b067eee50bc264b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
-  _reelID: 2
-  _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
-  _minSpinSpeed: 300
-  _startSpinAcceleration: 50
-  _deceleration: 50
-  _distToStop: 20
-  _timeToStop: 1
-  _minSpeedToStop: 300
 --- !u!114 &524948661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,6 +979,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 524948658}
   m_CullTransparentMesh: 1
+--- !u!114 &524948664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524948658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4710fbcc4d2969a4ba3e8f4beb04a13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_SlotReel
+  _data: {fileID: 11400000, guid: 4eb0112a8e9cae84a9d14926735abeae, type: 2}
 --- !u!1 &561256561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,6 +1138,7 @@ GameObject:
   - component: {fileID: 639521681}
   - component: {fileID: 639521680}
   - component: {fileID: 639521679}
+  - component: {fileID: 639521683}
   m_Layer: 5
   m_Name: Reel4
   m_TagString: Untagged
@@ -1171,15 +1177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf07a76fb636df040b067eee50bc264b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
-  _reelID: 3
-  _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
-  _minSpinSpeed: 300
-  _startSpinAcceleration: 50
-  _deceleration: 50
-  _distToStop: 20
-  _timeToStop: 1
-  _minSpeedToStop: 300
 --- !u!114 &639521680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,6 +1228,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639521677}
   m_CullTransparentMesh: 1
+--- !u!114 &639521683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639521677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4710fbcc4d2969a4ba3e8f4beb04a13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_SlotReel
+  _data: {fileID: 11400000, guid: 4eb0112a8e9cae84a9d14926735abeae, type: 2}
 --- !u!1 &653935602
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,7 +1409,7 @@ MonoBehaviour:
   _startDelay: 5
   _stopDelay: 3
   _nextDelay: 3
-  _slot: {fileID: 1052288835}
+  _slot: {fileID: 1052288836}
   _startBtn: {fileID: 561256564}
   _startImg:
     pressed: {fileID: 21300000, guid: 4ee106147eb921b43885ac0b442890fb, type: 3}
@@ -1714,6 +1724,7 @@ GameObject:
   - component: {fileID: 813530614}
   - component: {fileID: 813530613}
   - component: {fileID: 813530612}
+  - component: {fileID: 813530616}
   m_Layer: 5
   m_Name: Reel2
   m_TagString: Untagged
@@ -1752,15 +1763,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf07a76fb636df040b067eee50bc264b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
-  _reelID: 1
-  _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
-  _minSpinSpeed: 300
-  _startSpinAcceleration: 50
-  _deceleration: 50
-  _distToStop: 20
-  _timeToStop: 1
-  _minSpeedToStop: 300
 --- !u!114 &813530613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,6 +1814,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 813530610}
   m_CullTransparentMesh: 1
+--- !u!114 &813530616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813530610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4710fbcc4d2969a4ba3e8f4beb04a13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_SlotReel
+  _data: {fileID: 11400000, guid: 4eb0112a8e9cae84a9d14926735abeae, type: 2}
 --- !u!1 &847284065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1960,6 +1975,7 @@ GameObject:
   - component: {fileID: 1052288834}
   - component: {fileID: 1052288833}
   - component: {fileID: 1052288835}
+  - component: {fileID: 1052288836}
   m_Layer: 5
   m_Name: Slot
   m_TagString: Untagged
@@ -2043,71 +2059,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9aa08f52c2a3c54e85cf1fff8d76004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_TitleSlot
-  _reels:
-  - Reel: {fileID: 1145305505}
-    Sprites:
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-  - Reel: {fileID: 813530612}
-    Sprites:
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-  - Reel: {fileID: 524948660}
-    Sprites:
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-  - Reel: {fileID: 639521679}
-    Sprites:
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -7352339073622421304, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 215798499, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: 1407610273, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -73926452, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-    - {fileID: -1343340852, guid: bf4882297baa34c4382a6cd62f910484, type: 3}
-  _stopDelay: 1
-  _stopHeightOffset: 0
-  CustomControll: 1
-  _randomizeResult: 1
-  _startResults:
-  - Indices: 0100000006000000
-  - Indices: 0100000006000000
-  - Indices: 0100000006000000
-  - Indices: 0100000006000000
-  _closeResults:
-  - Indices: 0000000005000000
-  - Indices: 0200000007000000
-  - Indices: 0400000009000000
-  - Indices: 0300000008000000
-  _stopIndices: 01000000010000000100000001000000
-  _maxPlay: 3
+--- !u!114 &1052288836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052288830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a830d79974787940837037d13872861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_TitleSlot
+  _view: {fileID: 1052288835}
+  _reelControllers:
+  - {fileID: 1145305506}
+  - {fileID: 813530616}
+  - {fileID: 524948664}
+  - {fileID: 639521683}
+  _data: {fileID: 11400000, guid: 67fb91a94c7d339489ec4a2957420afc, type: 2}
 --- !u!1 &1127366167
 GameObject:
   m_ObjectHideFlags: 0
@@ -2401,6 +2371,7 @@ GameObject:
   - component: {fileID: 1145305503}
   - component: {fileID: 1145305502}
   - component: {fileID: 1145305505}
+  - component: {fileID: 1145305506}
   m_Layer: 5
   m_Name: Reel1
   m_TagString: Untagged
@@ -2490,15 +2461,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf07a76fb636df040b067eee50bc264b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::V_SlotReel
-  _reelID: 0
-  _imageSize: {x: 270, y: 190}
-  _maxSpinSpeed: 1000
-  _minSpinSpeed: 300
-  _startSpinAcceleration: 50
-  _deceleration: 50
-  _distToStop: 20
-  _timeToStop: 1
-  _minSpeedToStop: 300
+--- !u!114 &1145305506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145305500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4710fbcc4d2969a4ba3e8f4beb04a13a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::C_SlotReel
+  _data: {fileID: 11400000, guid: 4eb0112a8e9cae84a9d14926735abeae, type: 2}
 --- !u!1 &1270453786
 GameObject:
   m_ObjectHideFlags: 0
