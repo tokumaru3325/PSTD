@@ -39,7 +39,7 @@ public class TitleButton : MonoBehaviour
     /// スロット
     /// </summary>
     [SerializeField]
-    private V_TitleSlot _slot;
+    private C_TitleSlot _slot;
 
     /// <summary>
     /// キャンセル
@@ -133,7 +133,7 @@ public class TitleButton : MonoBehaviour
             await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token);
             _slot.OnClickStart();
             await UniTask.Delay(TimeSpan.FromSeconds(_stopDelay), cancellationToken: token);
-            _slot.OnStopAllReel();
+            _slot.OnStopAllReel(true);
         }
         catch (OperationCanceledException exp)
         {
@@ -149,7 +149,7 @@ public class TitleButton : MonoBehaviour
     /// <summary>
     /// スロットが停止した
     /// </summary>
-    private void OnSlotFinished(ResultType result)
+    private void OnSlotFinished(SlotResultType result)
     {
         // 次回
         if (!_slot.CustomControll)
@@ -157,9 +157,9 @@ public class TitleButton : MonoBehaviour
         else
         {
             _startBtn.sprite = _startImg.unPress;
-            if (result == ResultType.Start)
+            if (result == SlotResultType.Start)
                 ChangeToGameScene().Forget();
-            else if (result == ResultType.Close)
+            else if (result == SlotResultType.Close)
                 CloseGame().Forget();
         }
     }
