@@ -37,8 +37,7 @@ public class C_TitleSlot : MonoBehaviour
     /// </summary>
     public Action<SlotResultType> OnFinished;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         if (!_data)
         {
@@ -47,6 +46,11 @@ public class C_TitleSlot : MonoBehaviour
         }
 
         _model = new M_TitleSlot(_data);
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
         _currentResults = new int[_reelControllers.Length];
         _view.SetReelsSprite(_data.Reels);
 
