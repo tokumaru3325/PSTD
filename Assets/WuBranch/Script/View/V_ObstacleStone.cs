@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
+public class V_ObstacleStone : MonoBehaviour, IObstacleStoneView, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
 {
     /// <summary>
     /// 各段階の画像
@@ -45,10 +45,7 @@ public class V_ObstacleStone : MonoBehaviour, IPointerExitHandler, IPointerEnter
 
     void Awake()
     {
-        if (_myController)
-        {
-            _myController.SetView(this);
-        }
+        _myController = GetComponent<C_ObstacleStone>();
         _damageFlash = GetComponentInChildren<DamageFlash>();
         _uiShake = GetComponentInChildren<V_UIShake>();
         _minerSpawner = FindFirstObjectByType<V_MinerSpawnButton>();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class V_SlotReel : MonoBehaviour
+public class V_SlotReel : MonoBehaviour, ISlotReelView
 {
     /// <summary>
     /// 生成する図の大きさ

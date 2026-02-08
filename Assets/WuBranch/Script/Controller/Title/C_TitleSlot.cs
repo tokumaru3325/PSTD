@@ -3,12 +3,14 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(V_TitleSlot))]
 public class C_TitleSlot : MonoBehaviour
 {
 
-    [Tooltip("ビュー")]
-    [SerializeField]
-    private V_TitleSlot _view;
+    /// <summary>
+    /// ビュー
+    /// </summary>
+    private ITitleSlotView _view;
 
     [Tooltip("各ロールのコントローラー")]
     [SerializeField]
@@ -18,6 +20,9 @@ public class C_TitleSlot : MonoBehaviour
     [SerializeField]
     private M_TitleSlotData _data;
 
+    /// <summary>
+    /// カスタムコントロールが有効かどうか
+    /// </summary>
     public bool CustomControll => _model.CustomControll;
 
     private M_TitleSlot _model;
@@ -45,6 +50,7 @@ public class C_TitleSlot : MonoBehaviour
             return;
         }
 
+        _view = GetComponent<V_TitleSlot>();
         _model = new M_TitleSlot(_data);
     }
 

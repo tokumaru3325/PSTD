@@ -20,7 +20,7 @@ public class WantResult
     public int[] Indices;
 }
 
-public class V_TitleSlot : MonoBehaviour
+public class V_TitleSlot : MonoBehaviour, ITitleSlotView
 {
     /// <summary>
     /// ロールデータ

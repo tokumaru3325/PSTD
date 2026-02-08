@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
+public class V_PlayerTower : MonoBehaviour, IPlayerTowerView, IPointerExitHandler, IPointerEnterHandler
 {
     /// <summary>
     /// 各段階のタワーモデル
@@ -42,10 +42,6 @@ public class V_PlayerTower : MonoBehaviour, IPointerExitHandler, IPointerEnterHa
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (_playerController)
-        {
-            _playerController.SetView(this);
-        }
         _damageFlash = GetComponentInChildren<DamageFlash>();
         _uiShake = GetComponentInChildren<V_UIShake>();
         SetInitTowerImg();
