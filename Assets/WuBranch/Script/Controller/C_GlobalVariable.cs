@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
@@ -25,10 +26,16 @@ public class C_GlobalVariable : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameShutdown();
-        }
+        PressESC().Forget();
+    }
+
+    /// <summary>
+    /// ESCキーが押されたら
+    /// </summary>
+    private async UniTask PressESC()
+    {
+        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape));
+        GameShutdown();
     }
 
     /// <summary>
