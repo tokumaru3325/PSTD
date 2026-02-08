@@ -99,6 +99,7 @@ public class V_Buff : MonoBehaviour
     public void SlideIn()
     {
         Sequence mySequence = DOTween.Sequence();
+        mySequence.SetLink(this.gameObject);
         // 移動すると同時に拡大
         mySequence.Append(
             rectTransform.DOAnchorPosX(0, _moveDuration).SetEase(_slideInType)
@@ -115,6 +116,7 @@ public class V_Buff : MonoBehaviour
     public void SlideOut()
     {
         Sequence mySequence = DOTween.Sequence();
+        mySequence.SetLink(this.gameObject);
         // 移動すると同時に縮小
         mySequence.Append(
             rectTransform.DOAnchorPosX(_startOffsetX, _moveDuration).SetEase(_slideOutType)
