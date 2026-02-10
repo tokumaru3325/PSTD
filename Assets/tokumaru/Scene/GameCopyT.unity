@@ -420,6 +420,7 @@ MonoBehaviour:
   _unitType: 3
   _policyMaker: {fileID: 870321547}
   _mask: {fileID: 1977088083}
+  _canvasRaycaster: {fileID: 773190230}
   _markManger: {fileID: 107860609}
   _obstacleManager: {fileID: 226823602}
 --- !u!1 &92715459
@@ -16320,7 +16321,7 @@ MonoBehaviour:
   m_BlockingObjects: 1
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
 --- !u!114 &773190231
 MonoBehaviour:
   m_ObjectHideFlags: 0

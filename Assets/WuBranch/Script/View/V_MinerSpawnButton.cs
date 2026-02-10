@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class V_MinerSpawnButton : SpawnButton
 {
     [Tooltip("画面全体のマスク")]
     [SerializeField]
     private V_DarkMask _mask;
+
+    [Tooltip("キャンパスのグラフィックレイキャスター")]
+    [SerializeField]
+    private GraphicRaycaster _canvasRaycaster;
 
     [Tooltip("マーク管理者")]
     [SerializeField]
@@ -29,6 +34,7 @@ public class V_MinerSpawnButton : SpawnButton
         // 障害物だけが反応できるように
         Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
         raycaster.eventMask = LayerMask.GetMask("Obstacle");
+        _canvasRaycaster.blockingMask = LayerMask.GetMask("Obstacle");
         _obstacleManager.EnableObstacleSelection();
         _mask.EnableClickEvent();
         _mask.OpenMask();
@@ -56,6 +62,7 @@ public class V_MinerSpawnButton : SpawnButton
         // 障害物だけが反応できるように
         Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
         raycaster.eventMask = ~0;
+        _canvasRaycaster.blockingMask = LayerMask.GetMask("Nothing");
 
         _obstacleManager.DisableObstacleSelection();
         _markManger.CloseMarks();
