@@ -85,17 +85,11 @@ public class C_TitleSlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ForceWin().Forget();
-    }
-
-    /// <summary>
-    /// 強制的に当たる状態にする
-    /// </summary>
-    private async UniTask ForceWin()
-    {
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.M), cancellationToken: _cancellationToken);
-        Debug.Log("必ず当たる");
-        _model.ForceCorrect = true;
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log("必ず当たる");
+            _model.ForceCorrect = true;
+        }
     }
 
     public bool IsRunning => _model.IsRunning;

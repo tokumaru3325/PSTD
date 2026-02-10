@@ -1286,7 +1286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.Physics2DRaycaster
   m_EventMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 887
   m_MaxRayIntersections: 0
 --- !u!114 &330585550
 MonoBehaviour:
@@ -15721,6 +15721,7 @@ MonoBehaviour:
   _unitType: 3
   _policyMaker: {fileID: 1282031745}
   _mask: {fileID: 2142480933}
+  _canvasRaycaster: {fileID: 773190230}
   _markManger: {fileID: 1427018634}
   _obstacleManager: {fileID: 1791571549}
 --- !u!1 &773190229
@@ -15758,7 +15759,7 @@ MonoBehaviour:
   m_BlockingObjects: 1
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
 --- !u!114 &773190231
 MonoBehaviour:
   m_ObjectHideFlags: 0
