@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Steamworks;
 using Unity.Netcode;
 using UnityEngine;
@@ -25,10 +26,16 @@ public class C_GlobalVariable : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameShutdown();
-        }
+        PressESC().Forget();
+    }
+
+    /// <summary>
+    /// ESCキーが押されたら
+    /// </summary>
+    private async UniTask PressESC()
+    {
+        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape), cancellationToken: this.GetCancellationTokenOnDestroy());
+        GameShutdown();
     }
 
     /// <summary>
@@ -37,11 +44,11 @@ public class C_GlobalVariable : MonoBehaviour
     private void GameShutdown()
     {
         // ネットワーク上の物も全部シャットダウン
-       /* if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
-        {
-            SteamMatchmaking.LeaveLobby(_datas.RoomID);
-            NetworkManager.Singleton.Shutdown();
-        }*/
+        /* if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+         {
+             SteamMatchmaking.LeaveLobby(_datas.RoomID);
+             NetworkManager.Singleton.Shutdown();
+         }*/
         Application.Quit();
     }
 

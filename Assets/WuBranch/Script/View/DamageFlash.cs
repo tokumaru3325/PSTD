@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class DamageFlash : MonoBehaviour
@@ -23,7 +24,6 @@ public class DamageFlash : MonoBehaviour
     private AnimationCurve _flashSpeedCurve;
 
     private Material _material;
-    private Coroutine _flashCoroutine;
 
     void Awake()
     {
@@ -35,15 +35,14 @@ public class DamageFlash : MonoBehaviour
 
     public void TriggerFlash()
     {
-        _flashCoroutine = StartCoroutine(Flash());
+        Flash(this.GetCancellationTokenOnDestroy()).Forget();
     }
 
-    private IEnumerator Flash()
+    private async UniTask Flash(CancellationToken token)
     {
         // 色を設定してフラッシュを開始
         SetFlashColor();
 
-        float currentFlashAmount = 0f;
         float elapsedTime = 0f;
         while (elapsedTime < _flashDuration)
         {
@@ -51,10 +50,10 @@ public class DamageFlash : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             // フラッシュ量を0から1へ線形補間
-            currentFlashAmount = Mathf.Lerp(1f, _flashSpeedCurve.Evaluate(elapsedTime), elapsedTime / _flashDuration);
+            float currentFlashAmount = Mathf.Lerp(1f, _flashSpeedCurve.Evaluate(elapsedTime), elapsedTime / _flashDuration);
             SetFlashAmount(currentFlashAmount);
 
-            yield return null;
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(V_PlayerTower))]
 public class C_PlayerTowerController : MonoBehaviour
 {
     /// <summary>
@@ -12,7 +13,7 @@ public class C_PlayerTowerController : MonoBehaviour
     /// <summary>
     /// プレイヤーのタワービュー
     /// </summary>
-    private V_PlayerTower _playerView;
+    private IPlayerTowerView _playerView;
 
     /// <summary>
     /// プレイヤーのタワーモデル
@@ -22,6 +23,7 @@ public class C_PlayerTowerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _playerView = GetComponent<V_PlayerTower>();
         _playerModel = new M_Tower(Max_HP);
         _playerModel.OnHPChanged += OnUpdateHP;
         //[2025/12/23] プリンス START
@@ -37,15 +39,6 @@ public class C_PlayerTowerController : MonoBehaviour
     }
 
     /// <summary>
-    /// ビューを設定する
-    /// </summary>
-    /// <param name="view">プレイヤーのタワービュー</param>
-    public void SetView(V_PlayerTower view)
-    {
-        _playerView = view;
-    }
-
-    /// <summary>
     /// タワーの体力を減少させる
     /// </summary>
     /// <param name="damage">ダメージ量</param>
@@ -56,8 +49,7 @@ public class C_PlayerTowerController : MonoBehaviour
 
         _playerModel.SetHP(_playerModel.HP - damage);
 
-        if (_playerView)
-            _playerView.HandleDamageEffect();
+        _playerView.HandleDamageEffect();
     }
 
     /// <summary>
@@ -75,8 +67,7 @@ public class C_PlayerTowerController : MonoBehaviour
     /// <param name="hp"></param>
     private void OnUpdateHP(float hp)
     {
-        if (_playerView)
-            _playerView.UpdateHP(hp, Max_HP);
+        _playerView.UpdateHP(hp, Max_HP);
     }
 
     /// <summary>

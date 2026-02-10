@@ -10,7 +10,7 @@ public class C_SlotReel : MonoBehaviour
     private M_SlotReelData _data;
 
     private M_SlotReel _model;
-    private V_SlotReel _view;
+    private ISlotReelView _view;
 
     //[2026/01/30] プリンス start
     /// <summary>
@@ -31,7 +31,7 @@ public class C_SlotReel : MonoBehaviour
     /// <param name="reelID">ロールのID</param>
     /// <param name="sprites">表示する全画像</param>
     /// <param name="offset">初期高さ</param>
-    public void Initialize(V_SlotReel view, int reelID, Sprite[] sprites, float offset)
+    public void Initialize(ISlotReelView view, int reelID, Sprite[] sprites, float offset)
     {
         if (!_data)
         {

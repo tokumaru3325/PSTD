@@ -2,7 +2,8 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class C_ObstacleStone : MonoBehaviour
+[RequireComponent(typeof(V_ObstacleStone))]
+public class C_ObstacleStone : MonoBehaviour, IObstacleStoneController
 {
     [Tooltip("初期データ")]
     [SerializeField]
@@ -11,7 +12,7 @@ public class C_ObstacleStone : MonoBehaviour
     /// <summary>
     /// プレイヤーのタワービュー
     /// </summary>
-    private V_ObstacleStone _myView;
+    private IObstacleStoneView _myView;
 
     /// <summary>
     /// プレイヤーのタワーモデル
@@ -36,17 +37,9 @@ public class C_ObstacleStone : MonoBehaviour
         else
             _model = new M_ObstacleStone();
 
+        _myView = GetComponent<IObstacleStoneView>();
         _model.OnHPChanged += OnUpdateHP;
         CanBeSelected = false;
-    }
-
-    /// <summary>
-    /// ビューを設定する
-    /// </summary>
-    /// <param name="view">プレイヤーのタワービュー</param>
-    public void SetView(V_ObstacleStone view)
-    {
-        _myView = view;
     }
 
     /// <summary>
@@ -69,8 +62,7 @@ public class C_ObstacleStone : MonoBehaviour
         }
 
         SoundManager.Instance.PlaySE(SoundId.Mining, SEPlayParams.Default);
-        if (_myView)
-            _myView.HandleDamageEffect();
+        _myView?.HandleDamageEffect();
     }
 
     /// <summary>
@@ -80,8 +72,7 @@ public class C_ObstacleStone : MonoBehaviour
     /// <param name="maxHP">最大体力</param>
     private void OnUpdateHP(float hp, float maxHP)
     {
-        if (_myView)
-            _myView.UpdateHP(hp, maxHP);
+        _myView?.UpdateHP(hp, maxHP);
     }
 
     /// <summary>
@@ -93,7 +84,7 @@ public class C_ObstacleStone : MonoBehaviour
         OnDead?.Invoke(transform.position);
         this.gameObject.SetActive(false);
         // アニメーション終了待ちのための1秒
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: this.GetCancellationTokenOnDestroy());
         Destroy(this.gameObject);
     }
 
