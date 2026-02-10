@@ -153,21 +153,7 @@ public class C_SlotReel : MonoBehaviour
         if (diff < _model.DistToStop)
         {
             Debug.Log($"{gameObject.name} stop");
-            // 強制的に移動させる
-            _view.MoveReel(diff);
-            _model.IsStopping = false;
-            _model.CurrentSpinSpeed = 0;
-            // 2026.01.30 ウー start 止まる時音がずれるので修正
-            //[2026/01/30] プリンス start
-            activeReelSpinning--;
-            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
-            if (activeReelSpinning <= 0)
-            {
-                activeReelSpinning = 0;
-                //   SoundManager.Instance.StopSlotSpinSE();
-            }
-            //[2026/01/30] プリンス end
-            // 2026.01.30 ウー end
+            ForceMove(diff);
             // 通知
             OnStopped?.Invoke(_model.ReelID, _model.TargetIndex);
         }
@@ -196,20 +182,7 @@ public class C_SlotReel : MonoBehaviour
         if (Mathf.Abs(diff) < _model.DistToStop)
         {
             // 差を補填
-            _view.MoveReel(-diff);
-            _model.IsStopping = false;
-            _model.CurrentSpinSpeed = 0;
-            // 2026.01.30 ウー start 止まる時音がずれるので修正
-            //[2026/01/30] プリンス start
-            activeReelSpinning--;
-            SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
-            if (activeReelSpinning <= 0)
-            {
-                activeReelSpinning = 0;
-                //   SoundManager.Instance.StopSlotSpinSE();
-            }
-            //[2026/01/30] プリンス end
-            // 2026.01.30 ウー end
+            ForceMove(-diff);
             // 通知
             OnStopped?.Invoke(_model.ReelID, _view.FindTarget());
         }
@@ -217,6 +190,29 @@ public class C_SlotReel : MonoBehaviour
         {
             _view.MoveReel(-moveStep);
         }
+    }
+
+    /// <summary>
+    /// 強制的に移動させる
+    /// </summary>
+    /// <param name="diff">移動させる距離</param>
+    private void ForceMove(float diff)
+    {
+        // 強制的に移動させる
+        _view.MoveReel(diff);
+        _model.IsStopping = false;
+        _model.CurrentSpinSpeed = 0;
+        // 2026.01.30 ウー start 止まる時音がずれるので修正
+        //[2026/01/30] プリンス start
+        activeReelSpinning--;
+        SoundManager.Instance.PlaySE(SoundId.Impact, new SEPlayParams { clipIndex = 1 });
+        if (activeReelSpinning <= 0)
+        {
+            activeReelSpinning = 0;
+            //   SoundManager.Instance.StopSlotSpinSE();
+        }
+        //[2026/01/30] プリンス end
+        // 2026.01.30 ウー end
     }
 
     //[2026/01/30] プリンス start
