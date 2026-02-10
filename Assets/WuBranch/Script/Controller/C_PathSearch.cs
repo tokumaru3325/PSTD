@@ -117,6 +117,7 @@ public class C_PathSearch
         }
 
         // そうでない場合
+        _searchMap.Clear();
         for (int rowIndex = 0; rowIndex < path.Count; rowIndex++)
         {
             List<Node> rowNode = new();

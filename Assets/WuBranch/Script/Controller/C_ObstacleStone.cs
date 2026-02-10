@@ -84,7 +84,7 @@ public class C_ObstacleStone : MonoBehaviour, IObstacleStoneController
         OnDead?.Invoke(transform.position);
         this.gameObject.SetActive(false);
         // アニメーション終了待ちのための1秒
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: this.GetCancellationTokenOnDestroy());
         Destroy(this.gameObject);
     }
 

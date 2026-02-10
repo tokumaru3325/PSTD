@@ -34,7 +34,7 @@ public class C_GlobalVariable : MonoBehaviour
     /// </summary>
     private async UniTask PressESC()
     {
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape));
+        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape), cancellationToken: this.GetCancellationTokenOnDestroy());
         GameShutdown();
     }
 
@@ -44,11 +44,11 @@ public class C_GlobalVariable : MonoBehaviour
     private void GameShutdown()
     {
         // ネットワーク上の物も全部シャットダウン
-       /* if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
-        {
-            SteamMatchmaking.LeaveLobby(_datas.RoomID);
-            NetworkManager.Singleton.Shutdown();
-        }*/
+        /* if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient)
+         {
+             SteamMatchmaking.LeaveLobby(_datas.RoomID);
+             NetworkManager.Singleton.Shutdown();
+         }*/
         Application.Quit();
     }
 

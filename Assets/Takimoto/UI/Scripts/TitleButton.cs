@@ -73,6 +73,7 @@ public class TitleButton : MonoBehaviour
             if (!_slot.CustomControll)
                 StartSlot(_startDelay).Forget();
         }
+
         // 2026.01.21 ウー end
     }
 
@@ -169,7 +170,7 @@ public class TitleButton : MonoBehaviour
     /// </summary>
     private async UniTaskVoid ChangeToGameScene()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: this.GetCancellationTokenOnDestroy());
         SceneManager.LoadScene("GameCopyT", LoadSceneMode.Single);
     }
 
@@ -178,7 +179,7 @@ public class TitleButton : MonoBehaviour
     /// </summary>
     private async UniTaskVoid CloseGame()
     {
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: this.GetCancellationTokenOnDestroy());
         Application.Quit();
     }
 

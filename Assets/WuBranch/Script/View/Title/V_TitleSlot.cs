@@ -23,7 +23,7 @@ public class WantResult
 public class V_TitleSlot : MonoBehaviour, ITitleSlotView
 {
     /// <summary>
-    /// ロールデータ
+    /// リールデータ
     /// </summary>
     public ReelInfo[] ReelSprites { get; private set; }
 
@@ -39,7 +39,7 @@ public class V_TitleSlot : MonoBehaviour, ITitleSlotView
     }
 
     /// <summary>
-    /// 各ロールの画像を設定
+    /// 各リールの画像を設定
     /// </summary>
     /// <param name="data"></param>
     public void SetReelsSprite(ReelInfo[] data)

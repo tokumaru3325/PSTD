@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(V_TitleSlot))]
@@ -33,7 +35,7 @@ public class C_TitleSlot : MonoBehaviour
     private int[] _currentResults;
 
     /// <summary>
-    /// 停止したロールの数
+    /// 停止したリールの数
     /// </summary>
     private int _finishedReelCount;
 
@@ -41,6 +43,11 @@ public class C_TitleSlot : MonoBehaviour
     /// 完全停止した後の処理
     /// </summary>
     public Action<SlotResultType> OnFinished;
+
+    /// <summary>
+    /// キャンセル
+    /// </summary>
+    private CancellationToken _cancellationToken;
 
     void Awake()
     {
@@ -57,6 +64,7 @@ public class C_TitleSlot : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _cancellationToken = this.GetCancellationTokenOnDestroy();
         _currentResults = new int[_reelControllers.Length];
         _view.SetReelsSprite(_data.Reels);
 
@@ -77,17 +85,23 @@ public class C_TitleSlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("必ず当たる");
-            _model.ForceCorrect = true;
-        }
+        ForceWin().Forget();
+    }
+
+    /// <summary>
+    /// 強制的に当たる状態にする
+    /// </summary>
+    private async UniTask ForceWin()
+    {
+        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.M), cancellationToken: _cancellationToken);
+        Debug.Log("必ず当たる");
+        _model.ForceCorrect = true;
     }
 
     public bool IsRunning => _model.IsRunning;
 
     /// <summary>
-    /// ロールを回させる
+    /// リールを回させる
     /// </summary>
     public void OnClickStart()
     {
@@ -111,13 +125,13 @@ public class C_TitleSlot : MonoBehaviour
             _model.CurrentPlayCount = 0;
         }
 
-        // 各ロールを回させる
+        // 各リールを回させる
         foreach (var reel in _reelControllers)
             reel.StartSpin();
     }
 
     /// <summary>
-    /// 全部のロールを一気に停止
+    /// 全部のリールを一気に停止
     /// </summary>
     public void OnStopAllReel(bool randomize)
     {
@@ -136,13 +150,13 @@ public class C_TitleSlot : MonoBehaviour
             finalTarget = _model.StopIndices;
         }
 
-        StartCoroutine(StopSequence(finalTarget));
+        StopSequence(finalTarget).Forget();
     }
 
     /// <summary>
-    /// 個別のロールを停止させる
+    /// 個別のリールを停止させる
     /// </summary>
-    /// <param name="index">ロールのインデックス</param>
+    /// <param name="index">リールのインデックス</param>
     public void StopReel(int index)
     {
         if (!_model.CustomControll)
@@ -162,7 +176,7 @@ public class C_TitleSlot : MonoBehaviour
     /// 止める
     /// </summary>
     /// <param name="result">止まってほしい結果</param>
-    private IEnumerator StopSequence(int[] targets)
+    private async UniTask StopSequence(int[] targets)
     {
         //[2026/01/27] プリンス start
         //SoundManager.Instance.StopSlotSpinSE();
@@ -171,14 +185,14 @@ public class C_TitleSlot : MonoBehaviour
         for (int index = 0; index < _reelControllers.Length; index++)
         {
             _reelControllers[index].StopSpin(targets[index]);
-            yield return new WaitForSeconds(_model.StopDelay);
+            await UniTask.Delay(TimeSpan.FromSeconds(_model.StopDelay), cancellationToken: _cancellationToken);
         }
     }
 
     /// <summary>
-    /// ロールが停止した
+    /// 個別のリールが停止した
     /// </summary>
-    /// <param name="reelID">ロールのID</param>
+    /// <param name="reelID">リールのID</param>
     /// <param name="resultIndex">止まっている画像のインデックス</param>
     private void OnSingleReelStopped(int reelID, int resultIndex)
     {
