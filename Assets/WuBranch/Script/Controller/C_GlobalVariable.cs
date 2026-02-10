@@ -26,16 +26,10 @@ public class C_GlobalVariable : MonoBehaviour
 
     void Update()
     {
-        PressESC().Forget();
-    }
-
-    /// <summary>
-    /// ESCキーが押されたら
-    /// </summary>
-    private async UniTask PressESC()
-    {
-        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape), cancellationToken: this.GetCancellationTokenOnDestroy());
-        GameShutdown();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameShutdown();
+        }
     }
 
     /// <summary>
