@@ -61,7 +61,7 @@ public class V_MinerSpawnButton : SpawnButton
         // raycasterのeventMaskの値を変更
         // 障害物だけが反応できるように
         Physics2DRaycaster raycaster = Camera.main.GetComponent<Physics2DRaycaster>();
-        raycaster.eventMask = ~0;
+        raycaster.eventMask = LayerMask.GetMask("Default", "TransparentFX", "Ignore Raycast", "Water", "UI", "Units", "Player", "Obstacle");
         _canvasRaycaster.blockingMask = LayerMask.GetMask("Nothing");
 
         _obstacleManager.DisableObstacleSelection();
