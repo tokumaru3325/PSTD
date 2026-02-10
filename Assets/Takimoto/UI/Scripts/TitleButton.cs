@@ -171,6 +171,7 @@ public class TitleButton : MonoBehaviour
     private async UniTaskVoid ChangeToGameScene()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: this.GetCancellationTokenOnDestroy());
+        C_PathSearch.ResetSearchMap();
         SceneManager.LoadScene("GameCopyT", LoadSceneMode.Single);
     }
 
