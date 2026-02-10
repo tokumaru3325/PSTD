@@ -1,12 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEngine.GraphicsBuffer;
-
 
 public class UnitPresenter : MonoBehaviour
 {
@@ -32,12 +29,21 @@ public class UnitPresenter : MonoBehaviour
     private bool _IsGameEnding = false;
     private bool _IsStateUpdateStopped = false;
 
+    // 2026.02.10 ウー start
+    /// <summary>
+    /// キャンセルトークン
+    /// </summary>
+    private CancellationToken _cancelToken;
+    // 2026.02.10 ウー end
+
     //=====================================================================================================
     #region 初期化 - Initialization
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        // 2026.02.10 ウー start
+        _cancelToken = this.GetCancellationTokenOnDestroy();
+        // 2026.02.10 ウー end
     }
 
     private void OnEnable()
@@ -249,7 +255,10 @@ public class UnitPresenter : MonoBehaviour
         {
             Log($"{Model?.PlayerSide} unit wants to go to VictoryState", LogType.Warning);
             float timer = UnityEngine.Random.Range(0.0f, 1.0f);
-            StartCoroutine(DelayVictoryState(timer));
+            // 2026.02.10 ウー start
+            //StartCoroutine(DelayVictoryState(timer));
+            DelayVictoryState(timer, _cancelToken).Forget();
+            // 2026.02.10 ウー end
             return;
         }
         else
@@ -403,6 +412,18 @@ public class UnitPresenter : MonoBehaviour
             _stateMachine?.TrySetState(new VictoryState(this));
         }
     }
+    // 2026.02.10 ウー start
+    /// <summary>
+    /// 勝利状態への遅延
+    /// </summary>
+    /// <param name="delay">遅延時間（秒）</param>
+    /// <param name="token">キャンセルトークン</param>
+    private async UniTaskVoid DelayVictoryState(float delay, CancellationToken token)
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: token);
+        _stateMachine?.TrySetState(new VictoryState(this));
+    }
+    // 2026.02.10 ウー end
     #endregion
     //=====================================================================================================
     //=====================================================================================================
