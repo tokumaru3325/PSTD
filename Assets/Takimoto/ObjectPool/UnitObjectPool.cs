@@ -368,7 +368,7 @@ public class UnitObjectPool : MonoBehaviour
     /// </summary>
     /// <param name="enemyTag">敵陣のタグ</param>
     /// <returns>ユニット</returns>
-    private List<UnitPresenter> GetEnemysUnit(string enemyTag)
+    public List<UnitPresenter> GetEnemysUnit(string enemyTag)
     {
         // 敵のユニットをゲット
         List<UnitPresenter> knights = FindMyActivedUnit(KnightPool, enemyTag);

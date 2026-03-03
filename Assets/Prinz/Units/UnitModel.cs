@@ -100,6 +100,9 @@ public abstract class UnitModel
 
     public int serialNumber { get; private set; }
 
+    // 2026.02.10 ウー start
+    public bool IsBoss { get; private set; }
+    // 2026.02.10 ウー end
 
     //**************************************************************************************
     //**************************************************************************************
@@ -154,7 +157,7 @@ public abstract class UnitModel
 
     public void NotifyUnitDeath()
     {
-     //   Owner.Log($"Unit from {PlayerSide} notified death", LogType.Warning);
+        //   Owner.Log($"Unit from {PlayerSide} notified death", LogType.Warning);
         OnUnitDeath?.Invoke(Owner);
     }
 
@@ -287,7 +290,7 @@ public abstract class UnitModel
         {
             MoveDirection = direction;
             OnDirectionChanged?.Invoke(direction, MoveDirection);
-        //    Debug.Log($"MoveDirection: {MoveDirection}");
+            //    Debug.Log($"MoveDirection: {MoveDirection}");
         }
     }
 
@@ -306,6 +309,10 @@ public abstract class UnitModel
     public void SetSerialNumber(int num)
     {
         serialNumber = num;
+    }
+    public void SetIsBoss(bool isBoss)
+    {
+        IsBoss = isBoss;
     }
     #endregion
     //=====================================================================================================

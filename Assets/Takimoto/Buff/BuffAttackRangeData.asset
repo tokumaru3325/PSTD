@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: BuffAttackRangeData
   m_EditorClassIdentifier: Assembly-CSharp::BuffTypeData
   BuffValue: 1
-  BuffTime: 60
+  BuffTime: 45
   EffectColor: {r: 0, g: 32, b: 32, a: 0}
   BuffIcon: {fileID: -1016303037, guid: 11a74da6fbbb1af4e9ca749a56486526, type: 3}

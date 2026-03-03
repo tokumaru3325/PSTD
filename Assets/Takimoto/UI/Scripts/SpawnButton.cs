@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class SpawnButton : MonoBehaviour
 {
     //2026.02.02 得丸陽生 start
-    public Action spawn;
+    public Action<UnitID, bool> spawn;
     public Action ripiter;
     //2026.02.02 得丸陽生 end
 
@@ -225,7 +225,7 @@ public class SpawnButton : MonoBehaviour
         // 2026.01.28 ウー end
 
         //2026.02.02 得丸陽生 start
-        spawn?.Invoke();
+        spawn?.Invoke(_unitType, false);
         //2026.02.02 得丸陽生 end
     }
 
@@ -274,7 +274,7 @@ public class SpawnButton : MonoBehaviour
     //2026.02.02 得丸陽生 start
     public void GetSpawn()
     {
-        spawn?.Invoke();
+        spawn?.Invoke(_unitType, false);
     }
 
     public void Chukei()

@@ -22,6 +22,9 @@ public enum CPUAction
     SummonKnight,
     SummonArcher,
     SummonMage,
+    SummonBossKnight,
+    SummonBossArcher,
+    SummonBossMage,
     UseBuffSlot,
     UseMoneySlot,
     UnitSearchWayChange,
@@ -34,14 +37,19 @@ public class ActionWeights
 {
     public Dictionary<CPUAction, float> Weights = new()
     {
-        { CPUAction.SummonKnight, 1f },
-        { CPUAction.SummonArcher, 1f },
-        { CPUAction.SummonMage, 1f },
-        { CPUAction.UseBuffSlot, 1f },
-        { CPUAction.UseMoneySlot, 1f },
+        { CPUAction.SummonKnight, 0f },
+        { CPUAction.SummonArcher, 0f },
+        { CPUAction.SummonMage, 0f },
+        // 2026.02.10 ウー start
+        { CPUAction.SummonBossKnight, 0f },
+        { CPUAction.SummonBossArcher, 0f },
+        { CPUAction.SummonBossMage, 0f },
+        // 2026.02.10 ウー end
+        { CPUAction.UseBuffSlot, 0f },
+        { CPUAction.UseMoneySlot, 0f },
         //{ CPUAction.UnitSearchWayChange, 1.0f },
-        {CPUAction.SafeMoney,0.5f },
-        {CPUAction.wantToMoneySlot,1f },
+        {CPUAction.SafeMoney,0f },
+        {CPUAction.wantToMoneySlot, 0f },
     };
 }
 
@@ -117,7 +125,8 @@ public class CPUBrain : MonoBehaviour
     float currentMageCooldown = 0.0f;
 
     [SerializeField] float playBuffSlotMoney = 0.0f;
-    [SerializeField] float playMonetSlotMoney = 0.0f;
+    [SerializeField] float playMonsterSlotMoney = 0.0f;
+    [SerializeField] float playMoneySlotMoney = 0.0f;
 
     [SerializeField] UnitData _Knight;
     [SerializeField] UnitData _Archer;
@@ -131,6 +140,21 @@ public class CPUBrain : MonoBehaviour
     bool wantToSlot = false;
 
     private bool _IsGameFinished = false;
+
+    // 2026.02.10 ウー start
+    /// <summary>
+    /// CPUの危険度合計
+    /// </summary>
+    private int _cpuDng = 0;
+    /// <summary>
+    /// プレイヤーの危険度合計
+    /// </summary>
+    private int _playerDng = 0;
+
+    private MonsterSponerBySlot _monsterSlot;
+
+    // 2026.02.10 ウー end
+
     private void OnGameFinished(string deadplayer)
     {
         _IsGameFinished = true;
@@ -150,6 +174,12 @@ public class CPUBrain : MonoBehaviour
         //solverB.ripiter += SubPlayerUnitCount;
         //archerB.ripiter += SubPlayerUnitCount;
         //meigeB.ripiter += SubPlayerUnitCount;
+
+        _monsterSlot = FindFirstObjectByType<MonsterSponerBySlot>();
+        if (_monsterSlot != null)
+        {
+            _monsterSlot.OnSpawnBoss += AddPlayerUnitCount;
+        }
 
         _CPUSpawnPos = GetSpawnPos(_CPU.gameObject);
         _soloPlayerSpawnPos = GetSpawnPos(_soloPlayer.gameObject);
@@ -220,44 +250,79 @@ public class CPUBrain : MonoBehaviour
     }
 
 
-    private void CPUSpawnKnight()
+    private void CPUSpawnKnight(bool isBoss = false)
     {
         if (currentKnightCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Knight, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
-        if(RondomGetter() == 4 || RondomGetter() == 3)
+        // 2026.02.10 ウー start
+        if (isBoss)
         {
             ps.MakeItBoss(3);
+            _cpuDng += ps.GetDangerLevel() * 3;
         }
+        // if (RondomGetter() == 4 || RondomGetter() == 3)
+        // {
+        //     ps.MakeItBoss(3);
+        // }
+        // 2026.02.10 ウー end
         //ps.MakeItBoss(3);
         state.cpuUnitCount++;
-        currentKnightCooldown = knightCooldown;
-        _CPU.Money -= _Knight.BaseUnitCost;
+        if (!isBoss)
+        {
+            currentKnightCooldown = knightCooldown;
+            _CPU.Money -= _Knight.BaseUnitCost;
+            _cpuDng += ps.GetDangerLevel();
+        }
     }
-    private void CPUSpawnArcher()
+    private void CPUSpawnArcher(bool isBoss = false)
     {
         if (currentArcherCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Archer, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
-        if (RondomGetter() == 4 || RondomGetter() == 3)
+        // 2026.02.10 ウー start
+        if (isBoss)
         {
             ps.MakeItBoss(3);
+            _cpuDng += ps.GetDangerLevel() * 3;
         }
+        // if (RondomGetter() == 4 || RondomGetter() == 3)
+        // {
+        //     ps.MakeItBoss(3);
+        // }
+        // 2026.02.10 ウー end
+        //ps.MakeItBoss(3);
         //ps.MakeItBoss(3);
         state.cpuUnitCount++;
-        currentArcherCooldown = archerCooldown;
-        _CPU.Money -= _Archer.BaseUnitCost;
+        if (!isBoss)
+        {
+            currentArcherCooldown = archerCooldown;
+            _CPU.Money -= _Archer.BaseUnitCost;
+            _cpuDng += ps.GetDangerLevel();
+        }
     }
-    private void CPUSpawnMage()
+    private void CPUSpawnMage(bool isBoss = false)
     {
         if (currentMageCooldown > 0.0f) return;
         UnitPresenter ps = UnitObjectPool.GetObj(UnitID.Mage, _CPUSpawnPos, _soloPlayerSpawnPos, _CPUTag, _soloPlayerTag, way);
-        if (RondomGetter() == 4 || RondomGetter() == 3)
+        // 2026.02.10 ウー start
+        if (isBoss)
         {
             ps.MakeItBoss(3);
+            _cpuDng += ps.GetDangerLevel() * 3;
         }
+        // if (RondomGetter() == 4 || RondomGetter() == 3)
+        // {
+        //     ps.MakeItBoss(3);
+        // }
+        // 2026.02.10 ウー end
+        //ps.MakeItBoss(3);
         //ps.MakeItBoss(3);
         state.cpuUnitCount++;
-        currentMageCooldown = mageCooldown;
-        _CPU.Money -= _Mage.BaseUnitCost;
+        if (!isBoss)
+        {
+            currentMageCooldown = mageCooldown;
+            _CPU.Money -= _Mage.BaseUnitCost;
+            _cpuDng += ps.GetDangerLevel();
+        }
     }
 
     private Vector3 GetSpawnPos(GameObject player)
@@ -301,8 +366,15 @@ public class CPUBrain : MonoBehaviour
     }
 
 
-    void AddPlayerUnitCount()
+    void AddPlayerUnitCount(UnitID type, bool isBoss)
     {
+        Debug.LogWarning($"AddPlayerUnitCount called: type={type}, isBoss={isBoss}");
+        if (type == UnitID.Knight)
+            _playerDng += isBoss ? _Knight.DangerLevel * 3 : _Knight.DangerLevel;
+        else if (type == UnitID.Archer)
+            _playerDng += isBoss ? _Archer.DangerLevel * 3 : _Archer.DangerLevel;
+        if (type == UnitID.Mage)
+            _playerDng += isBoss ? _Mage.DangerLevel * 3 : _Mage.DangerLevel;
         state.playerUnitCount++;
     }
 
@@ -313,6 +385,11 @@ public class CPUBrain : MonoBehaviour
 
     void SubUnitCount(UnitPresenter ps)
     {
+        int dng = ps.IsBoss() ? ps.GetDangerLevel() * 3 : ps.GetDangerLevel();
+        if (ps.GetPlayerSide().Equals(_soloPlayerTag))
+            _playerDng -= dng;
+        else if (ps.GetPlayerSide().Equals(_CPUTag))
+            _cpuDng -= dng;
         if (ps.GetPlayerSide() == "Player1")
             state.playerUnitCount--;
         else
@@ -322,225 +399,265 @@ public class CPUBrain : MonoBehaviour
     private CPUAction ApplyCombinedConditions(GameState state)
     {
         var w = new Dictionary<CPUAction, float>(actionWeights.Weights);
-        // 1. お金がある × 敵ユニットがいる
-        if (_CPU.Money >= 50 && state.playerUnitCount > 0)
+        // // 1. お金がある × 敵ユニットがいる
+        // if (_CPU.Money >= 50 && state.playerUnitCount > 0)
+        // {
+        //     //w[CPUAction.SummonKnight] += 1.5f;
+        //     //w[CPUAction.SummonArcher] += 1f;
+
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        // }
+
+        // // 2. お金がある × 敵ユニットが多い
+        // if (_CPU.Money >= 50 && state.playerUnitCount >= 4)
+        // {
+        //     //w[CPUAction.SummonMage] += 2f;
+        //     w[CPUAction.SummonMage] += 0.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     w[CPUAction.SummonBossKnight] += 0.25f;
+        //     w[CPUAction.SummonBossArcher] += 0.25f;
+        //     w[CPUAction.SummonBossMage] += 0.25f;
+        // }
+
+        // // 3. お金がある × 敵ユニットがいない
+        // if (_CPU.Money >= 50 && state.playerUnitCount == 0)
+        // {
+        //     //w[CPUAction.SummonArcher] += 1.5f;
+        //     //w[CPUAction.SummonMage] += 1f;
+        //     w[CPUAction.wantToMoneySlot] += 0.75f;
+        //     w[CPUAction.SummonArcher] += 0.2f;
+        //     w[CPUAction.SummonMage] += 0.2f;
+        // }
+
+        // // 3. お金がある × 敵ユニットがいない
+        // if (_CPU.Money >= 50 && state.playerUnitCount <= 2)
+        // {
+        //     w[CPUAction.wantToMoneySlot] += 0.5f;
+        //     //w[CPUAction.SummonArcher] += 1.5f;
+        //     //w[CPUAction.SummonMage] += 1f;
+        // }
+
+        // // 4. お金がない × 敵ユニットが多い
+        // if (_CPU.Money < 30 && state.playerUnitCount >= 4)
+        // {
+        //     //w[CPUAction.UseMoneySlot] += 2f;
+        //     w[CPUAction.UseMoneySlot] += 0.5f;
+        // }
+
+
+
+        // // 5. CPU ユニットが少ない × ナイトクールダウン中
+        // if (state.cpuUnitCount == 1 && knightCooldown <= 0.0f)
+        // {
+        //     //w[CPUAction.UseMoneySlot] += 1.5f;
+        //     //w[CPUAction.UseBuffSlot] += 1f;
+        //     w[CPUAction.UseMoneySlot] += 0.5f;
+        //     w[CPUAction.UseBuffSlot] += 0.5f;
+        // }
+
+        // // 6. 敵バフあり × CPU バフなし × お金あり
+        // if (playerBuffList.GetListLength() != 0 && cpuBuffList.GetListLength() == 0 && _CPU.Money >= playBuffSlotMoney)
+        // {
+        //     //w[CPUAction.UseBuffSlot] += 2f;
+        //     w[CPUAction.UseBuffSlot] += 0.5f;
+        // }
+
+        // // 7. CPU が劣勢 × バフあり
+        // if (state.playerUnitCount > state.cpuUnitCount && cpuBuffList.GetListLength() != 0)
+        // {
+        //     //w[CPUAction.SummonKnight] += 1.5f;
+        //     //w[CPUAction.UnitSearchWayChange] += 1f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     //w[CPUAction.UnitSearchWayChange] += 0.5f;
+        // }
+
+        // // 8. CPU が優勢 × バフなし
+        // if (state.cpuUnitCount > state.playerUnitCount && cpuBuffList.GetListLength() == 0)
+        // {
+        //     //w[CPUAction.UseBuffSlot] += 0.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     w[CPUAction.UseBuffSlot] += 0.5f;
+        // }
+
+        // // 9. プレイヤーのお金が多い
+        // if (state.playerMoney >= 50)
+        // {
+        //     //w[CPUAction.SummonKnight] += 1f;
+        //     w[CPUAction.SummonArcher] += 1f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        // }
+
+        // // 10. プレイヤーのお金が少ない
+        // if (state.playerMoney < 30)
+        // {
+        //     //w[CPUAction.wantToMoneySlot] += 0.75f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        // }
+        // //w[CPUAction.SafeMoney] += 1f;
+
+        // // 11. 敵ユニットが多い × CPU バフあり
+        // if (state.playerUnitCount >= 3 && cpuBuffList.GetListLength() != 0)
+        // {
+        //     //w[CPUAction.SummonKnight] += 1.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        // }
+
+        // // 12. 敵ユニットが少ない × CPU バフあり
+        // if (state.playerUnitCount == 0 && cpuBuffList.GetListLength() != 0)
+        // {
+        //     w[CPUAction.SummonMage] += 0.2f;
+        //     w[CPUAction.wantToMoneySlot] += 0.75f;
+        // }
+
+        // // 13. CPU ユニットが多い × 敵ユニットが少ない
+        // if (state.cpuUnitCount >= 3 && state.playerUnitCount == 0)
+        // {
+        //     // w[CPUAction.SummonArcher] += 1f;
+        //     w[CPUAction.SummonArcher] += 0.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     w[CPUAction.SummonMage] += 0.5f;
+        // }
+
+        // // 14. 敵バフあり × CPU バフあり
+        // if (playerBuffList.GetListLength() != 0 && cpuBuffList.GetListLength() != 0)
+        // {
+        //     //w[CPUAction.SummonMage] += 1f;
+        //     w[CPUAction.SummonArcher] += 0.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     w[CPUAction.SummonMage] += 0.5f;
+        // }
+
+        // // 15. CPU が劣勢 × お金がある
+        // if (state.playerUnitCount > state.cpuUnitCount && _CPU.Money >= _Knight.BaseUnitCost)
+        // {
+        //     // w[CPUAction.SummonKnight] += 1.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     w[CPUAction.SummonArcher] += 0.5f;
+        // }
+
+        // // 16. CPU が優勢 × お金がある
+        // if (state.cpuUnitCount > state.playerUnitCount && _CPU.Money >= _Archer.BaseUnitCost)
+        // {
+        //     //w[CPUAction.SummonArcher] += 1f;
+        //     w[CPUAction.SummonArcher] += 0.5f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        // }
+
+        // // 17. 敵ユニットが多い × プレイヤーのお金が多い
+        // if (state.playerUnitCount >= 4 && state.playerMoney >= 50)
+        // {
+        //     //w[CPUAction.SummonKnight] += 1f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        //     w[CPUAction.SummonArcher] += 0.5f;
+        //     w[CPUAction.SummonMage] += 0.2f;
+        // }
+
+        // // 18. 敵ユニットが少ない × プレイヤーのお金が多い
+        // if (state.playerUnitCount == 2 && state.playerMoney >= 50)
+        // {
+        //     //w[CPUAction.SummonMage] += 1f;
+        //     w[CPUAction.SummonMage] += 0.2f;
+        //     w[CPUAction.SummonArcher] += 0.5f;
+        // }
+
+        // // 19. CPU ユニットが多い × CPU バフなし
+        // if (state.cpuUnitCount >= 3 && cpuBuffList.GetListLength() == 0)
+        // {
+        //     //w[CPUAction.UseBuffSlot] += 1f;
+        //     w[CPUAction.UseBuffSlot] += 1f;
+        //     w[CPUAction.wantToMoneySlot] += 1.0f;
+        // }
+
+        // // 20. CPU ユニットが少ない × CPU バフあり
+        // if (state.cpuUnitCount == 0 && cpuBuffList.GetListLength() != 0)
+        // {
+        //     //w[CPUAction.SummonKnight] += 1f;
+        //     w[CPUAction.SummonKnight] += 0.5f;
+        // }
+
+        // if (_CPU.Money >= 15.0f)
+        // {
+        //     w[CPUAction.SummonArcher] += 1.0f;
+        //     w[CPUAction.SummonMage] += 1.0f;
+        //     w[CPUAction.SummonKnight] += 0.1f;
+        // }
+
+        // if (state.cpuUnitCount >= 3)
+        // {
+        //     w[CPUAction.SafeMoney] += 2.5f;
+        // }
+
+        // if (_CPU.Money >= playMoneySlotMoney && state.cpuUnitCount >= 2)
+        //     w[CPUAction.UseMoneySlot] += 2.5f;
+
+        // if (_CPU.Money >= playBuffSlotMoney && cpuBuffList.GetListLength() == 0)
+        //     return CPUAction.UseBuffSlot;
+
+        // if (currentKnightCooldown > 0.0f || _CPU.Money < _Knight.BaseUnitCost)
+        //     w[CPUAction.SummonKnight] = 0f;
+
+        // if (currentArcherCooldown > 0.0f || _CPU.Money < _Archer.BaseUnitCost)
+        //     w[CPUAction.SummonArcher] = 0f;
+
+        // if (currentMageCooldown > 0.0f || _CPU.Money < _Mage.BaseUnitCost)
+        //     w[CPUAction.SummonMage] = 0f;
+
+        // if (_CPU.Money < playBuffSlotMoney)
+        //     w[CPUAction.UseBuffSlot] = 0f;
+
+        // if (_CPU.Money < playMoneySlotMoney)
+        //     w[CPUAction.UseMoneySlot] = 0f;
+
+        // if (state.cpuUnitCount >= 4)
+        // {
+        //     w[CPUAction.wantToMoneySlot] += 0.5f;
+        // }
+        // else
+        // {
+        //     w[CPUAction.wantToMoneySlot] = 0;
+        // }
+
+        // 2026.02.10 ウー start
+        w[CPUAction.SafeMoney] += 5.0f;
+        // diff > 0 ならプレイヤー有利, diff < 0 ならCPU有利
+        int diff = _playerDng - _cpuDng;
+        // CPU有利
+        if (diff <= 0)
         {
-            //w[CPUAction.SummonKnight] += 1.5f;
-            //w[CPUAction.SummonArcher] += 1f;
-
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-
-        // 2. お金がある × 敵ユニットが多い
-        if (_CPU.Money >= 50 && state.playerUnitCount >= 4)
-        {
-            //w[CPUAction.SummonMage] += 2f;
-            w[CPUAction.SummonMage] += 0.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-
-        // 3. お金がある × 敵ユニットがいない
-        if (_CPU.Money >= 50 && state.playerUnitCount == 0)
-        {
-            //w[CPUAction.SummonArcher] += 1.5f;
-            //w[CPUAction.SummonMage] += 1f;
-            w[CPUAction.wantToMoneySlot] += 0.75f;
-            w[CPUAction.SummonArcher] += 0.2f;
-            w[CPUAction.SummonMage] += 0.2f;
-        }
-
-        // 3. お金がある × 敵ユニットがいない
-        if (_CPU.Money >= 50 && state.playerUnitCount <= 2)
-        {
-            w[CPUAction.wantToMoneySlot] += 0.5f;
-            //w[CPUAction.SummonArcher] += 1.5f;
-            //w[CPUAction.SummonMage] += 1f;
-        }
-
-        // 4. お金がない × 敵ユニットが多い
-        if (_CPU.Money < 30 && state.playerUnitCount >= 4)
-        {
-            //w[CPUAction.UseMoneySlot] += 2f;
-            w[CPUAction.UseMoneySlot] += 0.5f;
-        }
-
-
-
-        // 5. CPU ユニットが少ない × ナイトクールダウン中
-        if (state.cpuUnitCount == 1 && knightCooldown <= 0.0f)
-        {
-            //w[CPUAction.UseMoneySlot] += 1.5f;
-            //w[CPUAction.UseBuffSlot] += 1f;
-            w[CPUAction.UseMoneySlot] += 0.5f;
-            w[CPUAction.UseBuffSlot] += 0.5f;
-        }
-
-        // 6. 敵バフあり × CPU バフなし × お金あり
-        if (playerBuffList.GetListLength() != 0 && cpuBuffList.GetListLength() == 0 && _CPU.Money >= playBuffSlotMoney)
-        {
-            //w[CPUAction.UseBuffSlot] += 2f;
-            w[CPUAction.UseBuffSlot] += 0.5f;
-        }
-
-        // 7. CPU が劣勢 × バフあり
-        if (state.playerUnitCount > state.cpuUnitCount && cpuBuffList.GetListLength() != 0)
-        {
-            //w[CPUAction.SummonKnight] += 1.5f;
-            //w[CPUAction.UnitSearchWayChange] += 1f;
-            w[CPUAction.SummonKnight] += 0.5f;
-            //w[CPUAction.UnitSearchWayChange] += 0.5f;
-        }
-
-        // 8. CPU が優勢 × バフなし
-        if (state.cpuUnitCount > state.playerUnitCount && cpuBuffList.GetListLength() == 0)
-        {
-            //w[CPUAction.UseBuffSlot] += 0.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-            w[CPUAction.UseBuffSlot] += 0.5f;
-        }
-
-        // 9. プレイヤーのお金が多い
-        if (state.playerMoney >= 50)
-        {
-            //w[CPUAction.SummonKnight] += 1f;
-            w[CPUAction.SummonArcher] += 1f;
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-
-        // 10. プレイヤーのお金が少ない
-        if (state.playerMoney < 30)
-        {
-            //w[CPUAction.wantToMoneySlot] += 0.75f;
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-        //w[CPUAction.SafeMoney] += 1f;
-
-        // 11. 敵ユニットが多い × CPU バフあり
-        if (state.playerUnitCount >= 3 && cpuBuffList.GetListLength() != 0)
-        {
-            //w[CPUAction.SummonKnight] += 1.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-
-        // 12. 敵ユニットが少ない × CPU バフあり
-        if (state.playerUnitCount == 0 && cpuBuffList.GetListLength() != 0)
-        {
-            w[CPUAction.SummonMage] += 0.2f;
-            w[CPUAction.wantToMoneySlot] += 0.75f;
-        }
-
-        // 13. CPU ユニットが多い × 敵ユニットが少ない
-        if (state.cpuUnitCount >= 3 && state.playerUnitCount == 0)
-        {
-            // w[CPUAction.SummonArcher] += 1f;
-            w[CPUAction.SummonArcher] += 0.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-            w[CPUAction.SummonMage] += 0.5f;
-        }
-
-        // 14. 敵バフあり × CPU バフあり
-        if (playerBuffList.GetListLength() != 0 && cpuBuffList.GetListLength() != 0)
-        {
-            //w[CPUAction.SummonMage] += 1f;
-            w[CPUAction.SummonArcher] += 0.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-            w[CPUAction.SummonMage] += 0.5f;
-        }
-
-        // 15. CPU が劣勢 × お金がある
-        if (state.playerUnitCount > state.cpuUnitCount && _CPU.Money >= _Knight.BaseUnitCost)
-        {
-            // w[CPUAction.SummonKnight] += 1.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-            w[CPUAction.SummonArcher] += 0.5f;
-        }
-
-        // 16. CPU が優勢 × お金がある
-        if (state.cpuUnitCount > state.playerUnitCount && _CPU.Money >= _Archer.BaseUnitCost)
-        {
-            //w[CPUAction.SummonArcher] += 1f;
-            w[CPUAction.SummonArcher] += 0.5f;
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-
-        // 17. 敵ユニットが多い × プレイヤーのお金が多い
-        if (state.playerUnitCount >= 4 && state.playerMoney >= 50)
-        {
-            //w[CPUAction.SummonKnight] += 1f;
-            w[CPUAction.SummonKnight] += 0.5f;
-            w[CPUAction.SummonArcher] += 0.5f;
-            w[CPUAction.SummonMage] += 0.2f;
-        }
-
-        // 18. 敵ユニットが少ない × プレイヤーのお金が多い
-        if (state.playerUnitCount == 2 && state.playerMoney >= 50)
-        {
-            //w[CPUAction.SummonMage] += 1f;
-            w[CPUAction.SummonMage] += 0.2f;
-            w[CPUAction.SummonArcher] += 0.5f;
-        }
-
-        // 19. CPU ユニットが多い × CPU バフなし
-        if (state.cpuUnitCount >= 3 && cpuBuffList.GetListLength() == 0)
-        {
-            //w[CPUAction.UseBuffSlot] += 1f;
-            w[CPUAction.UseBuffSlot] += 1f;
-            w[CPUAction.wantToMoneySlot] += 1.0f;
-        }
-
-        // 20. CPU ユニットが少ない × CPU バフあり
-        if (state.cpuUnitCount == 0 && cpuBuffList.GetListLength() != 0)
-        {
-            //w[CPUAction.SummonKnight] += 1f;
-            w[CPUAction.SummonKnight] += 0.5f;
-        }
-
-        if (_CPU.Money >= 15.0f)
-        {
+            w[CPUAction.SummonKnight] += 1.0f;
             w[CPUAction.SummonArcher] += 1.0f;
             w[CPUAction.SummonMage] += 1.0f;
-            w[CPUAction.SummonKnight] += 0.1f;
         }
 
-        if(state.cpuUnitCount >= 3)
+        if (diff < -7)
         {
-            w[CPUAction.SafeMoney] += 2.5f;
+            w[CPUAction.UseBuffSlot] += 2.0f;
+            w[CPUAction.SummonBossKnight] += 1.0f;
+            w[CPUAction.SummonBossArcher] += 1.0f;
+            w[CPUAction.SummonBossMage] += 1.0f;
         }
 
-        if (_CPU.Money >= playMonetSlotMoney && state.cpuUnitCount >= 2)
-            w[CPUAction.UseMoneySlot] += 2.5f;
-
-        if (_CPU.Money >= playBuffSlotMoney && cpuBuffList.GetListLength() == 0)
-            return CPUAction.UseBuffSlot;
-
-        if (currentKnightCooldown > 0.0f || _CPU.Money < _Knight.BaseUnitCost)
-            w[CPUAction.SummonKnight] = 0f;
-
-        if (currentArcherCooldown > 0.0f || _CPU.Money < _Archer.BaseUnitCost)
-            w[CPUAction.SummonArcher] = 0f;
-
-        if (currentMageCooldown > 0.0f || _CPU.Money < _Mage.BaseUnitCost)
-            w[CPUAction.SummonMage] = 0f;
-
-        if (_CPU.Money < playBuffSlotMoney)
-            w[CPUAction.UseBuffSlot] = 0f;
-
-        if (_CPU.Money < playMonetSlotMoney)
-            w[CPUAction.UseMoneySlot] = 0f;
-
-        if (state.cpuUnitCount >= 4)
+        // プレイヤー有利
+        if (diff > 0)
         {
-            w[CPUAction.wantToMoneySlot] += 0.5f;
+            w[CPUAction.SummonKnight] += 1.0f;
+            w[CPUAction.SummonArcher] += 1.0f;
+            w[CPUAction.SummonMage] += 1.0f;
         }
-        else
+
+        if (diff > 3)
         {
-            w[CPUAction.wantToMoneySlot] = 0;
+            w[CPUAction.UseBuffSlot] += 2.0f;
         }
+
+        if (diff > 7)
+        {
+            w[CPUAction.SummonBossKnight] += 1.0f;
+            w[CPUAction.SummonBossArcher] += 1.0f;
+            w[CPUAction.SummonBossMage] += 1.0f;
+        }
+        // 2026.02.10 ウー end
         return WeightedRandom(w);
-
-
-
-
     }
 
 
@@ -565,44 +682,69 @@ public class CPUBrain : MonoBehaviour
         switch (action)
         {
             case CPUAction.SummonKnight:
-                CPUSpawnKnight();
+                if (_CPU.Money >= _Knight.BaseUnitCost)
+                    CPUSpawnKnight();
                 break;
 
             case CPUAction.SummonArcher:
-                CPUSpawnArcher();
+                if (_CPU.Money >= _Archer.BaseUnitCost)
+                    CPUSpawnArcher();
                 break;
 
             case CPUAction.SummonMage:
-                CPUSpawnMage();
+                if (_CPU.Money >= _Mage.BaseUnitCost)
+                    CPUSpawnMage();
                 break;
 
+            // 2026.02.10 ウー start
+            case CPUAction.SummonBossKnight:
+                if (_CPU.Money >= playMonsterSlotMoney)
+                    CPUSpawnKnight(true);
+                break;
+
+            case CPUAction.SummonBossArcher:
+                if (_CPU.Money >= playMonsterSlotMoney)
+                    CPUSpawnArcher(true);
+                break;
+
+            case CPUAction.SummonBossMage:
+                if (_CPU.Money >= playMonsterSlotMoney)
+                    CPUSpawnMage(true);
+                break;
+            // 2026.02.10 ウー end
+
             case CPUAction.UseBuffSlot:
-                SlotSceneManager.BroadcastBuffSlotResult((BuffType)RondomGetter(), "Player2", "Player1");
-                _CPU.Money -= playBuffSlotMoney;
+                if (_CPU.Money >= playBuffSlotMoney)
+                {
+                    SlotSceneManager.BroadcastBuffSlotResult((BuffType)RondomGetter(), "Player2", "Player1");
+                    _CPU.Money -= playBuffSlotMoney;
+                }
                 break;
 
             case CPUAction.UseMoneySlot:
-
-                switch (RondomGetter())
+                if (_CPU.Money >= playMoneySlotMoney)
                 {
-                    case 0:
-                        _CPU.Money += 0;
-                        break;
-                    case 1:
-                        _CPU.Money += 15;
-                        break;
-                    case 2:
-                        _CPU.Money += 30;
-                        break;
-                    case 3:
-                        _CPU.Money += 150;
-                        break;
-                    case 4:
-                        _CPU.Money += 300;
-                        break;
+                    switch (RondomGetter())
+                    {
+                        case 0:
+                            _CPU.Money += 0;
+                            break;
+                        case 1:
+                            _CPU.Money += 15;
+                            break;
+                        case 2:
+                            _CPU.Money += 30;
+                            break;
+                        case 3:
+                            _CPU.Money += 150;
+                            break;
+                        case 4:
+                            _CPU.Money += 300;
+                            break;
 
+                    }
+                    _CPU.Money -= playMoneySlotMoney;
                 }
-                _CPU.Money -= playMonetSlotMoney;
                 break;
 
             case CPUAction.UnitSearchWayChange:
@@ -628,7 +770,7 @@ public class CPUBrain : MonoBehaviour
                 waitCount = 0.5f;
                 break;
             case CPUAction.SafeMoney:
-                _CPU.Money += 0.3f;
+                //_CPU.Money += 0.3f;
                 waitCount = 2.0f;
                 break;
             case CPUAction.wantToMoneySlot:
@@ -641,7 +783,10 @@ public class CPUBrain : MonoBehaviour
             currentWeights.Weights[key] = 1f;
         }
 
-
+        // 2026.02.10 ウー start
+        // 1秒に１回
+        waitCount = 1f;
+        // 2026.02.10 ウー end
 
     }
 
@@ -669,7 +814,7 @@ public class CPUBrain : MonoBehaviour
             {
                 if (wantToSlot)
                 {
-                    if (_CPU.Money >= playMonetSlotMoney)
+                    if (_CPU.Money >= playMoneySlotMoney)
                     {
                         wantToSlot = false;
                     }
