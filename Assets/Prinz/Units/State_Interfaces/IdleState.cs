@@ -22,7 +22,7 @@ public class IdleState : IUnitState
 
     public IUnitState OnUpdate(float dt)
     {
-        if(_idleTime <= _idleWaitTime) //ディレイ
+        if (_idleTime <= _idleWaitTime) //ディレイ
         {
             if (_me.IsValidTargetExist())
             {
@@ -48,9 +48,9 @@ public class IdleState : IUnitState
         }
 
 
-        if(_me.IsValidTargetExist() == false)
+        if (_me.IsValidTargetExist() == false)
         {
-        //    _me.Model.ClearTargets();
+            //    _me.Model.ClearTargets();
             return new MoveState(_me);
         }
 

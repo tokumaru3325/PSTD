@@ -57,6 +57,7 @@ public class UnitPresenter : MonoBehaviour
         Collider = GetComponent<Collider2D>();
         CreateModelFromData(data);
         Model.SetPlayerSide(PlayerTag);
+        Model.SetIsBoss(false);
         View.InitializeView();
 
         //敵のプレヤーを取得して記録する
@@ -224,6 +225,7 @@ public class UnitPresenter : MonoBehaviour
     public void MakeItBoss(float boost)
     {
         SetUnitSize(boost);
+        Model.SetIsBoss(true);
         Model.SetAttackPower(Model.AttackPower + boost);
         Model.SetHealth(Model.Health * boost);
         Model.SetMoveSpeed(Model.MoveSpeed / 2);
@@ -235,17 +237,17 @@ public class UnitPresenter : MonoBehaviour
     private void ResetSize()
     {
         SetUnitSize(1);
-/*        Log($"Model.AttackPower : {Model.AttackPower}", LogType.Error);
-        Log($"Model.Health : {Model.Health}", LogType.Error);
-        Log($"Model.MoveSpeed : {Model.MoveSpeed}", LogType.Error);
-        Log($"Model.AttackRange : {Model.AttackRange}", LogType.Error);*/
+        /*        Log($"Model.AttackPower : {Model.AttackPower}", LogType.Error);
+                Log($"Model.Health : {Model.Health}", LogType.Error);
+                Log($"Model.MoveSpeed : {Model.MoveSpeed}", LogType.Error);
+                Log($"Model.AttackRange : {Model.AttackRange}", LogType.Error);*/
 
         //    Model.SetAttackPower(Model.AttackPower + boost);
         //    Model.SetHealth(Model.Health * boost);
         //    Model.SetMoveSpeed(Model.MoveSpeed / 2);
         //    Model.SetAttackRange((Model.AttackRange / boost) + (0.25f * boost));
         ApplyAttackRange();
-    //    View.CreateBuffEffect(boost);
+        //    View.CreateBuffEffect(boost);
     }
 
     private void OnGameEndingNotify(bool ending, string tag)
@@ -756,7 +758,7 @@ public class UnitPresenter : MonoBehaviour
     private void UpdateTargets(UnitPresenter target)
     {
         if (_IsGameEnding) return;
-    //    Log($"Unit from {Model?.PlayerSide} tries to update targets", LogType.Warning);
+        //    Log($"Unit from {Model?.PlayerSide} tries to update targets", LogType.Warning);
         if (Model?.FindTarget(target) != null)
         {
             Log($"Unit from {Model.PlayerSide} updates targets and removes a Unit from {target.Model.PlayerSide}", LogType.Warning);
@@ -776,7 +778,7 @@ public class UnitPresenter : MonoBehaviour
         }
 
         // 2026.01.29 ウー start
-        if (other.GetComponent<C_ObstacleStone>() == Model.Obstacle)
+        if (other.GetComponent<C_ObstacleStone>() && other.GetComponent<C_ObstacleStone>() == Model.Obstacle)
         {
             Model.SetPlayerInRange(false);
             Model.BindTargetObstacle(null);
@@ -857,4 +859,15 @@ public class UnitPresenter : MonoBehaviour
         return Model.DangerLevel;
     }
     // 2026.01.23 ウー end
+
+    // 2026.02.10 ウー start
+    /// <summary>
+    /// ボスユニットかどうかを返す
+    /// </summary>
+    /// <returns>true: ボスユニット、false: それ以外</returns>
+    public bool IsBoss()
+    {
+        return Model.IsBoss;
+    }
+    // 2026.02.10 ウー end
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MonsterSponerBySlot : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class MonsterSponerBySlot : MonoBehaviour
     private Player _enemy;
 
     const string SPAWN_TAG = "SpawnPos";
+
+    // 2026.02.10 ウー start
+    public Action<UnitID, bool> OnSpawnBoss;
+    // 2026.02.10 ウー end
 
     [SerializeField]
     private V_StrategySelector _policyMaker;
@@ -60,30 +65,35 @@ public class MonsterSponerBySlot : MonoBehaviour
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(2);
                 count = 0;
+                OnSpawnBoss?.Invoke(type, true);
                 break;
             case 1:
                 type = UnitID.Archer;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(2);
                 count = 1;
+                OnSpawnBoss?.Invoke(type, true);
                 break;
             case 2:
                 type = UnitID.Archer;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(3);
                 count = 1;
+                OnSpawnBoss?.Invoke(type, true);
                 break;
             case 3:
                 type = UnitID.Knight;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(3);
                 count = 0;
+                OnSpawnBoss?.Invoke(type, true);
                 break;
             case 4:
                 type = UnitID.Mage;
                 ps = unitObjectPool.GetObj(type, mySpawnPos, enemyPos, playertag, _enemyTag, strategy); //[2025/11/20]　プリンス　: 「, Unit」を追加した -> 適切のデータをユニットに与える
                 ps.MakeItBoss(3);
                 count = 2;
+                OnSpawnBoss?.Invoke(type, true);
                 break;
         }
 
